@@ -1,0 +1,16 @@
+[
+{
+  "modid": "harakirimod",
+  "name": "Harakiri",
+  "description": "Harakiri is a hacked client built on forge.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Riga", "Vaxry"],
+  "credits": "Riga, Vaxry, Dan, Noil, D3x, TheCyberBrick, Hal",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
