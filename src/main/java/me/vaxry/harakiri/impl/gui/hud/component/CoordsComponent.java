@@ -4,7 +4,6 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
 import net.minecraft.client.Minecraft;
-import sun.nio.ch.Net;
 
 import java.text.DecimalFormat;
 
@@ -31,7 +30,7 @@ public final class CoordsComponent extends DraggableHudComponent {
 
             NetherCoordsComponent ncc = (NetherCoordsComponent)Harakiri.INSTANCE.getHudManager().findComponent(NetherCoordsComponent.class);
             if(ncc.isVisible())
-                coordz += ChatFormatting.GRAY + "[" + ChatFormatting.RESET + df.format(Minecraft.getMinecraft().player.posX/8.f) +
+                coordz += ChatFormatting.GRAY + " [" + ChatFormatting.RESET + df.format(Minecraft.getMinecraft().player.posX/8.f) +
                         ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
                         df.format(Minecraft.getMinecraft().player.posY/8.f) + ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
                         df.format(Minecraft.getMinecraft().player.posZ/8.f) +

@@ -8,10 +8,13 @@ import me.vaxry.harakiri.api.module.Module;
 import me.vaxry.harakiri.api.util.Timer;
 import me.vaxry.harakiri.api.value.Value;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiDisconnected;
+import net.minecraft.client.gui.*;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.network.EnumConnectionState;
 import net.minecraft.network.handshake.client.C00Handshake;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 /**
@@ -25,10 +28,15 @@ public final class ReconnectModule extends Module {
     private boolean reconnect;
     private Timer timer = new Timer();
 
+    private GuiButton reconnectButton;
+
     public final Value<Float> delay = new Value<Float>("Delay", new String[]{"Del"}, "Delay in MS (milliseconds) between reconnect attempts.", 3000.0f, 0.0f, 10000.0f, 500.0f);
 
     public ReconnectModule() {
         super("Reconnect", new String[]{"Rejoin", "Recon", "AutoReconnect"}, "Automatically reconnects to the last server after being kicked", "NONE", -1, ModuleType.MISC);
+        final ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
+        int w = 300;
+        int h = 40;
     }
 
     @Listener
@@ -54,6 +62,20 @@ public final class ReconnectModule extends Module {
                     this.reconnect = false;
                 }
             }
+        }
+    }
+
+    //todo: make this work xd
+
+    @SubscribeEvent
+    public static void onInitGuiEvent(final GuiScreenEvent.InitGuiEvent event) {
+        final GuiScreen gui = event.getGui();
+        if (gui instanceof GuiIngameMenu) {
+            int maxY = 0;
+            for (final GuiButton button : event.getButtonList()) {
+                maxY = Math.max(button.y, maxY);
+            }
+            event.getButtonList().add(new GuiButton(42042069, event.getButtonList().get(0).x, maxY + 24, "Tets"));
         }
     }
 

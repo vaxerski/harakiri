@@ -16,6 +16,7 @@ public final class ArmorComponent extends DraggableHudComponent {
 
     public ArmorComponent() {
         super("Armor");
+        this.setSnappable(false);
     }
 
     @Override

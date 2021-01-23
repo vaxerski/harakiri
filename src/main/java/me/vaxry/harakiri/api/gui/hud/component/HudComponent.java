@@ -25,6 +25,8 @@ public class HudComponent {
 
     private List<Value> valueList = new ArrayList<Value>();
 
+    public boolean ignore = false;
+
     public HudComponent() {
 
     }

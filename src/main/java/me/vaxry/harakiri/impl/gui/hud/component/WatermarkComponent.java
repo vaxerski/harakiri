@@ -4,12 +4,14 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.api.gui.hud.component.HudComponent;
 import me.vaxry.harakiri.api.texture.Texture;
+import me.vaxry.harakiri.api.util.RenderUtil;
 import me.vaxry.harakiri.impl.fml.harakiriMod;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.module.ui.WatermarkModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import scala.collection.parallel.ParIterableLike;
 
 /**
  * Author Seth
@@ -36,6 +38,9 @@ public final class WatermarkComponent extends HudComponent {
         if((Minecraft.getMinecraft().currentScreen instanceof GuiHudEditor))
             return;
 
+        if(Minecraft.getMinecraft().world == null)
+            return;
+
         WatermarkModule watermarkModule = (WatermarkModule) Harakiri.INSTANCE.getModuleManager().find(WatermarkModule.class);
         watermarkModule.setWMOnState(this.isVisible());
 
@@ -53,8 +58,11 @@ public final class WatermarkComponent extends HudComponent {
         this.watermarkTex.bind();
         this.watermarkTex.render(0, 0, res.getScaledWidth(), res.getScaledHeight());
 
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         GlStateManager.disableTexture2D();
         GlStateManager.disableBlend();
         GlStateManager.disableAlpha();
+
+        RenderUtil.end2D();
     }
 }

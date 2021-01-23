@@ -97,6 +97,7 @@ public final class HudManager {
         add(new TimeComponent());
         add(new EnemyPotionsComponent());
         add(new HubComponent());
+        add(new SwitchViewComponent());
         add(new InventoryComponent());
         add(new TotemCountComponent());
         add(new TutorialComponent());
@@ -107,11 +108,6 @@ public final class HudManager {
         add(new EntityListComponent());
 
         //MinecraftForge.EVENT_BUS.register(new ThreatCamComponent());
-
-
-        TrayComponent trayComponent = new TrayComponent();
-        trayComponent.setAnchorPoint(BOTTOM_CENTER);
-        add(trayComponent);
 
         NotificationsComponent notificationsComponent = new NotificationsComponent();
         notificationsComponent.setAnchorPoint(TOP_CENTER);

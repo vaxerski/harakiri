@@ -25,7 +25,7 @@ public final class DirectionComponent extends DraggableHudComponent {
 
         if (mc.world != null) {
             if (this.directionTimer.passed(250)) { // 250ms
-                direction = String.format("%s" + " " + ChatFormatting.GRAY + "%s", this.getFacing(), this.getTowards());
+                direction = String.format("%s" + ChatFormatting.GRAY + " [" + ChatFormatting.GRAY + "%s]", this.getFacing(), this.getTowards());
                 this.directionTimer.reset();
             }
 
@@ -56,7 +56,7 @@ public final class DirectionComponent extends DraggableHudComponent {
             case 7:
                 return "South East";
         }
-        return "Invalid";
+        return "Error";
     }
 
     private String getTowards() {

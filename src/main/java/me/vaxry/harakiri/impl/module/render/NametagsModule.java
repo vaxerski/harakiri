@@ -270,10 +270,17 @@ public final class NametagsModule extends Module {
             stacks.add(headitem);
             stacks.add(mainHandItem);
 
-            for(int i = 0; i < stacks.size(); ++i)
-                if(stacks.get(i).getItem() == Items.AIR)
-                    stacks.remove(i);
+            final boolean[] toRemove = new boolean[6];
 
+            for(int i = 0; i < stacks.size(); ++i) {
+                if (stacks.get(i).getItem() == Items.AIR)
+                    toRemove[i] = true;
+            }
+
+            for(int i = 5; i >= 0; --i){
+                if(toRemove[i])
+                    stacks.remove(i);
+            }
 
             // One stack is 16
             //

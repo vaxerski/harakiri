@@ -3,11 +3,14 @@ package me.vaxry.harakiri.impl.gui.hud;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
 import me.vaxry.harakiri.api.gui.hud.component.HudComponent;
+import me.vaxry.harakiri.api.module.Module;
 import me.vaxry.harakiri.api.texture.Texture;
 import me.vaxry.harakiri.api.util.RenderUtil;
 import me.vaxry.harakiri.api.util.Timer;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
+import me.vaxry.harakiri.impl.gui.hud.component.SwitchViewComponent;
+import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
 import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -139,7 +142,16 @@ public final class GuiHudEditor extends GuiScreen {
             RenderUtil.drawRect(point.getX() - 1, point.getY() - 1, point.getX() + 1, point.getY() + 1, 0x75909090);
         }
 
+        SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);
+
         for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+
+            if(component instanceof ModuleListComponent && !swc.isModules)
+                continue;
+
+            if(!(component instanceof ModuleListComponent) && swc.isModules && component != swc)
+                continue;
+
             if (component.isVisible()) {
                 component.render(mouseX, mouseY, partialTicks);
 
@@ -186,13 +198,24 @@ public final class GuiHudEditor extends GuiScreen {
                 }
             }
         }
+
+        swc.render(mouseX, mouseY, partialTicks);
     }
 
     @Override
     public void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
         super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
 
+        SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);
+
         for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+
+            if(component instanceof ModuleListComponent && !swc.isModules)
+                continue;
+
+            if(!(component instanceof ModuleListComponent) && swc.isModules && component != swc)
+                continue;
+
             if (component.isVisible()) {
                 component.mouseClickMove(mouseX, mouseY, clickedMouseButton);
             }
@@ -204,25 +227,48 @@ public final class GuiHudEditor extends GuiScreen {
         try {
             super.mouseClicked(mouseX, mouseY, mouseButton);
 
+            SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);
+            swc.mouseClicked(mouseX, mouseY, mouseButton);
             Harakiri.INSTANCE.getPlexusEffect().onMouseClicked();
 
             for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+                if(component instanceof ModuleListComponent && !swc.isModules)
+                    continue;
+
+                if(!(component instanceof ModuleListComponent) && swc.isModules && component != swc)
+                    continue;
+
                 if (component.isVisible()) {
                     component.mouseClick(mouseX, mouseY, mouseButton);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            Harakiri.INSTANCE.logChat("mouseClicked on ERROR SWC!! -> " + e.getMessage());
         }
     }
 
     @Override
     public void mouseReleased(int mouseX, int mouseY, int state) {
         super.mouseReleased(mouseX, mouseY, state);
+
+        SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);
+
         for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+            if(component instanceof ModuleListComponent && !swc.isModules)
+                continue;
+
+            if(!(component instanceof ModuleListComponent) && swc.isModules && component != swc)
+                continue;
+
             if (component.isVisible()) {
                 component.mouseRelease(mouseX, mouseY, state);
             }
+        }
+        try {
+            swc.mouseReleased(mouseX, mouseY, state);
+        }catch(Throwable t){
+            Harakiri.INSTANCE.logChat("MouseReleased on ERROR SWC!! -> " + t.getMessage());
         }
     }
 

@@ -14,7 +14,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  * Author Seth
  * 4/22/2019 @ 5:49 AM.
  */
-public final class BrightnessModule extends Module {
+public final class FullbrightModule extends Module {
 
     public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "The brightness mode to use.", Mode.GAMMA);
     public final Value<Boolean> disablePotion = new Value<Boolean>("DisablePotion", new String[]{"AutoDisablePotion", "dp", "adp"}, "Automatically remove the night vision effect if using a different mode.", false);
@@ -27,7 +27,7 @@ public final class BrightnessModule extends Module {
 
     private World world;
 
-    public BrightnessModule() {
+    public FullbrightModule() {
         super("Brightness", new String[]{"FullBright", "Bright"}, "Makes the world brighter", "NONE", -1, ModuleType.RENDER);
     }
 

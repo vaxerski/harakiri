@@ -7,6 +7,7 @@ import me.vaxry.harakiri.api.gui.hud.component.ResizableHudComponent;
 import me.vaxry.harakiri.api.texture.Texture;
 import me.vaxry.harakiri.api.util.RenderUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
+import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Mouse;
@@ -106,7 +107,7 @@ public final class HubComponent extends ResizableHudComponent {
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         RenderUtil.glScissor(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getX() + this.getW() - BORDER - SCROLL_WIDTH, this.getY() + this.getH() - BORDER, sr);
         for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
-            if (component != this) {
+            if (component != this && !(component instanceof ModuleListComponent)) {
                 RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, component.isVisible() ? 0x45002e00 : 0x452e0000);
                 final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + 1 + offsetY - this.scroll - mc.fontRenderer.FONT_HEIGHT + 1) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT) + 1 + offsetY - this.scroll);
                 if (insideComponent) {
@@ -136,7 +137,7 @@ public final class HubComponent extends ResizableHudComponent {
             int offsetY = BORDER;
 
             for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
-                if (component != this) {
+                if (component != this && !(component instanceof ModuleListComponent)) {
                     final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + 1 + offsetY - this.scroll) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT * 2) + 1 + offsetY - this.scroll);
                     if (insideComponent) {
                         component.setVisible(!component.isVisible());

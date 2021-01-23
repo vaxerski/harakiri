@@ -72,7 +72,7 @@ public final class ModuleManager {
         add(new NametagsModule());
         add(new SneakModule());
         add(new MiddleClickFriendsModule());
-        add(new BrightnessModule());
+        add(new FullbrightModule());
         add(new ReconnectModule());
         add(new AutoFishModule());
         add(new InteractModule());
@@ -181,6 +181,7 @@ public final class ModuleManager {
         add(new NoteBotModule());
 
         MinecraftForge.EVENT_BUS.register(espmod);
+        MinecraftForge.EVENT_BUS.register(new ReconnectModule());
 
         // p2w experience
         if (Harakiri.INSTANCE.getCapeManager().hasCape())
