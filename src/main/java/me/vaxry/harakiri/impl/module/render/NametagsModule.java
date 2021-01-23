@@ -285,7 +285,9 @@ public final class NametagsModule extends Module {
 
             nametagMiddleNew.y -= NAMETAG_SAFEAREA * 5 + mc.fontRenderer.FONT_HEIGHT + 16;
 
-            float rectWidth = NAMETAG_SAFEAREA*2 + stacks.size() * 16 + NAMETAG_SAFEAREA * (stacks.size() - 1);
+            float rectWidth = NAMETAG_SAFEAREA*2 + stacks.size() * 16 + NAMETAG_SAFEAREA * Math.max(stacks.size() - 1, 0);
+            if(stacks.size() == 0)
+                rectWidth = 0;
             RenderUtil.drawRect((float)nametagMiddleNew.x - rectWidth/2.f, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + 2 * NAMETAG_SAFEAREA, (float)nametagMiddleNew.x + rectWidth/2.f, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + 16 + 4 * NAMETAG_SAFEAREA, 0x551d1d1d);
             // BG drawn.
 
@@ -314,10 +316,10 @@ public final class NametagsModule extends Module {
                 }
             }
 
-            float nameScale = 0.7f;
+            float nameScale = 0.8f;
 
-            nametagMiddleNew.x /= 0.7f;
-            nametagMiddleNew.y /= 0.7f;
+            nametagMiddleNew.x /= 0.8f;
+            nametagMiddleNew.y /= 0.8f;
 
             GlStateManager.scale(nameScale, nameScale, nameScale);
 
@@ -325,10 +327,12 @@ public final class NametagsModule extends Module {
 
             String itemName = mainHandItem.getDisplayName();
 
-            nametagMiddleNew.y -= mc.fontRenderer.FONT_HEIGHT;
+            if(mainHandItem.getItem() == Items.AIR) itemName = "";
+
+            nametagMiddleNew.y -= mc.fontRenderer.FONT_HEIGHT / 2.f;
             float nameRectWidth = NAMETAG_SAFEAREA*2 + mc.fontRenderer.getStringWidth(itemName);
 
-            RenderUtil.drawRect((float)nametagMiddleNew.x - nameRectWidth / 2.f, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + NAMETAG_SAFEAREA, (float)nametagMiddleNew.x + nameRectWidth / 2.f, (float)nametagMiddleNew.y - NAMETAG_SAFEAREA, 0x551d1d1d);
+            //RenderUtil.drawRect((float)nametagMiddleNew.x - nameRectWidth / 2.f, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + NAMETAG_SAFEAREA, (float)nametagMiddleNew.x + nameRectWidth / 2.f, (float)nametagMiddleNew.y - NAMETAG_SAFEAREA, 0x551d1d1d);
             mc.fontRenderer.drawStringWithShadow(itemName, (float)nametagMiddleNew.x - nameRectWidth / 2.f + NAMETAG_SAFEAREA, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT, 0xFFDDDDDD);
 
 

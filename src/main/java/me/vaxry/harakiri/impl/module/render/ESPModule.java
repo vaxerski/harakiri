@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
+import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -41,6 +42,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.locationtech.jts.geom.Coordinate;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
@@ -60,11 +62,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class ESPModule extends Module {
 
+
     public ESPModule() {
         super("ESP", new String[]{"ESP"}, "Highlights entities", "NONE", -1, ModuleType.RENDER);
+
     }
 
-    // recode the entire thing, dont bother
+    @SubscribeEvent
+    public void onRenderLivingBase(RenderLivingEvent.Specials.Post<EntityLivingBase> ent){
+        if(!(ent.getEntity() instanceof EntityPlayer))
+            return;
 
+        EntityPlayer e = (EntityPlayer)ent.getEntity();
+    }
 
 }

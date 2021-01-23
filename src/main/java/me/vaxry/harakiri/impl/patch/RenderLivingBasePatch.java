@@ -75,40 +75,40 @@ public final class RenderLivingBasePatch extends ClassPatch {
      * @param methodNode
      * @param env
      */
-   /* @MethodPatch(
+    @MethodPatch(
             mcpName = "doRender",
             notchName = "a",
             mcpDesc = "(Lnet/minecraft/entity/EntityLivingBase;DDDFF)V",
             notchDesc = "(Lvp;DDDFF)V")
     public void doRender(MethodNode methodNode, PatchManager.Environment env) {
         //create a list of instructions and add the needed instructions to call our hook function
-        final InsnList preInsn = new InsnList();
+        final InsnList insnList = new InsnList();
         //add ALOAD to pass the entity into our hook function
-        preInsn.add(new VarInsnNode(ALOAD, 1));
+        insnList.add(new VarInsnNode(ALOAD, 1));
         //PRE
-        preInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry.harakiri/api/event/EventStageable$EventStage", "PRE", "Lme/vaxry.harakiri/api/event/EventStageable$EventStage;"));
+        insnList.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/api/event/EventStageable$EventStage", "PRE", "Lme/vaxry/harakiri/api/event/EventStageable$EventStage;"));
         //call our hook function
-        preInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "doRenderHook", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/entity/EntityLivingBase;Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z" : "(Lvp;Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z", false));
+        insnList.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "doRenderHook", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/entity/EntityLivingBase;Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z" : "(Lvp;Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z", false));
         //add a label to jump to
         final LabelNode jmp = new LabelNode();
-       //add if equals and pass the label
-        preInsn.add(new JumpInsnNode(IFEQ, jmp));
+        //add if equals and pass the label
+        insnList.add(new JumpInsnNode(IFEQ, jmp));
         //add return so the rest of the function doesn't get called
-        preInsn.add(new InsnNode(RETURN));
+        insnList.add(new InsnNode(RETURN));
         //add our label
-        preInsn.add(jmp);
+        insnList.add(jmp);
         //insert the list of instructions at the top of the function
-        methodNode.instructions.insert(preInsn);
+        methodNode.instructions.insert(insnList);
 
-        //create a list of instructions and add the needed instructions to call our hook function
+        //same as above
         final InsnList postInsn = new InsnList();
         //add ALOAD to pass the entity into our hook function
         postInsn.add(new VarInsnNode(ALOAD, 1));
         //POST
-        postInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry.harakiri/api/event/EventStageable$EventStage", "POST", "Lme/vaxry.harakiri/api/event/EventStageable$EventStage;"));
+        postInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/api/event/EventStageable$EventStage", "POST", "Lme/vaxry/harakiri/api/event/EventStageable$EventStage;"));
         //call our hook function
-        preInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "doRenderHook", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/entity/EntityLivingBase;Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z" : "(Lvp;Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z", false));
-       //insert the list of instructions at the bottom of the function
+        postInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "doRenderHook", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/entity/EntityLivingBase;Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z" : "(Lvp;Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z", false));
+        //insert the list of instructions at the bottom of the function
         methodNode.instructions.insertBefore(ASMUtil.bottom(methodNode), postInsn);
     }
 
@@ -119,11 +119,11 @@ public final class RenderLivingBasePatch extends ClassPatch {
      * @param stage
      * @return
      */
-    /*public static boolean doRenderHook(EntityLivingBase entity, EventStageable.EventStage stage) {
+    public static boolean doRenderHook(EntityLivingBase entity, EventStageable.EventStage stage) {
         final EventRenderLivingEntity event = new EventRenderLivingEntity(stage, entity);
         Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
 
+
         return event.isCanceled();
     }
-*/
 }

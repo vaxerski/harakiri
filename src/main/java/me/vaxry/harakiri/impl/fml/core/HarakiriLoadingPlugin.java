@@ -14,6 +14,9 @@ import java.util.Map;
 @IFMLLoadingPlugin.MCVersion(value = "1.12.2")
 public final class HarakiriLoadingPlugin implements IFMLLoadingPlugin {
 
+    public HarakiriLoadingPlugin() {
+    }
+
     @Override
     public String[] getASMTransformerClass() {
         return new String[]{

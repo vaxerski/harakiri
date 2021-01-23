@@ -1,8 +1,10 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
 import net.minecraft.client.Minecraft;
+import sun.nio.ch.Net;
 
 import java.text.DecimalFormat;
 
@@ -24,17 +26,23 @@ public final class CoordsComponent extends DraggableHudComponent {
         if (mc.player != null && mc.world != null) {
             final DecimalFormat df = new DecimalFormat("#.#");
 
-            final String coords = ChatFormatting.GRAY + "x " + ChatFormatting.RESET +
-                    df.format(Minecraft.getMinecraft().player.posX) + ChatFormatting.RESET + "," +
-                    ChatFormatting.GRAY + " y " + ChatFormatting.RESET + df.format(Minecraft.getMinecraft().player.posY) + ChatFormatting.RESET + "," +
-                    ChatFormatting.GRAY + " z " + ChatFormatting.RESET + df.format(Minecraft.getMinecraft().player.posZ) + ChatFormatting.RESET;
+            String coordz = ChatFormatting.GRAY + "XYZ: " + ChatFormatting.RESET + df.format(Minecraft.getMinecraft().player.posX) + ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
+                    df.format(Minecraft.getMinecraft().player.posY) + ChatFormatting.GRAY + ", " + ChatFormatting.RESET + df.format(Minecraft.getMinecraft().player.posZ);
 
-            this.setW(Minecraft.getMinecraft().fontRenderer.getStringWidth(coords));
+            NetherCoordsComponent ncc = (NetherCoordsComponent)Harakiri.INSTANCE.getHudManager().findComponent(NetherCoordsComponent.class);
+            if(ncc.isVisible())
+                coordz += ChatFormatting.GRAY + "[" + ChatFormatting.RESET + df.format(Minecraft.getMinecraft().player.posX/8.f) +
+                        ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
+                        df.format(Minecraft.getMinecraft().player.posY/8.f) + ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
+                        df.format(Minecraft.getMinecraft().player.posZ/8.f) +
+                        ChatFormatting.GRAY + "]";
 
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(coords, this.getX(), this.getY(), -1);
+            this.setW(Minecraft.getMinecraft().fontRenderer.getStringWidth(coordz));
+
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(coordz, this.getX(), this.getY(), -1);
         } else {
-            this.setW(Minecraft.getMinecraft().fontRenderer.getStringWidth("(coords)"));
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("(coords)", this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Minecraft.getMinecraft().fontRenderer.getStringWidth("(coordinates)"));
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("(coordinates)", this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 

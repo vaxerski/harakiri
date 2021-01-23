@@ -17,15 +17,12 @@ public final class ServerBrandComponent extends DraggableHudComponent {
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
 
-        if (mc.getCurrentServerData() != null) {
-            final String brand = mc.getCurrentServerData() == null ? "Vanilla" : mc.getCurrentServerData().gameVersion;
 
-            this.setW(mc.fontRenderer.getStringWidth(brand));
-            mc.fontRenderer.drawStringWithShadow(brand, this.getX(), this.getY(), -1);
-        } else {
-            this.setW(mc.fontRenderer.getStringWidth("(server brand)"));
-            mc.fontRenderer.drawStringWithShadow("(server brand)", this.getX(), this.getY(), 0xFFAAAAAA);
-        }
+        final String brand = mc.getCurrentServerData() == null ? "Vanilla" : mc.getCurrentServerData().gameVersion;
+
+        this.setW(mc.fontRenderer.getStringWidth(brand));
+        mc.fontRenderer.drawStringWithShadow(brand, this.getX(), this.getY(), -1);
+
     }
 
 }

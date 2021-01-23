@@ -4,5 +4,7 @@
   "package": "me.vaxry.harakiri.impl.mixin.client",
   "refmap": "mixins.harakiri.refmap.json",
   "client": [
+    "MixinRender",
+    "MixinRenderLivingBase"
   ]
 }

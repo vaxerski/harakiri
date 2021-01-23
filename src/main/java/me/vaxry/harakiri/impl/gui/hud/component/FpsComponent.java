@@ -1,7 +1,9 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 /**
  * Author Seth
@@ -19,7 +21,7 @@ public final class FpsComponent extends DraggableHudComponent {
         super.render(mouseX, mouseY, partialTicks);
 
         if (mc.world != null) {
-            final String fps = "FPS: " + Minecraft.getDebugFPS();
+            final String fps = ChatFormatting.GRAY + "FPS: " + ChatFormatting.RESET + Minecraft.getDebugFPS();
             this.setW(mc.fontRenderer.getStringWidth(fps));
             mc.fontRenderer.drawStringWithShadow(fps, this.getX(), this.getY(), -1);
         } else {

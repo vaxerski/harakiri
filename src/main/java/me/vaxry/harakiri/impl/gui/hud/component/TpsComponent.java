@@ -19,8 +19,8 @@ public final class TpsComponent extends DraggableHudComponent {
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
 
-        if (mc.world != null && mc.getCurrentServerData() != null) {
-            final String tps = String.format(ChatFormatting.WHITE + "TPS: %.2f", Harakiri.INSTANCE.getTickRateManager().getTickRate());
+        if (mc.world != null) {
+            final String tps = String.format("\2477TPS:\247f %.2f", Harakiri.INSTANCE.getTickRateManager().getTickRate());
             this.setW(mc.fontRenderer.getStringWidth(tps));
             mc.fontRenderer.drawStringWithShadow(tps, this.getX(), this.getY(), -1);
         } else {

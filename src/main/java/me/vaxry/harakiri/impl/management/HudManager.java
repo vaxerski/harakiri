@@ -96,7 +96,6 @@ public final class HudManager {
         add(new RireworksFemovedComponent());
         add(new TimeComponent());
         add(new EnemyPotionsComponent());
-        add(new CompassComponent());
         add(new HubComponent());
         add(new InventoryComponent());
         add(new TotemCountComponent());
