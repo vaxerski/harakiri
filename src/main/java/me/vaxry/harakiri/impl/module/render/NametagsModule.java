@@ -24,8 +24,10 @@ import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -39,6 +41,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
+import javax.print.attribute.standard.MediaSize;
 import javax.vecmath.Vector3d;
 import java.util.*;
 
@@ -48,6 +51,7 @@ public final class NametagsModule extends Module {
     private ICamera camera = new Frustum();;
 
     public final Value<Float> additionalScale = new Value<Float>("Scale", new String[]{"Scale", "s"}, "Scale the nametag", 1.f, 0.5f, 2.5f, 0.5f);
+    public final Value<Float> armorscale = new Value<Float>("ArmorScale", new String[]{"Armorscale", "as"}, "Scale the armor part", 1.f, 0.5f, 2.5f, 0.5f);
 
 
     public NametagsModule() {
@@ -163,6 +167,7 @@ public final class NametagsModule extends Module {
             float scale = 0;
             float textLength = 0;
             float xoffset = 0;
+            Coordinate nametagMiddleNew = new Coordinate(0,0);
 
             if(distancetoent > 5.f) {
                 // draw without 3D scaling
@@ -181,6 +186,9 @@ public final class NametagsModule extends Module {
 
                 nametagX /= scale;
                 nametagY /= scale;
+
+                nametagMiddleNew.x = nametagX;
+                nametagMiddleNew.y = nametagY;
 
                 textLength = mc.fontRenderer.getStringWidth(nametagstr);
                 nametagX -= textLength / 2.f;
@@ -218,19 +226,21 @@ public final class NametagsModule extends Module {
 
                 textLength = mc.fontRenderer.getStringWidth(nametagstr);
 
-                if(left.x > right.x){
-                    right.x /= scale;
-                    right.y /= scale;
+                right.x /= scale;
+                right.y /= scale;
+                left.x /= scale;
+                left.y /= scale;
 
+                if(left.x > right.x){
                     nametagX = (float)right.x + xoffset;
                     nametagY = (float)right.y;
                 }else{
-                    left.x /= scale;
-                    left.y /= scale;
-
                     nametagX = (float)left.x + xoffset;
                     nametagY = (float)left.y;
                 }
+
+                nametagMiddleNew.x = Math.abs(right.x + left.x) / 2.f;
+                nametagMiddleNew.y = left.y;
 
                 xoffset = 2.9f;
 
@@ -241,10 +251,91 @@ public final class NametagsModule extends Module {
             RenderUtil.drawRect(nametagX - NAMETAG_SAFEAREA + xoffset, nametagY, nametagX + textLength + xoffset + NAMETAG_SAFEAREA, nametagY + mc.fontRenderer.FONT_HEIGHT + 2 * NAMETAG_SAFEAREA, 0x551d1d1d);
             mc.fontRenderer.drawStringWithShadow(nametagstr, nametagX + xoffset, nametagY + NAMETAG_SAFEAREA, 0xFFDDDDDD);
 
+            // Draw Armor and stuff
+
+            final Iterator<ItemStack> items = e.getEquipmentAndArmor().iterator();
+            final ArrayList<ItemStack> stacks = new ArrayList<>();
+
+            final ItemStack offhandItem = ((EntityLivingBase)e).getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
+            final ItemStack mainHandItem = ((EntityLivingBase)e).getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
+            final ItemStack feetitem = ((EntityLivingBase)e).getItemStackFromSlot(EntityEquipmentSlot.FEET);
+            final ItemStack legitem = ((EntityLivingBase)e).getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+            final ItemStack chestItem = ((EntityLivingBase)e).getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+            final ItemStack headitem = ((EntityLivingBase)e).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+
+            stacks.add(offhandItem);
+            stacks.add(feetitem);
+            stacks.add(legitem);
+            stacks.add(chestItem);
+            stacks.add(headitem);
+            stacks.add(mainHandItem);
+
+            for(int i = 0; i < stacks.size(); ++i)
+                if(stacks.get(i).getItem() == Items.AIR)
+                    stacks.remove(i);
+
+
+            // One stack is 16
+            //
+
+            nametagMiddleNew.x /= armorscale.getValue();
+            nametagMiddleNew.y /= armorscale.getValue();
+
+            GlStateManager.scale(armorscale.getValue(), armorscale.getValue(), armorscale.getValue());
+
+            nametagMiddleNew.y -= NAMETAG_SAFEAREA * 5 + mc.fontRenderer.FONT_HEIGHT + 16;
+
+            float rectWidth = NAMETAG_SAFEAREA*2 + stacks.size() * 16 + NAMETAG_SAFEAREA * (stacks.size() - 1);
+            RenderUtil.drawRect((float)nametagMiddleNew.x - rectWidth/2.f, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + 2 * NAMETAG_SAFEAREA, (float)nametagMiddleNew.x + rectWidth/2.f, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + 16 + 4 * NAMETAG_SAFEAREA, 0x551d1d1d);
+            // BG drawn.
+
+            float currentX = 0;
+
+            for (ItemStack stack : stacks) {
+                if (stack != null) {
+                    final Item item = stack.getItem();
+                    if (item != Items.AIR) {
+                        GlStateManager.pushMatrix();
+                        GlStateManager.enableBlend();
+                        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+                        RenderHelper.enableGUIStandardItemLighting();
+                        GlStateManager.translate(nametagMiddleNew.x - rectWidth/2.f + NAMETAG_SAFEAREA + currentX, nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + 3 * NAMETAG_SAFEAREA, 0);
+
+                        mc.getRenderItem().renderItemAndEffectIntoGUI(stack, 0, 0);
+                        mc.getRenderItem().renderItemOverlays(mc.fontRenderer, stack, 0, 0);
+
+                        RenderHelper.disableStandardItemLighting();
+                        GlStateManager.disableBlend();
+                        GlStateManager.color(1, 1, 1, 1);
+                        GlStateManager.popMatrix();
+
+                        currentX += 16 + NAMETAG_SAFEAREA;
+                    }
+                }
+            }
+
+            float nameScale = 0.7f;
+
+            nametagMiddleNew.x /= 0.7f;
+            nametagMiddleNew.y /= 0.7f;
+
+            GlStateManager.scale(nameScale, nameScale, nameScale);
+
+            // Render in-hand item name
+
+            String itemName = mainHandItem.getDisplayName();
+
+            nametagMiddleNew.y -= mc.fontRenderer.FONT_HEIGHT;
+            float nameRectWidth = NAMETAG_SAFEAREA*2 + mc.fontRenderer.getStringWidth(itemName);
+
+            RenderUtil.drawRect((float)nametagMiddleNew.x - nameRectWidth / 2.f, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + NAMETAG_SAFEAREA, (float)nametagMiddleNew.x + nameRectWidth / 2.f, (float)nametagMiddleNew.y - NAMETAG_SAFEAREA, 0x551d1d1d);
+            mc.fontRenderer.drawStringWithShadow(itemName, (float)nametagMiddleNew.x - nameRectWidth / 2.f + NAMETAG_SAFEAREA, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT, 0xFFDDDDDD);
+
+
+            GlStateManager.scale(1/nameScale, 1/nameScale, 1/nameScale);
+            GlStateManager.scale(1/armorscale.getValue(), 1/armorscale.getValue(), 1/armorscale.getValue());
             GlStateManager.scale(1/scale, 1/scale, 1/scale);
             GlStateManager.popMatrix();
-
-            
         }
     }
 
