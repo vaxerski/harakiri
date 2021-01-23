@@ -69,6 +69,7 @@ public final class ModuleManager {
         add(new NoFallModule());
         add(new NoSwingModule());
         add(espmod);
+        add(new NametagsModule());
         add(new SneakModule());
         add(new MiddleClickFriendsModule());
         add(new BrightnessModule());

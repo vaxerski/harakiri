@@ -5,6 +5,7 @@ import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.api.gui.hud.component.HudComponent;
 import me.vaxry.harakiri.api.texture.Texture;
 import me.vaxry.harakiri.impl.fml.harakiriMod;
+import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.module.ui.WatermarkModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -31,6 +32,10 @@ public final class WatermarkComponent extends HudComponent {
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
+
+        if((Minecraft.getMinecraft().currentScreen instanceof GuiHudEditor))
+            return;
+
         WatermarkModule watermarkModule = (WatermarkModule) Harakiri.INSTANCE.getModuleManager().find(WatermarkModule.class);
         watermarkModule.setWMOnState(this.isVisible());
 
