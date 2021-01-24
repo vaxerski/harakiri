@@ -190,7 +190,7 @@ public final class StorageESPModule extends Module {
                             }
 
                             // push it
-                            tileEntitiesPoly.add(new Pair<>(union, getColor(te)));
+                            tileEntitiesPoly.add(new Pair<>(union, rainbow.getValue() ? 0xFFFFFFFF : getColor(te)));
                         }
                     }
                 }
