@@ -13,7 +13,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class RespawnModule extends Module {
 
     public RespawnModule() {
-        super("Respawn", new String[]{"AutoRespawn", "Resp"}, "Automatically respawn after death", "NONE", -1, ModuleType.COMBAT);
+        super("AutoRespawn", new String[]{"AutoRespawn", "Resp"}, "Automatically respawns you after death", "NONE", -1, ModuleType.COMBAT);
     }
 
     @Listener

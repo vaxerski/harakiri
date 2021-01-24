@@ -40,7 +40,7 @@ public final class KillAuraModule extends Module {
     public final Value<Float> range = new Value<>("Range", new String[]{"Dist"}, "The minimum range to attack.", 4.5f, 0.0f, 5.0f, 0.1f);
     public final Value<Boolean> coolDown = new Value<>("CoolDown", new String[]{"CoolD"}, "Delay your hits to gain damage.", true);
     public final Value<Boolean> sync = new Value<>("Sync", new String[]{"snc"}, "Sync your hits with the server's estimated TPS.", true);
-    public final Value<Boolean> teleport = new Value<>("Teleport", new String[]{"tp"}, "Teleports to your target(Only works on vanilla).", false);
+    //public final Value<Boolean> teleport = new Value<>("Teleport", new String[]{"tp"}, "Teleports to your target(Only works on vanilla).", false);
 
     private final RotationTask rotationTask = new RotationTask("KillAuraTask", 5);
 
@@ -71,11 +71,6 @@ public final class KillAuraModule extends Module {
                     Harakiri.INSTANCE.getRotationManager().startTask(this.rotationTask);
                     if (this.rotationTask.isOnline()) {
                         Harakiri.INSTANCE.getRotationManager().setPlayerRotations(angle[0], angle[1]);
-                    }
-
-                    //TODO interp
-                    if (this.teleport.getValue()) {
-                        Harakiri.INSTANCE.getPositionManager().setPlayerPosition(this.currentTarget.posX, this.currentTarget.posY, this.currentTarget.posZ);
                     }
                 }
                 break;

@@ -19,7 +19,7 @@ public final class CriticalsModule extends Module {
     public final Value<Mode> mode = new Value("Mode", new String[]{"Mode", "M"}, "The criticals mode to use.", Mode.PACKET);
 
     public CriticalsModule() {
-        super("Criticals", new String[]{"Crits"}, "Attempts to preform a critical while hitting entities", "NONE", -1, ModuleType.COMBAT);
+        super("Criticals", new String[]{"Crits"}, "Always makes you try to hit criticals.", "NONE", -1, ModuleType.COMBAT);
     }
 
     @Override

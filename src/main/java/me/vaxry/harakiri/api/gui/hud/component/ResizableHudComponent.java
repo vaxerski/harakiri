@@ -22,7 +22,7 @@ public class ResizableHudComponent extends DraggableHudComponent {
     private float maxWidth;
     private float maxHeight;
 
-    protected final float CLICK_ZONE = 2;
+    protected final float CLICK_ZONE = 10;
 
     public ResizableHudComponent(String name, float initialWidth, float initialHeight, float maxWidth, float maxHeight) {
         super(name);
@@ -60,15 +60,12 @@ public class ResizableHudComponent extends DraggableHudComponent {
         }
 
         if (Minecraft.getMinecraft().currentScreen instanceof GuiHudEditor) {
-            RenderUtil.drawRect(this.getX() + this.getW() - CLICK_ZONE, this.getY() + this.getH() - CLICK_ZONE, this.getX() + this.getW() + CLICK_ZONE, this.getY() + this.getH() + CLICK_ZONE, 0x80202020); //0x90
+            RenderUtil.drawResizeAnchor(this.getX() + this.getW() - CLICK_ZONE, this.getY() + this.getH() - CLICK_ZONE, CLICK_ZONE, CLICK_ZONE, 0x80303030); //0x45
         }
 
-        final boolean insideClickZone = mouseX >= this.getX() + this.getW() - CLICK_ZONE && mouseX <= this.getX() + this.getW() + CLICK_ZONE && mouseY >= this.getY() + this.getH() - CLICK_ZONE && mouseY <= this.getY() + this.getH() + CLICK_ZONE;
+        final boolean insideClickZone = mouseX >= this.getX() + this.getW() - CLICK_ZONE && mouseX <= this.getX() + this.getW() + CLICK_ZONE / 2.f && mouseY >= this.getY() + this.getH() - CLICK_ZONE && mouseY <= this.getY() + this.getH() + CLICK_ZONE / 2.f;
         if (insideClickZone) {
-            if(this instanceof ModuleListComponent || this instanceof HubComponent)
-                RenderUtil.drawRect(this.getX() + this.getW() - CLICK_ZONE, this.getY() + this.getH() - CLICK_ZONE, this.getX() + this.getW() + CLICK_ZONE, this.getY() + this.getH() + CLICK_ZONE, 0x11FFFFFF); //0x45
-            else
-                RenderUtil.drawRect(this.getX() + this.getW() - CLICK_ZONE, this.getY() + this.getH() - CLICK_ZONE, this.getX() + this.getW() + CLICK_ZONE, this.getY() + this.getH() + CLICK_ZONE, 0x35FFFFFF); //0x45
+            RenderUtil.drawResizeAnchor(this.getX() + this.getW() - CLICK_ZONE, this.getY() + this.getH() - CLICK_ZONE, CLICK_ZONE, CLICK_ZONE, 0x22FFFFFF); //0x45
         }
 
         this.clampMaxs();

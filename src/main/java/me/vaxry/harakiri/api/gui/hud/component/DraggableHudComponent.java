@@ -69,13 +69,16 @@ public class DraggableHudComponent extends HudComponent {
             this.clamp();
         } else if (this.isMouseInside(mouseX, mouseY)) {
             if(this instanceof ModuleListComponent || this instanceof HubComponent)
-                RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x11FFFFFF); //0x45
+                RenderUtil.drawRoundedRect(this.getX(), this.getY(), this.getW(), this.getH(), 5, 0x11FFFFFF); //0x45
             else
                 RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x35FFFFFF); //0x45
         }
 
         if (isHudEditor) {
-            RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x75101010);
+            if(this instanceof HubComponent || this instanceof ModuleListComponent)
+                RenderUtil.drawRoundedRect(this.getX(), this.getY(), this.getW(), this.getH(), 5, 0x75101010);
+            else
+                RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x75101010);
             if (this.isLocked()) {
                 // why??? its ugly
                 //RenderUtil.drawBorderedRect(this.getX() - 1, this.getY() - 1, this.getX() + this.getW() + 1, this.getY() + this.getH() + 1, 0.5f, 0x00000000, 0x75FFFFFF);

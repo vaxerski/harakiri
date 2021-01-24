@@ -10,9 +10,11 @@ import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.gui.hud.component.*;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
+import me.vaxry.harakiri.impl.module.misc.ReconnectModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraftforge.common.MinecraftForge;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.io.File;
@@ -75,6 +77,8 @@ public final class HudManager {
             moduleListXOffset += moduleList.getW() + 4 /* gap between each list */;
         }
 
+        RireworksFemovedComponent rfc = new RireworksFemovedComponent();
+
         add(new PlexusComponent());
         add(new WatermarkComponent());
         add(new EnabledModsComponent(TOP_RIGHT)); // creates the enabled mods component & by default anchors in the top right (to aid new users)
@@ -93,7 +97,7 @@ public final class HudManager {
         add(new BiomeComponent());
         add(new DirectionComponent());
         add(new PacketTimeComponent());
-        add(new RireworksFemovedComponent());
+        add(rfc);
         add(new TimeComponent());
         add(new EnemyPotionsComponent());
         add(new HubComponent());
@@ -107,6 +111,7 @@ public final class HudManager {
         add(new RearViewComponent());
         add(new EntityListComponent());
 
+        MinecraftForge.EVENT_BUS.register(rfc);
         //MinecraftForge.EVENT_BUS.register(new ThreatCamComponent());
 
         NotificationsComponent notificationsComponent = new NotificationsComponent();

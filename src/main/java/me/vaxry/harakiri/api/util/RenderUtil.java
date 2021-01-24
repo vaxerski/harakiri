@@ -58,6 +58,110 @@ public final class RenderUtil {
         GlStateManager.disableBlend();
     }
 
+    public static void drawRoundedRect(float x, float y, float w, float h, float radius, int color) {
+        float alpha = (float) (color >> 24 & 255) / 255.0F;
+        float red = (float) (color >> 16 & 255) / 255.0F;
+        float green = (float) (color >> 8 & 255) / 255.0F;
+        float blue = (float) (color & 255) / 255.0F;
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+
+        glColor(color);
+
+        GL11.glBegin(GL11.GL_POLYGON);
+        int SIDES = 32; // 32 sides
+        int SIDES34 = 8 * 3;
+
+
+        // Bottom Line
+        GL11.glVertex2d(x + radius, y + h);
+        GL11.glVertex2d(x + w - radius, y + h);
+
+        float x1 = x + w - radius;
+        float y1 = y + h - radius;
+
+        for (int i = 0; i <= SIDES / 4; i++)
+        {
+            GL11.glVertex2d(x1 + (Math.sin((i * (360.f / (float)SIDES) * 3.141526D / 180)) * radius), y1 + (Math.cos((i * (360.f / (float)SIDES) * 3.141526D / 180)) * radius));
+        }
+
+        // Right Line
+        GL11.glVertex2d(x + w, y + radius);
+
+        x1 = x + w - radius;
+        y1 = y + radius;
+
+        for (int i = SIDES / 4; i <= SIDES / 2; i++)
+        {
+            GL11.glVertex2d(x1 + (Math.sin((i * (360.f / (float)SIDES) * 3.141526D / 180)) * radius), y1 + (Math.cos((i * (360.f / (float)SIDES) * 3.141526D / 180)) * radius));
+        }
+
+        // Top Line
+        GL11.glVertex2d(x + radius, y);
+
+        x1 = x + radius;
+        y1 = y + radius;
+
+        for (int i = SIDES / 2; i <= SIDES34; i++)
+        {
+            GL11.glVertex2d(x1 + (Math.sin((i * (360.f / (float)SIDES) * 3.141526D / 180)) * radius), y1 + (Math.cos((i * (360.f / (float)SIDES) * 3.141526D / 180)) * radius));
+        }
+
+        // Left Line
+        GL11.glVertex2d(x, y + h - radius);
+
+        x1 = x + radius;
+        y1 = y + h - radius;
+
+        for (int i = SIDES34; i <= SIDES; i++)
+        {
+            GL11.glVertex2d(x1 + (Math.sin((i * (360.f / (float)SIDES) * 3.141526D / 180)) * radius), y1 + (Math.cos((i * (360.f / (float)SIDES) * 3.141526D / 180)) * radius));
+        }
+
+        GL11.glEnd();
+
+        GlStateManager.disableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.enableTexture2D();
+    }
+
+    //todo: fix this
+    public static void drawResizeAnchor(float x, float y, float w, float h, int color) {
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+
+        glColor(color);
+
+        GL11.glBegin(GL11.GL_POLYGON);
+
+        int SIDES = 32;
+        float radius = 0.5f * w;
+
+        GL11.glVertex2d(x, y + h);
+        GL11.glVertex2d(x + w - radius, y + h);
+
+        float x1 = x + w - radius;
+        float y1 = y + h - radius;
+
+        for (int i = 0; i <= SIDES / 4; i++)
+        {
+            GL11.glVertex2d(x1 + (Math.sin((i * (360.f / (float)SIDES) * 3.141526D / 180)) * radius), y1 + (Math.cos((i * (360.f / (float)SIDES) * 3.141526D / 180)) * radius));
+        }
+
+        GL11.glVertex2d(x + w, y);
+        GL11.glVertex2d(x, y + h);
+
+        GL11.glEnd();
+
+        GlStateManager.disableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.enableTexture2D();
+    }
+
     public static void drawGradientRect(float left, float top, float right, float bottom, int startColor, int endColor) {
         float f = (float) (startColor >> 24 & 255) / 255.0F;
         float f1 = (float) (startColor >> 16 & 255) / 255.0F;

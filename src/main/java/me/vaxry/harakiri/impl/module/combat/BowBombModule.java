@@ -16,7 +16,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class BowBombModule extends Module {
 
     public BowBombModule() {
-        super("BowBomb", new String[]{"BBomb"}, "Deal more damage with arrows while falling or flying", "NONE", -1, ModuleType.COMBAT);
+        super("BowBomb", new String[]{"BBomb"}, "Deals more damage with arrows when flying.", "NONE", -1, ModuleType.COMBAT);
     }
 
     @Listener

@@ -7,6 +7,7 @@ import me.vaxry.harakiri.api.patch.ClassPatch;
 import me.vaxry.harakiri.api.patch.MethodPatch;
 import me.vaxry.harakiri.api.util.ASMUtil;
 import me.vaxry.harakiri.impl.management.PatchManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
@@ -106,6 +107,28 @@ public final class RenderManagerPatch extends ClassPatch {
         Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
+    }
+
+    // Render Entity Static
+
+    @MethodPatch(
+            mcpName = "renderEntityStatic",
+            notchName = "a",
+            mcpDesc = "(Lnet/minecraft/entity/Entity;FZ)V",
+            notchDesc = "(Lvg;FZ)V")
+    public void renderEntityStatic(MethodNode methodNode, PatchManager.Environment env) {
+        final InsnList preInsn = new InsnList();
+        preInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "renderEntityStaticHook", env == PatchManager.Environment.IDE ? "()V" : "()V", false));
+        methodNode.instructions.insert(preInsn);
+    }
+
+    public static void renderEntityStaticHook() {
+        //dispatch our event and pass the render information into it along with the event stage
+
+        // kinda cool if someone likes it
+        //Minecraft.getMinecraft().getRenderManager().setRenderOutlines(false);
+
+        return;
     }
 
 }

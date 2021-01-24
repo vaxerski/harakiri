@@ -8,6 +8,7 @@ import me.vaxry.harakiri.api.texture.Texture;
 import me.vaxry.harakiri.api.util.RenderUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
+import me.vaxry.harakiri.impl.module.render.HudModule;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Mouse;
@@ -28,16 +29,20 @@ public final class HubComponent extends ResizableHudComponent {
     private final int TEXTURE_SIZE = 8;
     private final int TITLE_BAR_HEIGHT = mc.fontRenderer.FONT_HEIGHT + 1;
 
+    private boolean useRainbow = false;
+    private int rainbowCol = 0xFFFFFFFF;
+    private int rainbowColBG = 0x45FFFFFF;
+
     private final Texture texture;
 
     public HubComponent() {
-        super("Hub", 100, 120, 125, 1000);
+        super("Components", 100, 120, 125, 1000);
         this.texture = new Texture("module-hub.png");
 
         this.setVisible(true);
         this.setSnappable(false);
         this.setW(100);
-        this.setH(120);
+        this.setH(200);
         this.setX((mc.displayWidth / 2.0f) - (this.getW() / 2));
         this.setY((mc.displayHeight / 2.0f) - (this.getH() / 2));
     }
@@ -74,16 +79,25 @@ public final class HubComponent extends ResizableHudComponent {
             }
         }
 
+        final HudModule hm = (HudModule) Harakiri.INSTANCE.getModuleManager().find(HudModule.class);
+        if(hm.rainbow.getValue())
+            useRainbow = true;
+        else
+            useRainbow = false;
+
+        rainbowCol = Harakiri.INSTANCE.getHudEditor().rainbowColor;
+        rainbowColBG = 0x45000000 + Harakiri.INSTANCE.getHudEditor().rainbowColor - 0xFF000000;
+
         // Background & title
-        RenderUtil.drawRect(this.getX() - 1, this.getY() - 1, this.getX() + this.getW() + 1, this.getY() + this.getH() + 1, 0x11101010); //0x99
-        RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x22202020); //0xFF
+        //RenderUtil.drawRoundedRect(this.getX() - 1, this.getY() - 1, this.getW() + 1, this.getH() + 1, 5, 0x11101010); //0x99
+        RenderUtil.drawRoundedRect(this.getX(), this.getY(), this.getW(), this.getH(), 5, 0x22202020); //0xFF
         texture.bind();
         texture.render(this.getX() + BORDER, this.getY() + BORDER, TEXTURE_SIZE, TEXTURE_SIZE);
         mc.fontRenderer.drawStringWithShadow(this.getName(), this.getX() + BORDER + /* texture width */ TEXTURE_SIZE + BORDER, this.getY() + BORDER, 0xFFFFFFFF);
         offsetY += mc.fontRenderer.FONT_HEIGHT + 1;
 
         // Behind hub
-        RenderUtil.drawRect(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getX() + this.getW() - SCROLL_WIDTH - BORDER, this.getY() + this.getH() - BORDER, 0x22101010); //0xff
+        //RenderUtil.drawRoundedRect(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getW() - SCROLL_WIDTH - BORDER, this.getH() - BORDER, 5, 0x22101010); //0xff
 
         // Scrollbar bg
         RenderUtil.drawRect(this.getX() + this.getW() - SCROLL_WIDTH, this.getY() + offsetY + BORDER, this.getX() + this.getW() - BORDER, this.getY() + this.getH() - BORDER, 0x22101010); //0xff
@@ -107,15 +121,21 @@ public final class HubComponent extends ResizableHudComponent {
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         RenderUtil.glScissor(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getX() + this.getW() - BORDER - SCROLL_WIDTH, this.getY() + this.getH() - BORDER, sr);
         for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
-            if (component != this && !(component instanceof ModuleListComponent)) {
-                RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, component.isVisible() ? 0x45002e00 : 0x452e0000);
+            if (component != this && !(component instanceof ModuleListComponent) && !(component instanceof SwitchViewComponent)) {
+                if(useRainbow)
+                    RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, component.isVisible() ? rainbowColBG : 0x451F1C22);
+                else
+                    RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, component.isVisible() ? 0x45002e00 : 0x451F1C22);
                 final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + 1 + offsetY - this.scroll - mc.fontRenderer.FONT_HEIGHT + 1) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT) + 1 + offsetY - this.scroll);
                 if (insideComponent) {
                     RenderUtil.drawGradientRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, 0x30909090, 0x30909090); //0x00101010
                 }
 
                 // draw button text
-                mc.fontRenderer.drawStringWithShadow(component.getName(), this.getX() + BORDER + TEXT_GAP + 1, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, component.isVisible() ? 0xFF55FF55 : 0xFFFF5555);
+                if(useRainbow)
+                    mc.fontRenderer.drawStringWithShadow(component.getName(), this.getX() + BORDER + TEXT_GAP + 1, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, component.isVisible() ? rainbowCol : 0xFFDDDDDD);
+                else
+                    mc.fontRenderer.drawStringWithShadow(component.getName(), this.getX() + BORDER + TEXT_GAP + 1, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, component.isVisible() ? 0xFF55FF55 : 0xFFDDDDDD);
 
                 offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
             }
@@ -137,7 +157,7 @@ public final class HubComponent extends ResizableHudComponent {
             int offsetY = BORDER;
 
             for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
-                if (component != this && !(component instanceof ModuleListComponent)) {
+                if (component != this && !(component instanceof ModuleListComponent) && !(component instanceof SwitchViewComponent)) {
                     final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + 1 + offsetY - this.scroll) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT * 2) + 1 + offsetY - this.scroll);
                     if (insideComponent) {
                         component.setVisible(!component.isVisible());

@@ -45,14 +45,14 @@ public final class CrystalAuraModule extends Module {
 
     public final Value<Float> range = new Value<Float>("Range", new String[]{"Dist"}, "The minimum range to attack crystals.", 4.0f, 0.0f, 7.0f, 0.1f);
     public final Value<Boolean> attack = new Value<Boolean>("Attack", new String[]{"AutoAttack"}, "Automatically attack crystals.", true);
-    public final Value<Float> attackDelay = new Value<Float>("Attack_Delay", new String[]{"AttackDelay", "AttackDel", "Del"}, "The delay to attack in milliseconds.", 50.0f, 0.0f, 500.0f, 1.0f);
+    public final Value<Float> attackDelay = new Value<Float>("Attack_Delay", new String[]{"AttackDelay", "AttackDel", "Del"}, "The delay to attack (in ms).", 50.0f, 0.0f, 500.0f, 1.0f);
     public final Value<Boolean> place = new Value<Boolean>("Place", new String[]{"AutoPlace"}, "Automatically place crystals.", true);
-    public final Value<Float> placeDelay = new Value<Float>("Place_Delay", new String[]{"PlaceDelay", "PlaceDel"}, "The delay to place crystals.", 50.0f, 0.0f, 500.0f, 1.0f);
-    public final Value<Float> minDamage = new Value<Float>("Min_Damage", new String[]{"MinDamage", "Min", "MinDmg"}, "The minimum explosion damage calculated to place down a crystal.", 1.5f, 0.0f, 20.0f, 0.5f);
-    public final Value<Boolean> ignore = new Value<Boolean>("Ignore", new String[]{"Ig"}, "Ignore self damage checks.", false);
-    public final Value<Boolean> render = new Value<Boolean>("Render", new String[]{"R"}, "Draws information about recently placed crystals from your player.", true);
-    public final Value<Boolean> renderDamage = new Value<Boolean>("Render_Damage", new String[]{"RD", "RenderDamage", "ShowDamage"}, "Draws calculated explosion damage on recently placed crystals from your player.", true);
-    public final Value<Boolean> offHand = new Value<Boolean>("Offhand", new String[]{"Hand", "otherhand", "off"}, "Use crystals in the off-hand instead of holding them with the main-hand.", false);
+    public final Value<Float> placeDelay = new Value<Float>("Place_Delay", new String[]{"PlaceDelay", "PlaceDel"}, "The delay to place crystals (in ms).", 50.0f, 0.0f, 500.0f, 1.0f);
+    public final Value<Float> minDamage = new Value<Float>("Min_Damage", new String[]{"MinDamage", "Min", "MinDmg"}, "The minimum explosion damage to the threat to place down a crystal.", 1.5f, 0.0f, 20.0f, 0.5f);
+    public final Value<Boolean> ignore = new Value<Boolean>("Ignore", new String[]{"Ig"}, "Ignore self-damage checks.", false);
+    public final Value<Boolean> render = new Value<Boolean>("Render", new String[]{"R"}, "Shows information about your placed crystals.", true);
+    public final Value<Boolean> renderDamage = new Value<Boolean>("Render_Damage", new String[]{"RD", "RenderDamage", "ShowDamage"}, "Draws calculated explosion damage on your placed crystals.", true);
+    public final Value<Boolean> offHand = new Value<Boolean>("Offhand", new String[]{"Hand", "otherhand", "off"}, "Use crystals in the offhand instead of holding them with the mainhand.", false);
 
     private final Timer attackTimer = new Timer();
     private final Timer placeTimer = new Timer();

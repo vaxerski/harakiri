@@ -92,7 +92,7 @@ public final class EnabledModsComponent extends DraggableHudComponent {
             }
 
             for (Module mod : mods) {
-                if (mod != null && mod.getType() != Module.ModuleType.HIDDEN && mod.isEnabled() && !mod.isHidden()) {
+                if (mod != null && mod.getType() != Module.ModuleType.HIDDEN && (mod.isEnabled() || mc.fontRenderer.getStringWidth(mod.getDisplayName()) > mod.activexOffset) && !mod.isHidden()) {
                     String name = mod.getDisplayName() + (SHOW_METADATA ? (mod.getMetaData() != null ? " " + ChatFormatting.GRAY + "[" + ChatFormatting.WHITE + mod.getMetaData().toLowerCase() + ChatFormatting.GRAY + "]" : "") : "");
                     if (LOWERCASE)
                         name = name.toLowerCase();
@@ -110,6 +110,16 @@ public final class EnabledModsComponent extends DraggableHudComponent {
                     if (width >= maxWidth) {
                         maxWidth = width;
                     }
+
+                    if(mod.activexOffset > 0 || (!mod.isEnabled() && mc.fontRenderer.getStringWidth(mod.getDisplayName()) > mod.activexOffset)) {
+                        if((!mod.isEnabled() && mc.fontRenderer.getStringWidth(mod.getDisplayName()) > mod.activexOffset)) {
+                            mod.activexOffset += 1.3f;
+                        }else if(mod.isEnabled()) {
+                            mod.activexOffset -= 1.3f;
+                        }
+                    }
+                    else
+                        mod.activexOffset = 0;
 
                     if (this.getAnchorPoint() != null) {
                         if (this.getAnchorPoint().getPoint() != null) {
@@ -132,19 +142,23 @@ public final class EnabledModsComponent extends DraggableHudComponent {
                                 case TOP_CENTER:
                                 case TOP_LEFT:
                                 case TOP_RIGHT:
-                                    mc.fontRenderer.drawStringWithShadow(name, this.getX() + xOffset, this.getY() + yOffset, color);
-                                    yOffset += (mc.fontRenderer.FONT_HEIGHT + 1);
+                                    mc.fontRenderer.drawStringWithShadow(name, this.getX() + xOffset + mod.activexOffset, this.getY() + yOffset, color);
+                                    if(mod.activexOffset != 0){
+                                        final float perc = mod.activexOffset / mc.fontRenderer.getStringWidth(mod.getDisplayName());
+                                        yOffset += (mc.fontRenderer.FONT_HEIGHT + 1) * (1 - perc);
+                                    }else
+                                        yOffset += (mc.fontRenderer.FONT_HEIGHT + 1);
                                     break;
                                 case BOTTOM_CENTER:
                                 case BOTTOM_LEFT:
                                 case BOTTOM_RIGHT:
-                                    mc.fontRenderer.drawStringWithShadow(name, this.getX() + xOffset, this.getY() + (this.getH() - mc.fontRenderer.FONT_HEIGHT) + yOffset, color);
+                                    mc.fontRenderer.drawStringWithShadow(name, this.getX() + xOffset + mod.activexOffset, this.getY() + (this.getH() - mc.fontRenderer.FONT_HEIGHT) + yOffset, color);
                                     yOffset -= (mc.fontRenderer.FONT_HEIGHT + 1);
                                     break;
                             }
                         }
                     } else {
-                        mc.fontRenderer.drawStringWithShadow(name, this.getX() + xOffset, this.getY() + yOffset, color);
+                        mc.fontRenderer.drawStringWithShadow(name, this.getX() + xOffset + mod.activexOffset, this.getY() + yOffset, color);
                         yOffset += (mc.fontRenderer.FONT_HEIGHT + 1);
                     }
 

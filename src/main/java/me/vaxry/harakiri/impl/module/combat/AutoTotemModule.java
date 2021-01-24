@@ -18,10 +18,10 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class AutoTotemModule extends Module {
 
-    public final Value<Float> health = new Value("Health", new String[]{"Hp"}, "The amount of health needed to acquire a totem.", 16.0f, 0.0f, 20.0f, 0.5f);
+    public final Value<Float> health = new Value("Health", new String[]{"Hp"}, "The amount of health needed to auto-put a totem.", 16.0f, 0.0f, 20.0f, 0.5f);
 
     public AutoTotemModule() {
-        super("AutoTotem", new String[]{"Totem"}, "Automatically places a totem of undying in your offhand", "NONE", -1, ModuleType.COMBAT);
+        super("AutoTotem", new String[]{"Totem"}, "Automatically puts a totem into your offhand.", "NONE", -1, ModuleType.COMBAT);
     }
 
     @Override

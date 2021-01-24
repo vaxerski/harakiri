@@ -1,0 +1,13 @@
+{
+    "blend": {
+        "func": "add",
+        "srcrgb": "one",
+        "dstrgb": "1-srcalpha"
+    },
+    "vertex": "sobel",
+    "fragment": "remove_black",
+    "attributes": [ "Position" ],
+    "samplers": [
+        { "name": "DiffuseSampler" }
+    ]
+}

@@ -58,7 +58,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
     private boolean useRainbow = false;
 
     public ModuleListComponent(Module.ModuleType type) {
-        super(StringUtils.capitalize(type.name().toLowerCase()), 100, 100, 150, 400);
+        super(StringUtils.capitalize(type.name().toLowerCase()), 100, 150, 150, 400);
         this.type = type;
         this.originalName = StringUtils.capitalize(type.name().toLowerCase());
         this.hudEditorModule = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
@@ -119,8 +119,8 @@ public final class ModuleListComponent extends ResizableHudComponent {
 
         // Background & title
         //RenderUtil.begin2D();
-        RenderUtil.drawRect(this.getX() - 1, this.getY() - 1, this.getX() + this.getW() + 1, this.getY() + this.getH() + 1, 0x11101010); //0x99
-        RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x22202020); //0xFF
+        //RenderUtil.drawRoundedRect(this.getX() - 1, this.getY() - 1, this.getW() + 1, this.getH() + 1, 5,0x11101010); //0x99
+        RenderUtil.drawRoundedRect(this.getX(), this.getY(), this.getW(), this.getH(), 5, 0x22202020); //0xFF
         GlStateManager.enableBlend();
         texture.bind();
         texture.render(this.getX() + BORDER, this.getY() + BORDER, TEXTURE_SIZE, TEXTURE_SIZE);
@@ -129,7 +129,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
         offsetY += mc.fontRenderer.FONT_HEIGHT + 1;
 
         // Behind hub
-        RenderUtil.drawRect(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getX() + this.getW() - SCROLL_WIDTH - BORDER, this.getY() + this.getH() - BORDER, 0x22101010); //0xFF
+        //RenderUtil.drawRoundedRect(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getW() - SCROLL_WIDTH - BORDER, this.getH() - BORDER, 5, 0x22101010); //0xFF
 
         // Scrollbar bg
         RenderUtil.drawRect(this.getX() + this.getW() - SCROLL_WIDTH, this.getY() + offsetY + BORDER, this.getX() + this.getW() - BORDER, this.getY() + this.getH() - BORDER, 0x22101010); //0xFF
@@ -180,12 +180,12 @@ public final class ModuleListComponent extends ResizableHudComponent {
 
                     // draw bg behind gear
                     RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 12, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, 0x45202020);
-                    // draw gear
-                    this.gearTexture.bind();
-                    this.gearTexture.render(this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 11, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll + 0.5f, 8, 8);
-                    if (isHoveringOptions) { // draw options line hover gradient
-                        RenderUtil.drawGradientRect(this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 12, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, 0x50909090, 0x50909090); //0x50909090 0x00101010
-                    }
+                    // dont draw gear Xd
+                    //this.gearTexture.bind();
+                    //this.gearTexture.render(this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 11, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll + 0.5f, 8, 8);
+                    //if (isHoveringOptions) { // draw options line hover gradient
+                    //    RenderUtil.drawGradientRect(this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 12, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, 0x50909090, 0x50909090); //0x50909090 0x00101010
+                    //}
 
                     // draw hover gradient
                     RenderUtil.drawGradientRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, 0x30909090, 0x30909090); //0x30909090 0x00101010

@@ -17,7 +17,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class FastBowModule extends Module {
 
     public FastBowModule() {
-        super("FastBow", new String[]{"FBow"}, "Releases the bow as fast as possible", "NONE", -1, ModuleType.COMBAT);
+        super("FastBow", new String[]{"FBow"}, "Releases the bow as soon as possible", "NONE", -1, ModuleType.COMBAT);
     }
 
     @Listener

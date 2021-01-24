@@ -12,7 +12,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class MultitaskModule extends Module {
 
     public MultitaskModule() {
-        super("Multitask", new String[]{"multi", "task"}, "Allows the player to perform multiple actions at once. (eating, placing, attacking)", "NONE", -1, ModuleType.COMBAT);
+        super("Multitask", new String[]{"multi", "task"}, "Allows you to perform multiple actions at once.", "NONE", -1, ModuleType.COMBAT);
     }
 
     @Listener

@@ -17,6 +17,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.entity.Render;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -129,8 +130,9 @@ public final class GuiHudEditor extends GuiScreen {
 
         final float halfWidth = res.getScaledWidth() / 2.0f;
         final float halfHeight = res.getScaledHeight() / 2.0f;
-        RenderUtil.drawLine(halfWidth, 0, halfWidth, res.getScaledHeight(), 1, 0x75909090);
-        RenderUtil.drawLine(0, halfHeight, res.getScaledWidth(), halfHeight, 1, 0x75909090);
+        // ugly
+        //RenderUtil.drawLine(halfWidth, 0, halfWidth, res.getScaledHeight(), 1, 0x75909090);
+        //RenderUtil.drawLine(0, halfHeight, res.getScaledWidth(), halfHeight, 1, 0x75909090);
 
         // Rainbow Border
         RenderUtil.drawLine(0, 0,0, res.getScaledHeight(), 2, rainbowColor); // Left

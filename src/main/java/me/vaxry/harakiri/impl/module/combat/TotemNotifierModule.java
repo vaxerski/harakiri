@@ -26,7 +26,7 @@ public class TotemNotifierModule extends Module {
     final Minecraft mc = Minecraft.getMinecraft();
 
     public TotemNotifierModule() {
-        super("TotemNotifier", new String[]{"tm"}, "Notifies you when others pop totems.", "NONE", -1, ModuleType.COMBAT);
+        super("TotemPopNotifier", new String[]{"tm"}, "Notifies you when others around pop totems.", "NONE", -1, ModuleType.COMBAT);
     }
 
     public final List<Integer> entitiesWithTotems = new ArrayList<>();

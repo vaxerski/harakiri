@@ -3,6 +3,7 @@ package me.vaxry.harakiri.api.module;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.api.value.Value;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.HoverEvent;
@@ -26,6 +27,7 @@ public class Module {
     private boolean enabled;
     private ModuleType type;
 
+    public float activexOffset = 0;
     public float xOffset = 0;
 
     private List<Value> valueList = new ArrayList<Value>();
@@ -69,6 +71,7 @@ public class Module {
         this.setEnabled(!this.isEnabled());
         if (this.isEnabled()) {
             this.onEnable();
+            this.activexOffset = Minecraft.getMinecraft().fontRenderer.getStringWidth(this.getDisplayName());
         } else {
             this.onDisable();
         }

@@ -18,6 +18,8 @@ import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import me.vaxry.harakiri.Harakiri;
@@ -39,6 +41,11 @@ public class RireworksFemovedComponent extends DraggableHudComponent {
         this.setH(mc.fontRenderer.FONT_HEIGHT);
 
         Harakiri.INSTANCE.getEventManager().addEventListener(this);
+    }
+
+    @SubscribeEvent
+    public void onWorldLoad(WorldEvent.Load event) {
+        fireworks = 0;
     }
 
     @Listener

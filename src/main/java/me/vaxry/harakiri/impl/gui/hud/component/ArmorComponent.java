@@ -48,9 +48,9 @@ public final class ArmorComponent extends DraggableHudComponent {
                 mc.fontRenderer.drawString("(armor)", (int) this.getX(), (int) this.getY(), 0xFFAAAAAA);
                 itemSpacingWidth = ITEM_SIZE * 4; // simulate 4 slots of armor (for a placeholder in hud editor)
             } else {
-                this.setW(0);
-                this.setH(0);
-                this.setEmptyH(16);
+                //this.setW(0);
+                //this.setH(0);
+                //this.setEmptyH(16);
                 return;
             }
         }

@@ -75,9 +75,8 @@ public final class EntityListComponent extends DraggableHudComponent {
                 }
             }
 
-            if (this.getAnchorPoint() == null) {
-                this.components.add(new TextLineEntity(null, ChatFormatting.GRAY + "(text radar)"));
-            }
+
+            this.components.add(new TextLineEntity(null, ChatFormatting.GRAY + "EntityList:"));
 
             if (entityGroups.size() > 0) {
                 for (EntityGroup entityGroup : entityGroups) {
