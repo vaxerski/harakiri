@@ -9,9 +9,7 @@ import me.vaxry.harakiri.api.module.Module;
 import me.vaxry.harakiri.api.util.ColorUtil;
 import me.vaxry.harakiri.api.util.RenderUtil;
 import me.vaxry.harakiri.api.value.Value;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockAir;
-import net.minecraft.block.BlockEnderChest;
+import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -33,26 +31,28 @@ import java.util.List;
  */
 public final class SearchModule extends Module {
 
-    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"M", "type", "t"}, "Select which mode to draw the search visual.", Mode.OUTLINE);
-    public final Value<Integer> range = new Value<Integer>("Range", new String[]{"radius"}, "The range(m) to render search blocks.", 128, 1, 512, 1);
-    public final Value<Integer> limit = new Value<Integer>("Limit", new String[]{"max"}, "The maximum amount of blocks that can be rendered.", 3000, 1, 9000, 1);
-    public final Value<Integer> alpha = new Value<Integer>("Alpha", new String[]{"opacity"}, "Alpha value for the search bounding box.", 127, 1, 255, 1);
-    public final Value<Float> width = new Value<Float>("Width", new String[]{"size"}, "Line width of the search bounding box.", 1.0f, 0.1f, 5.0f, 0.1f);
-    public final Value<Boolean> tracer = new Value<Boolean>("Tracer", new String[]{"trace", "line"}, "Draw a tracer line to each search result.", false);
+    public final Value<Integer> alpha = new Value<Integer>("Alpha", new String[]{"opacity"}, "Alpha value for the tracer.", 185, 1, 255, 1);
+    public final Value<Float> width = new Value<Float>("Width", new String[]{"size"}, "Line width of the tracer.", 1.0f, 0.1f, 2.0f, 0.1f);
 
-    public enum Mode {
-        BOX, OUTLINE, OUTLINE_BOX, PLANE
-    }
-
+    private final int MAX_BLOCKS = 512;
     private List<Integer> ids = new ArrayList<>();
-    private final List<Vec3d> blocks = new ArrayList<>(512);
+    private final List<Vec3d> blocks = new ArrayList<>();
     private final ICamera frustum = new Frustum();
 
     public SearchModule() {
-        super("Search", new String[]{"srch", "find", "locate"}, "Search for different types of blocks. Enter the \"search\" command.", "NONE", -1, ModuleType.RENDER);
+        super("Search", new String[]{"srch", "find", "search"}, "Search for different types of blocks.", "NONE", -1, ModuleType.RENDER);
 
-        if (Harakiri.INSTANCE.getConfigManager().isFirstLaunch())
+        if (Harakiri.INSTANCE.getConfigManager().isFirstLaunch()) {
             this.add("furnace");
+            this.add("crafting_table");
+            this.add("enchanting_table");
+            this.add("chest");
+            this.add("trapped_chest");
+            this.add("bed");
+            this.add("hopper");
+            this.add("dispenser");
+            this.add("dropper");
+        }
     }
 
     @Listener
@@ -77,7 +77,6 @@ public final class SearchModule extends Module {
         if (mc.getRenderViewEntity() == null)
             return;
 
-        RenderUtil.begin3D();
         for (int i = this.blocks.size() - 1; i >= 0; i--) {
             final Vec3d searchBlock = this.blocks.get(i);
             if (searchBlock == null)
@@ -89,63 +88,30 @@ public final class SearchModule extends Module {
             if (block instanceof BlockAir)
                 continue;
 
-            if (mc.player.getDistance(searchBlock.x, searchBlock.y, searchBlock.z) < this.range.getValue()) {
-                final AxisAlignedBB bb = this.boundingBoxForBlock(blockPos);
 
-                this.frustum.setPosition(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().posY, mc.getRenderViewEntity().posZ);
+            final AxisAlignedBB bb = this.boundingBoxForBlock(blockPos);
 
-                if (this.frustum.isBoundingBoxInFrustum(new AxisAlignedBB(bb.minX + mc.getRenderManager().viewerPosX,
-                        bb.minY + mc.getRenderManager().viewerPosY,
-                        bb.minZ + mc.getRenderManager().viewerPosZ,
-                        bb.maxX + mc.getRenderManager().viewerPosX,
-                        bb.maxY + mc.getRenderManager().viewerPosY,
-                        bb.maxZ + mc.getRenderManager().viewerPosZ))) {
-                    final int color = ColorUtil.changeAlpha(this.getColor(blockPos, block), this.alpha.getValue());
-                    switch (this.mode.getValue()) {
-                        case BOX:
-                            RenderUtil.drawFilledBox(bb, ColorUtil.changeAlpha(color, this.alpha.getValue()));
-                            break;
-                        case OUTLINE:
-                            RenderUtil.drawBoundingBox(bb, this.width.getValue(), color);
-                            break;
-                        case OUTLINE_BOX:
-                            RenderUtil.drawFilledBox(bb, ColorUtil.changeAlpha(color, this.alpha.getValue()));
-                            RenderUtil.drawBoundingBox(bb, this.width.getValue(), color);
-                            break;
-                        case PLANE:
-                            RenderUtil.drawPlane(
-                                    searchBlock.x - mc.getRenderManager().viewerPosX,
-                                    searchBlock.y - mc.getRenderManager().viewerPosY,
-                                    searchBlock.z - mc.getRenderManager().viewerPosZ,
-                                    new AxisAlignedBB(0, 0, 0, 1, 1, 1),
-                                    this.width.getValue(),
-                                    color);
-                            break;
-                    }
+            this.frustum.setPosition(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().posY, mc.getRenderViewEntity().posZ);
 
-                    if (this.tracer.getValue()) {
-                        final Vec3d pos = new Vec3d(searchBlock.x, searchBlock.y, searchBlock.z).subtract(mc.getRenderManager().renderPosX, mc.getRenderManager().renderPosY, mc.getRenderManager().renderPosZ);
-                        final boolean bobbing = mc.gameSettings.viewBobbing;
-                        mc.gameSettings.viewBobbing = false;
-                        mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
-                        final Vec3d forward = new Vec3d(0, 0, 1).rotatePitch(-(float) Math.toRadians(Minecraft.getMinecraft().player.rotationPitch)).rotateYaw(-(float) Math.toRadians(Minecraft.getMinecraft().player.rotationYaw));
-                        RenderUtil.drawLine3D(forward.x, forward.y + mc.player.getEyeHeight(), forward.z, pos.x, pos.y, pos.z, this.width.getValue(), color);
-                        mc.gameSettings.viewBobbing = bobbing;
-                        mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
-                    }
-                }
-            } else {
-                this.blocks.remove(searchBlock);
-            }
+
+            final int color = ColorUtil.changeAlpha(this.getColor(blockPos, block), this.alpha.getValue());
+            final Vec3d pos = new Vec3d(searchBlock.x, searchBlock.y, searchBlock.z).subtract(mc.getRenderManager().renderPosX, mc.getRenderManager().renderPosY, mc.getRenderManager().renderPosZ);
+            final boolean bobbing = mc.gameSettings.viewBobbing;
+            mc.gameSettings.viewBobbing = false;
+            mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+            final Vec3d forward = new Vec3d(0, 0, 1).rotatePitch(-(float) Math.toRadians(Minecraft.getMinecraft().player.rotationPitch)).rotateYaw(-(float) Math.toRadians(Minecraft.getMinecraft().player.rotationYaw));
+            RenderUtil.drawLine3D(forward.x, forward.y + mc.player.getEyeHeight(), forward.z, pos.x, pos.y, pos.z, this.width.getValue(), color);
+            mc.gameSettings.viewBobbing = bobbing;
+            mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+
         }
-        RenderUtil.end3D();
     }
 
     @Listener
     public void onRenderBlock(EventRenderBlockModel event) {
         final BlockPos pos = event.getBlockPos();
         final IBlockState blockState = event.getBlockState();
-        if (this.contains(Block.getIdFromBlock(blockState.getBlock())) && !this.isPosCached(pos.getX(), pos.getY(), pos.getZ()) && this.blocks.size() < this.limit.getValue()) {
+        if (this.contains(Block.getIdFromBlock(blockState.getBlock())) && !this.isPosCached(pos.getX(), pos.getY(), pos.getZ()) && this.blocks.size() < MAX_BLOCKS) {
             this.blocks.add(new Vec3d(pos));
         }
     }
@@ -283,12 +249,18 @@ public final class SearchModule extends Module {
             return 0xFFD3E2CA;
         else if (block == Blocks.CAULDRON || block == Blocks.PORTAL)
             return 0xFF9E97BF;
+        else if (block == Blocks.CHEST || block == Blocks.TRAPPED_CHEST || block instanceof BlockChest)
+            return 0xFFCCA300;
+        else if (block == Blocks.BED || block instanceof BlockBed)
+            return 0xFFCC0000;
+        else if (block == Blocks.OBSIDIAN)
+            return 0xFF800080;
 
         final int mapColor = Minecraft.getMinecraft().world.getBlockState(pos).getMaterial().getMaterialMapColor().colorValue;
         if (mapColor > 0)
             return mapColor;
 
-        return 0xFFFFFFFF;
+        return 0xFFBFBFBF;
     }
 
     public List<Integer> getIds() {

@@ -183,10 +183,6 @@ public final class ModuleManager {
         MinecraftForge.EVENT_BUS.register(espmod);
         MinecraftForge.EVENT_BUS.register(new ReconnectModule());
 
-        // p2w experience
-        if (Harakiri.INSTANCE.getCapeManager().hasCape())
-            add(new CapeModule());
-
         this.loadExternalModules();
 
         moduleList.sort(Comparator.comparing(Module::getDisplayName));

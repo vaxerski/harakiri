@@ -39,7 +39,7 @@ public final class StorageESPModule extends Module {
     private float hue = 0;
 
     public StorageESPModule() {
-        super("Storage", new String[]{"StorageESP", "ChestFinder", "ChestESP"}, "Highlights different types of storage entities.", "NONE", -1, ModuleType.RENDER);
+        super("StorageESP", new String[]{"StorageESP", "ChestFinder", "ChestESP"}, "Highlights different types of storage entities.", "NONE", -1, ModuleType.RENDER);
     }
 
     private float getJitter() {

@@ -120,14 +120,9 @@ public class Camera2 {
             this.setRecording(true);
             frameBuffer.bindFramebuffer(true);
 
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            GlStateManager.enableBlend();
-
             mc.entityRenderer.renderWorld(mc.timer.renderPartialTicks, System.nanoTime());
             //mc.getRenderManager().renderEntityStatic(mc.player, mc.timer.renderPartialTicks, false);
             mc.entityRenderer.setupOverlayRendering();
-
-            GlStateManager.disableBlend();
 
             frameBuffer.unbindFramebuffer();
             this.setRecording(false);

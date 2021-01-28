@@ -28,7 +28,7 @@ public final class FullbrightModule extends Module {
     private World world;
 
     public FullbrightModule() {
-        super("Brightness", new String[]{"FullBright", "Bright"}, "Makes the world brighter", "NONE", -1, ModuleType.RENDER);
+        super("Fullbright", new String[]{"FullBright", "Bright"}, "Makes the world brighter", "NONE", -1, ModuleType.RENDER);
     }
 
     @Override

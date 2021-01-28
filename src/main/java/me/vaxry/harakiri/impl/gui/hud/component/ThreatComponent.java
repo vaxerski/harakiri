@@ -31,7 +31,8 @@ public class ThreatComponent extends DraggableHudComponent {
 
     public ThreatComponent() {
         super("Threat");
-        this.setH(mc.fontRenderer.FONT_HEIGHT);
+        this.setH(BoxY);
+        this.setX(BoxX);
 
         Harakiri.INSTANCE.getEventManager().addEventListener(this);
     }

@@ -14,6 +14,7 @@ import me.vaxry.harakiri.api.util.RenderUtil;
 import me.vaxry.harakiri.api.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -39,6 +40,7 @@ import net.minecraft.util.math.Vec3d;
 import org.locationtech.jts.geom.Coordinate;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import javax.print.attribute.standard.MediaSize;
@@ -94,14 +96,31 @@ public final class NametagsModule extends Module {
                     bb.maxX + mc.getRenderManager().viewerPosX,
                     bb.maxY + mc.getRenderManager().viewerPosY,
                     bb.maxZ + mc.getRenderManager().viewerPosZ))) {
-                blockPos = new BlockPos(ent.getPosition().getX(), ent.getPosition().getY() + 1, ent.getPosition().getZ());
+                continue;
+            }
+
+            EntityPlayer e = (EntityPlayer)ent;
+
+            Vec3d nametagvec = new Vec3d(e.getPositionVector().x, e.getPositionVector().y + e.eyeHeight, e.getPositionVector().z);
+
+            Coordinate nametagMiddle = conv3Dto2DSpace(nametagvec.x, nametagvec.y + 0.67334f, nametagvec.z);
+
+            double distancetoent = get3DDistance(e);
+
+            Vector3d anglesToEnt = calculateRelativeAngle(mc.player.getPositionEyes(0), nametagvec, new Vector3d(mc.player.rotationPitch, mc.player.rotationYaw, 0));
+            if(anglesToEnt.x > 90 || anglesToEnt.y > 110)
+                continue; // Dont
+
+            if(distancetoent < 2.f){
+                Vec3d accuratePos = e.getPositionEyes(0);
                 bb = new AxisAlignedBB(
-                        blockPos.getX() - mc.getRenderManager().viewerPosX,
-                        blockPos.getY() - mc.getRenderManager().viewerPosY,
-                        blockPos.getZ() - mc.getRenderManager().viewerPosZ,
-                        blockPos.getX() + 1 - mc.getRenderManager().viewerPosX,
-                        blockPos.getY() + 1 - mc.getRenderManager().viewerPosY,
-                        blockPos.getZ() + 1 - mc.getRenderManager().viewerPosZ);
+                        accuratePos.x - 0.1f - mc.getRenderManager().viewerPosX,
+                        accuratePos.y + 0.9f - mc.getRenderManager().viewerPosY,
+                        accuratePos.z - 0.1f - mc.getRenderManager().viewerPosZ,
+                        accuratePos.x + 0.1f - mc.getRenderManager().viewerPosX,
+                        accuratePos.y + 1.8f - mc.getRenderManager().viewerPosY,
+                        accuratePos.z + 0.1f - mc.getRenderManager().viewerPosZ);
+                //RenderUtil.drawBoundingBox(bb, 1, 255, 0, 0, 255);
                 if (!camera.isBoundingBoxInFrustum(new AxisAlignedBB(bb.minX + mc.getRenderManager().viewerPosX,
                         bb.minY + mc.getRenderManager().viewerPosY,
                         bb.minZ + mc.getRenderManager().viewerPosZ,
@@ -111,12 +130,6 @@ public final class NametagsModule extends Module {
                     continue;
                 }
             }
-
-            EntityPlayer e = (EntityPlayer)ent;
-
-            Vec3d nametagvec = new Vec3d(e.getPositionVector().x, e.getPositionVector().y + e.eyeHeight, e.getPositionVector().z);
-
-            Coordinate nametagMiddle = conv3Dto2DSpace(nametagvec.x, nametagvec.y + 0.67334f, nametagvec.z);
 
             // Nametag string setup
             String nametagstr = "";
@@ -160,14 +173,14 @@ public final class NametagsModule extends Module {
             else
                 nametagstr += "\247a" + ping + "ms";
 
-            double distancetoent = get3DDistance(e);
-
             float nametagX = 0;
             float nametagY = 0;
             float scale = 0;
             float textLength = 0;
             float xoffset = 0;
             Coordinate nametagMiddleNew = new Coordinate(0,0);
+
+
 
             if(distancetoent > 5.f) {
                 // draw without 3D scaling
@@ -204,7 +217,7 @@ public final class NametagsModule extends Module {
 
                 Coordinate nametagPoint = new Coordinate(nametagvec.x, nametagvec.z);
 
-                Coordinate point = new Coordinate((float)nametagvec.x + strwidth / 2.f, (float)nametagvec.z);
+                Coordinate point = new Coordinate(nametagvec.x + strwidth / 2.f, nametagvec.z);
 
                 Coordinate x1 = rotate_point(nametagPoint, point, playerYaw);
                 Coordinate y1;
@@ -215,6 +228,9 @@ public final class NametagsModule extends Module {
 
                 Coordinate right = conv3Dto2DSpace(x1.x, nametagvec.y + 0.67334f,x1.y);
                 Coordinate left = conv3Dto2DSpace(y1.x, nametagvec.y + 0.67334f,y1.y);
+
+                if(isOutOfScreen(right) && isOutOfScreen(left))
+                    continue; // Dont render if out of screen, duh
 
                 float scaledwidth = (float)Math.abs(right.x - left.x);
 
@@ -360,8 +376,8 @@ public final class NametagsModule extends Module {
     }
 
     Coordinate rotate_point(Coordinate around, Coordinate point, float theta) {
-        float p1x = (float)(Math.cos(theta) * (point.x - around.x) - Math.sin(theta) * (point.y - around.y) + around.x);
-        float p2x = (float)(Math.sin(theta) * (point.x - around.x) + Math.cos(theta) * (point.y - around.y) + around.y);
+        double p1x = (Math.cos(theta) * (point.x - around.x) - Math.sin(theta) * (point.y - around.y) + around.x);
+        double p2x = (Math.sin(theta) * (point.x - around.x) + Math.cos(theta) * (point.y - around.y) + around.y);
         return new Coordinate(p1x, p2x);
     }
 
@@ -375,6 +391,24 @@ public final class NametagsModule extends Module {
 
     private int get3DDistance(EntityPlayer e) {
         return (int)(Math.sqrt(Math.pow((Minecraft.getMinecraft().player.posX - e.posX),2) + Math.pow((Minecraft.getMinecraft().player.posY - e.posY),2) + Math.pow((Minecraft.getMinecraft().player.posZ - e.posZ),2)));
+    }
+
+    private boolean isOutOfScreen(Coordinate x) {
+        final ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
+        if((x.x < 0 || x.x > res.getScaledWidth()) && (x.y < 0 || x.y > res.getScaledHeight()))
+            return true;
+        return false;
+    }
+
+    private Vector3d calculateRelativeAngle(final Vec3d source, final Vec3d destination, final Vector3d viewAngles) {
+        Vector3d delta = new Vector3d();
+        delta.x = destination.x - source.x;
+        delta.y = destination.y - source.y;
+        delta.z = destination.z - source.z;
+        Vector3d angles = new Vector3d(Math.toDegrees(Math.atan2(-delta.z, Math.hypot(delta.x, delta.y))) - viewAngles.x,
+            Math.toDegrees(Math.atan2(delta.y, delta.x)) - viewAngles.y, 0);
+        angles.normalize();
+        return angles;
     }
 
 }

@@ -61,8 +61,6 @@ public final class Harakiri {
 
     private IgnoredManager ignoredManager;
 
-    private CapeManager capeManager;
-
     private PositionManager positionManager;
 
     private JoinLeaveManager joinLeaveManager;
@@ -96,7 +94,6 @@ public final class Harakiri {
             this.tickRateManager = new TickRateManager();
             this.chatManager = new ChatManager();
             this.worldManager = new WorldManager();
-            this.capeManager = new CapeManager();
             this.positionManager = new PositionManager();
             this.joinLeaveManager = new JoinLeaveManager();
             this.animationManager = new AnimationManager();
@@ -160,7 +157,6 @@ public final class Harakiri {
         this.tickRateManager.unload();
         this.chatManager.unload();
         this.ignoredManager.unload();
-        this.capeManager.unload();
         this.joinLeaveManager.unload();
         this.hudManager.unload();
         this.animationManager.unload();
@@ -194,10 +190,6 @@ public final class Harakiri {
         this.macroManager.getMacroList().clear();
         this.worldManager.getWorldDataList().clear();
         this.ignoredManager.getIgnoredList().clear();
-
-        this.capeManager.getCapeUserList().clear();
-        this.capeManager.getCapesMap().clear();
-        this.capeManager = new CapeManager();
 
         this.configManager.getConfigurableList().clear();
         this.configManager = new ConfigManager();
@@ -314,13 +306,6 @@ public final class Harakiri {
             this.ignoredManager = new IgnoredManager();
         }
         return this.ignoredManager;
-    }
-
-    public CapeManager getCapeManager() {
-        if (this.capeManager == null) {
-            this.capeManager = new CapeManager();
-        }
-        return this.capeManager;
     }
 
     public PositionManager getPositionManager() {
