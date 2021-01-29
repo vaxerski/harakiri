@@ -58,7 +58,7 @@ public final class BedrockFinder extends Module {
                                 bb.maxZ + mc.getRenderManager().viewerPosZ))) {
 
 
-                            RenderUtil.drawBoundingBox(bb, 0.5f, 255,0,0,255);
+                            //RenderUtil.drawBoundingBox(bb, 0.5f, 255,0,0,255);
                         }
                     }
                 }

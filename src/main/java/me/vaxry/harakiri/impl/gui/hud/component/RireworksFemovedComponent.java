@@ -199,7 +199,7 @@ public class RireworksFemovedComponent extends DraggableHudComponent {
                         bb.maxZ + mc.getRenderManager().viewerPosZ))) {
 
                     RenderUtil.drawFilledBox(bb, ColorUtil.changeAlpha(0xFFFF1111, 100));
-                    RenderUtil.drawBoundingBox(bb, 0.5f, 255, 50, 50, 255);
+                    RenderUtil.drawBoundingBox(bb, 0.5f, 0xFFFF4040);
                 }
             }
         }
