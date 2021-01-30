@@ -356,7 +356,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
             }
 
             if (this.scroll > this.totalHeight - this.getH()) {
-                this.scroll = Math.min(this.totalHeight - (int) this.getH(), 0); // Fix LUA box
+                this.scroll = this.totalHeight - (int) this.getH();
             }
 
             if (this.getOldScroll() != 0) {
