@@ -58,7 +58,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
     private boolean useRainbow = false;
 
     public ModuleListComponent(Module.ModuleType type) {
-        super(StringUtils.capitalize(type.name().toLowerCase()), 100, 150, 150, 400);
+        super(StringUtils.capitalize(type.name().toLowerCase()), 100, type == Module.ModuleType.LUA ? 50 : 150, 150, 400);
         this.type = type;
         this.originalName = StringUtils.capitalize(type.name().toLowerCase());
         this.hudEditorModule = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
