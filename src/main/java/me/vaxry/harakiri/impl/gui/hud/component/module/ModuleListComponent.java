@@ -111,9 +111,9 @@ public final class ModuleListComponent extends ResizableHudComponent {
                 this.setH(this.getTotalHeight());
                 this.setResizeDragging(false);
             }
-        } else if (!this.isLocked() && this.currentSettings == null && this.getH() > this.getTotalHeight()) {
+        } else if (!this.isLocked() && this.currentSettings == null && this.getH() > this.getTotalHeight() && this.type != Module.ModuleType.LUA) {
             this.setH(this.getTotalHeight());
-        } else if (this.currentSettings == null && this.getH() > this.getTotalHeight() && this.getTotalHeight() > this.getInitialHeight()) {
+        } else if (this.currentSettings == null && this.getH() > this.getTotalHeight() && this.getTotalHeight() > this.getInitialHeight() && this.type != Module.ModuleType.LUA) {
             this.setH(this.getTotalHeight());
         }
 
@@ -165,6 +165,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
                 offsetY += settingComponent.getH();
             }
         } else {
+
             this.title = this.originalName;
             for (Module module : Harakiri.INSTANCE.getModuleManager().getModuleList(this.type)) {
 
@@ -286,14 +287,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
                     if (insideComponent) {
                         switch (button) {
                             case 0:
-                                if (mouseX >= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 12) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 1)) {
-                                    this.removeTooltip();
-                                    this.currentSettings = new ModuleSettingsComponent(module, this);
-                                    this.setOldScroll(this.getScroll());
-                                    this.setScroll(0);
-                                } else {
-                                    module.toggle();
-                                }
+                                module.toggle();
                                 this.setDragging(false);
                                 break;
                             case 1:
@@ -362,7 +356,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
             }
 
             if (this.scroll > this.totalHeight - this.getH()) {
-                this.scroll = this.totalHeight - (int) this.getH();
+                this.scroll = Math.min(this.totalHeight - (int) this.getH(), 0); // Fix LUA box
             }
 
             if (this.getOldScroll() != 0) {
@@ -500,7 +494,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
             };
             components.add(keybindText);
 
-            ButtonComponent enabledButton = new ButtonComponent("Enabled");
+            /*ButtonComponent enabledButton = new ButtonComponent("Enabled");
             enabledButton.setTooltipText("Enables this module.");
             enabledButton.enabled = module.isEnabled();
             enabledButton.mouseClickListener = new ComponentListener() {
@@ -509,7 +503,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
                     module.toggle();
                 }
             };
-            components.add(enabledButton);
+            components.add(enabledButton);*/
 
             ButtonComponent hiddenButton = new ButtonComponent("Hidden");
             hiddenButton.setTooltipText("Hides this module from the enabled mods list.");
@@ -522,7 +516,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
             };
             components.add(hiddenButton);
 
-            ColorComponent colorComponent = new ColorComponent("List Color", module.getColor());
+            /*ColorComponent colorComponent = new ColorComponent("List Color", module.getColor());
             colorComponent.setTooltipText("The color for this module in the enabled mods list.");
             colorComponent.returnListener = new ComponentListener() {
                 @Override
@@ -531,7 +525,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
                     Harakiri.INSTANCE.getConfigManager().save(ModuleConfig.class);
                 }
             };
-            components.add(colorComponent);
+            components.add(colorComponent);*/
 
             for (Value value : module.getValueList()) {
                 if (value.getValue() instanceof Boolean) {
