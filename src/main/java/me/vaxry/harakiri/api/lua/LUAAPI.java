@@ -37,6 +37,8 @@ public final class LUAAPI {
             if(!parseLUAScript(luaName, this))
                 return;
             currentModuleHeader = Harakiri.INSTANCE.getModuleManager().findLua(luaName);
+            if(currentModuleHeader == null)
+                Harakiri.INSTANCE.logChat("CMH is null!!!!!!");
             applyLUAHeader(this);
             currentModuleHeader = null;
         }
@@ -149,14 +151,8 @@ public final class LUAAPI {
         Globals newglobals = new Globals();
         newglobals.load(new JseBaseLib());
         newglobals.load(new PackageLib());
-        newglobals.load(new Bit32Lib());
-        newglobals.load(new TableLib());
         newglobals.load(new StringLib());
-        newglobals.load(new CoroutineLib());
         newglobals.load(new JseMathLib());
-        newglobals.load(new JseIoLib());
-        newglobals.load(new JseOsLib());
-        newglobals.load(new LuajavaLib());
         LoadState.install(newglobals);
         LuaC.install(newglobals);
         JSEGlobals = newglobals;
@@ -168,10 +164,14 @@ public final class LUAAPI {
         JSEGlobals.load(new ChatAPI());
     }
 
+    //----------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------
+
     public static void onRender2D(ArrayList<LuaModule> enabledluas){
         for(LuaModule lua : enabledluas){
-            if(lua.hasErrors())
-                continue;
             if(!runScript(lua.rawDataEvent2D, EVENTCODE.EVENT_2D))
                 lua.setErrors(true);
         }

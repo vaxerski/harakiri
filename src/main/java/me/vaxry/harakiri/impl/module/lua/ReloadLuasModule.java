@@ -125,7 +125,6 @@ public class ReloadLuasModule extends Module {
 
         for (String pathname : pathnames) {
             deleteModuleForLua(pathname);
-            loadedLuas.add(new LUAAPI.LuaModule(pathname));
             createModuleForLua(pathname);
         }
 
