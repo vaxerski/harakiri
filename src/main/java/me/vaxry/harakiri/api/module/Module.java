@@ -47,6 +47,7 @@ public class Module {
         this.desc = "A custom LUA script.";
         this.luaName = luaname;
         this.type = type;
+        this.key = "NONE";
     }
 
     public Module(String displayName, String[] alias, String key, int color, ModuleType type) {
@@ -233,6 +234,14 @@ public class Module {
 
     public List<Value> getValueList() {
         return valueList;
+    }
+
+    public void clearValues(){
+        valueList.clear();
+    }
+
+    public void addValueInt(String n, String[] a, int def, int min, int max){
+        valueList.add(new Value<Integer>(n, a, n, def, min, max, 1));
     }
 
     public void setValueList(List<Value> valueList) {

@@ -3,6 +3,7 @@ package me.vaxry.harakiri.impl.module.lua;
 import com.yworks.yguard.test.A;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.api.event.render.EventRender2D;
+import me.vaxry.harakiri.api.event.render.EventRender3D;
 import me.vaxry.harakiri.api.lua.LUAAPI;
 import me.vaxry.harakiri.api.module.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
@@ -21,6 +22,11 @@ public class ReloadLuasModule extends Module {
         //Harakiri.INSTANCE.getEventManager().addEventListener(this);
     }
 
+
+    // ------------------------------------------------ //
+    //                    LUA EVENTS                    //
+    // ------------------------------------------------ //
+
     @Listener
     public void render2D(EventRender2D event){
         // Update LUAs
@@ -28,6 +34,20 @@ public class ReloadLuasModule extends Module {
 
         LUAAPI.onRender2D(enabledLuas);
     }
+
+    @Listener
+    public void render3D(EventRender3D event){
+        // Update LUAs
+        updateEnabledLuas();
+
+        LUAAPI.onRender3D(enabledLuas);
+    }
+
+    // ------------------------------------------------ //
+    // ------------------------------------------------ //
+    // ------------------------------------------------ //
+    // ------------------------------------------------ //
+    // ------------------------------------------------ //
 
     @Override
     public void onEnable() {
@@ -39,10 +59,14 @@ public class ReloadLuasModule extends Module {
 
     public void updateEnabledLuas(){
         for(Module mod : Harakiri.INSTANCE.getModuleManager().getModuleList(ModuleType.LUA)){
-           if(!mod.isEnabled() && isLuaEnabled(mod.luaName)) {
-               disableLuaByName(mod.luaName);
-               mod.setEnabled(false);
-           }
+            if(mod instanceof ReloadLuasModule)
+                continue;
+            if(!mod.isEnabled() && isLuaEnabled(mod.luaName)) {
+                disableLuaByName(mod.luaName);
+            }
+            if(mod.isEnabled() && !isLuaEnabled(mod.luaName)){
+                enableLuaByName(mod.luaName);
+            }
         }
     }
 
@@ -72,7 +96,22 @@ public class ReloadLuasModule extends Module {
         }
         if(del == null)
             return;
+        del.setErrors(false);
         enabledLuas.remove(del);
+    }
+
+    private void enableLuaByName(String name) {
+        LUAAPI.LuaModule add = null;
+        for(LUAAPI.LuaModule lm : loadedLuas) {
+            if (lm.getLuaName().equalsIgnoreCase(name)){
+                add = lm;
+                break;
+            }
+        }
+        if(add == null)
+            return;
+
+        enabledLuas.add(add);
     }
 
     private void reloadLuas(){
@@ -85,28 +124,17 @@ public class ReloadLuasModule extends Module {
         loadedLuas.clear();
 
         for (String pathname : pathnames) {
+            deleteModuleForLua(pathname);
             loadedLuas.add(new LUAAPI.LuaModule(pathname));
             createModuleForLua(pathname);
         }
 
         Harakiri.INSTANCE.logChat("Reloaded " + pathnames.length + " luas.");
+    }
 
-        // remove unnecessary LUAs
-        ArrayList<Module> toRemove = new ArrayList<>();
-
-        for(Module mod : Harakiri.INSTANCE.getModuleManager().getModuleList(ModuleType.LUA)){
-            boolean thisfound = false;
-            for(LUAAPI.LuaModule luamod : loadedLuas)
-                if(luamod.getLuaName().equalsIgnoreCase(mod.luaName)) {
-                    thisfound = true;
-                    break;
-                }
-            if(!thisfound)
-                toRemove.add(mod);
-        }
-
-        for(Module m : toRemove){
-            Harakiri.INSTANCE.getModuleManager().removeLuaModule(m.luaName);
+    private void deleteModuleForLua(String path){
+        if(Harakiri.INSTANCE.getModuleManager().findLua(path) != null) {
+            Harakiri.INSTANCE.getModuleManager().removeLuaModule(path);
         }
     }
 
