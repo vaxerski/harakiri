@@ -121,10 +121,13 @@ public class ReloadLuasModule extends Module {
 
         pathnames = f.list();
 
+        for (LUAAPI.LuaModule lm : loadedLuas){
+            deleteModuleForLua(lm.getLuaName());
+        }
+        
         loadedLuas.clear();
 
         for (String pathname : pathnames) {
-            deleteModuleForLua(pathname);
             createModuleForLua(pathname);
         }
 

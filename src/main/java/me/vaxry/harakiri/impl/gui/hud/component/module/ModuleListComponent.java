@@ -111,9 +111,9 @@ public final class ModuleListComponent extends ResizableHudComponent {
                 this.setH(this.getTotalHeight());
                 this.setResizeDragging(false);
             }
-        } else if (!this.isLocked() && this.currentSettings == null && this.getH() > this.getTotalHeight()) {
+        } else if (!this.isLocked() && this.currentSettings == null && this.getH() > this.getTotalHeight() && this.type != Module.ModuleType.LUA) {
             this.setH(this.getTotalHeight());
-        } else if (this.currentSettings == null && this.getH() > this.getTotalHeight() && this.getTotalHeight() > this.getInitialHeight()) {
+        } else if (this.currentSettings == null && this.getH() > this.getTotalHeight() && this.getTotalHeight() > this.getInitialHeight() && this.type != Module.ModuleType.LUA) {
             this.setH(this.getTotalHeight());
         }
 
@@ -361,8 +361,12 @@ public final class ModuleListComponent extends ResizableHudComponent {
                 this.scroll = 0;
             }
 
-            if (this.scroll > this.totalHeight - this.getH()) {
+            if (this.scroll > this.totalHeight - this.getH() && this.type != Module.ModuleType.LUA) {
                 this.scroll = this.totalHeight - (int) this.getH();
+            }else if(this.type == Module.ModuleType.LUA){
+                if(this.scroll > 0){
+                    this.scroll = 0;
+                }
             }
 
             if (this.getOldScroll() != 0) {
