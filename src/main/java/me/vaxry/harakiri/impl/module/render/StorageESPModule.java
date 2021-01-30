@@ -115,7 +115,7 @@ public final class StorageESPModule extends Module {
                             Polygon[] polys = new Polygon[6];
                             boolean[] is = new boolean[6];
 
-                            if (bb.maxX < 0) {
+                            if (bb.maxX < 0 || Math.abs(bb.maxX) < 5) {
                                 polys[0] = new GeometryFactory().createPolygon(new Coordinate[]{
                                         new Coordinate(ProjectedPs.get(5).getX(), ProjectedPs.get(5).getY()),
                                         new Coordinate(ProjectedPs.get(2).getX(), ProjectedPs.get(2).getY()),
@@ -125,7 +125,7 @@ public final class StorageESPModule extends Module {
                                 });
                                 is[0] = true;
                             }
-                            if (bb.maxY < mc.player.eyeHeight) {
+                            if (bb.maxY < mc.player.eyeHeight || Math.abs(bb.maxY) < 5) {
                                 polys[1] = new GeometryFactory().createPolygon(new Coordinate[]{
                                         new Coordinate(ProjectedPs.get(6).getX(), ProjectedPs.get(6).getY()),
                                         new Coordinate(ProjectedPs.get(1).getX(), ProjectedPs.get(1).getY()),
@@ -135,7 +135,7 @@ public final class StorageESPModule extends Module {
                                 });
                                 is[1] = true;
                             }
-                            if (bb.minX > 0) {
+                            if (bb.minX > 0 || Math.abs(bb.minX) < 5) {
                                 polys[2] = new GeometryFactory().createPolygon(new Coordinate[]{
                                         new Coordinate(ProjectedPs.get(7).getX(), ProjectedPs.get(7).getY()),
                                         new Coordinate(ProjectedPs.get(0).getX(), ProjectedPs.get(0).getY()),
@@ -145,7 +145,7 @@ public final class StorageESPModule extends Module {
                                 });
                                 is[2] = true;
                             }
-                            if (bb.minY > mc.player.eyeHeight) {
+                            if (bb.minY > mc.player.eyeHeight || Math.abs(bb.minY) < 5) {
                                 polys[3] = new GeometryFactory().createPolygon(new Coordinate[]{
                                         new Coordinate(ProjectedPs.get(5).getX(), ProjectedPs.get(5).getY()),
                                         new Coordinate(ProjectedPs.get(2).getX(), ProjectedPs.get(2).getY()),
@@ -155,7 +155,7 @@ public final class StorageESPModule extends Module {
                                 });
                                 is[3] = true;
                             }
-                            if (bb.minZ > 0) {
+                            if (bb.minZ > 0 || Math.abs(bb.minZ) < 5) {
                                 polys[4] = new GeometryFactory().createPolygon(new Coordinate[]{
                                         new Coordinate(ProjectedPs.get(5).getX(), ProjectedPs.get(5).getY()),
                                         new Coordinate(ProjectedPs.get(6).getX(), ProjectedPs.get(6).getY()),
@@ -165,7 +165,7 @@ public final class StorageESPModule extends Module {
                                 });
                                 is[4] = true;
                             }
-                            if (bb.maxZ < 0) {
+                            if (bb.maxZ < 0 || Math.abs(bb.maxZ) < 5) {
                                 polys[5] = new GeometryFactory().createPolygon(new Coordinate[]{
                                         new Coordinate(ProjectedPs.get(2).getX(), ProjectedPs.get(2).getY()),
                                         new Coordinate(ProjectedPs.get(1).getX(), ProjectedPs.get(1).getY()),
@@ -184,6 +184,7 @@ public final class StorageESPModule extends Module {
                                     if (is[i])
                                         union = union.union(polys[i]);
                                 }catch(Throwable t){
+                                    //todo: dont ignore this. Make something. Maybe delete the wrong point, but this causes weird shit.
                                     // Fucking ignore it Xd
                                     // sometimes happens
                                 }
@@ -217,7 +218,7 @@ public final class StorageESPModule extends Module {
                                 anyIntersects = true;
                                 break;
                             }catch (Throwable e){
-                                // ignore as well lol Xd
+                                // ignore
                             }
                         }
                     }
@@ -357,7 +358,7 @@ public final class StorageESPModule extends Module {
     }
 
     private Coordinate conv3Dto2DSpace(double x, double y, double z) {
-        final GLUProjection.Projection projection = GLUProjection.getInstance().project(x, y, z, GLUProjection.ClampMode.NONE, true);
+        final GLUProjection.Projection projection = GLUProjection.getInstance().project(x, y, z, GLUProjection.ClampMode.NONE, false);
 
         final Coordinate returns = new Coordinate(projection.getX(), projection.getY());
 
