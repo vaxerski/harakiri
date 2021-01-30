@@ -24,6 +24,8 @@ public final class Notification {
 
     private float transitionX = 0, transitionY = 0;
 
+    public float alpha = 0;
+
     private final Timer timer = new Timer();
 
     public Notification(String title, String text, Type type, int duration) {
@@ -35,10 +37,11 @@ public final class Notification {
 
         final NotificationsComponent notificationsComponent = (NotificationsComponent) Harakiri.INSTANCE.getHudManager().findComponent(NotificationsComponent.class);
         if (notificationsComponent != null) {
-            this.transitionX = notificationsComponent.getX();
-            this.transitionY = notificationsComponent.getY();
+            this.transitionX = 0;
+            this.transitionY = 0;
             this.setX(notificationsComponent.getX());
             this.setY(notificationsComponent.getY());
+            this.alpha = 0;
         }
 
         this.timer.reset();
@@ -51,7 +54,11 @@ public final class Notification {
     public void update() {
         int incline = 8;
         this.transitionX = (float) MathUtil.parabolic(this.transitionX, this.x, incline);
-        this.transitionY = (float) MathUtil.parabolic(this.transitionY, this.y, incline);
+        //this.transitionY = (float) MathUtil.parabolic(this.transitionY, this.y, incline);
+        this.alpha = Math.min(255.f, this.alpha + 2);
+        if(this.timer.passed(this.duration - 1000)){
+            this.alpha = Math.min(255.f, this.alpha -4);
+        }
         if (this.timer.passed((this.duration))) {
             Harakiri.INSTANCE.getNotificationManager().removeNotification(this);
         }

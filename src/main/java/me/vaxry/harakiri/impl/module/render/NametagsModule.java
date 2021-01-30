@@ -101,13 +101,13 @@ public final class NametagsModule extends Module {
 
             EntityPlayer e = (EntityPlayer)ent;
 
-            Vec3d nametagvec = new Vec3d(e.getPositionVector().x, e.getPositionVector().y + e.eyeHeight, e.getPositionVector().z);
+            Vec3d nametagvec = new Vec3d(e.getPositionEyes(event.getPartialTicks()).x, e.getPositionEyes(event.getPartialTicks()).y, e.getPositionEyes(event.getPartialTicks()).z);
 
             Coordinate nametagMiddle = conv3Dto2DSpace(nametagvec.x, nametagvec.y + 0.67334f, nametagvec.z);
 
             double distancetoent = get3DDistance(e);
 
-            Vector3d anglesToEnt = calculateRelativeAngle(mc.player.getPositionEyes(0), nametagvec, new Vector3d(mc.player.rotationPitch, mc.player.rotationYaw, 0));
+            Vector3d anglesToEnt = calculateRelativeAngle(mc.player.getPositionEyes(event.getPartialTicks()), nametagvec, new Vector3d(mc.player.rotationPitch, mc.player.rotationYaw, 0));
             if(anglesToEnt.x > 90 || anglesToEnt.y > 110)
                 continue; // Dont
 

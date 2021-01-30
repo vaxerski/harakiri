@@ -108,6 +108,7 @@ public final class ModuleManager {
         add(new DyeModule());
         add(new WaypointsModule());
         add(new SpeedModule());
+        add(new AntiHungerModule());
         add(new NoVoidModule());
         add(new HorseJumpModule());
         add(new TimeStampModule());
