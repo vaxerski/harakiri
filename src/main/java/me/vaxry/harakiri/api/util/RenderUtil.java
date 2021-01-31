@@ -298,7 +298,7 @@ public final class RenderUtil {
         for(;;){
             GlStateManager.disableTexture2D();
             GlStateManager.enableBlend();
-            GlStateManager.disableAlpha();
+            GlStateManager.enableAlpha();
             GlStateManager.tryBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
             GlStateManager.shadeModel(GL_SMOOTH);
             glLineWidth(thickness);
@@ -340,7 +340,7 @@ public final class RenderUtil {
             GlStateManager.shadeModel(GL_FLAT);
             glDisable(GL_LINE_SMOOTH);
             GlStateManager.disableBlend();
-            GlStateManager.enableAlpha();
+            GlStateManager.disableAlpha();
             GlStateManager.enableTexture2D();
 
             if(i >= coordinates.length)

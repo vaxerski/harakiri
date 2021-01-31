@@ -18,15 +18,15 @@ public class ColorComponent extends TextComponent {
 
     private String customDisplayValue;
 
-    private final Texture gearTexture;
-    private final Texture gearTextureEnabled;
+    //private final Texture gearTexture;
+    //private final Texture gearTextureEnabled;
 
     public ColorComponent(String name, int defaultColor) {
         super(name, String.valueOf(defaultColor), false);
         this.currentColor = new Color(defaultColor);
         this.displayValue = "#" + Integer.toHexString(this.currentColor.getRGB()).toLowerCase().substring(2);
-        this.gearTexture = new Texture("gear_wheel.png");
-        this.gearTextureEnabled = new Texture("gear_wheel-enabled.png");
+        //this.gearTexture = new Texture("gear_wheel.png");
+        //this.gearTextureEnabled = new Texture("gear_wheel-enabled.png");
 
         this.setH(9);
     }
@@ -79,8 +79,8 @@ public class ColorComponent extends TextComponent {
 
             // draw gear
             RenderUtil.drawRect(this.getX() + this.getW() - 10, this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0xFF101010);
-            this.gearTextureEnabled.bind();
-            this.gearTextureEnabled.render(this.getX() + this.getW() - 9, this.getY() + 0.5f, 8, 8);
+            //this.gearTextureEnabled.bind();
+            //this.gearTextureEnabled.render(this.getX() + this.getW() - 9, this.getY() + 0.5f, 8, 8);
 
             // check
             RenderUtil.drawRect(this.getX() + this.getW() - 20, this.getY(), this.getX() + this.getW() - 10, this.getY() + this.getH(), 0xFF101010);
@@ -91,8 +91,8 @@ public class ColorComponent extends TextComponent {
             this.handleBackspacing();
         } else {
             // draw gear
-            this.gearTexture.bind();
-            this.gearTexture.render(this.getX() + this.getW() - 9, this.getY() + 0.5f, 8, 8);
+            //this.gearTexture.bind();
+            //this.gearTexture.render(this.getX() + this.getW() - 9, this.getY() + 0.5f, 8, 8);
         }
     }
 

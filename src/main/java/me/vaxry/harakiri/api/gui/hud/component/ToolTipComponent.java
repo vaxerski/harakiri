@@ -29,19 +29,22 @@ public class ToolTipComponent extends HudComponent {
         super.render(mouseX, mouseY, partialTicks);
 
         if (this.alpha < 0xFF/*max alpha*/) {
-            this.alpha += 2/* arbitrary value, the speed at which it fades in essentially */;
+            this.alpha += 8/* arbitrary value, the speed at which it fades in essentially */;
+            if(this.alpha > 0xFF)
+                this.alpha = 0xFF;
         }
 
-        if (this.alpha > 0x99/* another arbitrary value, the alpha hex value at which it begins to show on screen*/) {
-            this.setX(mouseX - (this.getW() / 2.0f));
-            this.setY(mouseY - 18);
+        if (this.alpha > 0x8A/* another arbitrary value, the alpha hex value at which it begins to show on screen*/) {
+            final ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
+            this.setX(res.getScaledWidth() - this.getW() - 3);
+            this.setY(res.getScaledHeight() - this.getH() - 3);
 
             // clamp tooltip to stay inside the screen bounds
-            this.clamp();
+            //this.clamp();
 
             // background
-            RenderUtil.drawRect(this.getX() - 2, this.getY() - 2, this.getX() + this.getW() + 2, this.getY() + this.getH() + 2, ColorUtil.changeAlpha(0x80101010, this.alpha / 2));
-            RenderUtil.drawRect(this.getX() - 1, this.getY() - 1, this.getX() + this.getW() + 1, this.getY() + this.getH() + 1, ColorUtil.changeAlpha(0xAD101010, this.alpha / 2));
+            RenderUtil.drawRect(this.getX() - 2, this.getY() - 2, this.getX() + this.getW() + 2, this.getY() + this.getH() + 2, ColorUtil.changeAlpha(0x80202020, this.alpha / 2));
+            RenderUtil.drawRect(this.getX() - 1, this.getY() - 1, this.getX() + this.getW() + 1, this.getY() + this.getH() + 1, ColorUtil.changeAlpha(0xAD111111, this.alpha / 2));
             // text
             GlStateManager.enableBlend();
             Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.text, this.getX() + 1, this.getY() + 1, ColorUtil.changeAlpha(0xFF7A6E80, this.alpha)); //0xFFFFFFFF

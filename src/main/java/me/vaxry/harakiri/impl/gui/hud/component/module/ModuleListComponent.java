@@ -7,6 +7,7 @@ import me.vaxry.harakiri.api.gui.hud.component.*;
 import me.vaxry.harakiri.api.gui.hud.component.TextComponent;
 import me.vaxry.harakiri.api.module.Module;
 import me.vaxry.harakiri.api.texture.Texture;
+import me.vaxry.harakiri.api.util.ColorUtil;
 import me.vaxry.harakiri.api.util.RenderUtil;
 import me.vaxry.harakiri.api.value.Value;
 import me.vaxry.harakiri.impl.config.ModuleConfig;
@@ -36,6 +37,8 @@ public final class ModuleListComponent extends ResizableHudComponent {
     private int scroll = 0;
     private int oldScroll = 0;
     private int totalHeight;
+    private int componentY = 0;
+    private static int scomponentY = 0;
 
     private final int SCROLL_WIDTH = 5;
     private final int BORDER = 2;
@@ -106,16 +109,16 @@ public final class ModuleListComponent extends ResizableHudComponent {
         }
 
         // clamp max width & height
-        if (this.isResizeDragging()) {
+        /*if (this.isResizeDragging()) {
             if (this.getH() > this.getTotalHeight()) {
                 this.setH(this.getTotalHeight());
                 this.setResizeDragging(false);
             }
-        } else if (!this.isLocked() && this.currentSettings == null && this.getH() > this.getTotalHeight()) {
+        } else if (!this.isLocked() && this.getH() > this.getTotalHeight()) {
             this.setH(this.getTotalHeight());
-        } else if (this.currentSettings == null && this.getH() > this.getTotalHeight() && this.getTotalHeight() > this.getInitialHeight()) {
+        } else if (this.getH() > this.getTotalHeight() && this.getTotalHeight() > this.getInitialHeight()) {
             this.setH(this.getTotalHeight());
-        }
+        }*/
 
         // Background & title
         //RenderUtil.begin2D();
@@ -152,65 +155,81 @@ public final class ModuleListComponent extends ResizableHudComponent {
         // Begin scissoring and render the module "buttons"
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         RenderUtil.glScissor(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getX() + this.getW() - BORDER - SCROLL_WIDTH, this.getY() + this.getH() - BORDER, sr);
-        if (this.currentSettings != null) {
-            this.title = this.currentSettings.module.getDisplayName();
-            this.currentSettings.setX(this.getX() + BORDER);
-            this.currentSettings.setY(this.getY() + offsetY + BORDER - this.scroll);
-            this.currentSettings.setW(this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2);
-            this.currentSettings.setH(this.getH() - BORDER);
-            this.currentSettings.render(mouseX, mouseY, partialTicks);
-            offsetY += this.currentSettings.getH();
-            for (HudComponent settingComponent : this.currentSettings.components) {
-                //if (settingComponent.getY() > this.getY() + this.currentSettings.getH())
-                offsetY += settingComponent.getH();
-            }
-        } else {
 
-            this.title = this.originalName;
-            for (Module module : Harakiri.INSTANCE.getModuleManager().getModuleList(this.type)) {
+        this.title = this.originalName;
+        for (Module module : Harakiri.INSTANCE.getModuleManager().getModuleList(this.type)) {
 
-                // draw module button bg
-                if(useRainbow)
-                    RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, module.isEnabled() ? rainbowColBG : 0x451F1C22);
-                else
-                    RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, module.isEnabled() ? 0x453B005F : 0x451F1C22);
+            // draw module button bg
+            if(useRainbow)
+                RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, module.isEnabled() ? rainbowColBG : 0x451F1C22);
+            else
+                RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, module.isEnabled() ? 0x453B005F : 0x451F1C22);
 
-                final boolean insideModule = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 1) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + 1 + offsetY - this.scroll - mc.fontRenderer.FONT_HEIGHT + 1) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT) + 1 + offsetY - this.scroll);
-                if (insideModule) { // draw options line
-                    final boolean isHoveringOptions = mouseX >= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 12) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 2) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + 1 + offsetY - this.scroll - mc.fontRenderer.FONT_HEIGHT + 1) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT) + 1 + offsetY - this.scroll);
+            final boolean insideModule = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 1) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + 1 + offsetY - this.scroll - mc.fontRenderer.FONT_HEIGHT + 1) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT) + 1 + offsetY - this.scroll);
+            if (insideModule) { // draw options line
+                final boolean isHoveringOptions = mouseX >= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 12) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 2) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + 1 + offsetY - this.scroll - mc.fontRenderer.FONT_HEIGHT + 1) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT) + 1 + offsetY - this.scroll);
 
-                    // draw bg behind gear
-                    RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 12, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, 0x45202020);
-                    // dont draw gear Xd
-                    //this.gearTexture.bind();
-                    //this.gearTexture.render(this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 11, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll + 0.5f, 8, 8);
-                    //if (isHoveringOptions) { // draw options line hover gradient
-                    //    RenderUtil.drawGradientRect(this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 12, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, 0x50909090, 0x50909090); //0x50909090 0x00101010
-                    //}
+                // draw bg behind gear
+                //RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 12, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, 0x45202020);
+                // dont draw gear Xd
+                //this.gearTexture.bind();
+                //this.gearTexture.render(this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 11, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll + 0.5f, 8, 8);
+                //if (isHoveringOptions) { // draw options line hover gradient
+                //    RenderUtil.drawGradientRect(this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 12, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, 0x50909090, 0x50909090); //0x50909090 0x00101010
+                //}
 
-                    // draw hover gradient
-                    RenderUtil.drawGradientRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, 0x30909090, 0x30909090); //0x30909090 0x00101010
+                // draw hover gradient
+                RenderUtil.drawGradientRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, 0x30909090, 0x30909090); //0x30909090 0x00101010
 
-                    if(module.xOffset < 4.f){
-                        module.xOffset += 1.f;
-                    }else{
-                        module.xOffset = 4.f;
-                    }
-                } else {
-                    if(module.xOffset > 0.f)
-                        module.xOffset -= 0.7f;
-                    else
-                        module.xOffset = 0.f;
+                if(module.xOffset < 4.f){
+                    module.xOffset += 1.f;
+                }else{
+                    module.xOffset = 4.f;
                 }
-
-                // draw module name
-
-                if(useRainbow)
-                    mc.fontRenderer.drawStringWithShadow(module.getDisplayName(), this.getX() + BORDER + TEXT_GAP + 1 + module.xOffset, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, module.isEnabled() ? rainbowCol : 0xFF7A6E80);
+            } else {
+                if(module.xOffset > 0.f)
+                    module.xOffset -= 0.7f;
                 else
-                    mc.fontRenderer.drawStringWithShadow(module.getDisplayName(), this.getX() + BORDER + TEXT_GAP + 1 + module.xOffset, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, module.isEnabled() ? 0xFFC255FF : 0xFF7A6E80);
+                    module.xOffset = 0.f;
+            }
 
-                offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
+            // draw module name
+
+            if(useRainbow)
+                mc.fontRenderer.drawStringWithShadow(module.getDisplayName(), this.getX() + BORDER + TEXT_GAP + 1 + module.xOffset, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, module.isEnabled() ? rainbowCol : 0xFF7A6E80);
+            else
+                mc.fontRenderer.drawStringWithShadow(module.getDisplayName(), this.getX() + BORDER + TEXT_GAP + 1 + module.xOffset, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, module.isEnabled() ? 0xFFC255FF : 0xFF7A6E80);
+
+            offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
+
+            if(this.currentSettings != null){
+                if(this.currentSettings.module.getDisplayName().equalsIgnoreCase(module.getDisplayName())){
+                    // DRAW YEET
+                    float tempOffsetY = 0;
+
+                    this.currentSettings.setX(this.getX() + BORDER);
+                    this.currentSettings.setY(this.getY() + offsetY + BORDER - this.scroll);
+                    this.currentSettings.setW(this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2);
+                    this.currentSettings.setH(this.getH() - BORDER);
+                    this.currentSettings.render(mouseX, mouseY, partialTicks);
+                    for (HudComponent settingComponent : this.currentSettings.components) {
+                        //if (settingComponent.getY() > this.getY() + this.currentSettings.getH())
+                        tempOffsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
+                    }
+
+                    // Fix height
+                    this.currentSettings.setH(tempOffsetY);
+                    this.currentSettings.effectiveH = tempOffsetY * this.currentSettings.percOpen;
+
+                    // Slow opening.
+                    offsetY += tempOffsetY * this.currentSettings.percOpen;
+
+                    // Draw outline to see where the stuff is easier
+                    RenderUtil.drawLine(this.currentSettings.getX(), this.currentSettings.getY(), this.currentSettings.getX() + this.currentSettings.getW(), this.currentSettings.getY(), 0.5f, ColorUtil.changeAlpha(0xFFFFFFFF, this.currentSettings.alphaForBorder)); //top
+                    RenderUtil.drawLine(this.currentSettings.getX() + this.currentSettings.getW(), this.currentSettings.getY(), this.currentSettings.getX() + this.currentSettings.getW(), this.currentSettings.getY() + this.currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(0xFFFFFFFF, this.currentSettings.alphaForBorder)); //right
+                    RenderUtil.drawLine(this.currentSettings.getX(), this.currentSettings.getY() + this.currentSettings.getH(), this.currentSettings.getX() + this.currentSettings.getW(), this.currentSettings.getY() + this.currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(0xFFFFFFFF, this.currentSettings.alphaForBorder)); //bottom
+                    RenderUtil.drawLine(this.currentSettings.getX(), this.currentSettings.getY(), this.currentSettings.getX(), this.currentSettings.getY() + this.currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(0xFFFFFFFF, this.currentSettings.alphaForBorder)); //left
+                }
             }
         }
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
@@ -277,28 +296,44 @@ public final class ModuleListComponent extends ResizableHudComponent {
         final int titleBarHeight = mc.fontRenderer.FONT_HEIGHT + 1;
         final boolean insideTitlebar = mouseY <= this.getY() + BORDER + titleBarHeight;
 
+        if(this.currentSettings != null) {
+            this.currentSettings.mouseRelease(mouseX, mouseY, button);
+        }
+
         if (inside && !insideTitlebar && !isResizeDragging()) {
-            if (this.currentSettings != null) {
-                this.currentSettings.mouseRelease(mouseX, mouseY, button);
-            } else {
-                int offsetY = BORDER;
-                for (Module module : Harakiri.INSTANCE.getModuleManager().getModuleList(this.type)) {
-                    final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 1) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + 1 + offsetY - this.scroll) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT * 2) + 1 + offsetY - this.scroll);
-                    if (insideComponent) {
-                        switch (button) {
-                            case 0:
-                                module.toggle();
-                                this.setDragging(false);
-                                break;
-                            case 1:
-                                this.removeTooltip();
-                                this.currentSettings = new ModuleSettingsComponent(module, this);
-                                this.setOldScroll(this.getScroll());
-                                this.setScroll(0);
-                                break;
+            int offsetY = BORDER;
+            for (Module module : Harakiri.INSTANCE.getModuleManager().getModuleList(this.type)) {
+                final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 1) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + 1 + offsetY - this.scroll) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT * 2) + 1 + offsetY - this.scroll);
+                if (insideComponent) {
+                    switch (button) {
+                        case 0:
+                            module.toggle();
+                            this.setDragging(false);
+                            break;
+                        case 1:
+                            if(this.currentSettings != null){
+                                if(this.currentSettings.module.getDisplayName().equalsIgnoreCase(module.getDisplayName())){
+                                    this.currentSettings = null;
+                                }else{
+                                    this.currentSettings = null;
+                                    this.currentSettings = new ModuleSettingsComponent(module, this, offsetY);
+                                }
+                            }else{
+                                this.currentSettings = new ModuleSettingsComponent(module, this, offsetY);
+                            }
+                            this.removeTooltip();
+                            break;
+                    }
+                }
+                offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
+                if(this.currentSettings != null){
+                    if(this.currentSettings.module.getDisplayName().equalsIgnoreCase(module.getDisplayName())){
+                        componentY = offsetY;
+                        scomponentY = offsetY;
+                        for (HudComponent settingComponent : this.currentSettings.components) {
+                            offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
                         }
                     }
-                    offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
                 }
             }
 
@@ -459,19 +494,25 @@ public final class ModuleListComponent extends ResizableHudComponent {
         public final Module module;
         public final List<HudComponent> components;
         private final ModuleListComponent parentModuleList;
+        public int alphaForBorder = 255;
+        private boolean isAlphaDown = true;
+        public float percOpen = 0;
+        public float effectiveH = 0;
 
-        public ModuleSettingsComponent(Module module, ModuleListComponent parentModuleList) {
+        public ModuleSettingsComponent(Module module, ModuleListComponent parentModuleList, int yoff) {
             super(module.getDisplayName());
+
+            this.setY(this.getY() + yoff);
 
             this.module = module;
             this.components = new ArrayList<>();
             this.parentModuleList = parentModuleList;
 
             //components.add(new ButtonComponent(this.getName()));
-            components.add(new BackButtonComponent(parentModuleList));
+            //components.add(new BackButtonComponent(parentModuleList));
 
-            TextComponent keybindText = new TextComponent("Keybind", module.getKey().toLowerCase(), false);
-            keybindText.setTooltipText("The current key for toggling this module.");
+            TextComponent keybindText = new TextComponent("Bind", module.getKey().toLowerCase(), false);
+            keybindText.setTooltipText("An assigned key.");
             keybindText.textListener = new TextComponent.TextComponentListener() {
                 @Override
                 public void onKeyTyped(int keyCode) {
@@ -636,6 +677,28 @@ public final class ModuleListComponent extends ResizableHudComponent {
         public void render(int mouseX, int mouseY, float partialTicks) {
             super.render(mouseX, mouseY, partialTicks);
 
+            // Pulse alpha
+            if(isAlphaDown){
+                if(alphaForBorder > 1){
+                    alphaForBorder -= 2;
+                }else{
+                    alphaForBorder = 0;
+                    isAlphaDown = false;
+                }
+            }else{
+                if(alphaForBorder < 254){
+                    alphaForBorder += 2;
+                }else{
+                    alphaForBorder = 255;
+                    isAlphaDown = true;
+                }
+            }
+
+            // Increase perc
+            percOpen += 0.05f;
+            if(percOpen > 1.f)
+                percOpen = 1.f;
+
             int offsetY = 1;
             for (HudComponent component : this.components) {
                 int offsetX = 0;
@@ -660,8 +723,9 @@ public final class ModuleListComponent extends ResizableHudComponent {
                 if (skipRendering)
                     continue;
 
-                component.setX(this.getX() + 1 + offsetX);
                 component.setY(this.getY() + offsetY);
+                component.setX(this.getX() + 1 + offsetX);
+
                 component.setW(this.getW() - offsetX);
                 component.setH(Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT);
                 component.render(mouseX, mouseY, partialTicks);
@@ -672,6 +736,10 @@ public final class ModuleListComponent extends ResizableHudComponent {
                 }
 
                 offsetY += component.getH() + 1;
+
+                if(offsetY > effectiveH) {
+                    break;
+                }
             }
         }
 

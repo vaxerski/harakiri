@@ -79,7 +79,7 @@ if  not "" == "%GRADLE_EXIT_CONSOLE%" exit 1
 exit /b 1
 
 :mainEnd
-xcopy /y E:\PROJECTS\harakiri\build\libs\HARAKIRI-1.4dev-full.jar C:\Users\Rafa\AppData\Roaming\.minecraft\mods\1.12.2\
+xcopy /y E:\PROJECTS\harakiri\build\libs\HARAKIRI-1.5-dev-full.jar C:\Users\Rafa\AppData\Roaming\.minecraft\mods\1.12.2\
 if "%OS%"=="Windows_NT" endlocal
 
 :omega

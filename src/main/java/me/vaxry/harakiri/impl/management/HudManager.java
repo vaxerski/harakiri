@@ -94,7 +94,6 @@ public final class HudManager {
         add(new ArmorComponent());
         add(new PingComponent());
         add(new ServerBrandComponent());
-        add(new BiomeComponent());
         add(new DirectionComponent());
         add(new PacketTimeComponent());
         add(rfc);
@@ -104,11 +103,8 @@ public final class HudManager {
         add(new SwitchViewComponent());
         add(new InventoryComponent());
         add(new TotemCountComponent());
-        add(new TutorialComponent());
         add(new HoleOverlayComponent());
         add(new PlayerCountComponent());
-        add(new OverViewComponent());
-        add(new RearViewComponent());
         add(new EntityListComponent());
 
         MinecraftForge.EVENT_BUS.register(rfc);

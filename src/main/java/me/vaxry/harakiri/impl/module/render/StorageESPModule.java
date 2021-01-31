@@ -4,6 +4,7 @@ import akka.japi.Pair;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.api.event.render.EventRender2D;
 import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.api.util.ColorUtil;
 import me.vaxry.harakiri.api.util.GLUProjection;
 import me.vaxry.harakiri.api.util.RenderUtil;
 import me.vaxry.harakiri.api.util.Timer;
@@ -104,7 +105,7 @@ public final class StorageESPModule extends Module {
                             float distance = get3DDistance(bb.minX + mc.getRenderManager().viewerPosX + 0.5f, bb.minY + mc.getRenderManager().viewerPosY + 0.5f, bb.minZ + mc.getRenderManager().viewerPosZ + 0.5f);
                             float alpha = 255;
                             if(distance < 5){
-                                alpha = (distance / 2.f) * 255.f;
+                                alpha = Math.min(Math.max(distance - 2.5f, 0) * (0xFF / 2.5f),0xFF);
                             }
 
                             List<Coordinate> ProjectedPs = new ArrayList<>();
@@ -196,7 +197,7 @@ public final class StorageESPModule extends Module {
                             }
 
                             // push it
-                            tileEntitiesPoly.add(new Pair<>(union, rainbow.getValue() ? (int)(alpha * 0x1000000) + 0xFFFFFF : getColor(te) - 0xFF000000 + (int)(alpha * 0x1000000)));
+                            tileEntitiesPoly.add(new Pair<>(union, rainbow.getValue() ? (int)(alpha * 0x1000000) + 0xFFFFFF : ColorUtil.changeAlpha(getColor(te), (int)alpha)));
                         }
                     }
                 }

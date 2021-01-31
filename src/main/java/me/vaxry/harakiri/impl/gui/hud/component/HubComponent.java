@@ -37,7 +37,7 @@ public final class HubComponent extends ResizableHudComponent {
 
     public HubComponent() {
         super("Components", 100, 120, 125, 1000);
-        this.texture = new Texture("module-hub.png");
+        this.texture = new Texture("module-components.png");
 
         this.setVisible(true);
         this.setSnappable(false);

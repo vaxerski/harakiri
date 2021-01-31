@@ -444,7 +444,6 @@ public final class GLUProjection {
                     //Return point without clamping
                     if (GLU.gluProject((float) x, (float) y, (float) z, this.modelview, this.projection, this.viewport, this.coords)) {
                         //Get projected coordinates
-                        Harakiri.INSTANCE.logChat("Coords: x -> " + this.coords.get(0) + " y -> " + this.coords.get(1));
                         double guiX = (double) this.coords.get(0) * this.widthScale;
                         double guiY = ((double) this.displayHeight - (double) this.coords.get(1)) * (double) this.heightScale;
                         if (opposite) {
