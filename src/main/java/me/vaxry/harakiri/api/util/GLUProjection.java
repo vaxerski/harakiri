@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.api.util;
 
+import me.vaxry.harakiri.Harakiri;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.vector.Matrix4f;
@@ -443,10 +444,10 @@ public final class GLUProjection {
                     //Return point without clamping
                     if (GLU.gluProject((float) x, (float) y, (float) z, this.modelview, this.projection, this.viewport, this.coords)) {
                         //Get projected coordinates
+                        Harakiri.INSTANCE.logChat("Coords: x -> " + this.coords.get(0) + " y -> " + this.coords.get(1));
                         double guiX = (double) this.coords.get(0) * this.widthScale;
                         double guiY = ((double) this.displayHeight - (double) this.coords.get(1)) * (double) this.heightScale;
                         if (opposite) {
-                            //Invert coordinates
                             guiX = this.displayWidth * this.widthScale - guiX;
                             guiY = this.displayHeight * this.heightScale - guiY;
                         }

@@ -11,6 +11,7 @@ import me.vaxry.harakiri.api.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import org.locationtech.jts.geom.*;
@@ -100,6 +101,12 @@ public final class StorageESPModule extends Module {
                             // 7   6
                             // 4   5
 
+                            float distance = get3DDistance(bb.minX + mc.getRenderManager().viewerPosX + 0.5f, bb.minY + mc.getRenderManager().viewerPosY + 0.5f, bb.minZ + mc.getRenderManager().viewerPosZ + 0.5f);
+                            float alpha = 255;
+                            if(distance < 5){
+                                alpha = (distance / 2.f) * 255.f;
+                            }
+
                             List<Coordinate> ProjectedPs = new ArrayList<>();
 
                             ProjectedPs.add(conv3Dto2DSpace(bb.minX, bb.maxY, bb.maxZ));
@@ -184,14 +191,12 @@ public final class StorageESPModule extends Module {
                                     if (is[i])
                                         union = union.union(polys[i]);
                                 }catch(Throwable t){
-                                    //todo: dont ignore this. Make something. Maybe delete the wrong point, but this causes weird shit.
-                                    // Fucking ignore it Xd
-                                    // sometimes happens
+                                    //happens on incorrect clipping. Recode this to use 3d in the future.
                                 }
                             }
 
                             // push it
-                            tileEntitiesPoly.add(new Pair<>(union, rainbow.getValue() ? 0xFFFFFFFF : getColor(te)));
+                            tileEntitiesPoly.add(new Pair<>(union, rainbow.getValue() ? (int)(alpha * 0x1000000) + 0xFFFFFF : getColor(te) - 0xFF000000 + (int)(alpha * 0x1000000)));
                         }
                     }
                 }
@@ -363,5 +368,9 @@ public final class StorageESPModule extends Module {
         final Coordinate returns = new Coordinate(projection.getX(), projection.getY());
 
         return returns;
+    }
+
+    private int get3DDistance(double x, double y, double z) {
+        return (int)(Math.sqrt(Math.pow((Minecraft.getMinecraft().player.posX - x),2) + Math.pow((Minecraft.getMinecraft().player.posY - y),2) + Math.pow((Minecraft.getMinecraft().player.posZ - z),2)));
     }
 }
