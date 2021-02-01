@@ -103,7 +103,6 @@ public final class HudManager {
         add(new SwitchViewComponent());
         add(new InventoryComponent());
         add(new TotemCountComponent());
-        add(new HoleOverlayComponent());
         add(new PlayerCountComponent());
         add(new EntityListComponent());
 

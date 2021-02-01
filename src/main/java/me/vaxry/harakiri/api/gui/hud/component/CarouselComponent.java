@@ -34,9 +34,9 @@ public final class CarouselComponent extends HudComponent {
         final String displayValueText = this.getName() + ": " + this.displayValue;
         Minecraft.getMinecraft().fontRenderer.drawString(displayValueText, (int) this.getX() + 1, (int) this.getY() + 1, this.focused ? 0xFFFFFFFF : 0xFFAAAAAA);
 
-        RenderUtil.drawRect(this.getX() + this.getW() - 18, this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0xFF101010);
-        RenderUtil.drawTriangle(this.getX() + this.getW() - 14, this.getY() + 4, 3, -90, this.focused ? 0x75FFFFFF : 0x75909090);
-        RenderUtil.drawTriangle(this.getX() + this.getW() - 4, this.getY() + 4, 3, 90, this.focused ? 0x75FFFFFF : 0x75909090);
+        //RenderUtil.drawRect(this.getX() + this.getW() - 18, this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0xFF101010);
+        //RenderUtil.drawTriangle(this.getX() + this.getW() - 14, this.getY() + 4, 3, -90, this.focused ? 0x75FFFFFF : 0x75909090);
+        //RenderUtil.drawTriangle(this.getX() + this.getW() - 4, this.getY() + 4, 3, 90, this.focused ? 0x75FFFFFF : 0x75909090);
     }
 
     @Override
@@ -46,8 +46,10 @@ public final class CarouselComponent extends HudComponent {
         if (this.isMouseInside(mouseX, mouseY) && button == 0) {
             this.focus();
 
-            this.onLeftButtonPress(mouseX);
-            this.onRightButtonPress(mouseX);
+            this.raiseOption();
+
+            //this.onLeftButtonPress(mouseX);
+            //this.onRightButtonPress(mouseX);
 
             this.displayValue = this.value.getCapitalizedValue();
         } else {

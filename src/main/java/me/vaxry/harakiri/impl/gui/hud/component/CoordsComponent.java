@@ -29,13 +29,24 @@ public final class CoordsComponent extends DraggableHudComponent {
                     df.format(Minecraft.getMinecraft().player.posY) + ChatFormatting.GRAY + ", " + ChatFormatting.RESET + df.format(Minecraft.getMinecraft().player.posZ);
 
             NetherCoordsComponent ncc = (NetherCoordsComponent)Harakiri.INSTANCE.getHudManager().findComponent(NetherCoordsComponent.class);
-            if(ncc.isVisible())
-                coordz += ChatFormatting.GRAY + " [" + ChatFormatting.RESET + df.format(Minecraft.getMinecraft().player.posX/8.f) +
-                        ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
-                        df.format(Minecraft.getMinecraft().player.posY/8.f) + ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
-                        df.format(Minecraft.getMinecraft().player.posZ/8.f) +
-                        ChatFormatting.GRAY + "]";
-
+            if(ncc.isVisible()) {
+                if (mc.player.dimension == 0) {
+                    coordz += ChatFormatting.GRAY + " [" + ChatFormatting.RESET + df.format(Minecraft.getMinecraft().player.posX / 8.f) +
+                            ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
+                            df.format(Minecraft.getMinecraft().player.posY / 8.f) + ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
+                            df.format(Minecraft.getMinecraft().player.posZ / 8.f) +
+                            ChatFormatting.GRAY + "]";
+                }
+                else if (mc.player.dimension == -1){ // Nether
+                    coordz += ChatFormatting.GRAY + " [" + ChatFormatting.RESET + df.format(Minecraft.getMinecraft().player.posX * 8.f) +
+                            ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
+                            df.format(Minecraft.getMinecraft().player.posY * 8.f) + ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
+                            df.format(Minecraft.getMinecraft().player.posZ * 8.f) +
+                            ChatFormatting.GRAY + "]";
+                }else{
+                    // End
+                }
+            }
             this.setW(Minecraft.getMinecraft().fontRenderer.getStringWidth(coordz));
 
             Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(coordz, this.getX(), this.getY(), -1);

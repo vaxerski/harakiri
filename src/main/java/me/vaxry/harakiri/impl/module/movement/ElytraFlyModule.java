@@ -11,8 +11,10 @@ import me.vaxry.harakiri.api.util.MathUtil;
 import me.vaxry.harakiri.api.util.Timer;
 import me.vaxry.harakiri.api.value.Value;
 import me.vaxry.harakiri.impl.module.player.NoHungerModule;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -20,6 +22,7 @@ import net.minecraft.item.ItemElytra;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.server.SPacketChat;
+import net.minecraft.util.math.BlockPos;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 /**
@@ -42,6 +45,7 @@ public final class ElytraFlyModule extends Module {
     public final Value<Boolean> autoEquip = new Value<Boolean>("AutoEquip", new String[]{"AutoEquipt", "AutoElytra", "Equip", "Equipt", "ae"}, "Automatically equips a durable elytra before or during flight. (inventory only, not hotbar!)", false);
     public final Value<Float> autoEquipDelay = new Value<Float>("EquipDelay", new String[]{"AutoEquipDelay", "AutoEquiptDelay", "equipdelay", "aed"}, "Delay(ms) between elytra equip swap attempts.", 200.0f, 0.0f, 1000.0f, 10.0f);
     public final Value<Boolean> stayAirborne = new Value<Boolean>("StayAirborne", new String[]{"Airborne", "StayInAir", "Stay-Airborne", "air", "sa"}, "Attempts to always keep the player airborne (only use when AutoEquip is enabled).", false);
+    public final Value<Boolean> autoDock = new Value<Boolean>("AutoDock", new String[]{"Autodock", "ad", "dock"}, "Stops your movement when 0.3 blocks off the ground.", false);
     public final Value<Boolean> stayAirborneDisable = new Value<Boolean>("StayAirborneDisable", new String[]{"AutoDisableStayAirborne", "StayAirborneAutoDisable", "Stay-Airborne-Disable", "DisableStayInAir", "adsa", "dsa", "sad"}, "Automatically disables StayAirborne when touching the ground.", true);
     public final Value<Float> stayAirborneDelay = new Value<Float>("StayAirborneDelay", new String[]{"StayAirborneWait", "Stay-Airborne-Delay", "sadelay"}, "Delay(ms) between stay-airborne attempts.", 100.0f, 0.0f, 400.0f, 5.0f);
     public final Value<Boolean> disableInLiquid = new Value<Boolean>("DisableInLiquid", new String[]{"DisableInWater", "DisableInLava", "disableliquid", "liquidoff", "noliquid", "dil"}, "Disables all elytra flight when the player is in contact with liquid.", false);
@@ -228,6 +232,31 @@ public final class ElytraFlyModule extends Module {
                 if (mc.player.movementInput.moveStrafe != 0 || mc.player.movementInput.moveForward != 0) {
                     mc.player.motionX = directionSpeedControl[0];
                     mc.player.motionZ = directionSpeedControl[1];
+                }
+
+                // Dock
+                if(this.autoDock.getValue() && mc.player.movementInput.sneak) {
+                    BlockPos underMe = new BlockPos(mc.player.getPosition().getX(), mc.player.getPosition().getY() - 1, mc.player.getPosition().getZ());
+                    Block under = mc.world.getBlockState(underMe).getBlock();
+                    BlockPos underMe2 = new BlockPos(mc.player.getPosition().getX(), mc.player.getPosition().getY() - 2, mc.player.getPosition().getZ());
+                    Block under2 = mc.world.getBlockState(underMe2).getBlock();
+                    if(under == Blocks.AIR && under2 != Blocks.AIR){
+                        if(mc.player.motionY < 0)
+                            mc.player.motionY = -0.1f;
+                    }
+                    if (under != Blocks.AIR) {
+                        if (mc.player.motionY < 0) {
+                            mc.player.motionY = -0.03;
+                            mc.player.motionX = directionSpeedControl[0] / 10.f;
+                            mc.player.motionZ = directionSpeedControl[1] / 10.f;
+                            mc.player.rotationPitch = 0;
+                            if (mc.player.posY <= underMe.getY() + 1.34f) {
+                                mc.player.motionY = 0;
+                                mc.player.setSneaking(false);
+                                mc.player.movementInput.sneak = false;
+                            }
+                        }
+                    }
                 }
 
                 event.setX(mc.player.motionX);

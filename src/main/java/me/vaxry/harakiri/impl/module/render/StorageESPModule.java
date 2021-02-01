@@ -61,11 +61,16 @@ public final class StorageESPModule extends Module {
         if(hue >= 1.f)
             hue = 0.f;
 
+        final boolean bobbing = Minecraft.getMinecraft().gameSettings.viewBobbing;
+
         try {
             // union array for storing the shit
             ArrayList<Pair<Geometry, Integer>> tileEntitiesPoly = new ArrayList<>();
 
             final Minecraft mc = Minecraft.getMinecraft();
+
+            mc.gameSettings.viewBobbing = false;
+
             for (TileEntity te : mc.world.loadedTileEntityList) {
                 if (te != null) {
                     if (this.isTileStorage(te)) {
@@ -238,12 +243,15 @@ public final class StorageESPModule extends Module {
                 RenderUtil.drawOutlinePolygon(tileEntitiesPoly.get(i).first(), thickness.getValue(), tileEntitiesPoly.get(i).second(), this.rainbow.getValue(), this.hue);
             }
 
+            mc.gameSettings.viewBobbing = bobbing;
 
         }catch(Throwable e){
             StringWriter errors = new StringWriter();
             e.printStackTrace(new PrintWriter(errors));
             Harakiri.INSTANCE.logChat("StorageESP Threw an Error: " + e.getMessage());
         }
+
+        Minecraft.getMinecraft().gameSettings.viewBobbing = bobbing;
     }
 
     private boolean isTileStorage(TileEntity te) {

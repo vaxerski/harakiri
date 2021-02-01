@@ -43,11 +43,13 @@ public class ToolTipComponent extends HudComponent {
             //this.clamp();
 
             // background
-            RenderUtil.drawRect(this.getX() - 2, this.getY() - 2, this.getX() + this.getW() + 2, this.getY() + this.getH() + 2, ColorUtil.changeAlpha(0x80202020, this.alpha / 2));
-            RenderUtil.drawRect(this.getX() - 1, this.getY() - 1, this.getX() + this.getW() + 1, this.getY() + this.getH() + 1, ColorUtil.changeAlpha(0xAD111111, this.alpha / 2));
+            //RenderUtil.drawRect(this.getX() - 2, this.getY() - 2, this.getX() + this.getW() + 2, this.getY() + this.getH() + 2, ColorUtil.changeAlpha(0x80202020, this.alpha / 4));
+            RenderUtil.drawRoundedRect(this.getX() - 2, this.getY() - 2, this.getW() + 2, this.getH() + 2, 5, ColorUtil.changeAlpha(0x80202020, this.alpha / 4));
+            RenderUtil.drawRoundedRect(this.getX() - 1, this.getY() - 1, this.getW() + 1, this.getH() + 1, 5, ColorUtil.changeAlpha(0xAD111111, this.alpha / 4));
+            //RenderUtil.drawRect(this.getX() - 1, this.getY() - 1, this.getX() + this.getW() + 1, this.getY() + this.getH() + 1, ColorUtil.changeAlpha(0xAD111111, this.alpha / 4));
             // text
             GlStateManager.enableBlend();
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.text, this.getX() + 1, this.getY() + 1, ColorUtil.changeAlpha(0xFF7A6E80, this.alpha)); //0xFFFFFFFF
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.text, this.getX() + 1, this.getY() + 1, ColorUtil.changeAlpha(0xFFAAAAB7, this.alpha)); //0xFFFFFFFF
             GlStateManager.disableBlend();
         }
     }

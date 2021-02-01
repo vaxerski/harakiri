@@ -8,6 +8,7 @@ import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.effect.PlexusEffect;
 import me.vaxry.harakiri.impl.management.*;
+import me.vaxry.harakiri.impl.module.misc.DiscordRPCModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -77,6 +78,8 @@ public final class Harakiri {
 
     private PlexusEffect plexusEffect = null;
 
+    private DiscordManager discordManager;
+
     /**
      * The initialization point of the client
      * this is called post launch
@@ -103,6 +106,8 @@ public final class Harakiri {
             this.cameraManager = new CameraManager();
             this.hudManager = new HudManager();
             this.hudEditor = new GuiHudEditor();
+            this.discordManager = new DiscordManager();
+
             //this.plexusEffect = new PlexusEffect(); -- inits in GuiHudEditor
 
             this.configManager.init(); // Keep last, so we load configs after everything else inits
@@ -355,6 +360,13 @@ public final class Harakiri {
             this.cameraManager = new CameraManager();
         }
         return this.cameraManager;
+    }
+
+    public DiscordManager getDiscordManager() {
+        if (this.discordManager == null) {
+            this.discordManager = new DiscordManager();
+        }
+        return this.discordManager;
     }
 
     public PlexusEffect getPlexusEffect() {

@@ -25,7 +25,6 @@ import java.util.List;
  */
 public final class NewChunksModule extends Module {
 
-    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"M", "type", "t"}, "Select a mode to use to draw the chunk visual.", Mode.PLANE);
     public final Value<Color> color = new Value<Color>("Color", new String[]{"color", "c"}, "Change the color of the chunk visual.", new Color(255, 255, 255));
     public final Value<Integer> alpha = new Value<Integer>("Alpha", new String[]{"Alp", "Opacity", "a", "o"}, "Edit the alpha of the chunk visual.", 127, 1, 255, 1);
     public final Value<Float> width = new Value<Float>("Width", new String[]{"W", "size", "s"}, "Edit the width chunk visual.", 1.5f, 0.1f, 5.0f, 0.1f);
@@ -85,19 +84,9 @@ public final class NewChunksModule extends Module {
                     double x = chunkData.x - mc.getRenderManager().viewerPosX;
                     double y = -mc.getRenderManager().viewerPosY;
                     double z = chunkData.z - mc.getRenderManager().viewerPosZ;
-                    final AxisAlignedBB chunkBB = new AxisAlignedBB(0, 0, 0, 16, 2, 16);
+                    final AxisAlignedBB chunkBB = new AxisAlignedBB(0, 0, 0, 16, 0, 16);
 
-                    switch (this.mode.getValue()) {
-                        case BOX:
-                            RenderUtil.drawFilledBox(x, y, z, chunkBB, ColorUtil.changeAlpha(color, this.alpha.getValue()));
-                            break;
-                        case OUTLINE:
-                            RenderUtil.drawBoundingBox(x, y, z, chunkBB, this.width.getValue(), color);
-                            break;
-                        case PLANE:
-                            RenderUtil.drawPlane(x, y, z, new AxisAlignedBB(0, 0, 0, 16, 1, 16), this.width.getValue(), color);
-                            break;
-                    }
+                    RenderUtil.drawBoundingBox(x, y, z, chunkBB, this.width.getValue(), color);
                 }
             }
         }

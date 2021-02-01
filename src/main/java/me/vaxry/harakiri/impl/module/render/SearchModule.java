@@ -2,22 +2,27 @@ package me.vaxry.harakiri.impl.module.render;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.api.event.player.EventDestroyBlock;
+import me.vaxry.harakiri.api.event.render.EventRender2D;
 import me.vaxry.harakiri.api.event.render.EventRender3D;
 import me.vaxry.harakiri.api.event.render.EventRenderBlockModel;
 import me.vaxry.harakiri.api.event.world.EventLoadWorld;
 import me.vaxry.harakiri.api.module.Module;
 import me.vaxry.harakiri.api.util.ColorUtil;
+import me.vaxry.harakiri.api.util.GLUProjection;
 import me.vaxry.harakiri.api.util.RenderUtil;
 import me.vaxry.harakiri.api.value.Value;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import org.locationtech.jts.geom.Coordinate;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.util.ArrayList;
@@ -37,7 +42,6 @@ public final class SearchModule extends Module {
     private final int MAX_BLOCKS = 512;
     private List<Integer> ids = new ArrayList<>();
     private final List<Vec3d> blocks = new ArrayList<>();
-    private final ICamera frustum = new Frustum();
 
     public SearchModule() {
         super("Search", new String[]{"srch", "find", "search"}, "Search for different types of blocks.", "NONE", -1, ModuleType.RENDER);
@@ -72,10 +76,12 @@ public final class SearchModule extends Module {
     }
 
     @Listener
-    public void onDrawWorld(EventRender3D event) {
+    public void render2D(EventRender2D event) {
         final Minecraft mc = Minecraft.getMinecraft();
         if (mc.getRenderViewEntity() == null)
             return;
+
+        final ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
 
         for (int i = this.blocks.size() - 1; i >= 0; i--) {
             final Vec3d searchBlock = this.blocks.get(i);
@@ -88,22 +94,21 @@ public final class SearchModule extends Module {
             if (block instanceof BlockAir)
                 continue;
 
-
-            final AxisAlignedBB bb = this.boundingBoxForBlock(blockPos);
-
-            this.frustum.setPosition(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().posY, mc.getRenderViewEntity().posZ);
-
-
             final int color = ColorUtil.changeAlpha(this.getColor(blockPos, block), this.alpha.getValue());
             final Vec3d pos = new Vec3d(searchBlock.x, searchBlock.y, searchBlock.z).subtract(mc.getRenderManager().renderPosX, mc.getRenderManager().renderPosY, mc.getRenderManager().renderPosZ);
-            final boolean bobbing = mc.gameSettings.viewBobbing;
-            mc.gameSettings.viewBobbing = false;
-            mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
-            final Vec3d forward = new Vec3d(0, 0, 1).rotatePitch(-(float) Math.toRadians(Minecraft.getMinecraft().player.rotationPitch)).rotateYaw(-(float) Math.toRadians(Minecraft.getMinecraft().player.rotationYaw));
-            RenderUtil.drawLine3D(forward.x, forward.y + mc.player.getEyeHeight(), forward.z, pos.x, pos.y, pos.z, this.width.getValue(), color);
-            mc.gameSettings.viewBobbing = bobbing;
-            mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+            //final Vec3d forward = new Vec3d(0, 0, 1).rotatePitch(-(float) Math.toRadians(Minecraft.getMinecraft().player.rotationPitch)).rotateYaw(-(float) Math.toRadians(Minecraft.getMinecraft().player.rotationYaw));
+            //RenderUtil.drawLine3D(forward.x, forward.y + mc.player.getEyeHeight(), forward.z, pos.x + 0.5f, pos.y + 0.5f, pos.z + 0.5f, this.width.getValue(), color);
+            Coordinate coord2D = conv3Dto2DSpace(pos.x + 0.5f, pos.y + 0.5f, pos.z + 0.5f);
+            RenderUtil.drawLine(res.getScaledWidth()/2.f,res.getScaledHeight()/2.f, (float)coord2D.x, (float)coord2D.y, this.width.getValue(), color);
+        }
 
+        for(TileEntity te : mc.world.loadedTileEntityList){
+            if(te instanceof TileEntityChest && this.ids.contains(54) ||
+                    te instanceof TileEntityEnderChest && this.ids.contains(130)){
+                Coordinate coord2D = conv3Dto2DSpace(te.getPos().getX() + 0.5f - mc.getRenderManager().renderPosX, te.getPos().getY() + 0.5f - mc.getRenderManager().renderPosY, te.getPos().getZ() + 0.5f - mc.getRenderManager().renderPosZ);
+                final int color = ColorUtil.changeAlpha(this.getTileColor(te), this.alpha.getValue());
+                RenderUtil.drawLine(res.getScaledWidth()/2.f,res.getScaledHeight()/2.f, (float)coord2D.x, (float)coord2D.y, this.width.getValue(), color);
+            }
         }
     }
 
@@ -232,6 +237,36 @@ public final class SearchModule extends Module {
         return count;
     }
 
+    private int getTileColor(TileEntity te) {
+        if (te instanceof TileEntityChest) {
+            return 0xFFF0F000;
+        }
+        if (te instanceof TileEntityDropper) {
+            return 0xFFA6A6A6;
+        }
+        if (te instanceof TileEntityDispenser) {
+            return 0xFF4E4E4E;
+        }
+        if (te instanceof TileEntityHopper) {
+            return 0xFF4E4E4E;
+        }
+        if (te instanceof TileEntityFurnace) {
+            return 0xFF2D2D2D;
+        }
+        if (te instanceof TileEntityBrewingStand) {
+            return 0xFF17B9D2;
+        }
+        if (te instanceof TileEntityEnderChest) {
+            return 0xFFCC00FF;
+        }
+        if (te instanceof TileEntityShulkerBox) {
+            //final TileEntityShulkerBox shulkerBox = (TileEntityShulkerBox) te;
+            //return (255 << 24) | shulkerBox.getColor().getColorValue();
+            return 0xFFFF0066;
+        }
+        return 0xFFFFFFFF;
+    }
+
     private int getColor(final BlockPos pos, final Block block) {
         if (block instanceof BlockEnderChest)
             return 0xFF624FFF;
@@ -247,13 +282,13 @@ public final class SearchModule extends Module {
             return 0xFFB6BA9E;
         else if (block == Blocks.DISPENSER || block == Blocks.DROPPER)
             return 0xFFD3E2CA;
-        else if (block == Blocks.CAULDRON || block == Blocks.PORTAL)
+        else if (block == Blocks.CAULDRON)
             return 0xFF9E97BF;
         else if (block == Blocks.CHEST || block == Blocks.TRAPPED_CHEST || block instanceof BlockChest)
             return 0xFFCCA300;
         else if (block == Blocks.BED || block instanceof BlockBed)
             return 0xFFCC0000;
-        else if (block == Blocks.OBSIDIAN)
+        else if (block == Blocks.OBSIDIAN || block == Blocks.PORTAL)
             return 0xFF800080;
 
         final int mapColor = Minecraft.getMinecraft().world.getBlockState(pos).getMaterial().getMaterialMapColor().colorValue;
@@ -269,5 +304,13 @@ public final class SearchModule extends Module {
 
     public void setIds(List<Integer> ids) {
         this.ids = ids;
+    }
+
+    private Coordinate conv3Dto2DSpace(double x, double y, double z) {
+        final GLUProjection.Projection projection = GLUProjection.getInstance().project(x, y, z, GLUProjection.ClampMode.NONE, false);
+
+        final Coordinate returns = new Coordinate(projection.getX(), projection.getY());
+
+        return returns;
     }
 }

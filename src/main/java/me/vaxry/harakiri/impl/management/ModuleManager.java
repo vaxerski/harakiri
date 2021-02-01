@@ -149,6 +149,7 @@ public final class ModuleManager {
         add(new MapBypassModule());
         add(new NoBossHealthModule());
         add(new DiscordBypassModule());
+        add(new DiscordRPCModule());
         add(new HolesModule());
         add(new SmallShieldModule());
         add(new PullDownModule());
