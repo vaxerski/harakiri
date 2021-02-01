@@ -101,6 +101,7 @@ public final class ModuleManager {
         add(new ElytraFlyModule());
         add(new ItemSpoofModule());
         add(new AutoWalkModule());
+        add(new AvoidModule());
         add(new LaggerModule());
         add(new MacroModule());
         add(new BreedModule());

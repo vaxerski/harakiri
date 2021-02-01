@@ -708,8 +708,8 @@ public final class ModuleListComponent extends ResizableHudComponent {
 
             int offsetY = 1;
             for (HudComponent component : this.components) {
-                int offsetX = 0;
-                
+                int offsetX = 4;
+
                 for (HudComponent otherComponent : this.components) {
                     if (otherComponent == component || otherComponent.getName().equals(component.getName()))
                         continue;
