@@ -709,8 +709,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
             int offsetY = 1;
             for (HudComponent component : this.components) {
                 int offsetX = 0;
-
-                boolean skipRendering = false;
+                
                 for (HudComponent otherComponent : this.components) {
                     if (otherComponent == component || otherComponent.getName().equals(component.getName()))
                         continue;
@@ -718,17 +717,10 @@ public final class ModuleListComponent extends ResizableHudComponent {
                     if (otherComponent instanceof ButtonComponent) {
                         boolean isChildComponent = component.getName().toLowerCase().startsWith(otherComponent.getName().toLowerCase());
                         if (isChildComponent) {
-                            if (!((ButtonComponent) otherComponent).rightClickEnabled) {
-                                skipRendering = true;
-                            }
-
-                            offsetX += 4;
+                            offsetX += 5;
                         }
                     }
                 }
-
-                if (skipRendering)
-                    continue;
 
                 component.setY(this.getY() + offsetY);
                 component.setX(this.getX() + 1 + offsetX);
@@ -736,11 +728,6 @@ public final class ModuleListComponent extends ResizableHudComponent {
                 component.setW(this.getW() - offsetX);
                 component.setH(Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT);
                 component.render(mouseX, mouseY, partialTicks);
-
-                if (offsetX > 0) {
-                    RenderUtil.drawLine(component.getX() - offsetX + 1, component.getY(), component.getX() - offsetX + 1, component.getY() + component.getH(), 2.0f, 0xFF202020);
-                    RenderUtil.drawLine(component.getX() - offsetX + 1, component.getY() + component.getH() / 2, component.getX(), component.getY() + component.getH() / 2, 2.0f, 0xFF202020);
-                }
 
                 offsetY += component.getH() + 1;
 
