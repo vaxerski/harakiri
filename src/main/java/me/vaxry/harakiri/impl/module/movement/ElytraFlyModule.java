@@ -10,6 +10,7 @@ import me.vaxry.harakiri.api.util.InventoryUtil;
 import me.vaxry.harakiri.api.util.MathUtil;
 import me.vaxry.harakiri.api.util.Timer;
 import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import me.vaxry.harakiri.impl.module.player.NoHungerModule;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -235,7 +236,7 @@ public final class ElytraFlyModule extends Module {
                 }
 
                 // Dock
-                if(this.autoDock.getValue() && mc.player.movementInput.sneak) {
+                if(this.autoDock.getValue() && mc.player.movementInput.sneak && !Harakiri.INSTANCE.getModuleManager().find(FreeCamModule.class).isEnabled()) {
                     BlockPos underMe = new BlockPos(mc.player.getPosition().getX(), mc.player.getPosition().getY() - 1, mc.player.getPosition().getZ());
                     Block under = mc.world.getBlockState(underMe).getBlock();
                     BlockPos underMe2 = new BlockPos(mc.player.getPosition().getX(), mc.player.getPosition().getY() - 2, mc.player.getPosition().getZ());

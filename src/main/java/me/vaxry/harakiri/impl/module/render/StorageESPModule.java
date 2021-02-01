@@ -3,6 +3,7 @@ package me.vaxry.harakiri.impl.module.render;
 import akka.japi.Pair;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.api.event.render.EventRender2D;
+import me.vaxry.harakiri.api.event.render.EventRender3D;
 import me.vaxry.harakiri.api.module.Module;
 import me.vaxry.harakiri.api.util.ColorUtil;
 import me.vaxry.harakiri.api.util.GLUProjection;
@@ -14,6 +15,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.*;
+import net.minecraft.util.CooldownTracker;
 import net.minecraft.util.math.AxisAlignedBB;
 import org.locationtech.jts.geom.*;
 import org.lwjgl.util.vector.Vector3f;
@@ -21,8 +23,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -40,6 +41,8 @@ public final class StorageESPModule extends Module {
 
     private float hue = 0;
 
+    private HashMap<Coordinate, Coordinate> CoordTracker3D = new HashMap<>();
+
     public StorageESPModule() {
         super("StorageESP", new String[]{"StorageESP", "ChestFinder", "ChestESP"}, "Highlights different types of storage entities.", "NONE", -1, ModuleType.RENDER);
     }
@@ -55,6 +58,8 @@ public final class StorageESPModule extends Module {
 
     @Listener
     public void render2D(EventRender2D event) {
+
+        this.CoordTracker3D.clear();
 
         // Rainbow stuf
         this.hue += getJitter();
@@ -124,6 +129,15 @@ public final class StorageESPModule extends Module {
                             ProjectedPs.add(conv3Dto2DSpace(bb.maxX, bb.minY, bb.minZ));
                             ProjectedPs.add(conv3Dto2DSpace(bb.maxX, bb.maxY, bb.minZ));
                             ProjectedPs.add(conv3Dto2DSpace(bb.minX, bb.maxY, bb.minZ));
+
+                            /*CoordTracker3D.put(ProjectedPs.get(0), new Coordinate(bb.minX, bb.maxY, bb.maxZ));
+                            CoordTracker3D.put(ProjectedPs.get(1), new Coordinate(bb.maxX, bb.maxY, bb.maxZ));
+                            CoordTracker3D.put(ProjectedPs.get(2), new Coordinate(bb.maxX, bb.minY, bb.maxZ));
+                            CoordTracker3D.put(ProjectedPs.get(3), new Coordinate(bb.minX, bb.minY, bb.maxZ));
+                            CoordTracker3D.put(ProjectedPs.get(4), new Coordinate(bb.minX, bb.minY, bb.minZ));
+                            CoordTracker3D.put(ProjectedPs.get(5), new Coordinate(bb.maxX, bb.minY, bb.minZ));
+                            CoordTracker3D.put(ProjectedPs.get(6), new Coordinate(bb.maxX, bb.maxY, bb.minZ));
+                            CoordTracker3D.put(ProjectedPs.get(7), new Coordinate(bb.minX, bb.maxY, bb.minZ));*/
 
                             Polygon[] polys = new Polygon[6];
                             boolean[] is = new boolean[6];
@@ -238,6 +252,35 @@ public final class StorageESPModule extends Module {
                 if(!anyIntersects)
                     break;
             }
+
+            /*
+            // Resolve 2D to 3D :))
+            final ArrayList<Pair<ArrayList<Coordinate>, Integer>> Fixed3DList = new ArrayList<>();
+
+            for(int i = 0; i < tileEntitiesPoly.size(); ++i) {
+                ArrayList<Coordinate> newArrList = new ArrayList<>();
+                int color = 0;
+                for(Pair<Geometry, Integer> p : tileEntitiesPoly){
+                    color = p.second();
+                    for(int j = 0; j < p.first().getNumPoints(); ++j){
+                        Coordinate c = p.first().getCoordinates()[j];
+                        newArrList.add(CoordTracker3D.get(c));
+                    }
+                }
+                Fixed3DList.add(new Pair<>(newArrList, color));
+            }
+
+            for(int i = 0; i < Fixed3DList.size(); ++i) {
+                RenderUtil.begin3D();
+                mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+                RenderUtil.drawOutlinePolygon3D(Fixed3DList.get(i).first(), thickness.getValue(), Fixed3DList.get(i).second(), this.rainbow.getValue(), this.hue);
+                mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+                RenderUtil.end3D();
+            }*/
+
+            //
+            // Leave for another day, throws "Already Building!" for no apparent reason.
+            //   :-/
 
             for(int i = 0; i < tileEntitiesPoly.size(); ++i) {
                 RenderUtil.drawOutlinePolygon(tileEntitiesPoly.get(i).first(), thickness.getValue(), tileEntitiesPoly.get(i).second(), this.rainbow.getValue(), this.hue);

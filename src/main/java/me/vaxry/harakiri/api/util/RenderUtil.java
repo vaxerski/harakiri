@@ -17,6 +17,7 @@ import org.lwjgl.opengl.GL32;
 import java.awt.*;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -190,6 +191,34 @@ public final class RenderUtil {
         GlStateManager.enableTexture2D();
     }
 
+    public static void drawGradientRectLeftRight(float left, float top, float right, float bottom, int startColor, int endColor) {
+        float f = (float) (startColor >> 24 & 255) / 255.0F;
+        float f1 = (float) (startColor >> 16 & 255) / 255.0F;
+        float f2 = (float) (startColor >> 8 & 255) / 255.0F;
+        float f3 = (float) (startColor & 255) / 255.0F;
+        float f4 = (float) (endColor >> 24 & 255) / 255.0F;
+        float f5 = (float) (endColor >> 16 & 255) / 255.0F;
+        float f6 = (float) (endColor >> 8 & 255) / 255.0F;
+        float f7 = (float) (endColor & 255) / 255.0F;
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.shadeModel(7425);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        bufferbuilder.pos(right, top, 0).color(f5, f6, f7, f4).endVertex();
+        bufferbuilder.pos(left, top, 0).color(f1, f2, f3, f).endVertex();
+        bufferbuilder.pos(left, bottom, 0).color(f1, f2, f3, f).endVertex();
+        bufferbuilder.pos(right, bottom, 0).color(f5, f6, f7, f4).endVertex();
+        tessellator.draw();
+        GlStateManager.shadeModel(7424);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableTexture2D();
+    }
+
     public static void drawTriangle(float x, float y, float size, float theta, int color) {
         GL11.glTranslated(x, y, 0);
         GL11.glRotatef(180 + theta, 0F, 0F, 1.0F);
@@ -344,6 +373,61 @@ public final class RenderUtil {
             GlStateManager.enableTexture2D();
 
             if(i >= coordinates.length)
+                break;
+        }
+    }
+
+    public static void drawOutlinePolygon3D(ArrayList<Coordinate> geometry3D, float thickness, int hex, boolean rainbow, float hue) {
+        float red = (hex >> 16 & 0xFF) / 255.0F;
+        float green = (hex >> 8 & 0xFF) / 255.0F;
+        float blue = (hex & 0xFF) / 255.0F;
+        float alpha = (hex >> 24 & 0xFF) / 255.0F;
+
+        int lastbegin = 0;
+
+        Coordinate startCoord = geometry3D.get(0);
+
+        double geometryLength = geometry3D.size();
+        double elapsedLength = 0;
+
+        int i = 0;
+        for(;;){
+            glLineWidth(thickness);
+            glEnable(GL32.GL_DEPTH_CLAMP);
+            final Tessellator tessellator = Tessellator.getInstance();
+            final BufferBuilder bufferbuilder = tessellator.getBuffer();
+            bufferbuilder.begin(GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+
+            for(; i < geometry3D.size(); ++i){
+
+                float huehue = hue + (float)elapsedLength / (float)geometryLength;
+                if(huehue > 1)
+                    huehue -= 1;
+
+                Color rainbowColor = Color.getHSBColor(huehue, 1, 1);
+
+                if(i > 0)
+                    elapsedLength += Math.sqrt(Math.pow(geometry3D.get(i - 1).x - geometry3D.get(i).x, 2) + Math.pow(geometry3D.get(i - 1).y - geometry3D.get(i).y, 2));
+
+                // because some have holes.
+                if(i > lastbegin + 1){
+                    if(geometry3D.get(i - 1).x == startCoord.x && geometry3D.get(i - 1).y == startCoord.y){
+                        // We are back at the start. If there is more to draw, dont draw THIS line
+                        // and set the new start to the new start
+                        startCoord = geometry3D.get(i);
+                        lastbegin = i;
+                        break;
+                    }
+                }
+                if(rainbow)
+                    bufferbuilder.pos(geometry3D.get(i).x, geometry3D.get(i).y, geometry3D.get(i).z).color(rainbowColor.getRed() / 255.f, rainbowColor.getGreen() / 255.f, rainbowColor.getBlue() / 255.f, alpha).endVertex();
+                else
+                    bufferbuilder.pos(geometry3D.get(i).x, geometry3D.get(i).y, geometry3D.get(i).z).color(red, green, blue, alpha).endVertex();
+            }
+            tessellator.draw();
+            glDisable(GL32.GL_DEPTH_CLAMP);
+
+            if(i >= geometry3D.size())
                 break;
         }
     }

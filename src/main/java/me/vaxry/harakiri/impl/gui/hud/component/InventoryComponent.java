@@ -43,5 +43,14 @@ public final class InventoryComponent extends DraggableHudComponent {
         RenderHelper.disableStandardItemLighting();
         mc.getRenderItem().zLevel = 0.0F;
         GlStateManager.popMatrix();
+
+        //top
+        RenderUtil.drawLine(this.getX(), this.getY(), this.getX() + this.getW(), this.getY(), 0.7f, 0xAA000000);
+        //Right
+        RenderUtil.drawLine(this.getX() + this.getW(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0.7f, 0xAA000000);
+        //Bott
+        RenderUtil.drawLine(this.getX(), this.getY() + this.getH(), this.getX() + this.getW(), this.getY() + this.getH(), 0.7f, 0xAA000000);
+        //Left
+        RenderUtil.drawLine(this.getX(), this.getY(), this.getX(), this.getY() + this.getH(), 0.7f, 0xAA000000);
     }
 }

@@ -52,7 +52,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
 
     private final HudEditorModule hudEditorModule;
     private final Texture texture;
-    private final Texture gearTexture;
+    //private final Texture gearTexture;
 
     private ToolTipComponent currentToolTip;
     private ModuleSettingsComponent currentSettings;
@@ -67,7 +67,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
         this.originalName = StringUtils.capitalize(type.name().toLowerCase());
         this.hudEditorModule = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
         this.texture = new Texture("module-" + type.name().toLowerCase() + ".png");
-        this.gearTexture = new Texture("gear_wheel_modulelist.png");
+        //this.gearTexture = new Texture("gear_wheel_modulelist.png");
 
         this.setSnappable(false);
         this.setLocked(true);
@@ -228,11 +228,13 @@ public final class ModuleListComponent extends ResizableHudComponent {
                     // Slow opening.
                     offsetY += tempOffsetY * this.currentSettings.percOpen;
 
+                    int LINE_HAS_ERRORS = 2;
+
                     // Draw outline to see where the stuff is easier
-                    RenderUtil.drawLine(this.currentSettings.getX(), this.currentSettings.getY(), this.currentSettings.getX() + this.currentSettings.getW(), this.currentSettings.getY(), 0.5f, ColorUtil.changeAlpha(0xFFFFFFFF, this.currentSettings.alphaForBorder)); //top
-                    RenderUtil.drawLine(this.currentSettings.getX() + this.currentSettings.getW(), this.currentSettings.getY(), this.currentSettings.getX() + this.currentSettings.getW(), this.currentSettings.getY() + this.currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(0xFFFFFFFF, this.currentSettings.alphaForBorder)); //right
-                    RenderUtil.drawLine(this.currentSettings.getX(), this.currentSettings.getY() + this.currentSettings.getH(), this.currentSettings.getX() + this.currentSettings.getW(), this.currentSettings.getY() + this.currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(0xFFFFFFFF, this.currentSettings.alphaForBorder)); //bottom
-                    RenderUtil.drawLine(this.currentSettings.getX(), this.currentSettings.getY(), this.currentSettings.getX(), this.currentSettings.getY() + this.currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(0xFFFFFFFF, this.currentSettings.alphaForBorder)); //left
+                    RenderUtil.drawLine(this.currentSettings.getX() + LINE_HAS_ERRORS, this.currentSettings.getY(), this.currentSettings.getX() + this.currentSettings.getW() + LINE_HAS_ERRORS, this.currentSettings.getY(), 0.5f, ColorUtil.changeAlpha(0xFFFFFFFF, this.currentSettings.alphaForBorder)); //top
+                    RenderUtil.drawLine(this.currentSettings.getX() + this.currentSettings.getW() + LINE_HAS_ERRORS, this.currentSettings.getY(), this.currentSettings.getX() + this.currentSettings.getW() + LINE_HAS_ERRORS, this.currentSettings.getY() + this.currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(0xFFFFFFFF, this.currentSettings.alphaForBorder)); //right
+                    RenderUtil.drawLine(this.currentSettings.getX() + LINE_HAS_ERRORS, this.currentSettings.getY() + this.currentSettings.getH(), this.currentSettings.getX() + this.currentSettings.getW() + LINE_HAS_ERRORS, this.currentSettings.getY() + this.currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(0xFFFFFFFF, this.currentSettings.alphaForBorder)); //bottom
+                    RenderUtil.drawLine(this.currentSettings.getX() + LINE_HAS_ERRORS, this.currentSettings.getY(), this.currentSettings.getX() + LINE_HAS_ERRORS, this.currentSettings.getY() + this.currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(0xFFFFFFFF, this.currentSettings.alphaForBorder)); //left
                 }
             }
         }
