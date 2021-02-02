@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import com.yworks.yguard.test.A;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.api.event.player.EventDestroyBlock;
 import me.vaxry.harakiri.api.event.render.EventRender3D;
@@ -16,11 +17,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import org.locationtech.jts.geom.Coordinate;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.util.ArrayList;
@@ -31,17 +34,18 @@ public final class BedrockFinder extends Module {
 
     private ICamera camera = new Frustum();
 
-    private ArrayList<BlockPos> illegalBedrock;
+    private ArrayList<Coordinate> illegalBedrock = new ArrayList<>();
     private int foundBedrockLastS = 0;
 
     private Timer timer = new Timer();
 
     public BedrockFinder() {
         super("Bedrock Finder", new String[]{"BedrockFinder", "BF", "Bedrock"}, "Searches for unnatural bedrock.", "NONE", -1, ModuleType.RENDER);
+        timer.reset();
     }
 
     @Listener
-    public void render3D(EventRender3D event) {
+    public void onRender(EventRender3D event) {
         final float seconds = ((System.currentTimeMillis() - this.timer.getTime()) / 1000.0f) % 60.0f;
         if(seconds > 1){
             timer.reset();
@@ -55,7 +59,15 @@ public final class BedrockFinder extends Module {
 
         camera.setPosition(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().posY, mc.getRenderViewEntity().posZ);
 
-        for(BlockPos blockPos : illegalBedrock) {
+        RenderUtil.begin3D();
+
+        ArrayList<BlockPos> dirty = new ArrayList<>();
+
+        for(Coordinate blockPos : illegalBedrock) {
+
+            if(!mc.world.isBlockLoaded(new BlockPos(blockPos.x, blockPos.y, blockPos.z), false))
+                dirty.add(new BlockPos(blockPos.x, blockPos.y, blockPos.z));
+
 
             final AxisAlignedBB bb = new AxisAlignedBB(
                     blockPos.getX() - mc.getRenderManager().viewerPosX,
@@ -75,6 +87,18 @@ public final class BedrockFinder extends Module {
                 RenderGlobal.drawBoundingBox(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ, 0.8f, 0.1f, 0.1f, 1.0f);
             }
         }
+
+        for(BlockPos d : dirty)
+            removeBlock(d);
+
+        RenderUtil.end3D();
+    }
+
+    @Override
+    public void onToggle() {
+        super.onToggle();
+        Minecraft.getMinecraft().renderGlobal.loadRenderers();
+        this.illegalBedrock.clear();
     }
 
     @Listener
@@ -93,24 +117,36 @@ public final class BedrockFinder extends Module {
 
     private void removeBlock(BlockPos x) {
         for (int i = this.illegalBedrock.size() - 1; i >= 0; i--) {
-            BlockPos searchBlock = this.illegalBedrock.get(i);
-            if (searchBlock.getX() == x.getX() && searchBlock.getY() == x.getY() && searchBlock.getZ() == x.getZ())
+            Coordinate searchBlock = this.illegalBedrock.get(i);
+            if (searchBlock.getX() == x.getX() && searchBlock.getY() == x.getY() && searchBlock.getZ() == x.getZ()) {
                 this.illegalBedrock.remove(i);
+                break;
+            }
         }
+    }
+
+    private boolean isBlockAdded(BlockPos x) {
+        for (int i = this.illegalBedrock.size() - 1; i >= 0; i--) {
+            Coordinate searchBlock = this.illegalBedrock.get(i);
+            if (searchBlock.getX() == x.getX() && searchBlock.getY() == x.getY() && searchBlock.getZ() == x.getZ()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Listener
     public void onRenderBlock(EventRenderBlockModel event) {
-        if(!this.isEnabled())
-            return;
         final BlockPos pos = event.getBlockPos();
         final IBlockState blockState = event.getBlockState();
         if(blockState.getBlock() == Blocks.BEDROCK){
             if(Minecraft.getMinecraft().player.dimension == 0){
                 // Overworld, no bedrock > 7
                 if(pos.getY() > 7){
-                    illegalBedrock.add(pos);
-                    foundBedrockLastS += 1;
+                    if(!isBlockAdded(pos)) {
+                        foundBedrockLastS += 1;
+                        illegalBedrock.add(new Coordinate(pos.getX(), pos.getY(), pos.getZ()));
+                    }
                 }
             }
         }

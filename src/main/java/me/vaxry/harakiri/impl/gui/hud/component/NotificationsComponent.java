@@ -58,9 +58,9 @@ public final class NotificationsComponent extends DraggableHudComponent {
 
             float alpha = notification.alpha;
 
-            RenderUtil.drawRect(notification.getTransitionX() - 1, notification.getTransitionY(), notification.getTransitionX() + notification.getWidth() + 1, notification.getTransitionY() + notification.getHeight(), (int)Math.min(alpha * 0x10000000, 0x65000000) + 0x101010);
-            RenderUtil.drawRect(notification.getTransitionX() - 1, notification.getTransitionY(), notification.getTransitionX() + notification.getWidth() + 1, (notification.getTransitionY() + 1), notification.getType().getColor() - 0xFF000000 + (int)(alpha * 0x10000000));
-            mc.fontRenderer.drawStringWithShadow(notification.getText(), notification.getTransitionX(), notification.getTransitionY() + 4.0F, (int)(alpha * 0x10000000) + 0xFFFFFF);
+            RenderUtil.drawRect(notification.getTransitionX() - 1, notification.getY(), notification.getTransitionX() + notification.getWidth() + 1, notification.getY() + notification.getHeight(), (int)Math.min(alpha * 0x10000000, 0x65000000) + 0x101010);
+            RenderUtil.drawRect(notification.getTransitionX() - 1, notification.getY(), notification.getTransitionX() + notification.getWidth() + 1, (notification.getY() + 1), notification.getType().getColor() - 0xFF000000 + (int)(alpha * 0x10000000));
+            mc.fontRenderer.drawStringWithShadow(notification.getText(), notification.getTransitionX(), notification.getY() + 4.0F, (int)(alpha * 0x10000000) + 0xFFFFFF);
 
             final float width = notification.getWidth();
             if (width >= maxWidth) {
