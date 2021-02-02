@@ -31,6 +31,12 @@ public class AvoidModule extends Module {
 
     @Listener
     public void move(EventMove event) {
+        fixMovevemt(event);
+
+        // ezd
+    }
+
+    public void fixMovevemt(EventMove event){
         Minecraft mc = Minecraft.getMinecraft();
 
         // Check if we are colliding on 4 axes.
@@ -63,8 +69,6 @@ public class AvoidModule extends Module {
             if(event.getZ() < 0)
                 event.setZ(0);
         }
-
-        // ezd
     }
 
     private boolean isBlockUnloaded(BlockPos bloc){
