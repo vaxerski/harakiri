@@ -40,7 +40,7 @@ public final class BedrockFinder extends Module {
     private Timer timer = new Timer();
 
     public BedrockFinder() {
-        super("Bedrock Finder", new String[]{"BedrockFinder", "BF", "Bedrock"}, "Searches for unnatural bedrock.", "NONE", -1, ModuleType.RENDER);
+        super("BedrockFinder", new String[]{"BedrockFinder", "BF", "Bedrock"}, "Searches for unnatural bedrock.", "NONE", -1, ModuleType.RENDER);
         timer.reset();
     }
 
