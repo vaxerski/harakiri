@@ -22,7 +22,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class InteractModule extends Module {
 
     public InteractModule() {
-        super("Interact", new String[]{"GhostHand"}, "Allows you to access entities and blocks through walls", "NONE", -1, ModuleType.PLAYER);
+        super("Interact", new String[]{"GhostHand"}, "Allows you to access entities and blocks through walls.", "NONE", -1, ModuleType.PLAYER);
     }
 
     private boolean clicked;

@@ -22,7 +22,8 @@ public final class CommandsModule extends Module {
     public CommandsModule() {
         super("Commands", new String[]{"cmds", "cmd"}, "Allows you to execute client commands", "NONE", -1, ModuleType.HIDDEN);
         this.setHidden(true);
-        this.toggle();
+        this.setEnabled(true);
+        this.onEnable();
     }
 
     @Listener

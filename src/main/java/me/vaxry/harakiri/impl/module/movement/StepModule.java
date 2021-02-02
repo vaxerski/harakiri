@@ -36,7 +36,7 @@ public final class StepModule extends Module {
     private int packets;
 
     public StepModule() {
-        super("Step", new String[]{"stp"}, "Allows the player to step/teleport up blocks when horizontally colliding with one", "NONE", -1, ModuleType.MOVEMENT);
+        super("Step", new String[]{"stp"}, "Allows you to step up blocks you shouldn't.", "NONE", -1, ModuleType.MOVEMENT);
     }
 
     @Override

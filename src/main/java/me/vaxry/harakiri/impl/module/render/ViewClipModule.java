@@ -11,7 +11,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class ViewClipModule extends Module {
 
     public ViewClipModule() {
-        super("ViewClip", new String[]{"ViewC"}, "Prevents the third person camera from ray-tracing", "NONE", -1, ModuleType.RENDER);
+        super("ThirdPersonClip", new String[]{"ViewC"}, "Prevents the F5 camera from clipping.", "NONE", -1, ModuleType.RENDER);
     }
 
     @Listener

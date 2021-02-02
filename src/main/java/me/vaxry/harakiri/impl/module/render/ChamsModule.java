@@ -34,12 +34,12 @@ public final class ChamsModule extends Module {
 
     final float rainSpeed = 1.5f;
 
-    public final Value<Boolean> players = new Value<Boolean>("Players", new String[]{"Player"}, "Choose to enable on players.", true);
-    public final Value<Boolean> mobs = new Value<Boolean>("Mobs", new String[]{"Mob"}, "Choose to enable on mobs.", true);
-    public final Value<Boolean> animals = new Value<Boolean>("Animals", new String[]{"Animal"}, "Choose to enable on animals.", true);
-    public final Value<Boolean> vehicles = new Value<Boolean>("Vehicles", new String[]{"Vehic", "Vehicle"}, "Choose to enable on vehicles.", true);
-    public final Value<Boolean> crystals = new Value<Boolean>("Crystals", new String[]{"crystal", "crystals", "endcrystal", "endcrystals"}, "Choose to enable on end crystals.", true);
-    public final Value<Boolean> items = new Value<Boolean>("Items", new String[]{"Item", "i"}, "Choose to enable on items.", false);
+    public final Value<Boolean> players = new Value<Boolean>("Players", new String[]{"Player"}, "Enable on players.", true);
+    public final Value<Boolean> mobs = new Value<Boolean>("Mobs", new String[]{"Mob"}, "Enable on mobs.", true);
+    public final Value<Boolean> animals = new Value<Boolean>("Animals", new String[]{"Animal"}, "Enable on animals.", true);
+    public final Value<Boolean> vehicles = new Value<Boolean>("Vehicles", new String[]{"Vehic", "Vehicle"}, "Enable on vehicles.", true);
+    public final Value<Boolean> crystals = new Value<Boolean>("Crystals", new String[]{"crystal", "crystals", "endcrystal", "endcrystals"}, "Enable on end crystals.", true);
+    public final Value<Boolean> items = new Value<Boolean>("Items", new String[]{"Item", "i"}, "Enable on items.", false);
 
     public final Value<Boolean> rainbow = new Value<Boolean>("Rainbow", new String[]{"rainbow", "rb", "rainb", "rainbw"}, "Rainbow Mode", true);
 
@@ -50,7 +50,7 @@ public final class ChamsModule extends Module {
     }
 
     public ChamsModule() {
-        super("Chams", new String[]{"Cham", "Chameleon"}, "Allows you to see entities through walls", "NONE", -1, ModuleType.RENDER);
+        super("Chams", new String[]{"Cham", "Chameleon"}, "Allows you to see entities through walls and stuff.", "NONE", -1, ModuleType.RENDER);
     }
 
     @Override

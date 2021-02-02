@@ -20,7 +20,7 @@ public final class SprintModule extends Module {
     }
 
     public SprintModule() {
-        super("Sprint", new String[]{"AutoSprint", "Spr"}, "Automatically sprints for you", "NONE", -1, ModuleType.MOVEMENT);
+        super("Sprint", new String[]{"AutoSprint", "Spr"}, "Automatically sprints for you.", "NONE", -1, ModuleType.MOVEMENT);
     }
 
     @Override

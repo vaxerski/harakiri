@@ -23,7 +23,7 @@ public final class SourceBlockESPModule extends Module {
     private ICamera camera = new Frustum();
 
     public SourceBlockESPModule() {
-        super("Source Block ESP", new String[]{"SourceBlockESP", "SourceBlockESP", "SourceBlockESP"}, "Highlights Source Blocks", "NONE", -1, ModuleType.RENDER);
+        super("SourceBlockESP", new String[]{"SourceBlockESP", "SourceBlockESP", "SourceBlockESP"}, "Highlights Source Blocks", "NONE", -1, ModuleType.RENDER);
     }
 
     @Listener

@@ -21,14 +21,14 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class AutoCraftModule extends Module {
 
-    public final Value<Boolean> drop = new Value<>("Drop", new String[]{"d"}, "Automatically drop the crafted item.", false);
+    public final Value<Boolean> drop = new Value<>("Drop", new String[]{"d"}, "Drop the crafted item.", false);
     public final Value<String> recipe = new Value<>("Recipe", new String[]{"Recipes", "Rec", "Rec"}, "The recipe name of what you want to craft.", "");
-    public final Value<Float> delay = new Value<>("Delay", new String[]{"Del"}, "The crafting delay in milliseconds.", 50.0f, 0.0f, 500.0f, 1.0f);
+    public final Value<Float> delay = new Value<>("Delay", new String[]{"Del"}, "The crafting delay (in ms).", 50.0f, 0.0f, 500.0f, 1.0f);
 
     private final Timer timer = new Timer();
 
     public AutoCraftModule() {
-        super("AutoCraft", new String[]{"AutomaticCraft", "ACraft"}, "Automatically crafts recipes", "NONE", -1, ModuleType.MISC);
+        super("AutoCraft", new String[]{"AutomaticCraft", "ACraft"}, "Automatically crafts stuff for you.", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener

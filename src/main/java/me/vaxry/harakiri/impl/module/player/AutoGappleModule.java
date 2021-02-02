@@ -22,7 +22,7 @@ public final class AutoGappleModule extends Module {
     private int notchAppleSlot = -1;
 
     public AutoGappleModule() {
-        super("AutoGapple", new String[]{"Gapple", "AutoApple"}, "Automatically swaps & eats a (notch) apple when health is below the set threshold.", "NONE", -1, ModuleType.PLAYER);
+        super("AutoGapple", new String[]{"Gapple", "AutoApple"}, "Automatically eats a (god) apple when health is below the set threshold.", "NONE", -1, ModuleType.PLAYER);
     }
 
     @Override

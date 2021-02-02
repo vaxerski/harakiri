@@ -15,7 +15,7 @@ public final class NoEntityTraceModule extends Module {
     public Value<Boolean> toolsOnly = new Value<Boolean>("Tools", new String[]{"OnlyTools", "Tool", "Pickaxe", "Axe", "Shovel"}, "Only enable when holding a tool.", true);
 
     public NoEntityTraceModule() {
-        super("MineThrough", new String[]{"MineThrough", "MineThrough", "MineThrough", "MineT"}, "Mine through entities.", "NONE", -1, ModuleType.WORLD);
+        super("NoEntityHit", new String[]{"MineThrough", "MineThrough", "MineThrough", "MineT"}, "Do stuff through entities.", "NONE", -1, ModuleType.WORLD);
     }
 
     @Listener

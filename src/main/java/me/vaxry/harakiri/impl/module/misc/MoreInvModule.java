@@ -14,7 +14,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class MoreInvModule extends Module {
 
     public MoreInvModule() {
-        super("MoreInv", new String[]{"XCarry", "MoreInventory"}, "Allows you to carry items in your crafting and dragging slot", "NONE", -1, ModuleType.MISC);
+        super("XCarry", new String[]{"XCarry", "MoreInventory"}, "Allows you to carry items in your crafting and dragging slots.", "NONE", -1, ModuleType.MISC);
     }
 
     @Override

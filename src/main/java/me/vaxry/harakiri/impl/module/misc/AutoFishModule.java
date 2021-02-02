@@ -19,7 +19,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class AutoFishModule extends Module {
 
     public AutoFishModule() {
-        super("AutoFish", new String[]{"AutomaticFish"}, "Automatically catches fish and recasts", "NONE", -1, ModuleType.MISC);
+        super("AutoFish", new String[]{"AutomaticFish"}, "Automatically catches fish.", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener

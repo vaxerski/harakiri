@@ -16,7 +16,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class EntityControlModule extends Module {
 
     public EntityControlModule() {
-        super("EntityControl", new String[]{"AntiSaddle", "EntityRide", "NoSaddle"}, "Allows you to control llamas, horses, pigs without a saddle/carrot", "NONE", -1, ModuleType.MOVEMENT);
+        super("EntityControl", new String[]{"AntiSaddle", "EntityRide", "NoSaddle"}, "Allows you to control llamas, horses, pigs without a saddle/carrot on a stick", "NONE", -1, ModuleType.MOVEMENT);
     }
 
     @Listener

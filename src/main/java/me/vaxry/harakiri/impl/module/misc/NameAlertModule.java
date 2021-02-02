@@ -35,7 +35,7 @@ public final class NameAlertModule extends Module {
     private final File messagesFile;
 
     public NameAlertModule() {
-        super("NameAlert", new String[]{"NameAlert", "SayMyName", "WhoSaid"}, "Alerts you when someone says your name in chat via a notification.", "NONE", -1, ModuleType.MISC);
+        super("MentionAlert", new String[]{"MentionAlert", "SayMyName", "WhoSaid"}, "Alerts you when someone says your name in chat.", "NONE", -1, ModuleType.MISC);
 
         this.messagesFile = new File(Harakiri.INSTANCE.getConfigManager().getConfigDir(), "NameAlerts.txt");
         try {

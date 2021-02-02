@@ -17,7 +17,8 @@ public final class MacroModule extends Module {
     public MacroModule() {
         super("Macros", new String[]{"mac"}, "Allows you to bind macros to keys", "NONE", -1, ModuleType.HIDDEN);
         this.setHidden(true);
-        this.toggle();
+        this.setEnabled(true);
+        this.onEnable();
     }
 
     @Listener

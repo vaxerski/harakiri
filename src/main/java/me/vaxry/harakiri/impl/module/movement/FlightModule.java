@@ -30,9 +30,9 @@ public final class FlightModule extends Module {
         VANILLA, PACKET
     }
 
-    public final Value<Float> speed = new Value<Float>("Speed", new String[]{"Spd"}, "Speed multiplier for flight, higher values equals more speed.", 1.0f, 0.0f, 5.0f, 0.01f);
+    public final Value<Float> speed = new Value<Float>("Speed", new String[]{"Spd"}, "Speed multiplier for flight.", 1.0f, 0.0f, 5.0f, 0.01f);
 
-    public final Value<Boolean> noKick = new Value<Boolean>("NoKick", new String[]{"AntiKick", "Kick"}, "Bypass the server kicking you for flying while in flight.", true);
+    public final Value<Boolean> noKick = new Value<Boolean>("NoKick", new String[]{"AntiKick", "Kick"}, "Bypass the vanilla kick.", true);
 
     private int teleportId;
     private List<CPacketPlayer> packets = new ArrayList<>();

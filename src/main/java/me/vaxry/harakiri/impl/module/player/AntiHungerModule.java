@@ -10,7 +10,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public class AntiHungerModule extends Module {
 
     public AntiHungerModule() {
-        super("AntiHunger", new String[]{"AntiHunger", "AH"}, "Makes you lose less hunger", "NONE", -1, ModuleType.PLAYER);
+        super("AntiHunger", new String[]{"AntiHunger", "AH"}, "Makes you lose less hunger.", "NONE", -1, ModuleType.PLAYER);
     }
 
     @Listener

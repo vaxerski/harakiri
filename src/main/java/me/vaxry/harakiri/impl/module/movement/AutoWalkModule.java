@@ -19,17 +19,17 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class AutoWalkModule extends Module {
 
-    public final Value<Boolean> pressKeybind = new Value<>("PressKeybind", new String[]{"Keybind", "Key-bind", "PK", "P"}, "Presses the forward key for you.", true);
+    public final Value<Boolean> pressKeybind = new Value<>("PressKeybind", new String[]{"Keybind", "Key-bind", "PK", "P"}, "Presses the w key for you.", true);
     public final Value<Boolean> autoDisable = new Value<>("AutoDisable", new String[]{"Disable", "ad"}, "Automatically disables the module on disconnect or death.", true);
-    public final Value<Boolean> useBaritone = new Value<>("Baritone", new String[]{"Baritone", "B"}, "Sends a custom baritone command on enable.", false);
-    public final Value<String> baritoneCommand = new Value<>("Command", new String[]{"Com", "C", "Text"}, "The message you want to send to communicate with baritone. (include prefix!)", "#explore");
-    public final Value<String> baritoneCancelCommand = new Value<>("Cancel", new String[]{"BaritoneCancel", "Cancel", "Stop", "Text"}, "The cancel baritone command to send when disabled. (include prefix!)", "#cancel");
-    public final Value<Float> waitTime = new Value<Float>("MsgDelay", new String[]{"MessageDelay", "CommandDelay", "Delay", "Wait", "Time", "md", "d"}, "Delay(ms) between sending baritone commands when standing.", 3000.0f, 0.0f, 8000.0f, 100.0f);
+    public final Value<Boolean> useBaritone = new Value<>("Baritone", new String[]{"Baritone", "B"}, "Sends a baritone command on enable.", false);
+    public final Value<String> baritoneCommand = new Value<>("Command", new String[]{"Com", "C", "Text"}, "The message you want to send to baritone. (please add the prefix)", "#explore");
+    public final Value<String> baritoneCancelCommand = new Value<>("Cancel", new String[]{"BaritoneCancel", "Cancel", "Stop", "Text"}, "The cancel baritone command to send when disabled. (please add the prefix)", "#cancel");
+    public final Value<Float> waitTime = new Value<Float>("MsgDelay", new String[]{"MessageDelay", "CommandDelay", "Delay", "Wait", "Time", "md", "d"}, "Delay (in ms) between sending baritone commands when standing.", 3000.0f, 0.0f, 8000.0f, 100.0f);
 
     private final Timer sendCommandTimer = new Timer();
 
     public AutoWalkModule() {
-        super("AutoWalk", new String[]{"AutomaticWalk"}, "Automatically presses the forward key or sends commands to baritone.", "NONE", -1, ModuleType.MOVEMENT);
+        super("AutoWalk", new String[]{"AutomaticWalk"}, "Automatically walks for you.", "NONE", -1, ModuleType.MOVEMENT);
     }
 
     @Override

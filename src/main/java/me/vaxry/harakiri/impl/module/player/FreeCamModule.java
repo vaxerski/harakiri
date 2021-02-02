@@ -35,13 +35,13 @@ public final class FreeCamModule extends Module {
     private float yaw;
     private float pitch;
 
-    public final Value<Float> speed = new Value<Float>("Speed", new String[]{"Spd"}, "Speed of freecam flight, higher number equals quicker motion.", 1.0f, 0.0f, 2.0f, 0.1f);
+    public final Value<Float> speed = new Value<Float>("Speed", new String[]{"Spd"}, "Speed of freecam flight.", 1.0f, 0.0f, 2.0f, 0.1f);
     //public final Value<Boolean> view = new Value<Boolean>("3D", new String[]{"View"}, "The old Nodus client style free-cam, kind of like an elytra. (Hold forward key & move the mouse to turn)", false);
-    public final Value<Boolean> packet = new Value<Boolean>("Packet", new String[]{"Pack"}, "Disables any player position or rotation packets from being sent during free-cam if enabled.", true);
+    public final Value<Boolean> packet = new Value<Boolean>("Packet", new String[]{"Pack"}, "Disables any player position or rotation packets from being sent during freecam if enabled.", true);
     public final Value<Boolean> allowDismount = new Value<Boolean>("AllowDismount", new String[]{"Dismount", "Dis", "AllowDis"}, "Allow dismounting of the riding entity.", true);
 
     public FreeCamModule() {
-        super("FreeCam", new String[]{"FreeCamera"}, "Out of body experience", "NONE", -1, ModuleType.PLAYER);
+        super("FreeCam", new String[]{"FreeCamera"}, "Allows you to noclip.", "NONE", -1, ModuleType.PLAYER);
     }
 
     @Override

@@ -44,7 +44,7 @@ public final class SearchModule extends Module {
     private final List<Vec3d> blocks = new ArrayList<>();
 
     public SearchModule() {
-        super("Search", new String[]{"srch", "find", "search"}, "Search for different types of blocks.", "NONE", -1, ModuleType.RENDER);
+        super("Search", new String[]{"srch", "find", "search"}, "Search for selected blocks.", "NONE", -1, ModuleType.RENDER);
 
         if (Harakiri.INSTANCE.getConfigManager().isFirstLaunch()) {
             this.add("furnace");

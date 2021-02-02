@@ -20,13 +20,13 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public class PullDownModule extends Module {
     private static final float VELOCITY_MAX = 10.0f;
     public final Value<Boolean> jumpDisables =
-            new Value<Boolean>("JumpDisables", new String[]{"jump"}, "When enabled, holding the jump key will disable any pulldown events from triggering.", true);
+            new Value<Boolean>("JumpDisables", new String[]{"jump"}, "When enabled, holding the jump key will disable any speed boosts.", true);
     public final Value<Float> speed =
-            new Value<Float>("Speed", new String[]{"velocity"}, "Speed multiplier at which the player will be pulled down at.", 4.0f,
+            new Value<Float>("Speed", new String[]{"velocity"}, "Speed multiplier at which the player will be falling.", 4.0f,
                     0f, VELOCITY_MAX, 1f);
 
     public PullDownModule() {
-        super("PullDown", new String[]{"FastFall"}, "Increase your downwards velocity when falling",
+        super("PullDown", new String[]{"FastFall"}, "Increase your falling velocity.",
                 "NONE", -1, ModuleType.MOVEMENT);
     }
 

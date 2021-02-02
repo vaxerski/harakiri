@@ -31,7 +31,7 @@ import java.util.stream.IntStream;
  * @author noil
  */
 public final class NoteBotModule extends Module {
-
+/*
     private final Value<BotState> state = new Value<BotState>("State", new String[]{"State", "s"}, "Current state of the note-bot.", BotState.IDLE);
     private final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"mod", "m"}, "Current mode of the note-bot.", Mode.NORMAL);
     private final Value<Boolean> rotate = new Value<Boolean>("Rotate", new String[]{"rot", "r"}, "Rotate the player's head & body for each note-bot function.", true);
@@ -161,7 +161,7 @@ public final class NoteBotModule extends Module {
                             //this.state.setValue(BotState.IDLE);
                         }
                     }
-                    */
+                    *//*
 
                     if (this.state.getValue().equals(BotState.TUNING)) {
                         if (this.discoveredBlocks.size() == BLOCK_AREA && this.tunedBlocks.size() == BLOCK_AREA) {
@@ -323,5 +323,5 @@ public final class NoteBotModule extends Module {
 
     public void setCurrentNote(int currentNote) {
         this.currentNote = currentNote;
-    }
+    }*/
 }

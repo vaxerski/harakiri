@@ -24,10 +24,16 @@ public final class XrayModule extends Module {
     private int lastAO;
 
     public XrayModule() {
-        super("Xray", new String[]{"JadeVision", "Jade"}, "Allows you to filter what the world renders", "NONE", -1, ModuleType.RENDER);
+        super("Xray", new String[]{"JadeVision", "Jade"}, "Allows you to xray.", "NONE", -1, ModuleType.RENDER);
 
-        if (Harakiri.INSTANCE.getConfigManager().isFirstLaunch())
+        if (Harakiri.INSTANCE.getConfigManager().isFirstLaunch()) {
             this.add("diamond_ore");
+            this.add("coal_ore");
+            this.add("gold_ore");
+            this.add("redstone_ore");
+            this.add("iron_ore");
+            this.add("lapis_ore");
+        }
     }
 
     @Override

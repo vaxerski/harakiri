@@ -14,7 +14,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class BuildHeightModule extends Module {
 
     public BuildHeightModule() {
-        super("BuildHeight", new String[]{"BuildH", "BHeight"}, "Allows you to interact with blocks at build height", "NONE", -1, ModuleType.MISC);
+        super("MaxHeight", new String[]{"BuildH", "BHeight"}, "Allows you to interact with blocks at y=255.", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener

@@ -32,7 +32,7 @@ public final class PhaseModule extends Module {
     public final Value<Boolean> floor = new Value<Boolean>("Floor", new String[]{"Fl"}, "Prevents falling out of the world if enabled.", true);
 
     public PhaseModule() {
-        super("Phase", new String[]{"NoClip"}, "Allows you to glitch through blocks", "NONE", -1, ModuleType.WORLD);
+        super("Phase", new String[]{"NoClip"}, "Allows you to go through blocks.", "NONE", -1, ModuleType.WORLD);
     }
 
     @Override

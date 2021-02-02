@@ -30,8 +30,8 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class ScaffoldModule extends Module {
 
-    public final Value<Boolean> refill = new Value<Boolean>("Refill", new String[]{"ref"}, "If the held item is empty or not a block, fill the slot with a block from the inventory when the scaffold is triggered to place.", true);
-    public final Value<Boolean> rotate = new Value<Boolean>("Rotate", new String[]{"rot"}, "Should we rotate the player's head according to the place position?", true);
+    //public final Value<Boolean> refill = new Value<Boolean>("Refill", new String[]{"ref"}, "If the held item is empty or not a block, fill the slot with a block from the inventory when the scaffold is triggered to place.", true);
+    public final Value<Boolean> rotate = new Value<Boolean>("Rotate", new String[]{"rot"}, "Rotate the head to the place position.", true);
     //public final Value<Boolean> destroy = new Value<Boolean>("Destroy", new String[]{"Dest"}, "When enabled, after placing the block, forces the player to swing/destroy at the same position.", false);
 
     private final int[] blackList = new int[]{145, 130, 12, 252, 54, 146, 122, 13, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 50};
@@ -95,7 +95,7 @@ public final class ScaffoldModule extends Module {
                         } else {
                             final Vec3d block = this.getFirstBlock(dir);
 
-                            if (this.refill.getValue() && block != null) {
+                            /*if (this.refill.getValue() && block != null) {
                                 final int slot = this.findStackHotbar();
                                 if (slot != -1) {
                                     mc.player.inventory.currentItem = slot;
@@ -109,7 +109,7 @@ public final class ScaffoldModule extends Module {
                                         mc.player.setVelocity(0, 0, 0);
                                     }
                                 }
-                            }
+                            }*/
                         }
                     }
                 }

@@ -24,7 +24,7 @@ public final class SneakModule extends Module {
     }
 
     public SneakModule() {
-        super("Sneak", new String[]{"Sneek"}, "Allows you to sneak at full speed", "NONE", -1, ModuleType.MOVEMENT);
+        super("Sneak", new String[]{"Sneak"}, "Allows you to sneak at full speed.", "NONE", -1, ModuleType.MOVEMENT);
     }
 
     @Override

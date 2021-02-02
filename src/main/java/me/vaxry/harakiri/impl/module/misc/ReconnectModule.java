@@ -30,10 +30,10 @@ public final class ReconnectModule extends Module {
 
     private GuiButton reconnectButton;
 
-    public final Value<Float> delay = new Value<Float>("Delay", new String[]{"Del"}, "Delay in MS (milliseconds) between reconnect attempts.", 3000.0f, 0.0f, 10000.0f, 500.0f);
+    public final Value<Float> delay = new Value<Float>("Delay", new String[]{"Del"}, "Delay (in ms) between reconnect attempts.", 3000.0f, 0.0f, 10000.0f, 500.0f);
 
     public ReconnectModule() {
-        super("Reconnect", new String[]{"Rejoin", "Recon", "AutoReconnect"}, "Automatically reconnects to the last server after being kicked", "NONE", -1, ModuleType.MISC);
+        super("Reconnect", new String[]{"Rejoin", "Recon", "AutoReconnect"}, "Automatically reconnects to the last server after being disconnected.", "NONE", -1, ModuleType.MISC);
         final ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
         int w = 300;
         int h = 40;

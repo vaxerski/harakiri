@@ -13,7 +13,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class ColoredSignsModule extends Module {
 
     public ColoredSignsModule() {
-        super("ColoredSigns", new String[]{"CSigns", "CSign", "SignColor", "SignColor"}, "Allows you to use the & character to color signs(Patched on spigot)", "NONE", -1, ModuleType.MISC);
+        super("SignColor", new String[]{"CSigns", "CSign", "SignColor", "SignColor"}, "Allows you to use the & character to color signs (Doesn't work on spigot).", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener

@@ -22,7 +22,7 @@ public final class ReachModule extends Module {
 
     public final Value<Float> distance = new Value<Float>("Distance", new String[]{"Dist", "D"}, "The distance (in blocks) to reach.", 5.5f, 0.0f, 10.0f, 0.5f);
     public final Value<Boolean> highlight = new Value<Boolean>("Highlight", new String[]{"Hover", "H"}, "Enables rendering the BlockHighlight for the extended reach.", true);
-    public final Value<Boolean> blocks = new Value<Boolean>("Blocks", new String[]{"Block", "B"}, "Enables reaching for breaking & building blocks.", true);
+    public final Value<Boolean> blocks = new Value<Boolean>("Blocks", new String[]{"Block", "B"}, "Enables reaching for breaking and building blocks.", true);
     //public final Value<Boolean> entities = new Value<Boolean>("Entities", new String[]{"Entity", "Entitie", "E"}, "Enables reaching for attacking and interacting with entities.", false);
 
     private BlockHighlightModule blockHighlightModule = null;
@@ -31,7 +31,7 @@ public final class ReachModule extends Module {
     //private RayTraceResult currentEntityTrace = null;
 
     public ReachModule() {
-        super("Reach", new String[]{"Rch"}, "Extends the player's reach.", "NONE", -1, ModuleType.PLAYER);
+        super("Reach", new String[]{"Rch"}, "Extends your reach.", "NONE", -1, ModuleType.PLAYER);
     }
 
     @Listener

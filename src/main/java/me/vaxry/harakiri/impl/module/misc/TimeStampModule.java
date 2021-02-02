@@ -16,7 +16,7 @@ import java.util.Date;
 public final class TimeStampModule extends Module {
 
     public TimeStampModule() {
-        super("TimeStamp", new String[]{"Stamp"}, "Automatically adds the date at the bottom of signs", "NONE", -1, ModuleType.MISC);
+        super("SignTimestamp", new String[]{"Stamp"}, "Automatically adds the date at the bottom of your signs.", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener
@@ -26,7 +26,7 @@ public final class TimeStampModule extends Module {
                 final CPacketUpdateSign packet = (CPacketUpdateSign) event.getPacket();
 
                 if (packet.lines[3].length() <= 0) {
-                    packet.lines[3] = new SimpleDateFormat("MMM dd, yyyy").format(new Date());
+                    packet.lines[3] = new SimpleDateFormat("dd MMM, yyyy").format(new Date());
                 }
             }
         }

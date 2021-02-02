@@ -24,7 +24,7 @@ public final class AutoEatModule extends Module {
     private int foodSlot = -1;
 
     public AutoEatModule() {
-        super("AutoEat", new String[]{"Eat", "AutoFeed"}, "Automatically swaps & eats food when hunger is below the set threshold.", "NONE", -1, ModuleType.PLAYER);
+        super("AutoEat", new String[]{"Eat", "AutoFeed"}, "Automatically eats food when hunger is below the set threshold.", "NONE", -1, ModuleType.PLAYER);
     }
 
     @Override

@@ -31,24 +31,24 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class NoLagModule extends Module {
 
-    public final Value<Boolean> light = new Value<Boolean>("Light", new String[]{"Lit", "l"}, "Choose to enable the lighting lag fix. Disables lighting updates.", true);
-    public final Value<Boolean> signs = new Value<Boolean>("Signs", new String[]{"Sign", "si"}, "Choose to enable the sign lag fix. Disables the rendering of sign text.", false);
-    public final Value<Boolean> sounds = new Value<Boolean>("Sounds", new String[]{"Sound", "s"}, "Choose to enable the sound lag fix. Disable entity swap-item/equip sound.", true);
-    public final Value<Boolean> pistons = new Value<Boolean>("Pistons", new String[]{"Piston", "p"}, "Choose to enable the piston lag fix. Disables pistons from rendering.", false);
-    public final Value<Boolean> slimes = new Value<Boolean>("Slimes", new String[]{"Slime", "sl"}, "Choose to enable the slime lag fix. Disables slimes from spawning.", false);
-    public final Value<Boolean> items = new Value<Boolean>("Items", new String[]{"Item", "i"}, "Disables the rendering of items.", false);
-    public final Value<Boolean> particles = new Value<Boolean>("Particles", new String[]{"Part", "par"}, "Disables the spawning of all particles.", false);
+    public final Value<Boolean> light = new Value<Boolean>("Light", new String[]{"Lit", "l"}, "Disables lighting updates.", true);
+    public final Value<Boolean> signs = new Value<Boolean>("Signs", new String[]{"Sign", "si"}, "Disables the rendering of sign text.", false);
+    //public final Value<Boolean> sounds = new Value<Boolean>("Sounds", new String[]{"Sound", "s"}, "Disable entity swap-item/equip sound.", true);
     public final Value<Boolean> sky = new Value<Boolean>("Sky", new String[]{"Skies", "ski"}, "Disables the rendering of the sky.", false);
-    public final Value<Boolean> names = new Value<Boolean>("Names", new String[]{"Name", "n"}, "Disables the rendering of vanilla name-tags.", false);
+    //public final Value<Boolean> pistons = new Value<Boolean>("Pistons", new String[]{"Piston", "p"}, "Choose to enable the piston lag fix. Disables pistons from rendering.", false);
+    public final Value<Boolean> names = new Value<Boolean>("Names", new String[]{"Name", "n"}, "Disables the rendering of vanilla nametags (not hara ones).", false);
+    public final Value<Boolean> slimes = new Value<Boolean>("Slimes", new String[]{"Slime", "sl"}, "Disables slimes from spawning.", false);
+    public final Value<Boolean> items = new Value<Boolean>("Items", new String[]{"Item", "i"}, "Disables the rendering of items.", false);
+    public final Value<Boolean> particles = new Value<Boolean>("Particles", new String[]{"Part", "par"}, "Disables the spawning of particles.", false);
     public final Value<Boolean> withers = new Value<Boolean>("Withers", new String[]{"Wither", "w"}, "Disables the rendering of withers.", false);
     public final Value<Boolean> witherSkulls = new Value<Boolean>("WitherSkulls", new String[]{"WitherSkull", "skulls", "skull", "ws"}, "Disables the rendering of flying wither skulls.", false);
     public final Value<Boolean> crystals = new Value<Boolean>("Crystals", new String[]{"Wither", "w"}, "Disables the rendering of crystals.", false);
-    public final Value<Boolean> tnt = new Value<Boolean>("TNT", new String[]{"Wither", "w"}, "Disables the rendering of (primed) TNT.", false);
+    public final Value<Boolean> tnt = new Value<Boolean>("TNT", new String[]{"Wither", "w"}, "Disables the rendering of TNT.", false);
     public final Value<Boolean> firework = new Value<Boolean>("Fireworks", new String[]{"Fir", "f"}, "Disables the rendering of fireworks.", false);
-    public final Value<Boolean> removeChunkBan = new Value<Boolean>("NoChunkBan", new String[]{"NoChunk", "nw"}, "Remove chunkbans", false);
+    public final Value<Boolean> removeChunkBan = new Value<Boolean>("NoChunkBan", new String[]{"NoChunk", "nw"}, "Remove certain chunkbans.", false);
 
     public NoLagModule() {
-        super("NoLag", new String[]{"AntiLag", "NoRender"}, "Fixes malicious lag exploits and bugs that cause lag.", "NONE", -1, ModuleType.RENDER);
+        super("NoLag", new String[]{"AntiLag", "NoRender"}, "Fixes malicious lag exploits and bugs.", "NONE", -1, ModuleType.RENDER);
     }
 
     @Listener
@@ -74,13 +74,13 @@ public final class NoLagModule extends Module {
 
     @Listener
     public void renderBlockModel(EventRenderBlockModel event) {
-        if (this.pistons.getValue()) {
+        /*if (this.pistons.getValue()) {
             final Block block = event.getBlockState().getBlock();
             if (block instanceof BlockPistonMoving || block instanceof BlockPistonExtension) {
                 event.setRenderable(false);
                 event.setCanceled(true);
             }
-        }
+        }*/
         if (this.removeChunkBan.getValue()) {
             final Block block = event.getBlockState().getBlock();
             if (block instanceof BlockBeacon || block instanceof BlockEnchantmentTable) {
@@ -123,12 +123,12 @@ public final class NoLagModule extends Module {
     public void receivePacket(EventReceivePacket event) {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof SPacketSoundEffect) {
-                if (this.sounds.getValue()) {
+                /*if (this.sounds.getValue()) {
                     final SPacketSoundEffect packet = (SPacketSoundEffect) event.getPacket();
                     if (packet.getCategory() == SoundCategory.PLAYERS && packet.getSound() == SoundEvents.ITEM_ARMOR_EQUIP_GENERIC) {
                         event.setCanceled(true);
                     }
-                }
+                }*/
             }
         }
     }

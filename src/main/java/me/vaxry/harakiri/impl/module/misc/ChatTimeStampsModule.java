@@ -17,14 +17,14 @@ import java.util.Date;
  */
 public final class ChatTimeStampsModule extends Module {
 
-    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "Time format, 12 hour or 24 hour.", Mode.TWELVE);
+    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "Time format (12h/24h)", Mode.TWELVE);
 
     private enum Mode {
         TWELVE, TWENTY_FOUR
     }
 
     public ChatTimeStampsModule() {
-        super("ChatTimeStamps", new String[]{"ChatStamp", "ChatStamps"}, "Appends a time stamp on chat messages", "NONE", -1, ModuleType.MISC);
+        super("ChatTime", new String[]{"ChatStamp", "ChatStamps"}, "Adds a timestamp to chat messages.", "NONE", -1, ModuleType.MISC);
     }
 
     @Override

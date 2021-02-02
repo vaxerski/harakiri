@@ -20,7 +20,7 @@ public final class RotationLock extends Module {
     private float pitch;
 
     public RotationLock() {
-        super("RotationLock", new String[]{"RotLock", "Rotation"}, "Locks you rotation for precision", "NONE", -1, ModuleType.PLAYER);
+        super("RotationLock", new String[]{"RotLock", "Rotation"}, "Locks you rotation.", "NONE", -1, ModuleType.PLAYER);
     }
 
     @Override

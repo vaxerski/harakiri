@@ -16,7 +16,7 @@ public class MiddleClickPearlModule extends Module {
     private boolean clicked;
 
     public MiddleClickPearlModule() {
-        super("MiddleClickPearl", new String[]{"mcp", "autopearl"}, "Throws a pearl if you middle-click pointing in mid-air", "NONE", -1, ModuleType.MISC);
+        super("MiddleClickPearl", new String[]{"mcp", "autopearl"}, "Throws a pearl when you middle-click pointing in mid-air", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener

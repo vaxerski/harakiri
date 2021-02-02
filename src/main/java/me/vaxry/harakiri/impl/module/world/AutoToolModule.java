@@ -25,7 +25,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class AutoToolModule extends Module {
 
-    public final Value<Boolean> silent = new Value<Boolean>("Silent", new String[]{"Sil"}, "Hold any item and spoof your mining tool. (works on NCP)", false);
+    public final Value<Boolean> silent = new Value<Boolean>("Silent", new String[]{"Sil"}, "Hold any item and spoof your mining tool.", false);
 
     private boolean send;
 

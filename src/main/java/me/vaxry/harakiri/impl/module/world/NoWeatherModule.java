@@ -12,7 +12,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class NoWeatherModule extends Module {
 
     public NoWeatherModule() {
-        super("NoWeather", new String[]{"AntiWeather"}, "Allows you to control the weather client-side", "NONE", -1, ModuleType.WORLD);
+        super("NoWeather", new String[]{"AntiWeather"}, "Allows you to change the weather clientside.", "NONE", -1, ModuleType.WORLD);
     }
 
     @Listener

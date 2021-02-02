@@ -16,7 +16,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class FullbrightModule extends Module {
 
-    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "The brightness mode to use.", Mode.GAMMA);
+    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "The fullbright mode to use.", Mode.GAMMA);
     public final Value<Boolean> disablePotion = new Value<Boolean>("DisablePotion", new String[]{"AutoDisablePotion", "dp", "adp"}, "Automatically remove the night vision effect if using a different mode.", false);
 
     private enum Mode {

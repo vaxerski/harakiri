@@ -25,9 +25,9 @@ import java.util.List;
  */
 public final class NewChunksModule extends Module {
 
-    public final Value<Color> color = new Value<Color>("Color", new String[]{"color", "c"}, "Change the color of the chunk visual.", new Color(255, 255, 255));
-    public final Value<Integer> alpha = new Value<Integer>("Alpha", new String[]{"Alp", "Opacity", "a", "o"}, "Edit the alpha of the chunk visual.", 127, 1, 255, 1);
-    public final Value<Float> width = new Value<Float>("Width", new String[]{"W", "size", "s"}, "Edit the width chunk visual.", 1.5f, 0.1f, 5.0f, 0.1f);
+    public final Value<Color> color = new Value<Color>("Color", new String[]{"color", "c"}, "Change the color.", new Color(255, 255, 255));
+    public final Value<Integer> alpha = new Value<Integer>("Alpha", new String[]{"Alp", "Opacity", "a", "o"}, "Edit the alpha.", 127, 1, 255, 1);
+    public final Value<Float> width = new Value<Float>("Width", new String[]{"W", "size", "s"}, "Edit the width.", 1.5f, 0.1f, 5.0f, 0.1f);
 
     public enum Mode {
         BOX, OUTLINE, PLANE
@@ -39,7 +39,7 @@ public final class NewChunksModule extends Module {
     private final List<ChunkData> chunkDataList = new ArrayList<>();
 
     public NewChunksModule() {
-        super("NewChunks", new String[]{"ChunkGen"}, "Highlights newly generated chunks", "NONE", -1, ModuleType.RENDER);
+        super("NewChunks", new String[]{"ChunkGen"}, "Highlights newly generated chunks.", "NONE", -1, ModuleType.RENDER);
         this.currentColor = new Color(this.color.getValue().getRed(), this.color.getValue().getGreen(), this.color.getValue().getBlue(), this.alpha.getValue());
     }
 

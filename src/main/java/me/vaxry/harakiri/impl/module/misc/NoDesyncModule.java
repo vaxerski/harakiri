@@ -22,14 +22,14 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class NoDesyncModule extends Module {
 
-    public final Value<Boolean> crystals = new Value<Boolean>("Crystals", new String[]{"Crystal", "c"}, "Attempts to fix crystal de-sync (could be buggy).", false);
-    public final Value<Boolean> destroyedBlocks = new Value<Boolean>("Blocks", new String[]{"DestroyedBlocks", "b"}, "Attempts to fix server->client block de-sync.", true);
+    public final Value<Boolean> crystals = new Value<Boolean>("Crystals", new String[]{"Crystal", "c"}, "Attempts to fix crystal desync.", false);
+    public final Value<Boolean> destroyedBlocks = new Value<Boolean>("Blocks", new String[]{"DestroyedBlocks", "b"}, "Attempts to fix server block de-sync.", true);
 
     private boolean destroy;
     private BlockPos pos;
 
     public NoDesyncModule() {
-        super("NoDesync", new String[]{"NoDes", "AntiDesync", "NoDe-sync"}, "Prevents the client from de-syncing in some situations", "NONE", -1, ModuleType.MISC);
+        super("NoDesync", new String[]{"NoDes", "AntiDesync", "NoDe-sync"}, "Prevents the client from desyncing in some situations.", "NONE", -1, ModuleType.MISC);
     }
 
     @Override

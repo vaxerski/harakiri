@@ -16,7 +16,7 @@ public final class ChatSuffixModule extends Module {
     private final String prefix = "\u23D0 \u8179\u5207harakiri";
 
     public ChatSuffixModule() {
-        super("ChatSuffix", new String[]{"Suffix", "Chat_Suffix", "CustomChat", "Custom_Chat"}, "Add a custom suffix to your chat messages.", "NONE", -1, ModuleType.MISC);
+        super("ChatSuffix", new String[]{"Suffix", "Chat_Suffix", "CustomChat", "Custom_Chat"}, "Add a custom Harakiri suffix to your chat messages.", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener

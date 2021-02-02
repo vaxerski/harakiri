@@ -14,11 +14,11 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class StrafeModule extends Module {
 
-    public Value<Boolean> ground = new Value<Boolean>("Ground", new String[]{"Ground", "OnGround"}, "When enabled, enables strafe movement while on ground.", false);
-    public Value<Boolean> elytraCheck = new Value<Boolean>("ElytraCheck", new String[]{"Flycheck", "Elytra"}, "Lets you use ElytraFly and Strafe at the same time without bugging out.", true);
+    public Value<Boolean> ground = new Value<Boolean>("Ground", new String[]{"Ground", "OnGround"}, "Enables strafe movement while on ground.", false);
+    public Value<Boolean> elytraCheck = new Value<Boolean>("ElytraCheck", new String[]{"Flycheck", "Elytra"}, "Lets you use ElytraFly and Strafe.", true);
 
     public StrafeModule() {
-        super("Strafe", new String[]{"Strafe"}, "Unlocks full movement control while airborne, and optionally on ground too.", "NONE", -1, ModuleType.MOVEMENT);
+        super("Strafe", new String[]{"Strafe"}, "Full movement control while airborne, and optionally on ground.", "NONE", -1, ModuleType.MOVEMENT);
     }
 
     @Listener

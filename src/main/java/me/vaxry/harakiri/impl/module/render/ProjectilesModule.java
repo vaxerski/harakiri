@@ -50,7 +50,7 @@ public final class ProjectilesModule extends Module {
     public final Value<Integer> alpha = new Value<Integer>("Path Alpha", new String[]{"pathalpha", "opacity", "a", "o", "pa", "po"}, "Alpha value for the predicted path.", 255, 1, 255, 1);
 
     public ProjectilesModule() {
-        super("Projectiles", new String[]{"Proj"}, "Projects the possible path of an entity that was fired.", "NONE", -1, ModuleType.RENDER);
+        super("Projectiles", new String[]{"Proj"}, "Projects the path of an entity that was fired.", "NONE", -1, ModuleType.RENDER);
     }
 
     @Listener

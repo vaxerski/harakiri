@@ -18,12 +18,12 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 /**
  * @author noil
  */
-public final class BridgeModule extends Module {
+public final class ScaffoldModule extends Module {
 
     public final Value<Integer> reach = new Value<Integer>("Reach", new String[]{"Reach", "range", "r"}, "The reach in blocks from the player to end bridging.", 4, 1, 10, 1);
 
-    public BridgeModule() {
-        super("Bridge", new String[]{"Bridge", "AutoBridge"}, "Builds a bridge under you with your held item.", "NONE", -1, ModuleType.WORLD);
+    public ScaffoldModule() {
+        super("Scaffold", new String[]{"Scaffold", "AutoBridge"}, "Builds a bridge under you with your held item.", "NONE", -1, ModuleType.WORLD);
     }
 
     @Listener

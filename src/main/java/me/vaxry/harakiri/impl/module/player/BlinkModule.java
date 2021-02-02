@@ -22,7 +22,7 @@ public final class BlinkModule extends Module {
     private final Queue<Packet> packets = new ConcurrentLinkedQueue();
 
     public BlinkModule() {
-        super("Blink", new String[]{"FL (Blink)"}, "Holds packets until disabled", "NONE", -1, ModuleType.PLAYER);
+        super("Blink", new String[]{"FL (Blink)"}, "Holds packets until disabled.", "NONE", -1, ModuleType.PLAYER);
     }
 
     @Override

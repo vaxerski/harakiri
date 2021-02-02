@@ -13,7 +13,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class HorseJumpModule extends Module {
 
     public HorseJumpModule() {
-        super("HorseJump", new String[]{"JumpPower", "HJump"}, "Makes horses and llamas jump at max height", "NONE", -1, ModuleType.MOVEMENT);
+        super("HorseJump", new String[]{"JumpPower", "HJump"}, "Makes horses and llamas jump the highest.", "NONE", -1, ModuleType.MOVEMENT);
     }
 
     @Listener

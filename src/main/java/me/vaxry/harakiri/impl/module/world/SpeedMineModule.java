@@ -21,17 +21,17 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class SpeedMineModule extends Module {
 
-    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "The speed-mine mode to use.", Mode.PACKET);
+    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "The speedmine mode to use.", Mode.PACKET);
 
     private enum Mode {
         PACKET, DAMAGE, INSTANT
     }
 
     public final Value<Boolean> reset = new Value<Boolean>("Reset", new String[]{"Res"}, "Stops current block destroy damage from resetting if enabled.", true);
-    public final Value<Boolean> doubleBreak = new Value<Boolean>("DoubleBreak", new String[]{"DoubleBreak", "Double", "DB"}, "Mining a block will also mine the block above it, if enabled.", false);
+    public final Value<Boolean> doubleBreak = new Value<Boolean>("DoubleBreak", new String[]{"DoubleBreak", "Double", "DB"}, "Mining a block will also mine the block above it.", false);
 
     public SpeedMineModule() {
-        super("SpeedMine", new String[]{"FastMine"}, "Allows you to break blocks faster", "NONE", -1, ModuleType.WORLD);
+        super("SpeedMine", new String[]{"FastMine"}, "Allows you to break blocks faster.", "NONE", -1, ModuleType.WORLD);
     }
 
     @Override

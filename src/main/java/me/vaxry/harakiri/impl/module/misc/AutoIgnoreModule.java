@@ -25,12 +25,12 @@ public final class AutoIgnoreModule extends Module {
 
     private final String REGEX_NAME = "<(\\S+)\\s*(\\S+?)?>\\s(.*)";
 
-    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "The auto ignore mode to use.", Mode.CLIENT);
+    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "The AutoIgnore mode to use.", Mode.CLIENT);
 
     private List<String> blacklist = new ArrayList<>();
 
     public AutoIgnoreModule() {
-        super("AutoIgnore", new String[]{"AutomaticIgnore", "AIG", "AIgnore"}, "Automatically ignores someone if they say a certain word or phrase", "NONE", -1, ModuleType.MISC);
+        super("AutoIgnore", new String[]{"AutomaticIgnore", "AIG", "AIgnore"}, "Automatically ignores someone if they meet the conditions.", "NONE", -1, ModuleType.MISC);
     }
 
     @Override

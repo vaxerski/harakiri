@@ -14,7 +14,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class NoFallModule extends Module {
 
     public NoFallModule() {
-        super("NoFall", new String[]{"NoFallDamage"}, "Prevents fall damage", "NONE", -1, ModuleType.MOVEMENT);
+        super("NoFall", new String[]{"NoFallDamage"}, "Eliminates fall damage.", "NONE", -1, ModuleType.MOVEMENT);
     }
 
     @Listener

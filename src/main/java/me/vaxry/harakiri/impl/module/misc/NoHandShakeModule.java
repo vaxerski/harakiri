@@ -17,7 +17,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class NoHandShakeModule extends Module {
 
     public NoHandShakeModule() {
-        super("NoHandShake", new String[]{"AntiHandShake", "NoShake"}, "Prevents forge from sending your mod list to the server while connecting", "NONE", -1, ModuleType.MISC);
+        super("NoHandShake", new String[]{"AntiHandShake", "NoShake"}, "Prevents forge from sending your mod list to the server while connecting.", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener

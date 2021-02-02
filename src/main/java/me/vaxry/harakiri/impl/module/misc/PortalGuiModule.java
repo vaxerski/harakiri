@@ -13,7 +13,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class PortalGuiModule extends Module {
 
     public PortalGuiModule() {
-        super("PortalGui", new String[]{"PGui"}, "Allows you to open guis while in portals", "NONE", -1, ModuleType.MISC);
+        super("PortalGui", new String[]{"PGui"}, "Allows you to open guis while in portals.", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener

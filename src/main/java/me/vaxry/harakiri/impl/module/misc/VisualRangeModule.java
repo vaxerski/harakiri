@@ -26,7 +26,7 @@ public final class VisualRangeModule extends Module {
     private int prevPlayer = -1;
 
     public VisualRangeModule() {
-        super("VisualRange", new String[]{"VisRange", "VRange", "VR"}, "Notifies you when players enter and leave your visual range", "NONE", -1, ModuleType.MISC);
+        super("VisualRange", new String[]{"VisRange", "VRange", "VR"}, "Sends a notification when someone enters your visual range.", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener

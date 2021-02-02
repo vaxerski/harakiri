@@ -20,18 +20,18 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class GodModeModule extends Module {
 
-    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "The mode of the god-mode exploit.", Mode.PORTAL);
+    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "The mode of the godmode exploit.", Mode.PORTAL);
 
     private enum Mode {
         PORTAL, RIDING, LOCK, PACKET
     }
 
-    public final Value<Boolean> footsteps = new Value<Boolean>("FootSteps", new String[]{"Foot"}, "If enabled, others will be able to see your foot-steps during god-mode. (Disable if having trouble getting god-mode to work)", false);
+    public final Value<Boolean> footsteps = new Value<Boolean>("FootSteps", new String[]{"Foot"}, "If enabled, others will be able to see your footsteps during godmode.", false);
 
     private Entity riding;
 
     public GodModeModule() {
-        super("GodMode", new String[]{"God", "Pgm", "PortalGodmode", "PortalGod", "SickoMode"}, "Makes you invincible in certain cases", "NONE", -1, ModuleType.PLAYER);
+        super("GodMode", new String[]{"God", "Pgm", "PortalGodmode", "PortalGod", "SickoMode"}, "Makes you invincible in certain situations.", "NONE", -1, ModuleType.PLAYER);
     }
 
     @Override

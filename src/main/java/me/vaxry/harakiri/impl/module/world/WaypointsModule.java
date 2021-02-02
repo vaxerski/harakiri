@@ -29,7 +29,7 @@ public final class WaypointsModule extends Module {
     public final Value<Float> width = new Value<Float>("Width", new String[]{"Wid"}, "Pixel width of each tracer line.", 0.5f, 0.1f, 5.0f, 0.1f);
 
     public WaypointsModule() {
-        super("Waypoints", new String[]{"Wp", "Waypoint"}, "Highlights waypoints", "NONE", -1, ModuleType.WORLD);
+        super("Waypoints", new String[]{"Wp", "Waypoint"}, "Highlights waypoints.", "NONE", -1, ModuleType.WORLD);
     }
 
     @Listener

@@ -70,7 +70,6 @@ public final class CommandManager {
         this.commandList.add(new CalcStrongholdCommand());
         this.commandList.add(new LastInvCommand());
         this.commandList.add(new SearchCommand());
-        this.commandList.add(new PlayCommand());
 
         //create commands for every value within every module
         loadValueCommands();

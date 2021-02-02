@@ -14,7 +14,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class NoRotateModule extends Module {
 
     public NoRotateModule() {
-        super("NoRotate", new String[]{"NoRot", "AntiRotate"}, "Prevents you from processing server rotations", "NONE", -1, ModuleType.MISC);
+        super("NoRotate", new String[]{"NoRot", "AntiRotate"}, "Prevents you from processing server rotations.", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener
