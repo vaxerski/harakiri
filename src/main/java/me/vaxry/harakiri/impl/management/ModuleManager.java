@@ -155,7 +155,6 @@ public final class ModuleManager {
         add(new AutoMountModule());
         add(new EntityDesyncModule());
         add(new NoPacketModule());
-        add(new ScaffoldModule());
         add(new NoEffectsModule());
         add(new NoEntityTraceModule());
         add(new MultitaskModule());

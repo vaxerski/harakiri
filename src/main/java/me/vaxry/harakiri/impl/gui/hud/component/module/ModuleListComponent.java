@@ -41,6 +41,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
     private int componentY = 0;
     private static int scomponentY = 0;
 
+    private final float SCALING = 1f;
     private final int SCROLL_WIDTH = 5;
     private final int BORDER = 2;
     private final int TEXT_GAP = 2;
@@ -62,7 +63,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
     private boolean useRainbow = false;
 
     public ModuleListComponent(Module.ModuleType type) {
-        super(StringUtils.capitalize(type.name().toLowerCase()), 100, 150, 150, 400);
+        super(StringUtils.capitalize(type.name().toLowerCase()), 110, 150, 160, 400);
         this.type = type;
         this.originalName = StringUtils.capitalize(type.name().toLowerCase());
         this.hudEditorModule = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
@@ -81,6 +82,9 @@ public final class ModuleListComponent extends ResizableHudComponent {
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
+
+        //mouseX /= SCALING;
+        //mouseY /= SCALING;
 
         if (!(mc.currentScreen instanceof GuiHudEditor))
             return;
@@ -124,6 +128,8 @@ public final class ModuleListComponent extends ResizableHudComponent {
             this.setH(this.getTotalHeight());
         }*/
 
+        GlStateManager.scale(SCALING, SCALING, SCALING);
+
         // Background & title
         //RenderUtil.begin2D();
         //RenderUtil.drawRoundedRect(this.getX() - 1, this.getY() - 1, this.getW() + 1, this.getH() + 1, 5,0x11101010); //0x99
@@ -158,7 +164,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
 
         // Begin scissoring and render the module "buttons"
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        RenderUtil.glScissor(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getX() + this.getW() - BORDER - SCROLL_WIDTH, this.getY() + this.getH() - BORDER, sr);
+        RenderUtil.glScissor((this.getX() + BORDER) * SCALING, (this.getY() + offsetY + BORDER) * SCALING, (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) * SCALING, (this.getY() + this.getH() - BORDER) * SCALING, sr);
 
         this.title = this.originalName;
         for (Module module : Harakiri.INSTANCE.getModuleManager().getModuleList(this.type)) {
@@ -169,7 +175,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
             else
                 RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, module.isEnabled() ? 0x453B005F : 0x451F1C22);
 
-            final boolean insideModule = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 1) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + TEXT_GAP + offsetY - this.scroll - mc.fontRenderer.FONT_HEIGHT + TEXT_GAP) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT) + 1 + offsetY - this.scroll);
+            final boolean insideModule = mouseX >= (this.getX() + BORDER) * SCALING && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 1) * SCALING && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + TEXT_GAP + offsetY - this.scroll - mc.fontRenderer.FONT_HEIGHT + TEXT_GAP) * SCALING && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT) + 1 + offsetY - this.scroll) * SCALING;
             if (insideModule) { // draw options line
                 final boolean isHoveringOptions = mouseX >= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 12) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 2) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + TEXT_GAP + offsetY - this.scroll - mc.fontRenderer.FONT_HEIGHT + TEXT_GAP) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT) + 1 + offsetY - this.scroll);
 
@@ -215,7 +221,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
                     this.currentSettings.setY(this.getY() + offsetY + BORDER - this.scroll);
                     this.currentSettings.setW(this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2);
                     this.currentSettings.setH(this.getH() - BORDER);
-                    this.currentSettings.render(mouseX, mouseY, partialTicks);
+                    this.currentSettings.render((int)(mouseX * SCALING), (int)(mouseY * SCALING), partialTicks);
                     for (HudComponent settingComponent : this.currentSettings.components) {
                         //if (settingComponent.getY() > this.getY() + this.currentSettings.getH())
                         tempOffsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
@@ -290,6 +296,8 @@ public final class ModuleListComponent extends ResizableHudComponent {
         }
         //RenderUtil.end2D();
 
+        GlStateManager.scale(1.f/SCALING, 1.f/SCALING, 1.f/SCALING);
+
         // figures up a "total height (pixels)" of the inside of the list area (for calculating scroll height)
         this.totalHeight = BORDER + TEXT_GAP + offsetY + BORDER;
     }
@@ -297,6 +305,9 @@ public final class ModuleListComponent extends ResizableHudComponent {
     @Override
     public void mouseRelease(int mouseX, int mouseY, int button) {
         super.mouseRelease(mouseX, mouseY, button);
+
+        //mouseX /= SCALING;
+        //mouseY /= SCALING;
 
         final boolean inside = this.isMouseInside(mouseX, mouseY);
         final int titleBarHeight = mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
@@ -309,7 +320,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
         if (inside && !insideTitlebar && !isResizeDragging()) {
             int offsetY = BORDER;
             for (Module module : Harakiri.INSTANCE.getModuleManager().getModuleList(this.type)) {
-                final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 1) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + TEXT_GAP + offsetY - this.scroll) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT * 2) + 1 + offsetY - this.scroll);
+                final boolean insideComponent = mouseX >= (this.getX() + BORDER) * SCALING && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 1) * SCALING && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + TEXT_GAP + offsetY - this.scroll) * SCALING && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT * 2) + 1 + offsetY - this.scroll) * SCALING;
                 if (insideComponent) {
                     switch (button) {
                         case 0:
@@ -360,7 +371,9 @@ public final class ModuleListComponent extends ResizableHudComponent {
 
     @Override
     public void mouseClick(int mouseX, int mouseY, int button) {
-        final boolean insideDragZone = mouseY <= this.getY() + TITLE_BAR_HEIGHT + BORDER || mouseY >= ((this.getY() + this.getH()) - CLICK_ZONE);
+        final boolean insideDragZone = mouseY <= (this.getY() + TITLE_BAR_HEIGHT + BORDER) * SCALING || mouseY >= ((this.getY() + this.getH()) - CLICK_ZONE) * SCALING;
+        //mouseX /= SCALING;
+        //mouseY /= SCALING;
         if (insideDragZone) {
             super.mouseClick(mouseX, mouseY, button);
         } else {
@@ -389,6 +402,8 @@ public final class ModuleListComponent extends ResizableHudComponent {
     }
 
     private void handleScrolling(int mouseX, int mouseY) {
+        //mouseX *= SCALING;
+        //mouseY *= SCALING;
         if (this.isMouseInside(mouseX, mouseY) && Mouse.hasWheel()) {
             this.realScroll += -(Mouse.getDWheel() / 4.f);
 

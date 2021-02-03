@@ -19,7 +19,7 @@ public final class SpeedComponent extends DraggableHudComponent {
 
     private Timer timer = new Timer();
     private Vector3f lastPos = new Vector3f(0,0,0);
-    private float speed = 0;
+    public float speed = 0;
 
     public SpeedComponent() {
         super("Speed");

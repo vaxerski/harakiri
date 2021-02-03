@@ -8,6 +8,7 @@ import me.vaxry.harakiri.impl.gui.hud.component.HubComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Keyboard;
 
@@ -32,6 +33,8 @@ public class DraggableHudComponent extends HudComponent {
     private static final double ANCHOR_THRESHOLD = 80;
 
     protected final Minecraft mc = Minecraft.getMinecraft();
+
+    private float SCALING = 1f;
 
     public DraggableHudComponent(String name) {
         this.setName(name);
@@ -60,23 +63,33 @@ public class DraggableHudComponent extends HudComponent {
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
+        if(this instanceof ModuleListComponent || this instanceof HubComponent) {
+            mouseX /= SCALING;
+            mouseY /= SCALING;
+        }
 
-        boolean isHudEditor = Minecraft.getMinecraft().currentScreen instanceof GuiHudEditor;
+            boolean isHudEditor = Minecraft.getMinecraft().currentScreen instanceof GuiHudEditor;
 
         if (this.isDragging()) {
             this.setX(mouseX - this.getDeltaX());
             this.setY(mouseY - this.getDeltaY());
             this.clamp();
         } else if (this.isMouseInside(mouseX, mouseY)) {
-            if(this instanceof ModuleListComponent || this instanceof HubComponent)
+            if(this instanceof ModuleListComponent || this instanceof HubComponent) {
+                GlStateManager.scale(SCALING, SCALING, SCALING);
                 RenderUtil.drawRoundedRect(this.getX(), this.getY(), this.getW(), this.getH(), 5, 0x11FFFFFF); //0x45
+                GlStateManager.scale(1.f/SCALING, 1.f/SCALING, 1.f/SCALING);
+            }
             else
                 RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x35FFFFFF); //0x45
         }
 
         if (isHudEditor) {
-            if(this instanceof HubComponent || this instanceof ModuleListComponent)
+            if(this instanceof HubComponent || this instanceof ModuleListComponent) {
+                GlStateManager.scale(SCALING, SCALING, SCALING);
                 RenderUtil.drawRoundedRect(this.getX(), this.getY(), this.getW(), this.getH(), 5, 0x75101010);
+                GlStateManager.scale(1.f / SCALING, 1.f / SCALING, 1.f / SCALING);
+            }
             else
                 RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x75101010);
             if (this.isLocked()) {
