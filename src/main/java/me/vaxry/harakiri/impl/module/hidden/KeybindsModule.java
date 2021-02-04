@@ -6,6 +6,8 @@ import me.vaxry.harakiri.api.module.Module;
 import org.lwjgl.input.Keyboard;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
+import javax.swing.*;
+
 /**
  * Author Seth
  * 4/7/2019 @ 10:25 PM.
@@ -15,8 +17,10 @@ public final class KeybindsModule extends Module {
     public KeybindsModule() {
         super("Keybinds", new String[]{"Binds"}, "Allows you to bind modules to keys", "NONE", -1, ModuleType.HIDDEN);
         this.setHidden(true);
-        this.setEnabled(true);
-        this.onEnable();
+        if(!this.isEnabled()) {
+            this.setEnabled(true);
+            this.onEnable();
+        }
     }
 
     @Listener

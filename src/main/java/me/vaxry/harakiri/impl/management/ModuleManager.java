@@ -35,12 +35,13 @@ public final class ModuleManager {
 
     public ModuleManager() {
 
-        ESPModule espmod = new ESPModule();
-
         add(new KeybindsModule());
         add(new CommandsModule());
         add(new HudModule());
         add(new ArrayListModule());
+
+
+
         add(new ThreatCamModule());
         add(new PlexusModule());
         add(new NoOverlayModule());
@@ -68,12 +69,14 @@ public final class ModuleManager {
         add(new RespawnModule());
         add(new NoFallModule());
         add(new NoSwingModule());
+        ESPModule espmod = new ESPModule();
         add(espmod);
         add(new NametagsModule());
         add(new SneakModule());
         add(new MiddleClickFriendsModule());
         add(new FullbrightModule());
-        add(new ReconnectModule());
+        ReconnectModule recmod = new ReconnectModule();
+        add(recmod);
         add(new AutoFishModule());
         add(new InteractModule());
         add(new TracersModule());
@@ -166,7 +169,7 @@ public final class ModuleManager {
         add(new AutoWitherModule());
 
         MinecraftForge.EVENT_BUS.register(espmod);
-        MinecraftForge.EVENT_BUS.register(new ReconnectModule());
+        MinecraftForge.EVENT_BUS.register(recmod);
 
         this.loadExternalModules();
 
