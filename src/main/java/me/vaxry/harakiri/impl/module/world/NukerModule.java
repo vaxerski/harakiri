@@ -110,13 +110,14 @@ public final class NukerModule extends Module {
                 break;
             case POST:
                 if (this.mode.getValue().equals(Mode.CREATIVE)) {
+                    
                     /* the amazing creative 'nuker' straight from the latch hacked client */
                     for (double y = Math.round(mc.player.posY - 1) + this.vDistance.getValue(); y > Math.round(mc.player.posY - 1); y -= 1.0D) {
                         for (double x = mc.player.posX - this.hDistance.getValue(); x < mc.player.posX + this.hDistance.getValue(); x += 1.0D) {
                             for (double z = mc.player.posZ - this.hDistance.getValue(); z < mc.player.posZ + this.hDistance.getValue(); z += 1.0D) {
                                 final BlockPos blockPos = new BlockPos(x, y, z);
                                 final Block block = BlockUtil.getBlock(blockPos);
-                                if (block == Blocks.AIR || !mc.world.getBlockState(blockPos).isFullBlock())
+                                if (block == Blocks.AIR || !mc.world.getBlockState(blockPos).isFullBlock() || block == Blocks.BEDROCK)
                                     continue;
 
                                 if(this.flatten.getValue() && blockPos.getY() < mc.player.posY)
@@ -268,7 +269,7 @@ public final class NukerModule extends Module {
                         for (double z = mc.player.posZ - this.hDistance.getValue(); z < mc.player.posZ + this.hDistance.getValue(); z += 1.0D) {
                             final BlockPos blockPos = new BlockPos(x, y, z);
                             final Block block = BlockUtil.getBlock(blockPos);
-                            if (block == Blocks.AIR || !mc.world.getBlockState(blockPos).isFullBlock())
+                            if (block == Blocks.AIR || !mc.world.getBlockState(blockPos).isFullBlock() || block == Blocks.BEDROCK)
                                 continue;
 
                             if (this.flatten.getValue() && blockPos.getY() < mc.player.posY)

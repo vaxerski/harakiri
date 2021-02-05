@@ -233,11 +233,11 @@ public final class ElytraFlyModule extends Module {
                     Block under = mc.world.getBlockState(underMe).getBlock();
                     BlockPos underMe2 = new BlockPos(mc.player.getPosition().getX(), mc.player.getPosition().getY() - 2, mc.player.getPosition().getZ());
                     Block under2 = mc.world.getBlockState(underMe2).getBlock();
-                    if(under == Blocks.AIR && under2 != Blocks.AIR){
+                    if(under == Blocks.AIR && (under2 != Blocks.AIR && under2 != Blocks.WATER && under2 != Blocks.FLOWING_WATER && under2 != Blocks.FLOWING_LAVA && under2 != Blocks.LAVA)){
                         if(mc.player.motionY < 0)
                             mc.player.motionY = -0.1f;
                     }
-                    if (under != Blocks.AIR) {
+                    if (under != Blocks.AIR && under != Blocks.WATER && under != Blocks.LAVA && under != Blocks.FLOWING_WATER && under != Blocks.FLOWING_LAVA) {
                         if (mc.player.motionY < 0) {
                             mc.player.motionY = -0.03;
                             mc.player.motionX = directionSpeedControl[0] / 10.f;
