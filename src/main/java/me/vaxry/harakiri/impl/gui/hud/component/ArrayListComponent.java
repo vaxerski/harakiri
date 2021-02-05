@@ -7,10 +7,12 @@ import me.vaxry.harakiri.api.event.world.EventLoadWorld;
 import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
 import me.vaxry.harakiri.api.module.Module;
 import me.vaxry.harakiri.api.util.ColorUtil;
+import me.vaxry.harakiri.api.util.Timer;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.module.hidden.ArrayListModule;
 import me.vaxry.harakiri.impl.module.render.HudModule;
+import me.vaxry.harakiri.impl.module.world.TimerModule;
 import net.minecraft.client.gui.ScaledResolution;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
@@ -23,7 +25,7 @@ import java.util.List;
  * @author seth  * 7/25/2019 @ 7:24 AM
  * @author noil
  */
-public final class EnabledModsComponent extends DraggableHudComponent {
+public final class ArrayListComponent extends DraggableHudComponent {
 
     private ArrayListModule.Mode SORTING_MODE = ArrayListModule.Mode.LENGTH;
     private boolean SHOW_METADATA = true;
@@ -35,13 +37,25 @@ public final class EnabledModsComponent extends DraggableHudComponent {
     private float RAINBOW_SATURATION = 50.f;
     private float RAINBOW_BRIGHTNESS = 50.f;
 
-    public EnabledModsComponent(AnchorPoint anchorPoint) {
-        super("EnabledMods");
+    private Timer timer = new Timer();
+    private float curHue = 0;
+
+    public ArrayListComponent(AnchorPoint anchorPoint) {
+        super("ArrayList");
         //this.setAnchorPoint(anchorPoint); // dont plox
         this.setAnchorPoint(null);
         this.setVisible(true);
 
         Harakiri.INSTANCE.getEventManager().addEventListener(this); // subscribe to the event manager
+    }
+
+    private float getJitter() {
+        final float seconds = ((System.currentTimeMillis() - this.timer.getTime()) / 1000.0f) % 60.0f;
+
+        final float desiredTimePerSecond = RAINBOW_HUE_SPEED;
+
+        this.timer.reset();
+        return Math.min(desiredTimePerSecond * seconds, 1.0f);
     }
 
     @Override
@@ -91,6 +105,12 @@ public final class EnabledModsComponent extends DraggableHudComponent {
 
             }
 
+            float jitter = getJitter();
+            curHue += jitter;
+
+            if(curHue > 10000)
+                curHue -= 10000;
+
             for (Module mod : mods) {
                 if (mod != null && mod.getType() != Module.ModuleType.HIDDEN && (mod.isEnabled() || mc.fontRenderer.getStringWidth(mod.getDisplayName()) > mod.activexOffset) && !mod.isHidden()) {
                     String name = mod.getDisplayName() + (SHOW_METADATA ? (mod.getMetaData() != null ? " " + ChatFormatting.GRAY + "[" + ChatFormatting.WHITE + mod.getMetaData().toLowerCase() + ChatFormatting.GRAY + "]" : "") : "");
@@ -101,7 +121,7 @@ public final class EnabledModsComponent extends DraggableHudComponent {
 
                     int color;
                     if (RAINBOW && mc.player != null) {
-                        Color rainbow = new Color(Color.HSBtoRGB((float) (mc.player.ticksExisted / (100.0D - RAINBOW_HUE_SPEED) + Math.sin(hueDifference / (100.0D - RAINBOW_HUE_SPEED * Math.PI / 2.0D))) % 1.0F, RAINBOW_SATURATION, RAINBOW_BRIGHTNESS));
+                        Color rainbow = new Color(Color.HSBtoRGB((float) ((curHue * 7.5f) / (100.0D - RAINBOW_HUE_SPEED) + Math.sin(hueDifference / (100.0D - RAINBOW_HUE_SPEED * Math.PI / 2.0D))) % 1.0F, RAINBOW_SATURATION, RAINBOW_BRIGHTNESS));
                         color = ColorUtil.changeAlpha((new Color(rainbow.getRed(), rainbow.getGreen(), rainbow.getBlue())).getRGB(), 0xFF);
                     } else {
                         color = ColorUtil.changeAlpha(mod.getColor(), 0xFF);

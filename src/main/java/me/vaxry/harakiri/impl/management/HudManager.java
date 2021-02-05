@@ -80,7 +80,7 @@ public final class HudManager {
 
         add(new PlexusComponent());
         add(new WatermarkComponent());
-        add(new EnabledModsComponent(TOP_RIGHT)); // creates the enabled mods component & by default anchors in the top right (to aid new users)
+        add(new ArrayListComponent(TOP_RIGHT)); // creates the enabled mods component & by default anchors in the top right (to aid new users)
         add(new TpsComponent());
         add(new PotionEffectsComponent());
         add(new FpsComponent());
