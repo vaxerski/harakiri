@@ -47,9 +47,9 @@ public final class NukerModule extends Module {
     }
 
     public final Value<Float> distance = new Value<Float>("Distance", new String[]{"Dist", "D"}, "Maximum distance in blocks the nuker will reach.", 4.5f, 0.0f, 5.0f, 0.1f);
-    public final Value<Boolean> fixed = new Value<Boolean>("FixedDistance", new String[]{"Fixed", "fdist", "F"}, "Use vertical and horizontal distances in blocks instead of distances relative to the camera.", false);
-    public final Value<Float> vDistance = new Value<Float>("VerticalDistance", new String[]{"Vertical", "vdist", "VD"}, "Maximum vertical distance in blocks the nuker will reach.", 4.5f, 0.0f, 5.0f, 0.1f);
-    public final Value<Float> hDistance = new Value<Float>("HorizontalDistance", new String[]{"Horizontal", "hist", "HD"}, "Maximum horizontal distance in blocks the nuker will reach.", 3f, 0.0f, 5.0f, 0.1f);
+    public final Value<Boolean> fixed = new Value<Boolean>("FixedDist", new String[]{"Fixed", "fdist", "F"}, "Use vertical and horizontal distances in blocks instead of distances relative to the camera.", false);
+    public final Value<Float> vDistance = new Value<Float>("Vertical", new String[]{"Vertical", "vdist", "VD"}, "Maximum vertical distance in blocks the nuker will reach.", 4.5f, 0.0f, 5.0f, 0.1f);
+    public final Value<Float> hDistance = new Value<Float>("Horizontal", new String[]{"Horizontal", "hist", "HD"}, "Maximum horizontal distance in blocks the nuker will reach.", 3f, 0.0f, 5.0f, 0.1f);
     public final Value<Boolean> flatten = new Value<Boolean>("Flatten", new String[]{"Flatten", "flat", "flt"}, "Flatten the region", false);
     public final Value<Boolean> drawMining = new Value<Boolean>("DrawMining", new String[]{"drawmining", "dm", "drawm"}, "Draw mined blocks' outlines", false);
 

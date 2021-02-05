@@ -11,6 +11,7 @@ import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.SwitchViewComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
+import me.vaxry.harakiri.impl.module.hidden.KeybindsModule;
 import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;

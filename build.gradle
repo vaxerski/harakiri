@@ -91,8 +91,7 @@ shadowJar {
         attributes 'FMLAT': 'harakiri_at.cfg'
     }
 
-    exclude 'dummyThing'
-    exclude 'LICENSE.txt'
+    exclude 'dummyyy'
     classifier = 'full'
 }
 

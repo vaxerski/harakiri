@@ -6,6 +6,7 @@ import me.vaxry.harakiri.api.event.EventStageable;
 import me.vaxry.harakiri.api.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.api.module.Module;
 import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.impl.module.world.TimerModule;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.material.Material;
@@ -26,7 +27,13 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class StepModule extends Module {
 
     //public final Value<Integer> height = new Value<Integer>("Height", new String[]{"Height", "H"}, "The step block-height.", 2, 1, 4, 1);
-    public final Value<Integer> ticks = new Value<Integer>("Ticks", new String[]{"Ticks", "T"}, "Tick delay. 0 and 1 might cause bugs.", 2, 0, 10, 1);
+    public final Value<Integer> ticks = new Value<Integer>("Ticks", new String[]{"Ticks", "T"}, "Tick delay.", 2, 0, 10, 0);
+    public final Value<Integer> wiait = new Value<Integer>("Wait", new String[]{"Wait", "W"}, "Wait delay.", 2, 0, 10, 0);
+    public final Value<Float> timer = new Value<Float>("TimerSpeed", new String[]{"TimerSpeed", "Timer"}, "Timer to use when stepping.", 1.f, 0.1f, 2.f, 0.1f);
+    public final Value<Boolean> sureStep = new Value<Boolean>("SureStep", new String[]{"SureStep", "S"}, "SureStep.", false);
+    public final Value<Float> sureStepAm = new Value<Float>("SureStepPerc", new String[]{"SureStepPerc", "SSP"}, "SureStep amount.", 0.25f, 0.f, 2.f, 0.1f);
+
+
     //public final Value<Boolean> spoof = new Value<Boolean>("Spoof", new String[]{"Spoof", "S"}, "Whether to spoof.", false);
 
     private final double[] oneblockPositions = new double[] { 0.42D, 0.75D };
@@ -38,6 +45,7 @@ public final class StepModule extends Module {
     private double[] selectedPositions = new double[0];
 
     private int ticksLast = 0;
+    private int waitS = 0;
 
     public StepModule() {
         super("Step", new String[]{"stp"}, "Allows you to step up blocks you shouldn't.", "NONE", -1, ModuleType.MOVEMENT);
@@ -53,6 +61,10 @@ public final class StepModule extends Module {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             final Minecraft mc = Minecraft.getMinecraft();
 
+            final TimerModule timer = (TimerModule)Harakiri.INSTANCE.getModuleManager().find(TimerModule.class);
+            if(!timer.isEnabled())
+                Minecraft.getMinecraft().timer.tickLength = 50.0f;
+
             if(ticksLast - 100 > mc.player.ticksExisted){
                 ticksLast = 0;
                 // Probably died or sumn reset.
@@ -65,6 +77,11 @@ public final class StepModule extends Module {
             // Check if the collision is 1 or 2
             int height = 1;
             if(!(mc.player.collidedHorizontally && mc.player.onGround)){
+                return;
+            }
+
+            if(waitS < this.wiait.getValue()){
+                waitS++;
                 return;
             }
 
@@ -88,6 +105,10 @@ public final class StepModule extends Module {
                             blockPos.getY() + 1,
                             blockPos.getZ() + 1);
                     if (!(block instanceof net.minecraft.block.BlockAir)) {
+                        if(!mc.world.getBlockState(blockPos).isFullBlock())
+                            continue;
+                        if(!mc.world.getBlockState(blockPos).isOpaqueCube())
+                            continue;
                         if(blockbb.intersects(extendedbb)) {
                             height = 2;
                             break;
@@ -119,6 +140,9 @@ public final class StepModule extends Module {
                             blockPos.getY() + 1,
                             blockPos.getZ() + 1);
                     if (!(block instanceof net.minecraft.block.BlockAir)) {
+                        if(block instanceof net.minecraft.block.BlockGrass || block instanceof net.minecraft.block.BlockFlower)
+                            continue;
+
                         if(blockbb.intersects(afterStep)) {
                             legal = false;
                             break;
@@ -136,7 +160,7 @@ public final class StepModule extends Module {
                     this.selectedPositions = this.oneblockPositions;
                     break;
                 case 2:
-                    this.selectedPositions = this.futurePositions;
+                    this.selectedPositions = this.twoblockPositions;
                     break;
             }
 
@@ -151,13 +175,23 @@ public final class StepModule extends Module {
             }
 
             if (mc.player.onGround && !mc.player.isInsideOfMaterial(Material.WATER) && !mc.player.isInsideOfMaterial(Material.LAVA) && mc.player.collidedVertically && mc.player.fallDistance == 0.0F && !mc.gameSettings.keyBindJump.pressed && mc.player.collidedHorizontally && !mc.player.isOnLadder() /*&& (this.packets > this.selectedPositions.length - 2 || (((Boolean)this.spoof.getValue()).booleanValue() && this.packets > ((Integer)this.ticks.getValue()).intValue()))*/) {
+                Minecraft.getMinecraft().timer.tickLength = 50.0f / this.timer.getValue();
                 for (double position : this.selectedPositions) {
                     mc.player.connection.sendPacket((Packet) new CPacketPlayer.Position(mc.player.posX, mc.player.posY + position, mc.player.posZ, true));
                 }
-                mc.player.setPosition(mc.player.posX, mc.player.posY + this.selectedPositions[this.selectedPositions.length - 1], mc.player.posZ);
+
+                if(sureStep.getValue()){
+                    double x = mc.player.posX + mc.player.motionX * this.sureStepAm.getValue();
+                    double z = mc.player.posZ + mc.player.motionZ * this.sureStepAm.getValue();
+
+                    mc.player.setPosition(x, mc.player.posY + this.selectedPositions[this.selectedPositions.length - 1], z);
+                }else{
+                    mc.player.setPosition(mc.player.posX, mc.player.posY + this.selectedPositions[this.selectedPositions.length - 1], mc.player.posZ);
+                }
             }
 
             ticksLast = mc.player.ticksExisted;
+            waitS = 0;
         }
     }
 }

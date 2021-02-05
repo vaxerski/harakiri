@@ -30,7 +30,7 @@ public final class SliderComponent extends HudComponent {
         super(name);
         this.sliding = false;
         this.value = value;
-        this.sliderBar = new SliderBarComponent(4, 9, 192, this);
+        this.sliderBar = new SliderBarComponent(2, 9, 230, this);
     }
 
     @Override
@@ -153,7 +153,7 @@ public final class SliderComponent extends HudComponent {
                 }
                 break;
             case 1:
-                if (this.textComponent == null) {
+                /*if (this.textComponent == null) {
                     TextComponent valueNumberText = new TextComponent(value.getName(), value.getValue().toString(), true);
                     valueNumberText.setTooltipText(value.getDesc() + " " + ChatFormatting.GRAY + "(" + value.getMin() + " - " + value.getMax() + ")");
                     valueNumberText.returnListener = new ComponentListener() {
@@ -181,7 +181,7 @@ public final class SliderComponent extends HudComponent {
                     this.textComponent = valueNumberText;
                 } else {
                     this.textComponent = null;
-                }
+                }*/
                 break;
         }
 
@@ -248,12 +248,12 @@ public final class SliderComponent extends HudComponent {
         public void mouseRelease(int mouseX, int mouseY, int button) {
             super.mouseRelease(mouseX, mouseY, button);
 
-            if (this.isMouseInside(mouseX, mouseY)) {
+            //if (this.isMouseInside(mouseX, mouseY)) { // Do not
                 if (button == 0) {
                     this.setValueFromPosition();
                     this.setDragging(false);
                 }
-            }
+            //}
         }
 
         private void clampSlider() {

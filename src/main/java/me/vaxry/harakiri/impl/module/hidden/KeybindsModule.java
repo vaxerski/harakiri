@@ -17,7 +17,8 @@ public final class KeybindsModule extends Module {
     public KeybindsModule() {
         super("Keybinds", new String[]{"Binds"}, "Allows you to bind modules to keys", "NONE", -1, ModuleType.HIDDEN);
         this.setHidden(true);
-        this.toggle();
+        if(!this.isEnabled())
+            this.toggle();
     }
 
     @Listener

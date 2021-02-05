@@ -167,9 +167,12 @@ public final class ModuleManager {
         add(new NoFriendHurtModule());
         add(new ReachModule());
         add(new AutoWitherModule());
+        HitsoundModule hitsoundModule = new HitsoundModule();
+        add(hitsoundModule);
 
         MinecraftForge.EVENT_BUS.register(espmod);
         MinecraftForge.EVENT_BUS.register(recmod);
+        MinecraftForge.EVENT_BUS.register(hitsoundModule);
 
         this.loadExternalModules();
 
