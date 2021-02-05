@@ -110,7 +110,7 @@ public final class NukerModule extends Module {
                 break;
             case POST:
                 if (this.mode.getValue().equals(Mode.CREATIVE)) {
-                    
+
                     /* the amazing creative 'nuker' straight from the latch hacked client */
                     for (double y = Math.round(mc.player.posY - 1) + this.vDistance.getValue(); y > Math.round(mc.player.posY - 1); y -= 1.0D) {
                         for (double x = mc.player.posX - this.hDistance.getValue(); x < mc.player.posX + this.hDistance.getValue(); x += 1.0D) {

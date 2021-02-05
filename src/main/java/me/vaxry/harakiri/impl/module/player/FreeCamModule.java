@@ -34,6 +34,7 @@ public final class FreeCamModule extends Module {
     private Vec3d position;
     private float yaw;
     private float pitch;
+    private int iThirdperson;
 
     public final Value<Float> speed = new Value<Float>("Speed", new String[]{"Spd"}, "Speed of freecam flight.", 1.0f, 0.0f, 2.0f, 0.1f);
     //public final Value<Boolean> view = new Value<Boolean>("3D", new String[]{"View"}, "The old Nodus client style free-cam, kind of like an elytra. (Hold forward key & move the mouse to turn)", false);
@@ -49,6 +50,8 @@ public final class FreeCamModule extends Module {
         super.onEnable();
         final Minecraft mc = Minecraft.getMinecraft();
         if (mc.world != null) {
+            iThirdperson = mc.gameSettings.thirdPersonView;
+            mc.gameSettings.thirdPersonView = 0;
             this.entity = new EntityOtherPlayerMP(mc.world, mc.session.getProfile());
             this.entity.copyLocationAndAnglesFrom(mc.player);
             if (mc.player.getRidingEntity() != null) {
@@ -61,6 +64,10 @@ public final class FreeCamModule extends Module {
             this.entity.rotationYaw = mc.player.rotationYaw;
             this.entity.rotationYawHead = mc.player.rotationYawHead;
             this.entity.inventory.copyInventory(mc.player.inventory);
+            this.entity.setFlag(7, mc.player.isElytraFlying());
+            this.entity.rotateElytraX = mc.player.rotateElytraX;
+            this.entity.rotateElytraY = mc.player.rotateElytraY;
+            this.entity.rotateElytraZ = mc.player.rotateElytraZ;
             mc.world.addEntityToWorld(69420, this.entity);
             this.position = mc.player.getPositionVector();
             this.yaw = mc.player.rotationYaw;
@@ -89,6 +96,7 @@ public final class FreeCamModule extends Module {
             mc.player.motionX = 0;
             mc.player.motionY = 0;
             mc.player.motionZ = 0;
+            mc.gameSettings.thirdPersonView = iThirdperson;
         }
     }
 
