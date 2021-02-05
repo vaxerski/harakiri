@@ -1,4 +1,4 @@
-package me.vaxry.harakiri.impl.module.misc;
+package me.vaxry.harakiri.impl.module.hidden;
 
 import me.vaxry.harakiri.api.event.EventStageable;
 import me.vaxry.harakiri.api.event.minecraft.EventDisplayGui;
@@ -8,6 +8,7 @@ import me.vaxry.harakiri.api.event.render.EventRender3D;
 import me.vaxry.harakiri.api.module.Module;
 import me.vaxry.harakiri.api.util.Timer;
 import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.impl.gui.menu.AutoReconnectButton;
 import me.vaxry.harakiri.impl.gui.menu.ReconnectButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
@@ -33,18 +34,29 @@ public final class ReconnectModule extends Module {
     private boolean reconnect;
     private Timer timer = new Timer();
 
+    public final Value<Boolean> auto = new Value<Boolean>("AutoReconnect", new String[]{"Auto"}, "Auto Reconnect.", true);
     public final Value<Float> delay = new Value<Float>("Delay", new String[]{"Del"}, "Delay (in ms) between reconnect attempts.", 3000.0f, 0.0f, 10000.0f, 500.0f);
 
     public ReconnectModule() {
-        super("Reconnect", new String[]{"Rejoin", "Recon", "AutoReconnect"}, "Automatically reconnects to the last server after being disconnected.", "NONE", -1, ModuleType.MISC);
+        super("Reconnect", new String[]{"Rejoin", "Recon", "AutoReconnect"}, "Automatically reconnects to the last server after being disconnected.", "NONE", -1, ModuleType.HIDDEN);
+        this.setHidden(true);
+        if(!this.isEnabled()) {
+            this.setEnabled(true);
+            this.onEnable();
+        }
     }
 
     @Listener
-    public void onRender(EventRender3D event) {
-        if(Minecraft.getMinecraft().player == null || Minecraft.getMinecraft().world == null || Minecraft.getMinecraft().isSingleplayer())
-            return;
-
-        this.lastIp = Minecraft.getMinecraft().getCurrentServerData().serverIP;
+    public void sendPacket(EventSendPacket event) {
+        if (event.getStage() == EventStageable.EventStage.PRE) {
+            if (event.getPacket() instanceof C00Handshake) {
+                final C00Handshake packet = (C00Handshake) event.getPacket();
+                if (packet.getRequestedState() == EnumConnectionState.LOGIN) {
+                    this.lastIp = packet.ip;
+                    this.lastPort = packet.port;
+                }
+            }
+        }
     }
 
     @Listener
@@ -59,10 +71,11 @@ public final class ReconnectModule extends Module {
     }
 
     public void reconnect(){
-        //todo: fix this.
-        Minecraft.getMinecraft().displayGuiScreen(new GuiConnecting(null, Minecraft.getMinecraft(), this.lastIp, this.lastPort));
-        this.timer.reset();
-        this.reconnect = false;
+        if (this.lastIp != null && this.lastPort > 0) {
+            Minecraft.getMinecraft().displayGuiScreen(new GuiConnecting(Minecraft.getMinecraft().currentScreen, Minecraft.getMinecraft(), this.lastIp, this.lastPort));
+            this.timer.reset();
+            this.reconnect = false;
+        }
     }
 
     @SubscribeEvent
@@ -77,7 +90,8 @@ public final class ReconnectModule extends Module {
                 maxY = Math.max(button.y, maxY);
                 lastId = button.id;
             }
-            event.getButtonList().add(new ReconnectButton(lastId + 1, x, maxY + 20, "Re-Enter thy Stage"));
+            event.getButtonList().add(new ReconnectButton(lastId + 1, x, maxY + 23, "Re-Enter thy Stage"));
+            event.getButtonList().add(new AutoReconnectButton(lastId + 1, x, maxY + 46, "Mechanical Re-Entering Disabled."));
         }
     }
 

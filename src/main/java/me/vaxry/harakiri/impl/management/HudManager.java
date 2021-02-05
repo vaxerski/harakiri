@@ -10,7 +10,6 @@ import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.gui.hud.component.*;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
-import me.vaxry.harakiri.impl.module.misc.ReconnectModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
