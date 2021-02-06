@@ -20,7 +20,7 @@ public final class HudEditorModule extends Module {
     private boolean open;
 
     public HudEditorModule() {
-        super("HudEditor", new String[]{"HudEdit", "HEdit"}, "Displays a menu to modify the hud", "GRAVE", -1, ModuleType.UI);
+        super("Gui", new String[]{"Gui"}, "Displays the gui", "RSHIFT", -1, ModuleType.UI);
         this.setHidden(true);
     }
 
