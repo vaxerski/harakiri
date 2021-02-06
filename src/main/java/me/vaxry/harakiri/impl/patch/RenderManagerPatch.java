@@ -1,13 +1,12 @@
 package me.vaxry.harakiri.impl.patch;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.render.EventRenderEntity;
-import me.vaxry.harakiri.api.patch.ClassPatch;
-import me.vaxry.harakiri.api.patch.MethodPatch;
-import me.vaxry.harakiri.api.util.ASMUtil;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.render.EventRenderEntity;
+import me.vaxry.harakiri.framework.patch.ClassPatch;
+import me.vaxry.harakiri.framework.patch.MethodPatch;
+import me.vaxry.harakiri.framework.util.ASMUtil;
 import me.vaxry.harakiri.impl.management.PatchManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
@@ -51,9 +50,9 @@ public final class RenderManagerPatch extends ClassPatch {
         //add FLOAD to pass the partialTicks into our hook function
         preInsn.add(new VarInsnNode(FLOAD, 9));
         //PRE
-        preInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/api/event/EventStageable$EventStage", "PRE", "Lme/vaxry/harakiri/api/event/EventStageable$EventStage;"));
+        preInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/framework/event/EventStageable$EventStage", "PRE", "Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;"));
         //call our hook function
-        preInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "renderEntityHook", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/entity/Entity;DDDFFLme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z" : "(Lvg;DDDFFLme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z", false));
+        preInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "renderEntityHook", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/entity/Entity;DDDFFLme/vaxry/harakiri/framework/event/EventStageable$EventStage;)Z" : "(Lvg;DDDFFLme/vaxry/harakiri/framework/event/EventStageable$EventStage;)Z", false));
         //add a label to jump to
         final LabelNode jmp = new LabelNode();
         //add if equals and pass the label
@@ -80,9 +79,9 @@ public final class RenderManagerPatch extends ClassPatch {
         //add FLOAD to pass the partialTicks into our hook function
         postInsn.add(new VarInsnNode(FLOAD, 9));
         //POST
-        postInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/api/event/EventStageable$EventStage", "POST", "Lme/vaxry/harakiri/api/event/EventStageable$EventStage;"));
+        postInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/framework/event/EventStageable$EventStage", "POST", "Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;"));
         //call our hook function
-        postInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "renderEntityHook", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/entity/Entity;DDDFFLme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z" : "(Lvg;DDDFFLme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z", false));
+        postInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "renderEntityHook", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/entity/Entity;DDDFFLme/vaxry/harakiri/framework/event/EventStageable$EventStage;)Z" : "(Lvg;DDDFFLme/vaxry/harakiri/framework/event/EventStageable$EventStage;)Z", false));
         //insert the list of instructions at the bottom of the function
         methodNode.instructions.insertBefore(ASMUtil.bottom(methodNode), postInsn);
     }

@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.module.player;
 
-import me.vaxry.harakiri.api.event.network.EventSendPacket;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;

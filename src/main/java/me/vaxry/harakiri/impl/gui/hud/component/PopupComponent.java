@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.api.util.RenderUtil;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.util.RenderUtil;
 
 /**
  * created by noil on 11/4/19 at 7:54 AM

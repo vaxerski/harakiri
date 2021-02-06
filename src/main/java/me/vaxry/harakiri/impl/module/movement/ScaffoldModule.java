@@ -1,18 +1,17 @@
 package me.vaxry.harakiri.impl.module.movement;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.task.rotation.RotationTask;
-import me.vaxry.harakiri.api.util.MathUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.task.rotation.RotationTask;
+import me.vaxry.harakiri.framework.util.MathUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.ClickType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;

@@ -2,11 +2,11 @@ package me.vaxry.harakiri.impl.module.misc;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.FileUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.FileUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.util.StringUtils;

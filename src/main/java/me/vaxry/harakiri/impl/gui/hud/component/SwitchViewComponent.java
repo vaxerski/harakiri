@@ -1,12 +1,9 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
-import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.gui.hud.component.HudComponent;
-import me.vaxry.harakiri.api.util.RenderUtil;
+import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
+import me.vaxry.harakiri.framework.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import scala.collection.parallel.ParIterableLike;
 
 public class SwitchViewComponent extends HudComponent {
 

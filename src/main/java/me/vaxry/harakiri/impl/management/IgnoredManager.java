@@ -1,6 +1,6 @@
 package me.vaxry.harakiri.impl.management;
 
-import me.vaxry.harakiri.api.ignore.Ignored;
+import me.vaxry.harakiri.framework.ignore.Ignored;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

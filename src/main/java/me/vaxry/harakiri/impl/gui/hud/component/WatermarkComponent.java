@@ -2,16 +2,15 @@ package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.gui.hud.component.HudComponent;
-import me.vaxry.harakiri.api.texture.Texture;
-import me.vaxry.harakiri.api.util.RenderUtil;
+import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
+import me.vaxry.harakiri.framework.texture.Texture;
+import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.impl.fml.harakiriMod;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.module.ui.WatermarkModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
-import scala.collection.parallel.ParIterableLike;
 
 /**
  * Author Seth

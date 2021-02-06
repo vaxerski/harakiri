@@ -2,8 +2,8 @@ package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.api.util.PotionUtil;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.util.PotionUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

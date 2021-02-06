@@ -1,14 +1,14 @@
 package me.vaxry.harakiri.impl.module.world;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventSendPacket;
-import me.vaxry.harakiri.api.event.render.EventRender2D;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.ColorUtil;
-import me.vaxry.harakiri.api.util.GLUProjection;
-import me.vaxry.harakiri.api.util.RenderUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
+import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.ColorUtil;
+import me.vaxry.harakiri.framework.util.GLUProjection;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketClientStatus;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;

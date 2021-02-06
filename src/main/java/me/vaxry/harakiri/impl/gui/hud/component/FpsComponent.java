@@ -1,9 +1,8 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 /**
  * Author Seth

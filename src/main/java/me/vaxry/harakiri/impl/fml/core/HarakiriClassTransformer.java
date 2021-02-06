@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.fml.core;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.patch.ClassPatch;
-import me.vaxry.harakiri.api.patch.MethodPatch;
-import me.vaxry.harakiri.api.util.ASMUtil;
+import me.vaxry.harakiri.framework.patch.ClassPatch;
+import me.vaxry.harakiri.framework.patch.MethodPatch;
+import me.vaxry.harakiri.framework.util.ASMUtil;
 import me.vaxry.harakiri.impl.management.PatchManager;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.tree.ClassNode;

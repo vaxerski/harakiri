@@ -1,24 +1,11 @@
 package me.vaxry.harakiri.impl.module.movement;
 
-import com.yworks.yguard.test.A;
-import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.event.player.EventMove;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.MathUtil;
-import me.vaxry.harakiri.api.value.Value;
-import net.minecraft.block.Block;
+import me.vaxry.harakiri.framework.event.player.EventMove;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
-import net.minecraft.init.Blocks;
-import net.minecraft.network.play.server.SPacketChunkData;
-import net.minecraft.network.play.server.SPacketUnloadChunk;
 import net.minecraft.util.math.BlockPos;
-import org.locationtech.jts.geom.Coordinate;
-import scala.collection.parallel.ParIterableLike;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
-
-import java.util.ArrayList;
 
 public class AvoidModule extends Module {
 

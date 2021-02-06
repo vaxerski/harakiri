@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.management;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import net.minecraft.network.play.server.SPacketTimeUpdate;
 import net.minecraft.util.math.MathHelper;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;

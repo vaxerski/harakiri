@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.management;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.patch.ClassPatch;
-import me.vaxry.harakiri.api.util.ReflectionUtil;
+import me.vaxry.harakiri.framework.patch.ClassPatch;
+import me.vaxry.harakiri.framework.util.ReflectionUtil;
 import me.vaxry.harakiri.impl.patch.*;
 
 import java.io.File;

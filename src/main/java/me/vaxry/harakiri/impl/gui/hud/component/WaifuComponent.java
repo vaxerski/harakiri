@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
-import me.vaxry.harakiri.api.gui.hud.component.ResizableHudComponent;
-import me.vaxry.harakiri.api.texture.Texture;
+import me.vaxry.harakiri.framework.gui.hud.component.ResizableHudComponent;
+import me.vaxry.harakiri.framework.texture.Texture;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;

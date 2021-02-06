@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
-import me.vaxry.harakiri.api.gui.hud.component.ResizableHudComponent;
-import me.vaxry.harakiri.api.util.MathUtil;
-import me.vaxry.harakiri.api.util.RenderUtil;
-import me.vaxry.harakiri.api.util.Timer;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.gui.hud.component.ResizableHudComponent;
+import me.vaxry.harakiri.framework.util.MathUtil;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.util.Timer;
+import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.math.MathHelper;

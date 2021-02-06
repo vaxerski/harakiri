@@ -1,14 +1,8 @@
 package me.vaxry.harakiri.impl.fml;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.extd.MiscExtd;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-
-import javax.swing.*;
-import java.io.PrintWriter;
-import java.io.RandomAccessFile;
-import java.io.StringWriter;
 
 /**
  * @author Seth

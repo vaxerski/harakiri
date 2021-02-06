@@ -1,14 +1,13 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
-import me.vaxry.harakiri.api.event.render.EventRender2D;
-import me.vaxry.harakiri.api.event.render.EventRender3D;
-import me.vaxry.harakiri.api.event.world.EventSpawnEntity;
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.api.util.*;
-import me.vaxry.harakiri.api.util.ColorUtil;
-import me.vaxry.harakiri.api.util.GLUProjection;
-import me.vaxry.harakiri.api.util.RenderUtil;
-import me.vaxry.harakiri.api.util.Timer;
+import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
+import me.vaxry.harakiri.framework.event.world.EventSpawnEntity;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.util.ColorUtil;
+import me.vaxry.harakiri.framework.util.GLUProjection;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.util.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;

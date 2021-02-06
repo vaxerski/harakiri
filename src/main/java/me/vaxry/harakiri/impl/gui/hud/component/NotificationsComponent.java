@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.api.notification.Notification;
-import me.vaxry.harakiri.api.util.RenderUtil;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.notification.Notification;
+import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 

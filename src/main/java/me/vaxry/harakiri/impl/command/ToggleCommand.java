@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.command;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.command.Command;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.command.Command;
+import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.impl.config.ModuleConfig;
 
 /**

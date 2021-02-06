@@ -1,15 +1,10 @@
 package me.vaxry.harakiri.impl.module.misc;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.network.EventSendPacket;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.play.client.CPacketPlayerAbilities;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.network.play.client.CPacketUseEntity;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import javax.sound.sampled.*;

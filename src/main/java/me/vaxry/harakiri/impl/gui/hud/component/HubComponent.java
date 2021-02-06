@@ -1,11 +1,11 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.gui.hud.EventHubComponentClick;
-import me.vaxry.harakiri.api.gui.hud.component.HudComponent;
-import me.vaxry.harakiri.api.gui.hud.component.ResizableHudComponent;
-import me.vaxry.harakiri.api.texture.Texture;
-import me.vaxry.harakiri.api.util.RenderUtil;
+import me.vaxry.harakiri.framework.event.gui.hud.EventHubComponentClick;
+import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
+import me.vaxry.harakiri.framework.gui.hud.component.ResizableHudComponent;
+import me.vaxry.harakiri.framework.texture.Texture;
+import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
 import me.vaxry.harakiri.impl.module.render.HudModule;

@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import me.vaxry.harakiri.api.event.gui.EventRenderTooltip;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.RenderUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.gui.EventRenderTooltip;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockShulkerBox;
 import net.minecraft.client.Minecraft;

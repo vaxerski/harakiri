@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.management;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.config.Configurable;
-import me.vaxry.harakiri.api.event.client.EventLoadConfig;
-import me.vaxry.harakiri.api.event.client.EventSaveConfig;
+import me.vaxry.harakiri.framework.config.Configurable;
+import me.vaxry.harakiri.framework.event.client.EventLoadConfig;
+import me.vaxry.harakiri.framework.event.client.EventSaveConfig;
 import me.vaxry.harakiri.impl.config.*;
 
 import java.io.File;

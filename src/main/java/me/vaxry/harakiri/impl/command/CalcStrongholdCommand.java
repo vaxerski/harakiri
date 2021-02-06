@@ -2,11 +2,11 @@ package me.vaxry.harakiri.impl.command;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.command.Command;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.api.util.MathUtil;
+import me.vaxry.harakiri.framework.command.Command;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
+import me.vaxry.harakiri.framework.util.MathUtil;
 import me.vaxry.harakiri.impl.module.hidden.CommandsModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.SoundEvents;

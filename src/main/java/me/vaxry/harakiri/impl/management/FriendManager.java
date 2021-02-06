@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.management;
 
-import me.vaxry.harakiri.api.friend.Friend;
-import me.vaxry.harakiri.api.util.StringUtil;
+import me.vaxry.harakiri.framework.friend.Friend;
+import me.vaxry.harakiri.framework.util.StringUtil;
 import net.minecraft.entity.Entity;
 import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;

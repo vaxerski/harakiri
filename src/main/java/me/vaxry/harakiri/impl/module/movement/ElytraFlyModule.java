@@ -1,14 +1,14 @@
 package me.vaxry.harakiri.impl.module.movement;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.event.player.EventMove;
-import me.vaxry.harakiri.api.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.MathUtil;
-import me.vaxry.harakiri.api.util.Timer;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.event.player.EventMove;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.MathUtil;
+import me.vaxry.harakiri.framework.util.Timer;
+import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;

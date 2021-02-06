@@ -1,12 +1,10 @@
 package me.vaxry.harakiri.impl.module.misc;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.fml.harakiriMod;
 import me.vaxry.harakiri.impl.gui.hud.component.SpeedComponent;
-import me.vaxry.harakiri.impl.management.DiscordManager;
-import me.vaxry.harakiri.impl.module.movement.ElytraFlyModule;
 import net.minecraft.client.Minecraft;
 
 import java.text.DecimalFormat;

@@ -1,10 +1,9 @@
 package me.vaxry.harakiri.impl.patch;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.world.*;
-import me.vaxry.harakiri.api.event.world.*;
-import me.vaxry.harakiri.api.patch.ClassPatch;
-import me.vaxry.harakiri.api.patch.MethodPatch;
+import me.vaxry.harakiri.framework.event.world.*;
+import me.vaxry.harakiri.framework.patch.ClassPatch;
+import me.vaxry.harakiri.framework.patch.MethodPatch;
 import me.vaxry.harakiri.impl.management.PatchManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;

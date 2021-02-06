@@ -1,9 +1,8 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.api.util.*;
-import me.vaxry.harakiri.api.util.PotionUtil;
-import me.vaxry.harakiri.api.util.RenderUtil;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.util.PotionUtil;
+import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiInventory;

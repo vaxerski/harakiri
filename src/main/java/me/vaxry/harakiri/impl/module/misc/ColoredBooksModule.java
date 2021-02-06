@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.misc;
 
-import me.vaxry.harakiri.api.event.gui.EventBookPage;
-import me.vaxry.harakiri.api.event.gui.EventBookTitle;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.gui.EventBookPage;
+import me.vaxry.harakiri.framework.event.gui.EventBookTitle;
+import me.vaxry.harakiri.framework.module.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 /**

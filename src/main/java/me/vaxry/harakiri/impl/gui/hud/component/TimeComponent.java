@@ -1,6 +1,6 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

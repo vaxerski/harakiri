@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.management;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.macro.Macro;
+import me.vaxry.harakiri.framework.macro.Macro;
 
 import java.util.ArrayList;
 import java.util.List;

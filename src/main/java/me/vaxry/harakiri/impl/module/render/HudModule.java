@@ -1,12 +1,12 @@
 package me.vaxry.harakiri.impl.module.render;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.gui.EventRenderPotions;
-import me.vaxry.harakiri.api.event.render.EventRender2D;
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.api.gui.hud.component.HudComponent;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.gui.EventRenderPotions;
+import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import net.minecraft.client.Minecraft;

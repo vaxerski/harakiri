@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.command;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.command.Command;
-import me.vaxry.harakiri.api.ignore.Ignored;
+import me.vaxry.harakiri.framework.command.Command;
+import me.vaxry.harakiri.framework.ignore.Ignored;
 import me.vaxry.harakiri.impl.config.IgnoreConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;

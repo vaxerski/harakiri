@@ -3,11 +3,11 @@ package me.vaxry.harakiri.impl.config;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.config.Configurable;
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.api.gui.hud.component.HudComponent;
-import me.vaxry.harakiri.api.util.FileUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.config.Configurable;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
+import me.vaxry.harakiri.framework.util.FileUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 
 import java.io.File;

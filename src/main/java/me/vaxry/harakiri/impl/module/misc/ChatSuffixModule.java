@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.misc;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.player.EventSendChatMessage;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.player.EventSendChatMessage;
+import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.impl.module.hidden.CommandsModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketChatMessage;

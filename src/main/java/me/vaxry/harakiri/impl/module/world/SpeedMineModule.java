@@ -1,12 +1,12 @@
 package me.vaxry.harakiri.impl.module.world;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.player.EventClickBlock;
-import me.vaxry.harakiri.api.event.player.EventPlayerDamageBlock;
-import me.vaxry.harakiri.api.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.api.event.player.EventResetBlockRemoving;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.player.EventClickBlock;
+import me.vaxry.harakiri.framework.event.player.EventPlayerDamageBlock;
+import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
+import me.vaxry.harakiri.framework.event.player.EventResetBlockRemoving;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import me.vaxry.harakiri.api.event.gui.EventRenderHelmet;
-import me.vaxry.harakiri.api.event.gui.EventRenderPortal;
-import me.vaxry.harakiri.api.event.render.EventRenderOverlay;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.gui.EventRenderHelmet;
+import me.vaxry.harakiri.framework.event.gui.EventRenderPortal;
+import me.vaxry.harakiri.framework.event.render.EventRenderOverlay;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 /**

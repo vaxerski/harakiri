@@ -1,12 +1,10 @@
 package me.vaxry.harakiri.impl.module.hidden;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.minecraft.EventKeyPress;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.minecraft.EventKeyPress;
+import me.vaxry.harakiri.framework.module.Module;
 import org.lwjgl.input.Keyboard;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
-
-import javax.swing.*;
 
 /**
  * Author Seth

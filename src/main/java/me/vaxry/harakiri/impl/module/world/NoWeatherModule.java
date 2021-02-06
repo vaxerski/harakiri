@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.module.world;
 
-import me.vaxry.harakiri.api.event.world.EventRainStrength;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.world.EventRainStrength;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.client.Minecraft;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 

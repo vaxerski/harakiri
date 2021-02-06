@@ -1,9 +1,8 @@
 package me.vaxry.harakiri.impl.module.movement;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.player.EventMove;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.player.EventMove;
+import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.client.Minecraft;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;

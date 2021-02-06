@@ -1,12 +1,11 @@
 package me.vaxry.harakiri.impl.management;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.camera.Camera;
-import me.vaxry.harakiri.api.camera.Camera2;
-import me.vaxry.harakiri.api.event.minecraft.EventUpdateFramebufferSize;
-import me.vaxry.harakiri.api.event.player.EventFovModifier;
-import me.vaxry.harakiri.api.event.render.*;
-import me.vaxry.harakiri.api.event.render.*;
+import me.vaxry.harakiri.framework.camera.Camera;
+import me.vaxry.harakiri.framework.camera.Camera2;
+import me.vaxry.harakiri.framework.event.minecraft.EventUpdateFramebufferSize;
+import me.vaxry.harakiri.framework.event.player.EventFovModifier;
+import me.vaxry.harakiri.framework.event.render.*;
 import net.minecraft.client.Minecraft;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 

@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.player;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventSendPacket;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.ClickType;

@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.module.movement;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.player.EventMove;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.player.EventMove;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.MobEffects;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;

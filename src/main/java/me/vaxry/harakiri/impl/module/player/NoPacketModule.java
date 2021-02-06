@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.module.player;
 
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.event.network.EventSendPacket;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.network.play.client.*;
 import net.minecraft.network.play.server.SPacketDestroyEntities;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;

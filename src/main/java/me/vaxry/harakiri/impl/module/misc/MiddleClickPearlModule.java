@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.misc;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemEnderPearl;

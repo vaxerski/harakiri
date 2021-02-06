@@ -1,13 +1,11 @@
 package me.vaxry.harakiri.impl.module.hidden;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.minecraft.EventDisplayGui;
-import me.vaxry.harakiri.api.event.minecraft.EventRunTick;
-import me.vaxry.harakiri.api.event.network.EventSendPacket;
-import me.vaxry.harakiri.api.event.render.EventRender3D;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.Timer;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.minecraft.EventRunTick;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.Timer;
+import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.gui.menu.AutoReconnectButton;
 import me.vaxry.harakiri.impl.gui.menu.ReconnectButton;
 import net.minecraft.client.Minecraft;
@@ -15,16 +13,9 @@ import net.minecraft.client.gui.*;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.network.EnumConnectionState;
 import net.minecraft.network.handshake.client.C00Handshake;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public final class ReconnectModule extends Module {

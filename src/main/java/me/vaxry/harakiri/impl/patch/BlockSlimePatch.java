@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.patch;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.world.EventLandOnSlime;
-import me.vaxry.harakiri.api.event.world.EventWalkOnSlime;
-import me.vaxry.harakiri.api.patch.ClassPatch;
-import me.vaxry.harakiri.api.patch.MethodPatch;
+import me.vaxry.harakiri.framework.event.world.EventLandOnSlime;
+import me.vaxry.harakiri.framework.event.world.EventWalkOnSlime;
+import me.vaxry.harakiri.framework.patch.ClassPatch;
+import me.vaxry.harakiri.framework.patch.MethodPatch;
 import me.vaxry.harakiri.impl.management.PatchManager;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;

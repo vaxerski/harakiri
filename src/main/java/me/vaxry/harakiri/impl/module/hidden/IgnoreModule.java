@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.module.hidden;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.ignore.Ignored;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.ignore.Ignored;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.util.StringUtils;

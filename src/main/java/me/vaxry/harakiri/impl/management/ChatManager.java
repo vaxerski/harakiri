@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.management;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.api.util.Timer;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
+import me.vaxry.harakiri.framework.util.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;

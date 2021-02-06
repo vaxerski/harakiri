@@ -1,29 +1,20 @@
 package me.vaxry.harakiri.impl.module.render;
 
 
-import com.google.common.collect.Lists;
-import com.mojang.realmsclient.gui.ChatFormatting;
-import jdk.nashorn.internal.ir.Block;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.render.EventRender2D;
-import me.vaxry.harakiri.api.event.render.EventRenderName;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.GLUProjection;
-import me.vaxry.harakiri.api.util.ItemUtil;
-import me.vaxry.harakiri.api.util.RenderUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.event.render.EventRenderName;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.GLUProjection;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,19 +22,12 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import org.locationtech.jts.geom.Coordinate;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector2f;
-import org.lwjgl.util.vector.Vector3f;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-import javax.print.attribute.standard.MediaSize;
 import javax.vecmath.Vector3d;
 import java.util.*;
 

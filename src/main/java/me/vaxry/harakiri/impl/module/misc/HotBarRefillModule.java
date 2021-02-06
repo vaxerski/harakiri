@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.module.misc;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.Timer;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.Timer;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.inventory.GuiInventory;

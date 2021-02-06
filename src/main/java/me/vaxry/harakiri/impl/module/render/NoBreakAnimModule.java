@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import me.vaxry.harakiri.api.event.player.EventPlayerDamageBlock;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.player.EventPlayerDamageBlock;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;

@@ -1,24 +1,21 @@
 package me.vaxry.harakiri.impl.gui.hud;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.api.gui.hud.component.HudComponent;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.texture.Texture;
-import me.vaxry.harakiri.api.util.RenderUtil;
-import me.vaxry.harakiri.api.util.Timer;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
+import me.vaxry.harakiri.framework.texture.Texture;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.SwitchViewComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
-import me.vaxry.harakiri.impl.module.hidden.KeybindsModule;
 import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.entity.Render;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;

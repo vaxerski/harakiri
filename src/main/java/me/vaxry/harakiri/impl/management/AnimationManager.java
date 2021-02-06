@@ -1,6 +1,6 @@
 package me.vaxry.harakiri.impl.management;
 
-import me.vaxry.harakiri.api.animation.Animation;
+import me.vaxry.harakiri.framework.animation.Animation;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

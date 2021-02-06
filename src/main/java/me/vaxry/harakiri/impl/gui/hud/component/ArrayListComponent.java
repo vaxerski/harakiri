@@ -2,17 +2,16 @@ package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.client.EventSaveConfig;
-import me.vaxry.harakiri.api.event.world.EventLoadWorld;
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.ColorUtil;
-import me.vaxry.harakiri.api.util.Timer;
+import me.vaxry.harakiri.framework.event.client.EventSaveConfig;
+import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.ColorUtil;
+import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.module.hidden.ArrayListModule;
 import me.vaxry.harakiri.impl.module.render.HudModule;
-import me.vaxry.harakiri.impl.module.world.TimerModule;
 import net.minecraft.client.gui.ScaledResolution;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 

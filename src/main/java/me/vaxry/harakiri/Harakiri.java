@@ -1,14 +1,13 @@
 package me.vaxry.harakiri;
 
-import me.vaxry.harakiri.api.event.client.EventLoad;
-import me.vaxry.harakiri.api.event.client.EventReload;
-import me.vaxry.harakiri.api.event.client.EventUnload;
-import me.vaxry.harakiri.api.logging.harakiriFormatter;
+import me.vaxry.harakiri.framework.event.client.EventLoad;
+import me.vaxry.harakiri.framework.event.client.EventReload;
+import me.vaxry.harakiri.framework.event.client.EventUnload;
+import me.vaxry.harakiri.framework.logging.harakiriFormatter;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.effect.PlexusEffect;
 import me.vaxry.harakiri.impl.management.*;
-import me.vaxry.harakiri.impl.module.misc.DiscordRPCModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;

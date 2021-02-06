@@ -1,13 +1,13 @@
 package me.vaxry.harakiri.impl.module.movement;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.api.event.player.EventUpdateInput;
-import me.vaxry.harakiri.api.event.world.EventCollideSoulSand;
-import me.vaxry.harakiri.api.event.world.EventLandOnSlime;
-import me.vaxry.harakiri.api.event.world.EventWalkOnSlime;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
+import me.vaxry.harakiri.framework.event.player.EventUpdateInput;
+import me.vaxry.harakiri.framework.event.world.EventCollideSoulSand;
+import me.vaxry.harakiri.framework.event.world.EventLandOnSlime;
+import me.vaxry.harakiri.framework.event.world.EventWalkOnSlime;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemShield;

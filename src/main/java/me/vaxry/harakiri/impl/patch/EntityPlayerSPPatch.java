@@ -1,12 +1,11 @@
 package me.vaxry.harakiri.impl.patch;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.player.*;
-import me.vaxry.harakiri.api.event.player.*;
-import me.vaxry.harakiri.api.patch.ClassPatch;
-import me.vaxry.harakiri.api.patch.MethodPatch;
-import me.vaxry.harakiri.api.util.ASMUtil;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.player.*;
+import me.vaxry.harakiri.framework.patch.ClassPatch;
+import me.vaxry.harakiri.framework.patch.MethodPatch;
+import me.vaxry.harakiri.framework.util.ASMUtil;
 import me.vaxry.harakiri.impl.management.PatchManager;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.client.ForgeHooksClient;
@@ -40,9 +39,9 @@ public final class EntityPlayerSPPatch extends ClassPatch {
         //create a list of instructions
         final InsnList preInsn = new InsnList();
         //PRE
-        preInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/api/event/EventStageable$EventStage", "PRE", "Lme/vaxry/harakiri/api/event/EventStageable$EventStage;"));
+        preInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/framework/event/EventStageable$EventStage", "PRE", "Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;"));
         //call our hook function
-        preInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "onUpdateHook", "(Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z", false));
+        preInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "onUpdateHook", "(Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;)Z", false));
         //create a label to jump to
         final LabelNode jmp = new LabelNode();
         //add "if equals"
@@ -57,9 +56,9 @@ public final class EntityPlayerSPPatch extends ClassPatch {
         //same as above
         final InsnList postInsn = new InsnList();
         //POST
-        postInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/api/event/EventStageable$EventStage", "POST", "Lme/vaxry/harakiri/api/event/EventStageable$EventStage;"));
+        postInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/framework/event/EventStageable$EventStage", "POST", "Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;"));
         //call our hook function
-        postInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "onUpdateHook", "(Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z", false));
+        postInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "onUpdateHook", "(Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;)Z", false));
         //insert the list of instructions at the bottom of the function
         methodNode.instructions.insertBefore(ASMUtil.bottom(methodNode), postInsn);
     }
@@ -100,9 +99,9 @@ public final class EntityPlayerSPPatch extends ClassPatch {
         //create a list of instructions
         final InsnList preInsn = new InsnList();
         //PRE
-        preInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/api/event/EventStageable$EventStage", "PRE", "Lme/vaxry/harakiri/api/event/EventStageable$EventStage;"));
+        preInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/framework/event/EventStageable$EventStage", "PRE", "Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;"));
         //call our hook function
-        preInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "onUpdateWalkingPlayerHook", "(Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z", false));
+        preInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "onUpdateWalkingPlayerHook", "(Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;)Z", false));
         //create a label to jump to
         final LabelNode jmp = new LabelNode();
         //add "if equals"
@@ -117,9 +116,9 @@ public final class EntityPlayerSPPatch extends ClassPatch {
         //same as above
         final InsnList postInsn = new InsnList();
         //POST
-        postInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/api/event/EventStageable$EventStage", "POST", "Lme/vaxry/harakiri/api/event/EventStageable$EventStage;"));
+        postInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/framework/event/EventStageable$EventStage", "POST", "Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;"));
         //call our hook function
-        postInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "onUpdateWalkingPlayerHook", "(Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z", false));
+        postInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "onUpdateWalkingPlayerHook", "(Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;)Z", false));
         //insert the list of instructions at the bottom of the function
         methodNode.instructions.insertBefore(ASMUtil.bottom(methodNode), postInsn);
     }

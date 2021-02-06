@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.config;
 
 import com.google.gson.JsonObject;
-import me.vaxry.harakiri.api.config.Configurable;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.FileUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.config.Configurable;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.FileUtil;
+import me.vaxry.harakiri.framework.value.Value;
 
 import java.awt.*;
 import java.io.File;

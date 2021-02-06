@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.module.combat;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.minecraft.EventRunTick;
-import me.vaxry.harakiri.api.event.world.EventRemoveEntity;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.minecraft.EventRunTick;
+import me.vaxry.harakiri.framework.event.world.EventRemoveEntity;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

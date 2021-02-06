@@ -1,11 +1,11 @@
 package me.vaxry.harakiri.impl.management;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.module.EventModuleLoad;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.ReflectionUtil;
-import me.vaxry.harakiri.api.util.StringUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.module.EventModuleLoad;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.ReflectionUtil;
+import me.vaxry.harakiri.framework.util.StringUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.module.combat.*;
 import me.vaxry.harakiri.impl.module.hidden.*;
 import me.vaxry.harakiri.impl.module.misc.*;
@@ -108,7 +108,6 @@ public final class ModuleManager {
         add(new SpeedModule());
         add(new AntiHungerModule());
         add(new HorseJumpModule());
-        add(new TimeStampModule());
         add(new NewChunksModule());
         add(new NoCrystalModule());
         add(new StorageESPModule());
@@ -131,7 +130,6 @@ public final class ModuleManager {
         add(new ViewClipModule());
         add(new NoGlobalSoundsModule());
         add(new NoBiomeColorModule());
-        add(new VanillaTabModule());
         add(new BuildHeightModule());
         add(new BlockHighlightModule());
         add(new NoWeatherModule());
@@ -151,7 +149,6 @@ public final class ModuleManager {
         add(new ChatSuffixModule());
         add(new VisualRangeModule());
         add(new HotBarRefillModule());
-        add(new QuickCraftModule());
         add(new TotemNotifierModule());
         add(new MiddleClickPearlModule());
         add(new NameAlertModule());

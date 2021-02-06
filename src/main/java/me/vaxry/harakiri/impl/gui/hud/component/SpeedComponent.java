@@ -1,13 +1,11 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.api.util.Timer;
-import net.minecraft.util.math.MathHelper;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.util.Timer;
 import net.minecraft.util.math.Vec3d;
 
 import javax.vecmath.Vector3f;
-import java.sql.Time;
 import java.text.DecimalFormat;
 
 

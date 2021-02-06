@@ -1,11 +1,11 @@
 package me.vaxry.harakiri.impl.module.combat;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.task.rotation.RotationTask;
-import me.vaxry.harakiri.api.util.MathUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.task.rotation.RotationTask;
+import me.vaxry.harakiri.framework.util.MathUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

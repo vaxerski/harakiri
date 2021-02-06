@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.gui.menu;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.util.Timer;
+import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.module.hidden.ReconnectModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;

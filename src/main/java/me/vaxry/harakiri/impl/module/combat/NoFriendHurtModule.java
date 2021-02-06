@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.module.combat;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventSendPacket;
-import me.vaxry.harakiri.api.friend.Friend;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
+import me.vaxry.harakiri.framework.friend.Friend;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;

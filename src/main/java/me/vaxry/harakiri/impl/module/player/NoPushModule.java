@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.module.player;
 
-import me.vaxry.harakiri.api.event.player.EventApplyCollision;
-import me.vaxry.harakiri.api.event.player.EventPushOutOfBlocks;
-import me.vaxry.harakiri.api.event.player.EventPushedByWater;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.player.EventApplyCollision;
+import me.vaxry.harakiri.framework.event.player.EventPushOutOfBlocks;
+import me.vaxry.harakiri.framework.event.player.EventPushedByWater;
+import me.vaxry.harakiri.framework.module.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 /**
