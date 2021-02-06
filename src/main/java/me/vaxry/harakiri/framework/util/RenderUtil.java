@@ -46,6 +46,7 @@ public final class RenderUtil {
         float blue = (float) (color & 255) / 255.0F;
         final Tessellator tessellator = Tessellator.getInstance();
         final BufferBuilder bufferbuilder = tessellator.getBuffer();
+        GlStateManager.enableAlpha();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
@@ -57,6 +58,7 @@ public final class RenderUtil {
         tessellator.draw();
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+        GlStateManager.disableAlpha();
     }
 
     public static void drawRoundedRect(float x, float y, float w, float h, float radius, int color) {

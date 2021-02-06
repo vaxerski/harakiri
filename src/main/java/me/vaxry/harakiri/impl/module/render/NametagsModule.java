@@ -1,10 +1,14 @@
 package me.vaxry.harakiri.impl.module.render;
 
 
+import akka.japi.Pair;
+import com.yworks.yguard.test.A;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.event.render.EventRenderName;
+import me.vaxry.harakiri.framework.extd.RenderItemAlpha;
 import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.GLUProjection;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.value.Value;
@@ -34,14 +38,21 @@ import java.util.*;
 public final class NametagsModule extends Module {
 
     private float NAMETAG_SAFEAREA = 1.f;
-    private ICamera camera = new Frustum();;
+    private ICamera camera = new Frustum();
+
+    private RenderItemAlpha renderItemAlpha;
+
+    private HashMap<EntityPlayer, Float> playersList = new HashMap<>();
 
     public final Value<Float> additionalScale = new Value<Float>("Scale", new String[]{"Scale", "s"}, "Scale the nametag", 1.f, 0.5f, 2.5f, 0.5f);
     public final Value<Float> armorscale = new Value<Float>("ArmorScale", new String[]{"Armorscale", "as"}, "Scale the armor part", 1.f, 0.5f, 2.5f, 0.5f);
+    public final Value<Integer> fadein = new Value<Integer>("FadeInSpeed", new String[]{"Fadein", "f"}, "Background fade in speed. Doesnt work for items cuz I'm lazy and minecraft.", 5, 1, 25, 1);
 
 
     public NametagsModule() {
         super("Nametags", new String[]{"Nametags"}, "Adds custom nametags for players.", "NONE", -1, ModuleType.RENDER);
+        Minecraft mc = Minecraft.getMinecraft();
+        renderItemAlpha = new RenderItemAlpha(mc.getTextureManager(), mc.modelManager, mc.getItemColors());
     }
 
     @Listener
@@ -83,7 +94,17 @@ public final class NametagsModule extends Module {
                 continue;
             }
 
+            HashMap<String, Integer> toDraw = new HashMap<>();
+
             EntityPlayer e = (EntityPlayer)ent;
+            if(!isPlayerCached(e))
+                playersList.put(e, 0.f);
+
+            for(Map.Entry<EntityPlayer, Float> p : playersList.entrySet()){
+                p.setValue(Math.min(p.getValue() + fadein.getValue() / 3.f, 255));
+            }
+
+            float alphaPerc = playersList.get(ent) / 255.f;
 
             Vec3d nametagvec = new Vec3d(e.getPositionEyes(event.getPartialTicks()).x, e.getPositionEyes(event.getPartialTicks()).y, e.getPositionEyes(event.getPartialTicks()).z);
 
@@ -121,21 +142,35 @@ public final class NametagsModule extends Module {
             int health = Math.round(e.getHealth());
             health += e.getAbsorptionAmount();
 
-            if(health > 20)
+            if(health > 20) {
                 nametagstr += "\2472\247o" + health;
-            else if(health > 13)
+                toDraw.put(health + " ", 0xFF11DD11);
+            }
+            else if(health > 13) {
                 nametagstr += "\2472" + health;
-            else if(health > 7)
+                toDraw.put(health + " ", 0xFF11DD11);
+            }
+            else if(health > 7) {
                 nametagstr += "\2476" + health;
-            else
+                toDraw.put(health + " ", 0xFFAAAA00);
+            }
+            else {
                 nametagstr += "\247c" + health;
+                toDraw.put(health + " ", 0xFFFF3333);
+            }
+
+
 
             nametagstr += "\247f ";
 
-            if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null)
+            if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null) {
                 nametagstr += "\2473" + e.getName();
-            else
+                toDraw.put(e.getName() + " ", 0xFF3333FF);
+            }
+            else {
                 nametagstr += "\247f" + e.getName();
+                toDraw.put(e.getName() + " ", 0xFFFFFFFF);
+            }
 
             nametagstr += "\247f ";
 
@@ -146,16 +181,26 @@ public final class NametagsModule extends Module {
                     ping = playerInfo.getResponseTime();
             }
 
-            if(ping == -1)
+            if(ping == -1) {
                 nametagstr += "\2478?";
-            else if (ping > 200)
+                toDraw.put("?", 0xFF888888);
+            }
+            else if (ping > 200) {
                 nametagstr += "\247c" + ping + "ms";
-            else if(ping > 100)
+                toDraw.put(ping + "ms", 0xFFFF3333);
+            }
+            else if(ping > 100) {
                 nametagstr += "\2476" + ping + "ms";
-            else if(ping > 50)
+                toDraw.put(ping + "ms", 0xFFAAAA00);
+            }
+            else if(ping > 50) {
                 nametagstr += "\2472" + ping + "ms";
-            else
+                toDraw.put(ping + "ms", 0xFF11DD11);
+            }
+            else {
                 nametagstr += "\247a" + ping + "ms";
+                toDraw.put(ping + "ms", 0xFF11FF11);
+            }
 
             float nametagX = 0;
             float nametagY = 0;
@@ -163,8 +208,6 @@ public final class NametagsModule extends Module {
             float textLength = 0;
             float xoffset = 0;
             Coordinate nametagMiddleNew = new Coordinate(0,0);
-
-
 
             if(distancetoent > 5.f) {
                 // draw without 3D scaling
@@ -248,8 +291,18 @@ public final class NametagsModule extends Module {
 
             // Draw basic nametag
 
-            RenderUtil.drawRect(nametagX - NAMETAG_SAFEAREA + xoffset, nametagY, nametagX + textLength + xoffset + NAMETAG_SAFEAREA, nametagY + mc.fontRenderer.FONT_HEIGHT + 2 * NAMETAG_SAFEAREA, 0x551d1d1d);
-            mc.fontRenderer.drawStringWithShadow(nametagstr, nametagX + xoffset, nametagY + NAMETAG_SAFEAREA, 0xFFDDDDDD);
+            RenderUtil.drawRect(nametagX - NAMETAG_SAFEAREA + xoffset, nametagY, nametagX + textLength + xoffset + NAMETAG_SAFEAREA, nametagY + mc.fontRenderer.FONT_HEIGHT + 2 * NAMETAG_SAFEAREA, ColorUtil.changeAlpha(0x551D1D1D, (int)(alphaPerc * 85)));
+
+            //mc.fontRenderer.drawStringWithShadow(nametagstr, nametagX + xoffset, nametagY + NAMETAG_SAFEAREA, (int)(0xFF * alphaPerc) * 0x1000000 + 0xDDDDDD);
+
+            // New rendering
+            float xoff = 0;
+            GlStateManager.enableBlend();
+            for(Map.Entry<String, Integer> entry : toDraw.entrySet()){
+                mc.fontRenderer.drawStringWithShadow(entry.getKey(), nametagX + xoffset + xoff, nametagY + NAMETAG_SAFEAREA, (int)(0xFF * alphaPerc) * 0x1000000 + entry.getValue());
+                xoff += mc.fontRenderer.getStringWidth(entry.getKey());
+            }
+            GlStateManager.disableBlend();
 
             // Draw Armor and stuff
 
@@ -295,7 +348,7 @@ public final class NametagsModule extends Module {
             float rectWidth = NAMETAG_SAFEAREA*2 + stacks.size() * 16 + NAMETAG_SAFEAREA * Math.max(stacks.size() - 1, 0);
             if(stacks.size() == 0)
                 rectWidth = 0;
-            RenderUtil.drawRect((float)nametagMiddleNew.x - rectWidth/2.f, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + 2 * NAMETAG_SAFEAREA, (float)nametagMiddleNew.x + rectWidth/2.f, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + 16 + 4 * NAMETAG_SAFEAREA, 0x551d1d1d);
+            RenderUtil.drawRect((float)nametagMiddleNew.x - rectWidth/2.f, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + 2 * NAMETAG_SAFEAREA, (float)nametagMiddleNew.x + rectWidth/2.f, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + 16 + 4 * NAMETAG_SAFEAREA, ColorUtil.changeAlpha(0x551D1D1D, (int)(alphaPerc * 85)));
             // BG drawn.
 
             float currentX = 0;
@@ -310,8 +363,9 @@ public final class NametagsModule extends Module {
                         RenderHelper.enableGUIStandardItemLighting();
                         GlStateManager.translate(nametagMiddleNew.x - rectWidth/2.f + NAMETAG_SAFEAREA + currentX, nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + 3 * NAMETAG_SAFEAREA, 0);
 
-                        mc.getRenderItem().renderItemAndEffectIntoGUI(stack, 0, 0);
-                        mc.getRenderItem().renderItemOverlays(mc.fontRenderer, stack, 0, 0);
+                        renderItemAlpha.alpha = alphaPerc;
+                        renderItemAlpha.renderItemAndEffectIntoGUI(stack, 0, 0);
+                        renderItemAlpha.renderItemOverlays(mc.fontRenderer, stack, 0, 0);
 
                         RenderHelper.disableStandardItemLighting();
                         GlStateManager.disableBlend();
@@ -340,13 +394,26 @@ public final class NametagsModule extends Module {
             float nameRectWidth = NAMETAG_SAFEAREA*2 + mc.fontRenderer.getStringWidth(itemName);
 
             //RenderUtil.drawRect((float)nametagMiddleNew.x - nameRectWidth / 2.f, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + NAMETAG_SAFEAREA, (float)nametagMiddleNew.x + nameRectWidth / 2.f, (float)nametagMiddleNew.y - NAMETAG_SAFEAREA, 0x551d1d1d);
-            mc.fontRenderer.drawStringWithShadow(itemName, (float)nametagMiddleNew.x - nameRectWidth / 2.f + NAMETAG_SAFEAREA, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT, 0xFFDDDDDD);
 
+            // New rendering
+            GlStateManager.enableBlend();
+            mc.fontRenderer.drawStringWithShadow(itemName, (float)nametagMiddleNew.x - nameRectWidth / 2.f + NAMETAG_SAFEAREA, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT, (int)(0xFF * alphaPerc) * 0x1000000 + 0xDDDDDD);
+            GlStateManager.disableBlend();
 
             GlStateManager.scale(1/nameScale, 1/nameScale, 1/nameScale);
             GlStateManager.scale(1/armorscale.getValue(), 1/armorscale.getValue(), 1/armorscale.getValue());
             GlStateManager.scale(1/scale, 1/scale, 1/scale);
             GlStateManager.popMatrix();
+        }
+
+        //Cleanup ent list
+        ArrayList<EntityPlayer> toRemove = new ArrayList<>();
+        for(Map.Entry<EntityPlayer, Float> p : playersList.entrySet()){
+            if(!mc.world.loadedEntityList.contains(p.getKey()))
+                toRemove.add(p.getKey());
+        }
+        for(EntityPlayer e : toRemove){
+            playersList.remove(e);
         }
     }
 
@@ -393,6 +460,14 @@ public final class NametagsModule extends Module {
             Math.toDegrees(Math.atan2(delta.y, delta.x)) - viewAngles.y, 0);
         angles.normalize();
         return angles;
+    }
+
+    private boolean isPlayerCached(EntityPlayer e){
+        for(Map.Entry<EntityPlayer, Float> p : playersList.entrySet()){
+            if(p.getKey() == e)
+                return true;
+        }
+        return false;
     }
 
 }
