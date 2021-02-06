@@ -1,11 +1,16 @@
 package me.vaxry.harakiri.impl.module.misc;
 
 import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.api.event.network.EventSendPacket;
 import me.vaxry.harakiri.api.module.Module;
 import me.vaxry.harakiri.api.value.Value;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.play.client.CPacketPlayerAbilities;
+import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import javax.sound.sampled.*;
 import java.io.File;
@@ -13,7 +18,7 @@ import java.io.File;
 public class HitsoundModule extends Module {
     String audiopath;
 
-    public final Value<Float> volume = new Value<Float>("Volume", new String[]{"Volume", "Vol"}, "Volume of the hitsound", 0.5f, 1f, 100.f, 1f);
+    public final Value<Float> volume = new Value<Float>("Volume", new String[]{"Volume", "Vol"}, "Volume of the hitsound", 0.5f, 0f, 1.f, 0.01f);
 
 
     public HitsoundModule(){
@@ -21,16 +26,29 @@ public class HitsoundModule extends Module {
         audiopath = System.getenv("APPDATA") + "\\.minecraft\\Harakiri\\hitsound.wav";
     }
 
-    @SubscribeEvent
+    @Listener
+    public void onPacketSend(EventSendPacket event){
+        if(event.getPacket() instanceof CPacketUseEntity){
+            CPacketUseEntity packet = (CPacketUseEntity) event.getPacket();
+            if(packet.getAction() == CPacketUseEntity.Action.ATTACK)
+                PlaySound(new File(audiopath));
+        }
+    }
+
+    /*@SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event){
         if(!this.isEnabled())
             return;
 
-        if(event.getSource().getTrueSource().equals(Minecraft.getMinecraft().player)){
+        try {
+            if (event.getSource().getTrueSource().equals(Minecraft.getMinecraft().player)) {
 
-            PlaySound(new File(audiopath));
+                PlaySound(new File(audiopath));
+            }
+        }catch(Throwable t){
+            // Oof
         }
-    }
+    }*/
 
 
     private void PlaySound(File in){

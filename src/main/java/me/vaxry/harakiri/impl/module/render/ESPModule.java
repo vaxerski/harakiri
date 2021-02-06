@@ -7,6 +7,7 @@ import me.vaxry.harakiri.api.event.EventStageable;
 import me.vaxry.harakiri.api.event.network.EventReceivePacket;
 import me.vaxry.harakiri.api.event.render.EventRender2D;
 import me.vaxry.harakiri.api.event.render.EventRender3D;
+import me.vaxry.harakiri.api.event.render.EventRenderEntity;
 import me.vaxry.harakiri.api.event.render.EventRenderName;
 import me.vaxry.harakiri.api.extd.ShaderGroupExt;
 import me.vaxry.harakiri.api.friend.Friend;
@@ -77,6 +78,7 @@ public final class ESPModule extends Module {
     public final Value<Boolean> items = new Value<Boolean>("Items", new String[]{"Items", "i"}, "Draw Items", false);
     public final Value<Boolean> hostile = new Value<Boolean>("Hostile", new String[]{"Hostile", "h"}, "Draw Hostile Entities", false);
     public final Value<Boolean> passive = new Value<Boolean>("Passive", new String[]{"Passive", "p"}, "Draw Hostile Entities", false);
+    public final Value<Boolean> crystals = new Value<Boolean>("Crystals", new String[]{"Crystals", "c"}, "Draw Crystals", false);
 
     private ResourceLocation shader;
     private boolean toLoadShader = false;
@@ -90,6 +92,7 @@ public final class ESPModule extends Module {
     private Scoreboard board;
     private ScorePlayerTeam green;
     private ScorePlayerTeam red;
+    private ScorePlayerTeam purple;
 
     private Class[] hostileMobs = {EntitySpider.class, EntityCaveSpider.class, EntityEnderman.class,EntityPigZombie.class,
         EntityEvoker.class, EntityVindicator.class, EntityVex.class, EntityEndermite.class, EntityGuardian.class, EntityElderGuardian.class,
@@ -188,8 +191,10 @@ public final class ESPModule extends Module {
                 this.board = mc.player.getWorldScoreboard();
                 this.green = board.createTeam("haraGreen");
                 this.red = board.createTeam("haraRed");
+                this.purple = board.createTeam("haraPurple");
                 this.green.setPrefix(TextFormatting.GREEN.toString());
                 this.red.setPrefix(TextFormatting.RED.toString());
+                this.purple.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
 
             }catch(Throwable t){
                 Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
@@ -207,10 +212,48 @@ public final class ESPModule extends Module {
             ent.getEntity().setGlowing(false);
 
 
-        if(hostileMobsList.contains(ent.getEntity().getClass()))
+        if(hostileMobsList.contains(ent.getEntity().getClass()) || ent.getEntity() instanceof EntitySpider)
             board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), red.getName());
         else
             board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), green.getName());
+    }
+
+    @Listener
+    public void onRenderEntity(EventRenderEntity event) {
+        Minecraft mc = Minecraft.getMinecraft();
+        if(toLoadShader) {
+
+            // Create the shader
+            try {
+                mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
+                mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
+                mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
+
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+                this.board = mc.player.getWorldScoreboard();
+                this.green = board.createTeam("haraGreen");
+                this.red = board.createTeam("haraRed");
+                this.purple = board.createTeam("haraPurple");
+                this.green.setPrefix(TextFormatting.GREEN.toString());
+                this.red.setPrefix(TextFormatting.RED.toString());
+                this.purple.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
+
+            }catch(Throwable t){
+                Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
+                // JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+            toLoadShader = false;
+        }
+
+        if(this.isEnabled() && event.getEntity() instanceof EntityEnderCrystal && this.crystals.getValue()){
+            event.getEntity().setGlowing(true);
+            board.addPlayerToTeam(event.getEntity().getUniqueID().toString(), purple.getName());
+        }else if(event.getEntity() instanceof EntityEnderCrystal){
+            event.getEntity().setGlowing(false);
+        }
+
     }
 
     @SubscribeEvent
