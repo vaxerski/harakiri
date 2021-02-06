@@ -3,12 +3,14 @@ package me.vaxry.harakiri;
 import me.vaxry.harakiri.framework.event.client.EventLoad;
 import me.vaxry.harakiri.framework.event.client.EventReload;
 import me.vaxry.harakiri.framework.event.client.EventUnload;
+import me.vaxry.harakiri.framework.extd.FontRendererExtd;
 import me.vaxry.harakiri.framework.logging.harakiriFormatter;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.effect.PlexusEffect;
 import me.vaxry.harakiri.impl.management.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.Loader;
@@ -79,6 +81,8 @@ public final class Harakiri {
 
     private DiscordManager discordManager;
 
+    private FontRendererExtd fontRendererExtd;
+
     /**
      * The initialization point of the client
      * this is called post launch
@@ -115,6 +119,9 @@ public final class Harakiri {
             //Display.setTitle("Vaxppuku 1.12.2");
 
             this.getEventManager().dispatchEvent(new EventLoad());
+
+            // Create the font renderer
+            fontRendererExtd = new FontRendererExtd(Minecraft.getMinecraft().gameSettings, new ResourceLocation("harakirimod", "textures/ascii.png"), Minecraft.getMinecraft().renderEngine, true);
 
             // Add runtime hook to listen for shutdown to save configs
             Runtime.getRuntime().addShutdownHook(new Thread("Harakiri Shutdown Hook") {
@@ -366,6 +373,13 @@ public final class Harakiri {
             this.discordManager = new DiscordManager();
         }
         return this.discordManager;
+    }
+
+    public FontRendererExtd getFontRendererExtd(){
+        if(this.fontRendererExtd == null){
+            this.fontRendererExtd = new FontRendererExtd(Minecraft.getMinecraft().gameSettings, new ResourceLocation("harakirimod", "textures/ascii.png"), Minecraft.getMinecraft().renderEngine, true);
+        }
+        return this.fontRendererExtd;
     }
 
     public PlexusEffect getPlexusEffect() {

@@ -81,6 +81,7 @@ public final class ModuleManager {
         add(new InteractModule());
         add(new TracersModule());
         add(new ChamsModule());
+        //add(new CustomFontModule()); //Didnt work well
         add(new FastPlaceModule());
         add(new SpeedMineModule());
         add(new AutoToolModule());
