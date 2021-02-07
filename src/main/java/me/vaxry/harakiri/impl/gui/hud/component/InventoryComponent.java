@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
@@ -25,7 +26,7 @@ public final class InventoryComponent extends DraggableHudComponent {
 
         if (mc.player == null) {
             if (mc.currentScreen instanceof GuiHudEditor) {
-                mc.fontRenderer.drawStringWithShadow("(inventory)", this.getX(), this.getY(), 0xFFAAAAAA);
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(inventory)", this.getX(), this.getY(), 0xFFAAAAAA);
             }
             return;
         }

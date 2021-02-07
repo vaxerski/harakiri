@@ -7,24 +7,21 @@ import net.minecraft.client.gui.FontRenderer;
 
 public class CustomFontModule extends Module {
 
-    private FontRenderer defaultRenderer;
-
     public CustomFontModule() {
         super("CustomFont", new String[]{"CustomFont"}, "Enables a custom TTF Font.", "NONE", -1, Module.ModuleType.RENDER);
-        defaultRenderer = Minecraft.getMinecraft().fontRenderer;
+        //this.setEnabled(true);
+        Harakiri.INSTANCE.getTTFFontUtil().isTTF = this.isEnabled();
     }
 
     @Override
     public void onEnable() {
         super.onEnable();
-
-        Minecraft.getMinecraft().fontRenderer = Harakiri.INSTANCE.getFontRendererExtd();
+        Harakiri.INSTANCE.getTTFFontUtil().isTTF = true;
     }
 
     @Override
     public void onDisable() {
         super.onDisable();
-
-        Minecraft.getMinecraft().fontRenderer = defaultRenderer;
+        Harakiri.INSTANCE.getTTFFontUtil().isTTF = false;
     }
 }

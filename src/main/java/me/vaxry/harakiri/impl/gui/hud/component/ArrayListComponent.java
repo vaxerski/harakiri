@@ -86,7 +86,7 @@ public final class ArrayListComponent extends DraggableHudComponent {
                         firstName = firstName.toLowerCase();
                         secondName = secondName.toLowerCase();
                     }
-                    final float dif = mc.fontRenderer.getStringWidth(secondName) - mc.fontRenderer.getStringWidth(firstName);
+                    final float dif = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(secondName) - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(firstName);
                     return dif != 0 ? (int) dif : secondName.compareTo(firstName);
                 };
                 mods.sort(lengthComparator);
@@ -112,15 +112,15 @@ public final class ArrayListComponent extends DraggableHudComponent {
                 curHue -= 10000;
 
             for (Module mod : mods) {
-                if (mod != null && mod.getType() != Module.ModuleType.HIDDEN && (mod.isEnabled() || mc.fontRenderer.getStringWidth(mod.getDisplayName()) > mod.activexOffset) && !mod.isHidden()) {
+                if (mod != null && mod.getType() != Module.ModuleType.HIDDEN && (mod.isEnabled() || Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(mod.getDisplayName()) > mod.activexOffset) && !mod.isHidden()) {
                     String name = mod.getDisplayName() + (SHOW_METADATA ? (mod.getMetaData() != null ? " " + ChatFormatting.GRAY + "[" + ChatFormatting.WHITE + mod.getMetaData().charAt(0) + mod.getMetaData().substring(1, mod.getMetaData().length()).toLowerCase() + ChatFormatting.GRAY + "]" : "") : "");
                     if(mod instanceof VelocityModule)
-                        name = mod.getDisplayName() + (SHOW_METADATA ? (mod.getMetaData() != null ? " " + ChatFormatting.GRAY + "[" + ChatFormatting.WHITE + mod.getMetaData().toUpperCase() + ChatFormatting.GRAY + "]" : "") : "");
+                        name = mod.getDisplayName() + (SHOW_METADATA ? (mod.getMetaData() != null ? " " + ChatFormatting.GRAY + "[" + ChatFormatting.WHITE + mod.getMetaData() + ChatFormatting.GRAY + "]" : "") : "");
 
                     if (LOWERCASE)
                         name = name.toLowerCase();
 
-                    final float width = mc.fontRenderer.getStringWidth(name);
+                    final float width = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(name);
 
                     int color;
                     if (RAINBOW && mc.player != null) {
@@ -134,8 +134,8 @@ public final class ArrayListComponent extends DraggableHudComponent {
                         maxWidth = width;
                     }
 
-                    if(mod.activexOffset > 0 || (!mod.isEnabled() && mc.fontRenderer.getStringWidth(mod.getDisplayName()) > mod.activexOffset)) {
-                        if((!mod.isEnabled() && mc.fontRenderer.getStringWidth(mod.getDisplayName()) > mod.activexOffset)) {
+                    if(mod.activexOffset > 0 || (!mod.isEnabled() && Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(mod.getDisplayName()) > mod.activexOffset)) {
+                        if((!mod.isEnabled() && Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(mod.getDisplayName()) > mod.activexOffset)) {
                             mod.activexOffset += 1.3f;
                         }else if(mod.isEnabled()) {
                             mod.activexOffset -= 1.3f;
@@ -149,7 +149,7 @@ public final class ArrayListComponent extends DraggableHudComponent {
                             switch (this.getAnchorPoint().getPoint()) {
                                 case TOP_CENTER:
                                 case BOTTOM_CENTER:
-                                    xOffset = (this.getW() - mc.fontRenderer.getStringWidth(name)) / 2;
+                                    xOffset = (this.getW() - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(name)) / 2;
                                     break;
                                 case TOP_LEFT:
                                 case BOTTOM_LEFT:
@@ -157,7 +157,7 @@ public final class ArrayListComponent extends DraggableHudComponent {
                                     break;
                                 case TOP_RIGHT:
                                 case BOTTOM_RIGHT:
-                                    xOffset = this.getW() - mc.fontRenderer.getStringWidth(name);
+                                    xOffset = this.getW() - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(name);
                                     break;
                             }
 
@@ -165,24 +165,24 @@ public final class ArrayListComponent extends DraggableHudComponent {
                                 case TOP_CENTER:
                                 case TOP_LEFT:
                                 case TOP_RIGHT:
-                                    mc.fontRenderer.drawStringWithShadow(name, this.getX() + xOffset + mod.activexOffset, this.getY() + yOffset, color);
+                                    Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(name, this.getX() + xOffset + mod.activexOffset, this.getY() + yOffset, color);
                                     if(mod.activexOffset != 0){
-                                        final float perc = mod.activexOffset / mc.fontRenderer.getStringWidth(mod.getDisplayName());
-                                        yOffset += (mc.fontRenderer.FONT_HEIGHT + 1) * (1 - perc);
+                                        final float perc = mod.activexOffset / Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(mod.getDisplayName());
+                                        yOffset += (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1) * (1 - perc);
                                     }else
-                                        yOffset += (mc.fontRenderer.FONT_HEIGHT + 1);
+                                        yOffset += (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1);
                                     break;
                                 case BOTTOM_CENTER:
                                 case BOTTOM_LEFT:
                                 case BOTTOM_RIGHT:
-                                    mc.fontRenderer.drawStringWithShadow(name, this.getX() + xOffset + mod.activexOffset, this.getY() + (this.getH() - mc.fontRenderer.FONT_HEIGHT) + yOffset, color);
-                                    yOffset -= (mc.fontRenderer.FONT_HEIGHT + 1);
+                                    Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(name, this.getX() + xOffset + mod.activexOffset, this.getY() + (this.getH() - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT) + yOffset, color);
+                                    yOffset -= (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1);
                                     break;
                             }
                         }
                     } else {
-                        mc.fontRenderer.drawStringWithShadow(name, this.getX() + xOffset + mod.activexOffset, this.getY() + yOffset, color);
-                        yOffset += (mc.fontRenderer.FONT_HEIGHT + 1);
+                        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(name, this.getX() + xOffset + mod.activexOffset, this.getY() + yOffset, color);
+                        yOffset += (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1);
                     }
 
                     hueDifference = (int) (hueDifference + RAINBOW_HUE_DIFFERENCE);
@@ -193,9 +193,9 @@ public final class ArrayListComponent extends DraggableHudComponent {
         if (isInHudEditor) {
             if (maxWidth == 0) { // no mods
                 final String arraylist = "(enabled mods)";
-                mc.fontRenderer.drawStringWithShadow(arraylist, this.getX(), this.getY(), 0xFFAAAAAA);
-                maxWidth = mc.fontRenderer.getStringWidth(arraylist) + 1 /* right side gap */;
-                yOffset = mc.fontRenderer.FONT_HEIGHT + 1 /* right side gap */;
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(arraylist, this.getX(), this.getY(), 0xFFAAAAAA);
+                maxWidth = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(arraylist) + 1 /* right side gap */;
+                yOffset = Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1 /* right side gap */;
             }
         }
 

@@ -15,7 +15,7 @@ public final class CoordsComponent extends DraggableHudComponent {
 
     public CoordsComponent() {
         super("Coords");
-        this.setH(Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT);
+        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -47,12 +47,12 @@ public final class CoordsComponent extends DraggableHudComponent {
                     // End
                 }
             }
-            this.setW(Minecraft.getMinecraft().fontRenderer.getStringWidth(coordz));
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(coordz));
 
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(coordz, this.getX(), this.getY(), -1);
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(coordz, this.getX(), this.getY(), -1);
         } else {
-            this.setW(Minecraft.getMinecraft().fontRenderer.getStringWidth("(coordinates)"));
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("(coordinates)", this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("(coordinates)"));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(coordinates)", this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 

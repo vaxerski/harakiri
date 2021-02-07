@@ -45,7 +45,7 @@ public final class WatermarkComponent extends HudComponent {
 
         final ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
 
-        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(WATERMARK, 1, watermarkModule.Xoff.getValue(), 0xFF9C00FF);
+        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(WATERMARK, 1, watermarkModule.Xoff.getValue(), 0xFF9C00FF);
 
         GlStateManager.enableAlpha();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);

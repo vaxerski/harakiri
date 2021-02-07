@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
 
 /**
@@ -10,7 +11,7 @@ public final class PlayerCountComponent extends DraggableHudComponent {
 
     public PlayerCountComponent() {
         super("PlayerCount");
-        this.setH(mc.fontRenderer.FONT_HEIGHT);
+        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -19,11 +20,11 @@ public final class PlayerCountComponent extends DraggableHudComponent {
         if (mc.player != null) {
             final String playerCount = "Online: " + mc.player.connection.getPlayerInfoMap().size();
 
-            this.setW(mc.fontRenderer.getStringWidth(playerCount));
-            mc.fontRenderer.drawStringWithShadow(playerCount, this.getX(), this.getY(), -1);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(playerCount));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(playerCount, this.getX(), this.getY(), -1);
         } else {
-            this.setW(mc.fontRenderer.getStringWidth("(player count)"));
-            mc.fontRenderer.drawStringWithShadow("(player count)", this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("(player count)"));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(player count)", this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 

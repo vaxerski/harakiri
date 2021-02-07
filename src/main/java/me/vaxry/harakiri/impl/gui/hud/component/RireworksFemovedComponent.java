@@ -37,7 +37,7 @@ public class RireworksFemovedComponent extends DraggableHudComponent {
 
     public RireworksFemovedComponent() {
         super("RemovedFireworks");
-        this.setH(mc.fontRenderer.FONT_HEIGHT);
+        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
 
         Harakiri.INSTANCE.getEventManager().addEventListener(this);
     }
@@ -67,14 +67,14 @@ public class RireworksFemovedComponent extends DraggableHudComponent {
         if (mc.player != null && mc.world != null) {
             final String delay = fireworks > 100 ? "\247cFireworks: " + String.valueOf(fireworks) : "\247fFireworks: " + String.valueOf(fireworks);
 
-            this.setW(mc.fontRenderer.getStringWidth(delay));
-            mc.fontRenderer.drawStringWithShadow(delay, this.getX(), this.getY(), -1);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(delay));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(delay, this.getX(), this.getY(), -1);
 
 
 
         } else {
-            this.setW(mc.fontRenderer.getStringWidth("(Fireworks)"));
-            mc.fontRenderer.drawStringWithShadow("(Fireworks)", this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("(Fireworks)"));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(Fireworks)", this.getX(), this.getY(), 0xFFAAAAAA);
 
             fireworks = 0;
             lastRocketTime.reset();
@@ -160,7 +160,7 @@ public class RireworksFemovedComponent extends DraggableHudComponent {
 
         if(fireworks != 0){
             if(seconds < 10)
-                mc.fontRenderer.drawStringWithShadow("Last Firework", bounds[0] + (bounds[2] - bounds[0]) / 2, bounds[1] + (bounds[3] - bounds[1]) - mc.fontRenderer.FONT_HEIGHT - 1, 0xFFFF0000);
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("Last Firework", bounds[0] + (bounds[2] - bounds[0]) / 2, bounds[1] + (bounds[3] - bounds[1]) - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - 1, 0xFFFF0000);
         }
     }
 

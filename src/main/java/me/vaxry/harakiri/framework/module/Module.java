@@ -71,7 +71,7 @@ public class Module {
         this.setEnabled(!this.isEnabled());
         if (this.isEnabled()) {
             this.onEnable();
-            this.activexOffset = Minecraft.getMinecraft().fontRenderer.getStringWidth(this.getDisplayName());
+            this.activexOffset = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(this.getDisplayName());
         } else {
             this.onDisable();
         }

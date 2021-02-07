@@ -258,8 +258,8 @@ public final class CrystalAuraModule extends Module {
                     if (damage != -1) {
                         final String damageText = (Math.floor(damage) == damage ? (int) damage : String.format("%.1f", damage)) + "";
                         //GlStateManager.disableDepth();
-                        GlStateManager.translate(-(mc.fontRenderer.getStringWidth(damageText) / 2.0d), 0, 0);
-                        mc.fontRenderer.drawStringWithShadow(damageText, 0, 0, 0xFFAAAAAA);
+                        GlStateManager.translate(-(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(damageText) / 2.0d), 0, 0);
+                        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(damageText, 0, 0, 0xFFAAAAAA);
                     }
                     GlStateManager.popMatrix();
                 }

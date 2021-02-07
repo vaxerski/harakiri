@@ -60,20 +60,20 @@ public class ColorComponent extends TextComponent {
         } else if (customDisplayValue != null) {
             displayedName = customDisplayValue;
         }
-        Minecraft.getMinecraft().fontRenderer.drawString(displayedName, (int) this.getX() + BORDER + COLOR_SIZE + BORDER, (int) this.getY() + BORDER, this.focused ? 0xFFFFFFFF : 0xFFAAAAAA);
+        Harakiri.INSTANCE.getTTFFontUtil().drawString(displayedName, (int) this.getX() + BORDER + COLOR_SIZE + BORDER, (int) this.getY() + BORDER, this.focused ? 0xFFFFFFFF : 0xFFAAAAAA);
 
         // draw bg rect behind right button
         RenderUtil.drawRect(this.getX() + this.getW() - (this.focused ? 20 : 10), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x45202020);
 
         if (this.focused) {
             if (!this.selectedText.equals("")) {
-                RenderUtil.drawRect(this.getX() + BORDER + COLOR_SIZE + BORDER, this.getY(), this.getX() + BORDER + COLOR_SIZE + BORDER + Minecraft.getMinecraft().fontRenderer.getStringWidth(this.displayValue), this.getY() + this.getH(), 0x45FFFFFF);
+                RenderUtil.drawRect(this.getX() + BORDER + COLOR_SIZE + BORDER, this.getY(), this.getX() + BORDER + COLOR_SIZE + BORDER + Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(this.displayValue), this.getY() + this.getH(), 0x45FFFFFF);
             }
 
-            float blockX = this.getX() + BORDER + Minecraft.getMinecraft().fontRenderer.getStringWidth(this.displayValue) + COLOR_SIZE + BORDER + TEXT_BLOCK_PADDING;
+            float blockX = this.getX() + BORDER + Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(this.displayValue) + COLOR_SIZE + BORDER + TEXT_BLOCK_PADDING;
             float blockY = this.getY() + TEXT_BLOCK_PADDING;
             int blockWidth = 2;
-            int blockHeight = Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT - 2;
+            int blockHeight = Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - 2;
             RenderUtil.drawRect(blockX, blockY, blockX + blockWidth, blockY + blockHeight, 0xFFFFFFFF);
 
             // draw gear

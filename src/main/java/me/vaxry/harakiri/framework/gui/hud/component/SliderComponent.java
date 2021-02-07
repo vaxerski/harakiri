@@ -69,7 +69,7 @@ public final class SliderComponent extends HudComponent {
                 this.sliderBar.render(mouseX, mouseY, partialTicks);
             }
 
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.getName(), (int) this.getX() + 1, (int) this.getY() + 1, 0xFFAAAAAA);
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.getName(), (int) this.getX() + 1, (int) this.getY(), 0xFFAAAAAA);
 
             String displayedValue = this.decimalFormat.format(this.value.getValue());
             if (this.sliding) {
@@ -78,7 +78,7 @@ public final class SliderComponent extends HudComponent {
                     displayedValue = draggedValue;
             }
 
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(displayedValue, (int) (this.getX() + this.getW()) - Minecraft.getMinecraft().fontRenderer.getStringWidth(displayedValue) - 1, (int) this.getY() + 1, 0xFFAAAAAA);
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(displayedValue, (int) (this.getX() + this.getW()) - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(displayedValue) - 1, (int) this.getY(), 0xFFAAAAAA);
         } else {
             this.textComponent.setX(this.getX());
             this.textComponent.setY(this.getY());

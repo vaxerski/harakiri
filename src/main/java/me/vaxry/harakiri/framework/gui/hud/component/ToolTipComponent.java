@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.framework.gui.hud.component;
 
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import net.minecraft.client.Minecraft;
@@ -18,8 +19,8 @@ public class ToolTipComponent extends HudComponent {
         this.text = text;
         this.alpha = 0;
 
-        final int tooltipWidth = Minecraft.getMinecraft().fontRenderer.getStringWidth(text);
-        final int tooltipHeight = Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT;
+        final int tooltipWidth = (int)Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(text);
+        final int tooltipHeight = Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT;
         this.setW(tooltipWidth);
         this.setH(tooltipHeight);
     }
@@ -49,7 +50,7 @@ public class ToolTipComponent extends HudComponent {
             //RenderUtil.drawRect(this.getX() - 1, this.getY() - 1, this.getX() + this.getW() + 1, this.getY() + this.getH() + 1, ColorUtil.changeAlpha(0xAD111111, this.alpha / 4));
             // text
             GlStateManager.enableBlend();
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.text, this.getX() + 1, this.getY() + 1, ColorUtil.changeAlpha(0xFFAAAAB7, this.alpha)); //0xFFFFFFFF
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.text, this.getX() + 1, this.getY() + 1, ColorUtil.changeAlpha(0xFFAAAAB7, this.alpha)); //0xFFFFFFFF
             GlStateManager.disableBlend();
         }
     }

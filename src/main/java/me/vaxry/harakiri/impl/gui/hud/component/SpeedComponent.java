@@ -1,6 +1,7 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
 import me.vaxry.harakiri.framework.util.Timer;
 import net.minecraft.util.math.Vec3d;
@@ -21,7 +22,7 @@ public final class SpeedComponent extends DraggableHudComponent {
 
     public SpeedComponent() {
         super("Speed");
-        this.setH(mc.fontRenderer.FONT_HEIGHT);
+        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
     }
 
     private float getSpeed() {
@@ -58,12 +59,12 @@ public final class SpeedComponent extends DraggableHudComponent {
 
             final String speed = ChatFormatting.GRAY + "Speed: " + ChatFormatting.RESET + df.format(getSpeed()) + ChatFormatting.GRAY + "km/h";
 
-            this.setW(mc.fontRenderer.getStringWidth(speed));
-            mc.fontRenderer.drawStringWithShadow(speed, this.getX(), this.getY(), -1);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(speed));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(speed, this.getX(), this.getY(), -1);
         } else {
             final String speed = ChatFormatting.GRAY + "Speed: " + ChatFormatting.RESET + "0" + ChatFormatting.GRAY + "km/h";
-            this.setW(mc.fontRenderer.getStringWidth(speed));
-            mc.fontRenderer.drawStringWithShadow(speed, this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(speed));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(speed, this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 

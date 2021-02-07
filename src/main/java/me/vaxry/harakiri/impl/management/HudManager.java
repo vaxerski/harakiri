@@ -33,8 +33,6 @@ public final class HudManager {
     private List<HudComponent> componentList = new CopyOnWriteArrayList<>();
     private List<AnchorPoint> anchorPoints = new ArrayList<>();
 
-    private final FirstLaunchComponent firstLaunchComponent;
-
     public HudManager() {
         final ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
 
@@ -117,9 +115,6 @@ public final class HudManager {
         // Organize alphabetically
         this.componentList = this.componentList.stream().sorted((obj1, obj2) -> obj1.getName().compareTo(obj2.getName())).collect(Collectors.toList());
 
-        // Create first launch component
-        this.firstLaunchComponent = new FirstLaunchComponent();
-
         Harakiri.INSTANCE.getEventManager().addEventListener(this);
     }
 
@@ -154,16 +149,6 @@ public final class HudManager {
     @Listener
     public void onRender(EventRender2D event) {
         final Minecraft mc = Minecraft.getMinecraft();
-
-        if (this.firstLaunchComponent != null && mc.world != null) {
-            if (Harakiri.INSTANCE.getConfigManager().isFirstLaunch()) {
-                if (mc.currentScreen instanceof GuiHudEditor) {
-                    firstLaunchComponent.onClose();
-                } else if (firstLaunchComponent.isVisible()) {
-                    firstLaunchComponent.render(0, 0, event.getPartialTicks());
-                }
-            }
-        }
 
         final int chatHeight = (mc.currentScreen instanceof GuiChat) ? 14 : 0;
 

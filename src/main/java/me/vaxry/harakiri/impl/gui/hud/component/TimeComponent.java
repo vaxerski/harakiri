@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
 
 import java.text.SimpleDateFormat;
@@ -12,7 +13,7 @@ public final class TimeComponent extends DraggableHudComponent {
 
     public TimeComponent() {
         super("Time");
-        this.setH(mc.fontRenderer.FONT_HEIGHT);
+        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -21,7 +22,7 @@ public final class TimeComponent extends DraggableHudComponent {
 
         final String time = new SimpleDateFormat("h:mm a").format(new Date());
 
-        this.setW(mc.fontRenderer.getStringWidth(time));
-        mc.fontRenderer.drawStringWithShadow(time, this.getX(), this.getY(), -1);
+        this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(time));
+        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(time, this.getX(), this.getY(), -1);
     }
 }

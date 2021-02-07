@@ -40,16 +40,16 @@ public abstract class MainMenuButton {
         if (this.clicked) {
             RenderUtil.drawRect(this.x, this.y, this.x + this.w, this.y + this.h, 0x66111111);
             RenderUtil.drawGradientRect(this.x + 1, this.y + 1, this.x + this.w - 1, this.y + this.h - 1, 0xAA232323, 0xAA303030);
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.text, this.x + (this.w / 2) - (Minecraft.getMinecraft().fontRenderer.getStringWidth(this.text) / 2.0f), this.y + (this.h / 2) - (Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT / 2.0f), 0xFF9900EE);
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.text, this.x + (this.w / 2) - (Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(this.text) / 2.0f), this.y + (this.h / 2) - (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT / 2.0f), 0xFF9900EE);
         } else {
             if (this.inside(x, y)) {
                 RenderUtil.drawRect(this.x, this.y, this.x + this.w, this.y + this.h, 0x66111111);
                 RenderUtil.drawGradientRect(this.x + 1, this.y + 1, this.x + this.w - 1, this.y + this.h - 1, 0xAA303030, 0xAA232323);
-                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.text, this.x + (this.w / 2) - (Minecraft.getMinecraft().fontRenderer.getStringWidth(this.text) / 2.0f), this.y + (this.h / 2) - (Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT / 2.0f), -1);
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.text, this.x + (this.w / 2) - (Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(this.text) / 2.0f), this.y + (this.h / 2) - (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT / 2.0f), -1);
             } else {
                 RenderUtil.drawRect(this.x, this.y, this.x + this.w, this.y + this.h, 0x66111111);
                 RenderUtil.drawGradientRect(this.x + 1, this.y + 1, this.x + this.w - 1, this.y + this.h - 1, 0xAA303030, 0xAA232323);
-                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.text, this.x + (this.w / 2) - (Minecraft.getMinecraft().fontRenderer.getStringWidth(this.text) / 2.0f), this.y + (this.h / 2) - (Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT / 2.0f), 0xFFAAAAAA);
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.text, this.x + (this.w / 2) - (Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(this.text) / 2.0f), this.y + (this.h / 2) - (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT / 2.0f), 0xFFAAAAAA);
             }
         }
     }

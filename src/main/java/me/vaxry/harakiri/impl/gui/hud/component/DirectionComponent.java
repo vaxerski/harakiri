@@ -1,6 +1,7 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
 import me.vaxry.harakiri.framework.util.Timer;
 import net.minecraft.util.math.MathHelper;
@@ -16,7 +17,7 @@ public final class DirectionComponent extends DraggableHudComponent {
 
     public DirectionComponent() {
         super("Direction");
-        this.setH(mc.fontRenderer.FONT_HEIGHT);
+        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -29,11 +30,11 @@ public final class DirectionComponent extends DraggableHudComponent {
                 this.directionTimer.reset();
             }
 
-            this.setW(mc.fontRenderer.getStringWidth(direction));
-            mc.fontRenderer.drawStringWithShadow(direction, this.getX(), this.getY(), -1);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(direction));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(direction, this.getX(), this.getY(), -1);
         } else {
-            this.setW(mc.fontRenderer.getStringWidth("(direction)"));
-            mc.fontRenderer.drawStringWithShadow("(direction)", this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("(direction)"));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(direction)", this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 

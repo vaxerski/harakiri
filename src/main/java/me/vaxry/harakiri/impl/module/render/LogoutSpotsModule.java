@@ -2,6 +2,7 @@ package me.vaxry.harakiri.impl.module.render;
 
 import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.player.EventPlayerJoin;
 import me.vaxry.harakiri.framework.event.player.EventPlayerLeave;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
@@ -100,8 +101,8 @@ public final class LogoutSpotsModule extends Module {
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(projection.getX(), projection.getY(), 0);
                 String text = data.profile.getName() + " logout";
-                float textWidth = mc.fontRenderer.getStringWidth(text);
-                mc.fontRenderer.drawStringWithShadow(text, -(textWidth / 2), 0, -1);
+                float textWidth = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(text);
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(text, -(textWidth / 2), 0, -1);
                 GlStateManager.translate(-projection.getX(), -projection.getY(), 0);
                 GlStateManager.popMatrix();
             }

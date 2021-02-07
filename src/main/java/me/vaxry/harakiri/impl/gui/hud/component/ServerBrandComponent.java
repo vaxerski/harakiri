@@ -1,6 +1,7 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
 
 /**
@@ -11,7 +12,7 @@ public final class ServerBrandComponent extends DraggableHudComponent {
 
     public ServerBrandComponent() {
         super("ServerBrand");
-        this.setH(mc.fontRenderer.FONT_HEIGHT);
+        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -21,8 +22,8 @@ public final class ServerBrandComponent extends DraggableHudComponent {
 
         final String brand = mc.getCurrentServerData() == null ? ChatFormatting.GRAY + "Vanilla" :ChatFormatting.GRAY + mc.getCurrentServerData().gameVersion;
 
-        this.setW(mc.fontRenderer.getStringWidth(brand));
-        mc.fontRenderer.drawStringWithShadow(brand, this.getX(), this.getY(), -1);
+        this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(brand));
+        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(brand, this.getX(), this.getY(), -1);
 
     }
 

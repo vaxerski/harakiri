@@ -41,7 +41,7 @@ public class ThreatCamComponent extends DraggableHudComponent {
         super.render(mouseX, mouseY, partialTicks);
 
         if(Minecraft.getMinecraft().currentScreen instanceof GuiHudEditor) {
-            mc.fontRenderer.drawStringWithShadow("ThreatCam (alpha)", this.getX() + this.getW() / 2 - mc.fontRenderer.getStringWidth("ThreatCam (alpha)") / 2, this.getY() + this.getH() / 2 - mc.fontRenderer.FONT_HEIGHT / 2, 0x99FFFFFF);
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("ThreatCam (alpha)", this.getX() + this.getW() / 2 - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("ThreatCam (alpha)") / 2, this.getY() + this.getH() / 2 - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT / 2, 0x99FFFFFF);
             return;
         }
 
@@ -69,7 +69,7 @@ public class ThreatCamComponent extends DraggableHudComponent {
 
         RenderUtil.drawRect(this.getX() - 1, this.getY() - 1, this.getX() + this.getW() + 1, this.getY() + this.getH() + 1, 0x99101010);
         RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0xFF202020);
-        mc.fontRenderer.drawStringWithShadow(this.getName(), this.getX() + 2, this.getY() + 2, 0xFFFFFFFF);
+        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.getName(), this.getX() + 2, this.getY() + 2, 0xFFFFFFFF);
 
         this.threatCamera.setRendering(true);
 

@@ -41,7 +41,7 @@ public class ThreatComponent extends DraggableHudComponent {
         super.render(mouseX, mouseY, partialTicks);
 
         if(Minecraft.getMinecraft().currentScreen instanceof GuiHudEditor) {
-            mc.fontRenderer.drawStringWithShadow("Threat Display", this.getX() + this.getW() / 2 - mc.fontRenderer.getStringWidth("Threat Display") / 2, this.getY() + this.getH() / 2 - mc.fontRenderer.FONT_HEIGHT / 2, 0x99FFFFFF);
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("Threat Display", this.getX() + this.getW() / 2 - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("Threat Display") / 2, this.getY() + this.getH() / 2 - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT / 2, 0x99FFFFFF);
             return;
         }
 
@@ -63,7 +63,7 @@ public class ThreatComponent extends DraggableHudComponent {
             // Render the text in the BG with 4x Scale
             GlStateManager.pushMatrix();
             GlStateManager.scale(4,4,4);
-            mc.fontRenderer.drawString("Threat",(this.getX() + BoxX/2.0f)/4 + 1 - mc.fontRenderer.getStringWidth("Threat")/2, (this.getY() + BoxY/2.0f)/4 - mc.fontRenderer.FONT_HEIGHT/2.0f + 1, 0x44000000, false);
+            Harakiri.INSTANCE.getTTFFontUtil().drawString("Threat",(this.getX() + BoxX/2.0f)/4 + 1 - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("Threat")/2, (this.getY() + BoxY/2.0f)/4 - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT/2.0f + 1, 0x44000000);
             GlStateManager.scale(1,1,1);
             GlStateManager.popMatrix();
 
@@ -94,9 +94,9 @@ public class ThreatComponent extends DraggableHudComponent {
 
             // Render Name
             if(Harakiri.INSTANCE.getFriendManager().isFriend(threat) != null)
-                mc.fontRenderer.drawStringWithShadow(threat.getName(),this.getX() + this.ModelX + this.BorderPadding + this.InfoX/2 - 0.5f * mc.fontRenderer.getStringWidth(threat.getName()), this.getY() + this.BorderPadding + mc.fontRenderer.FONT_HEIGHT + 1, 0xFF00E6E6);
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(threat.getName(),this.getX() + this.ModelX + this.BorderPadding + this.InfoX/2 - 0.5f * Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(threat.getName()), this.getY() + this.BorderPadding + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1, 0xFF00E6E6);
             else
-                mc.fontRenderer.drawStringWithShadow(threat.getName(),this.getX() + this.ModelX + this.BorderPadding + this.InfoX/2 - 0.5f * mc.fontRenderer.getStringWidth(threat.getName()), this.getY() + this.BorderPadding + mc.fontRenderer.FONT_HEIGHT + 1, isDangerous(threat) ? 0xFFFF0000 : 0xFF11FF11);
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(threat.getName(),this.getX() + this.ModelX + this.BorderPadding + this.InfoX/2 - 0.5f * Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(threat.getName()), this.getY() + this.BorderPadding + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1, isDangerous(threat) ? 0xFFFF0000 : 0xFF11FF11);
 
             // Render Info
             String info = "";
@@ -120,7 +120,7 @@ public class ThreatComponent extends DraggableHudComponent {
 
             info += "\247f" + distance;
 
-            mc.fontRenderer.drawStringWithShadow(info,this.getX() + this.ModelX + this.BorderPadding + this.InfoX/2 - mc.fontRenderer.getStringWidth(info)/2.0f, this.getY() + this.BorderPadding + 2*mc.fontRenderer.FONT_HEIGHT + 2, 0xFFFFFFFF);
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(info,this.getX() + this.ModelX + this.BorderPadding + this.InfoX/2 - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(info)/2.0f, this.getY() + this.BorderPadding + 2*Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 2, 0xFFFFFFFF);
 
             // Render Health
 
@@ -138,18 +138,18 @@ public class ThreatComponent extends DraggableHudComponent {
                 colorForRect = 0xFFFF0000;
 
             // Rect
-            RenderUtil.drawRect(this.getX() + this.ModelX + this.BorderPadding * 2, this.getY() + this.BorderPadding + 4*mc.fontRenderer.FONT_HEIGHT + 4, (int)(this.getX() + this.ModelX + this.BorderPadding + healthPerc * this.InfoX), this.getY() + this.BorderPadding + 4*mc.fontRenderer.FONT_HEIGHT + 4 + mc.fontRenderer.FONT_HEIGHT + 1, colorForRect);
+            RenderUtil.drawRect(this.getX() + this.ModelX + this.BorderPadding * 2, this.getY() + this.BorderPadding + 4*Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 4, (int)(this.getX() + this.ModelX + this.BorderPadding + healthPerc * this.InfoX), this.getY() + this.BorderPadding + 4*Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 4 + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1, colorForRect);
             // Text
             if(!isIllegal){
                 if(!isAbsorption)
-                    mc.fontRenderer.drawStringWithShadow(String.valueOf(health), this.getX() + this.ModelX + this.BorderPadding + this.InfoX/2 - 0.5f*mc.fontRenderer.getStringWidth(String.valueOf(health)), this.getY() + this.BorderPadding + 4*mc.fontRenderer.FONT_HEIGHT + 4, 0xFFFFFFFF);
+                    Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(String.valueOf(health), this.getX() + this.ModelX + this.BorderPadding + this.InfoX/2 - 0.5f*Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(String.valueOf(health)), this.getY() + this.BorderPadding + 4*Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 4, 0xFFFFFFFF);
                 else
-                    mc.fontRenderer.drawStringWithShadow(String.valueOf((int)(health + threat.getAbsorptionAmount())), this.getX() + this.ModelX + this.BorderPadding + this.InfoX/2 - 0.5f*mc.fontRenderer.getStringWidth(String.valueOf(health)), this.getY() + this.BorderPadding + 4*mc.fontRenderer.FONT_HEIGHT + 4, 0xFFFFFFFF);
+                    Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(String.valueOf((int)(health + threat.getAbsorptionAmount())), this.getX() + this.ModelX + this.BorderPadding + this.InfoX/2 - 0.5f*Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(String.valueOf(health)), this.getY() + this.BorderPadding + 4*Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 4, 0xFFFFFFFF);
             } else {
-                mc.fontRenderer.drawStringWithShadow("ILLEGAL (" + String.valueOf(health) + ")", this.getX() + this.ModelX + this.BorderPadding + this.InfoX/2 - 0.5f*mc.fontRenderer.getStringWidth("ILLEGAL (" + String.valueOf(health) + ")"), this.getY() + this.BorderPadding + 4*mc.fontRenderer.FONT_HEIGHT + 4, 0xFFFF0000);
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("ILLEGAL (" + String.valueOf(health) + ")", this.getX() + this.ModelX + this.BorderPadding + this.InfoX/2 - 0.5f*Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("ILLEGAL (" + String.valueOf(health) + ")"), this.getY() + this.BorderPadding + 4*Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 4, 0xFFFF0000);
             }
 
-            mc.fontRenderer.drawStringWithShadow("Health", this.getX() + this.ModelX + this.BorderPadding + this.InfoX/2 - 0.5f*mc.fontRenderer.getStringWidth("Health"), this.getY() + this.BorderPadding + 3.2f*mc.fontRenderer.FONT_HEIGHT + 3.2f, 0xFFFFFFFF);
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("Health", this.getX() + this.ModelX + this.BorderPadding + this.InfoX/2 - 0.5f*Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("Health"), this.getY() + this.BorderPadding + 3.2f*Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 3.2f, 0xFFFFFFFF);
 
 
             // Render Additional
@@ -190,7 +190,7 @@ public class ThreatComponent extends DraggableHudComponent {
                 moreInfo = moreInfo.substring(0, moreInfo.length()-3);
             }
 
-            mc.fontRenderer.drawStringWithShadow(moreInfo, this.getX() + this.ModelX + this.BorderPadding + this.InfoX - mc.fontRenderer.getStringWidth(moreInfo), this.getY() + this.BorderPadding + 6.0f*mc.fontRenderer.FONT_HEIGHT + 6.0f, 0xFFFFFFFF);
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(moreInfo, this.getX() + this.ModelX + this.BorderPadding + this.InfoX - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(moreInfo), this.getY() + this.BorderPadding + 6.0f*Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 6.0f, 0xFFFFFFFF);
 
             // Illegal Health red border
             if(isIllegal) {

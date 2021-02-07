@@ -1,6 +1,7 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
 import me.vaxry.harakiri.framework.util.PotionUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
@@ -36,7 +37,7 @@ public final class PotionEffectsComponent extends DraggableHudComponent {
             final Comparator<PotionEffect> comparator = (first, second) -> {
                 final String firstEffect = PotionUtil.getFriendlyPotionName(first) + " " + ChatFormatting.GRAY + Potion.getPotionDurationString(first, 1.0F);
                 final String secondEffect = PotionUtil.getFriendlyPotionName(second) + " " + ChatFormatting.GRAY + Potion.getPotionDurationString(second, 1.0F);
-                final float dif = mc.fontRenderer.getStringWidth(secondEffect) - mc.fontRenderer.getStringWidth(firstEffect);
+                final float dif = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(secondEffect) - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(firstEffect);
                 return dif != 0 ? (int) dif : secondEffect.compareTo(firstEffect);
             };
 
@@ -46,7 +47,7 @@ public final class PotionEffectsComponent extends DraggableHudComponent {
                 if (potionEffect != null) {
                     final String effect = PotionUtil.getFriendlyPotionName(potionEffect) + " " + ChatFormatting.GRAY + Potion.getPotionDurationString(potionEffect, 1.0F);
 
-                    final float width = mc.fontRenderer.getStringWidth(effect);
+                    final float width = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(effect);
 
                     if (width >= maxWidth) {
                         maxWidth = width;
@@ -56,7 +57,7 @@ public final class PotionEffectsComponent extends DraggableHudComponent {
                         switch (this.getAnchorPoint().getPoint()) {
                             case TOP_CENTER:
                             case BOTTOM_CENTER:
-                                xOffset = (this.getW() - mc.fontRenderer.getStringWidth(effect)) / 2;
+                                xOffset = (this.getW() - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(effect)) / 2;
                                 break;
                             case TOP_LEFT:
                             case BOTTOM_LEFT:
@@ -64,7 +65,7 @@ public final class PotionEffectsComponent extends DraggableHudComponent {
                                 break;
                             case TOP_RIGHT:
                             case BOTTOM_RIGHT:
-                                xOffset = this.getW() - mc.fontRenderer.getStringWidth(effect);
+                                xOffset = this.getW() - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(effect);
                                 break;
                         }
                     }
@@ -74,19 +75,19 @@ public final class PotionEffectsComponent extends DraggableHudComponent {
                             case TOP_CENTER:
                             case TOP_LEFT:
                             case TOP_RIGHT:
-                                mc.fontRenderer.drawStringWithShadow(effect, this.getX() + xOffset, this.getY() + yOffset, potionEffect.getPotion().getLiquidColor());
-                                yOffset += (mc.fontRenderer.FONT_HEIGHT + 1);
+                                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(effect, this.getX() + xOffset, this.getY() + yOffset, potionEffect.getPotion().getLiquidColor());
+                                yOffset += (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1);
                                 break;
                             case BOTTOM_CENTER:
                             case BOTTOM_LEFT:
                             case BOTTOM_RIGHT:
-                                mc.fontRenderer.drawStringWithShadow(effect, this.getX() + xOffset, this.getY() + (this.getH() - mc.fontRenderer.FONT_HEIGHT) + yOffset, potionEffect.getPotion().getLiquidColor());
-                                yOffset -= (mc.fontRenderer.FONT_HEIGHT + 1);
+                                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(effect, this.getX() + xOffset, this.getY() + (this.getH() - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT) + yOffset, potionEffect.getPotion().getLiquidColor());
+                                yOffset -= (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1);
                                 break;
                         }
                     } else {
-                        mc.fontRenderer.drawStringWithShadow(effect, this.getX() + xOffset, this.getY() + yOffset, potionEffect.getPotion().getLiquidColor());
-                        yOffset += (mc.fontRenderer.FONT_HEIGHT + 1);
+                        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(effect, this.getX() + xOffset, this.getY() + yOffset, potionEffect.getPotion().getLiquidColor());
+                        yOffset += (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1);
                     }
                 }
             }
@@ -95,13 +96,13 @@ public final class PotionEffectsComponent extends DraggableHudComponent {
         if (effects.size() <= 0) {
             if (mc.currentScreen instanceof GuiHudEditor) {
                 final String placeholder = "(my potion effects)";
-                maxWidth = mc.fontRenderer.getStringWidth(placeholder);
-                yOffset = mc.fontRenderer.FONT_HEIGHT;
-                mc.fontRenderer.drawStringWithShadow(placeholder, this.getX(), this.getY(), 0xFFAAAAAA);
+                maxWidth = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(placeholder);
+                yOffset = Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT;
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(placeholder, this.getX(), this.getY(), 0xFFAAAAAA);
             } else {
                 maxWidth = 0;
                 yOffset = 0;
-                this.setEmptyH(mc.fontRenderer.FONT_HEIGHT);
+                this.setEmptyH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
             }
         }
 

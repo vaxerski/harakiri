@@ -11,7 +11,7 @@ public final class TpsComponent extends DraggableHudComponent {
 
     public TpsComponent() {
         super("Tps");
-        this.setH(mc.fontRenderer.FONT_HEIGHT);
+        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -20,11 +20,11 @@ public final class TpsComponent extends DraggableHudComponent {
 
         if (mc.world != null) {
             final String tps = String.format("\2477TPS:\247f %.2f", Harakiri.INSTANCE.getTickRateManager().getTickRate());
-            this.setW(mc.fontRenderer.getStringWidth(tps));
-            mc.fontRenderer.drawStringWithShadow(tps, this.getX(), this.getY(), -1);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(tps));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(tps, this.getX(), this.getY(), -1);
         } else {
-            this.setW(mc.fontRenderer.getStringWidth("(tps)"));
-            mc.fontRenderer.drawStringWithShadow("(tps)", this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("(tps)"));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(tps)", this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 

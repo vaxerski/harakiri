@@ -31,7 +31,7 @@ public final class ColorsComponent extends ResizableHudComponent {
     private final int SCROLL_WIDTH = 5;
     private final int BORDER = 2;
     private final int TEXT_GAP = 1;
-    private final int TITLE_BAR_HEIGHT = mc.fontRenderer.FONT_HEIGHT + 1;
+    private final int TITLE_BAR_HEIGHT = Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1;
 
     private ColorComponent currentColorComponent = null;
 
@@ -80,8 +80,8 @@ public final class ColorsComponent extends ResizableHudComponent {
         // Background & title
         RenderUtil.drawRect(this.getX() - 1, this.getY() - 1, this.getX() + this.getW() + 1, this.getY() + this.getH() + 1, 0x99101010);
         RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0xFF202020);
-        mc.fontRenderer.drawStringWithShadow(this.getName(), this.getX() + BORDER, this.getY() + BORDER, 0xFFFFFFFF);
-        offsetY += mc.fontRenderer.FONT_HEIGHT + 1;
+        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.getName(), this.getX() + BORDER, this.getY() + BORDER, 0xFFFFFFFF);
+        offsetY += Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1;
 
         // Behind hub
         RenderUtil.drawRect(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getX() + this.getW() - SCROLL_WIDTH - BORDER, this.getY() + this.getH() - BORDER, 0xFF101010);
@@ -113,17 +113,17 @@ public final class ColorsComponent extends ResizableHudComponent {
                     if (value.getValue().getClass() != Color.class)
                         continue;
 
-                    RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, 0x45303030);
-                    final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + 1 + offsetY - this.scroll - mc.fontRenderer.FONT_HEIGHT + 1) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT) + 1 + offsetY - this.scroll);
+                    RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - this.scroll, 0x45303030);
+                    final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1 + offsetY - this.scroll - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1) && mouseY <= (this.getY() + BORDER + (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT) + 1 + offsetY - this.scroll);
                     if (insideComponent) {
-                        RenderUtil.drawGradientRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, 0x30909090, 0x00101010);
+                        RenderUtil.drawGradientRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - this.scroll, 0x30909090, 0x00101010);
                     }
 
                     // draw button text
                     final int valueColor = ((Color) value.getValue()).getRGB();
-                    mc.fontRenderer.drawStringWithShadow(ChatFormatting.GRAY + component.getName() + ": " + ChatFormatting.RESET + value.getName(), this.getX() + BORDER + TEXT_GAP + 1, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, valueColor);
+                    Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(ChatFormatting.GRAY + component.getName() + ": " + ChatFormatting.RESET + value.getName(), this.getX() + BORDER + TEXT_GAP + 1, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, valueColor);
 
-                    offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
+                    offsetY += Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
                 }
             }
         }
@@ -133,24 +133,24 @@ public final class ColorsComponent extends ResizableHudComponent {
                     if (value.getValue().getClass() != Color.class)
                         continue;
 
-                    RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, 0x45303030);
-                    final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + 1 + offsetY - this.scroll - mc.fontRenderer.FONT_HEIGHT + 1) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT) + 1 + offsetY - this.scroll);
+                    RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - this.scroll, 0x45303030);
+                    final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1 + offsetY - this.scroll - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1) && mouseY <= (this.getY() + BORDER + (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT) + 1 + offsetY - this.scroll);
                     if (insideComponent) {
-                        RenderUtil.drawGradientRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, 0x30909090, 0x00101010);
+                        RenderUtil.drawGradientRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - this.scroll, 0x30909090, 0x00101010);
                     }
 
                     // draw button text
                     final int valueColor = ((Color) value.getValue()).getRGB();
-                    mc.fontRenderer.drawStringWithShadow(ChatFormatting.GRAY + module.getDisplayName() + ": " + ChatFormatting.RESET + value.getName(), this.getX() + BORDER + TEXT_GAP + 1, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, valueColor);
+                    Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(ChatFormatting.GRAY + module.getDisplayName() + ": " + ChatFormatting.RESET + value.getName(), this.getX() + BORDER + TEXT_GAP + 1, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, valueColor);
 
-                    offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
+                    offsetY += Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
                 }
             }
         }
 
         if (this.currentColorComponent != null) {
             // draw overlay
-            RenderUtil.drawRect(this.getX() + BORDER, this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + 1, this.getX() + this.getW() - BORDER, this.getY() + this.getH() - BORDER, 0xCC101010);
+            RenderUtil.drawRect(this.getX() + BORDER, this.getY() + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1, this.getX() + this.getW() - BORDER, this.getY() + this.getH() - BORDER, 0xCC101010);
 
             // draw color
             RenderUtil.drawRect(this.getX() + (this.getW() / 2) - 10, this.getY() + (this.getH() / 4) - 10, this.getX() + (this.getW() / 2) + 10, this.getY() + (this.getH() / 4) + 10, this.currentColorComponent.getCurrentColor().getRGB());
@@ -159,12 +159,12 @@ public final class ColorsComponent extends ResizableHudComponent {
             if (this.getW() > 180) {
                 final String hexColor = "#" + Integer.toHexString(this.currentColorComponent.getCurrentColor().getRGB()).toLowerCase().substring(2);
                 final String rgbColor = String.format("r%s g%s b%s", this.currentColorComponent.getCurrentColor().getRed(), this.currentColorComponent.getCurrentColor().getGreen(), this.currentColorComponent.getCurrentColor().getBlue());
-                mc.fontRenderer.drawStringWithShadow(hexColor, this.getX() + (this.getW() / 2) + 12, this.getY() + (this.getH() / 4) - 16 + mc.fontRenderer.FONT_HEIGHT, 0xFFAAAAAA);
-                mc.fontRenderer.drawStringWithShadow(rgbColor, this.getX() + (this.getW() / 2) + 12, this.getY() + (this.getH() / 4) - 16 + (mc.fontRenderer.FONT_HEIGHT * 2), 0xFFAAAAAA);
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(hexColor, this.getX() + (this.getW() / 2) + 12, this.getY() + (this.getH() / 4) - 16 + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT, 0xFFAAAAAA);
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(rgbColor, this.getX() + (this.getW() / 2) + 12, this.getY() + (this.getH() / 4) - 16 + (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT * 2), 0xFFAAAAAA);
             }
 
             // draw name
-            mc.fontRenderer.drawStringWithShadow(this.currentColorComponent.getName(), this.getX() + (this.getW() / 2) - mc.fontRenderer.getStringWidth(this.currentColorComponent.getName()) / 2.0f, this.getY() + (this.getH() / 4) + 14, 0xFFFFFFFF);
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.currentColorComponent.getName(), this.getX() + (this.getW() / 2) - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(this.currentColorComponent.getName()) / 2.0f, this.getY() + (this.getH() / 4) + 14, 0xFFFFFFFF);
         }
 
         // end scissoring
@@ -210,7 +210,7 @@ public final class ColorsComponent extends ResizableHudComponent {
                         if (value.getValue().getClass() != Color.class)
                             continue;
 
-                        final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + 1 + offsetY - this.scroll) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT * 2) + 1 + offsetY - this.scroll);
+                        final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1 + offsetY - this.scroll) && mouseY <= (this.getY() + BORDER + (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT * 2) + 1 + offsetY - this.scroll);
                         if (insideComponent && this.currentColorComponent == null) {
                             ColorComponent colorComponent = new ColorComponent(component.getName() + " " + value.getName(), ((Color) value.getValue()).getRGB(), ChatFormatting.WHITE + "Click to edit");
                             colorComponent.returnListener = new ComponentListener() {
@@ -223,7 +223,7 @@ public final class ColorsComponent extends ResizableHudComponent {
                             this.currentColorComponent = colorComponent;
                         }
 
-                        offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
+                        offsetY += Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
                     }
                 }
             }
@@ -234,7 +234,7 @@ public final class ColorsComponent extends ResizableHudComponent {
                         if (value.getValue().getClass() != Color.class)
                             continue;
 
-                        final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + 1 + offsetY - this.scroll) && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT * 2) + 1 + offsetY - this.scroll);
+                        final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1 + offsetY - this.scroll) && mouseY <= (this.getY() + BORDER + (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT * 2) + 1 + offsetY - this.scroll);
                         if (insideComponent && this.currentColorComponent == null) {
                             ColorComponent colorComponent = new ColorComponent(module.getDisplayName() + " " + value.getName(), ((Color) value.getValue()).getRGB(), ChatFormatting.WHITE + "Click to edit");
                             colorComponent.returnListener = new ComponentListener() {
@@ -247,7 +247,7 @@ public final class ColorsComponent extends ResizableHudComponent {
                             this.currentColorComponent = colorComponent;
                         }
 
-                        offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
+                        offsetY += Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
                     }
                 }
             }

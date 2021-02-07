@@ -5,10 +5,12 @@ import me.vaxry.harakiri.framework.event.client.EventReload;
 import me.vaxry.harakiri.framework.event.client.EventUnload;
 import me.vaxry.harakiri.framework.extd.FontRendererExtd;
 import me.vaxry.harakiri.framework.logging.harakiriFormatter;
+import me.vaxry.harakiri.framework.util.TTFFontUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.effect.PlexusEffect;
 import me.vaxry.harakiri.impl.management.*;
+import me.vaxry.harakiri.impl.module.render.CustomFontModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -31,6 +33,7 @@ import java.util.logging.Logger;
  */
 public final class Harakiri {
 
+    private boolean isTTF = true;
     public static final Harakiri INSTANCE = new Harakiri();
 
     private Logger logger;
@@ -83,12 +86,16 @@ public final class Harakiri {
 
     private FontRendererExtd fontRendererExtd;
 
+    private TTFFontUtil fontUtil;
+
     /**
      * The initialization point of the client
      * this is called post launch
      */
     public void init() {
         try {
+            this.fontUtil = new TTFFontUtil("gravity", 18);
+
             this.eventManager = new AnnotatedEventManager();
             this.apiManager = new APIManager();
             this.configManager = new ConfigManager();
@@ -380,6 +387,20 @@ public final class Harakiri {
             this.fontRendererExtd = new FontRendererExtd(Minecraft.getMinecraft().gameSettings, new ResourceLocation("harakirimod", "textures/ascii.png"), Minecraft.getMinecraft().renderEngine, true);
         }
         return this.fontRendererExtd;
+    }
+
+    public TTFFontUtil getTTFFontUtil(){
+        if(this.fontUtil == null){
+            this.fontUtil = new TTFFontUtil("gravity", 20);
+        }
+        return this.fontUtil;
+    }
+
+    public boolean isTTF(){
+        CustomFontModule customFontModule = (CustomFontModule)Harakiri.INSTANCE.getModuleManager().find(CustomFontModule.class);
+        if(customFontModule == null)
+            return false;
+        return customFontModule.isEnabled();
     }
 
     public PlexusEffect getPlexusEffect() {

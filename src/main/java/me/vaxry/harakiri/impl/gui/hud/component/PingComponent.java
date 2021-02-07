@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
 import net.minecraft.client.network.NetworkPlayerInfo;
 
@@ -13,7 +14,7 @@ public final class PingComponent extends DraggableHudComponent {
 
     public PingComponent() {
         super("Ping");
-        this.setH(mc.fontRenderer.FONT_HEIGHT);
+        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -21,8 +22,8 @@ public final class PingComponent extends DraggableHudComponent {
         super.render(mouseX, mouseY, partialTicks);
 
         if (mc.world == null || mc.player == null) {
-            this.setW(mc.fontRenderer.getStringWidth("(ping)"));
-            mc.fontRenderer.drawStringWithShadow("(ping)", this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("(ping)"));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(ping)", this.getX(), this.getY(), 0xFFAAAAAA);
             return;
         }
 
@@ -34,8 +35,8 @@ public final class PingComponent extends DraggableHudComponent {
             final String ms = playerInfo.getResponseTime() != 0 ? playerInfo.getResponseTime() + "ms" : "?";
             final String ping = "Ping: " + ms;
 
-            this.setW(mc.fontRenderer.getStringWidth(ping));
-            mc.fontRenderer.drawStringWithShadow(ping, this.getX(), this.getY(), -1);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(ping));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(ping, this.getX(), this.getY(), -1);
         }
     }
 }

@@ -57,7 +57,7 @@ public final class GuiharakiriMainMenu extends GuiScreen {
         // resize the harakiri hud editor with the size of the main menu
         harakiri.INSTANCE.getHudEditor().onResize(mc, res.getScaledWidth(), res.getScaledHeight());
 
-        float height = (res.getScaledHeight() / 4.0f) + mc.fontRenderer.FONT_HEIGHT / 2.0f + 18;
+        float height = (res.getScaledHeight() / 4.0f) + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT / 2.0f + 18;
 
         this.singlePlayer = new MainMenuButton(res.getScaledWidth() / 2.0f - 70, height, "Singleplayer") {
             @Override
@@ -196,9 +196,9 @@ public final class GuiharakiriMainMenu extends GuiScreen {
 
         /*
         GlStateManager.pushMatrix();
-        GlStateManager.translate(res.getScaledWidth() / 2.0f - (mc.fontRenderer.getStringWidth("harakiri \2477" + harakiriMod.VERSION) / 2.0f * 4), (res.getScaledHeight() / 4.0f) - (mc.fontRenderer.FONT_HEIGHT * 4), 0);
+        GlStateManager.translate(res.getScaledWidth() / 2.0f - (Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("harakiri \2477" + harakiriMod.VERSION) / 2.0f * 4), (res.getScaledHeight() / 4.0f) - (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT * 4), 0);
         GlStateManager.scale(4.0f, 4.0f, 4.0f);
-        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("harakiri \2477" + harakiriMod.VERSION, 0, 0, -1);
+        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("harakiri \2477" + harakiriMod.VERSION, 0, 0, -1);
         //GlStateManager.scale(1.0f, 1.0f, 1.0f);
         GlStateManager.popMatrix();
 
@@ -268,10 +268,10 @@ public final class GuiharakiriMainMenu extends GuiScreen {
         final ScaledResolution res = new ScaledResolution(mc);
 
         final String spash = "Welcome, " + mc.getSession().getUsername();
-        this.drawString(this.fontRenderer, spash, 1, res.getScaledHeight() - mc.fontRenderer.FONT_HEIGHT, -1);
+        this.drawString(this.fontRenderer, spash, 1, res.getScaledHeight() - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT, -1);
 
         final String version = ChatFormatting.GRAY + "Version " + harakiriMod.VERSION + " for " + Minecraft.getMinecraft().getVersion();
-        this.drawString(this.fontRenderer, version, res.getScaledWidth() - mc.fontRenderer.getStringWidth(version) - 1, res.getScaledHeight() - mc.fontRenderer.FONT_HEIGHT, -1);
+        this.drawString(this.fontRenderer, version, res.getScaledWidth() - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(version) - 1, res.getScaledHeight() - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT, -1);
     }
 
     public void unload() {
