@@ -21,9 +21,9 @@ public final class FriendCommand extends Command {
     private String[] clearAlias = new String[]{"Clear", "C"};
 
     public FriendCommand() {
-        super("Friend", new String[]{"F"}, "Allows you to add or remove friends", "Friend Add <Username>\n" +
-                "Friend Add <Username> <Alias>\n" +
-                "Friend Remove <Username>\n" +
+        super("Friend", new String[]{"F"}, "Allows you to add or remove friends.", "Friend Add <username>\n" +
+                "Friend Add <username> <alias>\n" +
+                "Friend Remove <username>\n" +
                 "Friend List\n" +
                 "Friend Clear");
     }

@@ -63,7 +63,7 @@ public final class PatchManager {
 
         //load custom external patches
         //TODO this needs more testing
-        loadExternalPatches();
+        //loadExternalPatches();
     }
 
     /**
@@ -74,7 +74,7 @@ public final class PatchManager {
     void loadExternalPatches() {
         try {
             //create a directory at "harakiri/Patches"
-            final File dir = new File("harakiri/Patches");
+            final File dir = new File("harakiri/patches");
 
             //if it doesnt exist create it
             if (!dir.exists()) {

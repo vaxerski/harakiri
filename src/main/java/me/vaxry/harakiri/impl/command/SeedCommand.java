@@ -15,7 +15,7 @@ import net.minecraft.client.multiplayer.ServerData;
 public final class SeedCommand extends Command {
 
     public SeedCommand() {
-        super("Seed", new String[]{"RandomSeed"}, "Sets the client-side seed used by certain features", "Seed <Number>");
+        super("Seed", new String[]{"RandomSeed"}, "Sets the client-side seed.", "Seed <Number>");
     }
 
     @Override

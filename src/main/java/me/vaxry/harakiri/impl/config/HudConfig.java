@@ -62,14 +62,14 @@ public final class HudConfig extends Configurable {
                             draggableHudComponent.setAnchorPoint(null);
                         }
                         break;
-                    case "Glue":
+                    case "Stick":
                         if (!entry.getValue().getAsString().equals("NONE")) {
                             draggableHudComponent.setGlued((DraggableHudComponent) Harakiri.INSTANCE.getHudManager().findComponent(entry.getValue().getAsString()));
                         } else {
                             draggableHudComponent.setGlued(null);
                         }
                         break;
-                    case "GlueSide":
+                    case "StickSide":
                         if (!entry.getValue().getAsString().equals("NONE")) {
                             draggableHudComponent.setGlueSide(DraggableHudComponent.GlueSide.valueOf(entry.getValue().getAsString()));
                         } else {
@@ -120,8 +120,8 @@ public final class HudConfig extends Configurable {
             DraggableHudComponent draggableHudComponent = (DraggableHudComponent) hudComponent;
             componentsListJsonObject.addProperty("Locked", draggableHudComponent.isLocked());
             componentsListJsonObject.addProperty("Anchor", draggableHudComponent.getAnchorPoint() == null ? "NONE" : draggableHudComponent.getAnchorPoint().getPoint().name());
-            componentsListJsonObject.addProperty("Glue", draggableHudComponent.getGlued() == null ? "NONE" : draggableHudComponent.getGlued().getName());
-            componentsListJsonObject.addProperty("GlueSide", draggableHudComponent.getGlued() == null ? "NONE" : ((DraggableHudComponent) hudComponent).getGlueSide().name());
+            componentsListJsonObject.addProperty("Stick", draggableHudComponent.getGlued() == null ? "NONE" : draggableHudComponent.getGlued().getName());
+            componentsListJsonObject.addProperty("StickSide", draggableHudComponent.getGlued() == null ? "NONE" : ((DraggableHudComponent) hudComponent).getGlueSide().name());
         }
 
         if (hudComponent.getValueList().size() != 0) {

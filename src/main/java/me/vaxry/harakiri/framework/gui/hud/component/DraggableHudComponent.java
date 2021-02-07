@@ -81,7 +81,7 @@ public class DraggableHudComponent extends HudComponent {
                 GlStateManager.scale(1.f/SCALING, 1.f/SCALING, 1.f/SCALING);
             }
             else
-                RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x35FFFFFF); //0x45
+                RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x11FFFFFF); //0x45
         }
 
         if (isHudEditor) {

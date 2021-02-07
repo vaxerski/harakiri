@@ -8,6 +8,7 @@ import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.texture.Texture;
 import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.config.ModuleConfig;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
@@ -53,7 +54,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
     private String title = "";
 
     private final HudEditorModule hudEditorModule;
-    private final Texture texture;
+    //private final Texture texture;
     private final Texture arrowTexture;
     //private final Texture gearTexture;
 
@@ -65,27 +66,67 @@ public final class ModuleListComponent extends ResizableHudComponent {
     private int rainbowColBG = 0x45FFFFFF;
     private boolean useRainbow = false;
 
+    private Timer timer = new Timer();
+    public float framejitter;
+
+    private float getJitter() {
+        final float seconds = ((System.currentTimeMillis() - this.timer.getTime()) / 1000.0f) % 60.0f;
+
+        final float desiredTimePerSecond = 1; // general
+
+        this.timer.reset();
+        return Math.min(desiredTimePerSecond * seconds, 1.0f);
+    }
+
     public ModuleListComponent(Module.ModuleType type) {
         super(StringUtils.capitalize(type.name().toLowerCase()), 110, 150, 160, 400);
         this.type = type;
         this.originalName = StringUtils.capitalize(type.name().toLowerCase());
         this.hudEditorModule = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
-        this.texture = new Texture("module-" + type.name().toLowerCase() + ".png");
+        //this.texture = new Texture("module-" + type.name().toLowerCase() + ".png");
         this.arrowTexture = new Texture("arrow.png");
         //this.gearTexture = new Texture("gear_wheel_modulelist.png");
 
         this.setSnappable(false);
-        this.setLocked(true);
         this.setVisible(true);
 
-        this.setX(20);
         this.setY(20);
 
+        if(Harakiri.INSTANCE.getConfigManager().isFirstLaunch()){
+            switch(this.type){
+                case MOVEMENT:
+                    this.setX(20);
+                    break;
+                case RENDER:
+                    this.setX(170);
+                    break;
+                case PLAYER:
+                    this.setX(320);
+                    break;
+                case COMBAT:
+                    this.setX(20);
+                    this.setY(250);
+                    break;
+                case WORLD:
+                    this.setX(170);
+                    this.setY(250);
+                    break;
+                case MISC:
+                    this.setX(320);
+                    this.setY(250);
+                    break;
+            }
+        }else{
+            this.setX(20);
+            this.setY(20);
+        }
     }
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
+
+        framejitter = this.getJitter();
 
         //mouseX /= SCALING;
         //mouseY /= SCALING;
@@ -191,7 +232,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
             else
                 RenderUtil.drawGradientRectLeftRight(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - this.scroll, module.isEnabled() ? ACCENT_COLOR_BG : 0x451F1C22, 0x00000000);
 
-            final boolean insideModule = mouseX >= (this.getX() + BORDER) * SCALING && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 1) * SCALING && mouseY >= (this.getY() + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP + offsetY - this.scroll - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP) * SCALING && mouseY <= (this.getY() + BORDER + (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT) + 1 + offsetY - this.scroll) * SCALING;
+            final boolean insideModule = mouseX >= (this.getX() + BORDER) * SCALING && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 1) * SCALING && mouseY >= (this.getY() + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + offsetY - this.scroll - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP) * SCALING && mouseY <= (this.getY() + BORDER + (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT) + 1 + offsetY - this.scroll) * SCALING;
             if (insideModule) { // draw options line
                 final boolean isHoveringOptions = mouseX >= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 12) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 2) && mouseY >= (this.getY() + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP + offsetY - this.scroll - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP) && mouseY <= (this.getY() + BORDER + (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT) + 1 + offsetY - this.scroll);
 
@@ -204,20 +245,33 @@ public final class ModuleListComponent extends ResizableHudComponent {
                 //    RenderUtil.drawGradientRect(this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 12, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - this.scroll, 0x50909090, 0x50909090); //0x50909090 0x00101010
                 //}
 
-                // draw hover gradient
-                RenderUtil.drawGradientRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - this.scroll, 0x30909090, 0x30909090); //0x30909090 0x00101010
+
+                if(module.highlightA < 48.f){
+                    module.highlightA += 300.f * framejitter;
+                }else{
+                    module.highlightA = 48.f;
+                }
 
                 if(module.xOffset < 4.f){
-                    module.xOffset += 1.f;
+                    module.xOffset += 60.f * framejitter;
                 }else{
                     module.xOffset = 4.f;
                 }
             } else {
                 if(module.xOffset > 0.f)
-                    module.xOffset -= 0.7f;
+                    module.xOffset -= 0.7f * 60.f * framejitter;
                 else
                     module.xOffset = 0.f;
+
+                if(module.highlightA > 0.f){
+                    module.highlightA -= 1.f * 60.f * framejitter;
+                }else{
+                    module.highlightA = 0.f;
+                }
             }
+
+            // draw hover alpha
+            RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - this.scroll, ((int)module.highlightA * 0x1000000) + 0x909090);
 
             // draw module name
 
@@ -259,6 +313,10 @@ public final class ModuleListComponent extends ResizableHudComponent {
                         RenderUtil.drawRect(currentSettings.getX() + LINE_HAS_ERRORS, currentSettings.getY(), currentSettings.getX() + currentSettings.getW() + LINE_HAS_ERRORS, (currentSettings.percOpen * currentSettings.effectiveH) + currentSettings.getY(), (int)(currentSettings.percOpen * (float)0x88) * 0x1000000);
 
                         currentSettings.render((int) (mouseX * SCALING), (int) (mouseY * SCALING), partialTicks);
+
+                        // Restore scissor
+                        RenderUtil.glScissor((this.getX() + BORDER) * SCALING, (this.getY() + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP + BORDER) * SCALING, (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) * SCALING, (this.getY() + this.getH() - BORDER) * SCALING, sr);
+
                         for (HudComponent settingComponent : currentSettings.components) {
                             //if (settingComponent.getY() > this.getY() + this.currentSettings.getH())
                             tempOffsetY += Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1 /* TextGap */;
@@ -274,9 +332,9 @@ public final class ModuleListComponent extends ResizableHudComponent {
 
                         // Draw outline to see where the stuff is easier
                         RenderUtil.drawLine(currentSettings.getX() + LINE_HAS_ERRORS, currentSettings.getY(), currentSettings.getX() + currentSettings.getW() + LINE_HAS_ERRORS, currentSettings.getY(), 0.5f, ColorUtil.changeAlpha(this.useRainbow ? this.rainbowCol : ACCENT_COLOR, currentSettings.alphaForBorder)); //top
-                        RenderUtil.drawLine(currentSettings.getX() + currentSettings.getW() + LINE_HAS_ERRORS, currentSettings.getY(), currentSettings.getX() + currentSettings.getW() + LINE_HAS_ERRORS, currentSettings.getY() + currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(this.useRainbow ? this.rainbowCol : ACCENT_COLOR, currentSettings.alphaForBorder)); //right
-                        RenderUtil.drawLine(currentSettings.getX() + LINE_HAS_ERRORS, currentSettings.getY() + currentSettings.getH(), currentSettings.getX() + currentSettings.getW() + LINE_HAS_ERRORS, currentSettings.getY() + currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(this.useRainbow ? this.rainbowCol : ACCENT_COLOR, currentSettings.alphaForBorder)); //bottom
-                        RenderUtil.drawLine(currentSettings.getX() + LINE_HAS_ERRORS, currentSettings.getY(), currentSettings.getX() + LINE_HAS_ERRORS, currentSettings.getY() + currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(this.useRainbow ? this.rainbowCol : ACCENT_COLOR, currentSettings.alphaForBorder)); //left
+                        RenderUtil.drawLine(currentSettings.getX() + currentSettings.getW() + LINE_HAS_ERRORS, currentSettings.getY(), currentSettings.getX() + currentSettings.getW() + LINE_HAS_ERRORS, currentSettings.getY() + (currentSettings.getH() * currentSettings.percOpen), 0.5f, ColorUtil.changeAlpha(this.useRainbow ? this.rainbowCol : ACCENT_COLOR, currentSettings.alphaForBorder)); //right
+                        RenderUtil.drawLine(currentSettings.getX() + LINE_HAS_ERRORS, currentSettings.getY() + (currentSettings.getH() * currentSettings.percOpen), currentSettings.getX() + currentSettings.getW() + LINE_HAS_ERRORS, currentSettings.getY() + (currentSettings.getH() * currentSettings.percOpen), 0.5f, ColorUtil.changeAlpha(this.useRainbow ? this.rainbowCol : ACCENT_COLOR, currentSettings.alphaForBorder)); //bottom
+                        RenderUtil.drawLine(currentSettings.getX() + LINE_HAS_ERRORS, currentSettings.getY(), currentSettings.getX() + LINE_HAS_ERRORS, currentSettings.getY() + (currentSettings.getH() * currentSettings.percOpen), 0.5f, ColorUtil.changeAlpha(this.useRainbow ? this.rainbowCol : ACCENT_COLOR, currentSettings.alphaForBorder)); //left
 
                     } else if(!isCurrentSettingOpen(module.getDisplayName())){ // dont render if its open Xd
 
@@ -560,7 +618,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
     }
 
     public Texture getTexture() {
-        return texture;
+        return null;
     }
 
     public ToolTipComponent getCurrentToolTip() {
@@ -800,14 +858,14 @@ public final class ModuleListComponent extends ResizableHudComponent {
             // Pulse alpha
             if(isAlphaDown){
                 if(alphaForBorder > 1){
-                    alphaForBorder -= 2;
+                    alphaForBorder -= 2 * 60.f * this.parentModuleList.framejitter;
                 }else{
                     alphaForBorder = 0;
                     isAlphaDown = false;
                 }
             }else{
                 if(alphaForBorder < 254){
-                    alphaForBorder += 2;
+                    alphaForBorder += 2 * 60.f * this.parentModuleList.framejitter;
                 }else{
                     alphaForBorder = 255;
                     isAlphaDown = true;
@@ -816,11 +874,11 @@ public final class ModuleListComponent extends ResizableHudComponent {
 
             // Increase perc
             if(!toClose) {
-                percOpen += 0.05f;
+                percOpen += 0.05f * 60.f * this.parentModuleList.framejitter;
                 if (percOpen > 1.f)
                     percOpen = 1.f;
             }else{
-                percOpen -= 0.05f;
+                percOpen -= 0.05f * 60.f * this.parentModuleList.framejitter;
                 if (percOpen < 0.f)
                     percOpen = 0.f;
             }
@@ -828,8 +886,9 @@ public final class ModuleListComponent extends ResizableHudComponent {
             final ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
 
             int offsetY = 1;
-            GL11.glEnable(GL11.GL_SCISSOR_TEST);
-            RenderUtil.glScissor(this.getX(), this.getY(), this.getW() + this.getX(), this.getY() + this.effectiveH, sr);
+            //GL11.glEnable(GL11.GL_SCISSOR_TEST);//Scissor is enabled you retard
+            //                                      vvv dont go under the limit xd vvv                                                                                                  vvv dont go over the limit xd vvv
+            RenderUtil.glScissor(this.getX(), Math.max(this.getY(), this.parentModuleList.getY() + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 2), this.getW() + this.getX(), Math.min(this.getY() + this.effectiveH, this.parentModuleList.getY() + this.parentModuleList.getH()), sr);
             for (HudComponent component : this.components) {
                 int offsetX = 1;
 
@@ -854,7 +913,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
 
                 offsetY += component.getH() + 1;
             }
-            GL11.glDisable(GL11.GL_SCISSOR_TEST);
+            //GL11.glDisable(GL11.GL_SCISSOR_TEST);
         }
 
         @Override

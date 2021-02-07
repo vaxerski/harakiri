@@ -16,7 +16,7 @@ import net.minecraft.network.play.client.CPacketCreativeInventoryAction;
 public final class SignBookCommand extends Command {
 
     public SignBookCommand() {
-        super("SignBook", new String[]{"SBook", "SignB"}, "Allows you to change the author of a signed book while in creative", "SignBook <Username>");
+        super("SignBook", new String[]{"SBook", "SignB"}, "Allows you to change the author of a signed book (creative)", "SignBook <Username>");
     }
 
     @Override

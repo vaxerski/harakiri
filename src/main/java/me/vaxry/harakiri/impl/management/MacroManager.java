@@ -15,9 +15,9 @@ public final class MacroManager {
     private List<Macro> macroList = new ArrayList<>();
 
     public MacroManager() {
-        if (Harakiri.INSTANCE.getConfigManager().isFirstLaunch()) {
-            this.addMacro("HudEditorToggle", "RSHIFT", ".toggle hudeditor");
-        }
+        //if (Harakiri.INSTANCE.getConfigManager().isFirstLaunch()) {
+        //    this.addMacro("HudEditorToggle", "RSHIFT", ".toggle hudeditor");
+        //}
     }
 
     public Macro find(String name) {

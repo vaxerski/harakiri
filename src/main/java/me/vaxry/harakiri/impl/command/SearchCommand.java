@@ -23,10 +23,10 @@ public final class SearchCommand extends Command {
 
     public SearchCommand() {
         super("Search", new String[]{"find", "locate"}, "Allows you to change what blocks are visible on search",
-                "Search Add <Block_Name>\n" +
-                        "Search Add <ID>\n" +
-                        "Search Remove <Block_Name>\n" +
-                        "Search Remove <ID>\n" +
+                "Search Add <block_name>\n" +
+                        "Search Add <id>\n" +
+                        "Search Remove <block_name>\n" +
+                        "Search Remove <id>\n" +
                         "Search List\n" +
                         "Search Clear");
     }

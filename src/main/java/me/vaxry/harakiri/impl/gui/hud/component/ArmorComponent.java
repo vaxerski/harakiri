@@ -46,7 +46,7 @@ public final class ArmorComponent extends DraggableHudComponent {
 
         if (!playerHasArmor) {
             if (isInHudEditor) {
-                Harakiri.INSTANCE.getTTFFontUtil().drawString("(armor)", (int) this.getX(), (int) this.getY(), 0xFFAAAAAA);
+                Harakiri.INSTANCE.getTTFFontUtil().drawString("(armor)", this.getX() + this.getW() / 2.f - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("(armor)")/2.f, (int) this.getY() + this.getH() / 2.f - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT / 2.f, 0xFFAAAAAA);
                 itemSpacingWidth = ITEM_SIZE * 4; // simulate 4 slots of armor (for a placeholder in hud editor)
             } else {
                 //this.setW(0);

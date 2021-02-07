@@ -26,47 +26,28 @@ public final class CommandManager {
     private List<Command> commandList = new ArrayList<>();
 
     public CommandManager() {
-        this.commandList.add(new HelpCommand());
         this.commandList.add(new ToggleCommand());
         this.commandList.add(new VClipCommand());
         this.commandList.add(new HClipCommand());
-        this.commandList.add(new ColorCommand());
         this.commandList.add(new BindCommand());
         this.commandList.add(new XrayCommand());
         this.commandList.add(new FriendCommand());
         this.commandList.add(new PeekCommand());
         this.commandList.add(new SpectateCommand());
-        this.commandList.add(new ModuleCommand());
         this.commandList.add(new YawCommand());
         this.commandList.add(new PitchCommand());
         this.commandList.add(new NameCommand());
         this.commandList.add(new MacroCommand());
-        this.commandList.add(new WaypointsCommand());
-        this.commandList.add(new InvSeeCommand());
-        this.commandList.add(new SayCommand());
-        this.commandList.add(new CoordsCommand());
-        this.commandList.add(new ConnectCommand());
         this.commandList.add(new SeedCommand());
-        this.commandList.add(new IgnoreCommand());
-        this.commandList.add(new AutoIgnoreCommand());
         this.commandList.add(new FakeChatCommand());
-        this.commandList.add(new EnchantCommand());
-        this.commandList.add(new RenameCommand());
-        this.commandList.add(new SpawnEggCommand());
-        this.commandList.add(new StackSizeCommand());
-        this.commandList.add(new CrashSlimeCommand());
         this.commandList.add(new SignBookCommand());
-        this.commandList.add(new SkullCommand());
-        this.commandList.add(new GiveCommand());
-        this.commandList.add(new CalcStrongholdCommand());
-        this.commandList.add(new LastInvCommand());
         this.commandList.add(new SearchCommand());
 
         //create commands for every value within every module
         loadValueCommands();
 
         //load our external commands
-        loadExternalCommands();
+        //loadExternalCommands();
 
         commandList.sort(Comparator.comparing(Command::getDisplayName));
     }
@@ -79,7 +60,7 @@ public final class CommandManager {
     public void loadExternalCommands() {
         try {
             //create a directory at "harakiri/Commands"
-            final File dir = new File("Harakiri/Commands");
+            final File dir = new File("harakiri/commands");
 
             //if it doesnt exist create it
             if (!dir.exists()) {

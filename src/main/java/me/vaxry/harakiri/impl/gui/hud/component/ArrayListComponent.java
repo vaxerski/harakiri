@@ -71,6 +71,16 @@ public final class ArrayListComponent extends DraggableHudComponent {
         float maxWidth = 0;
         int hueDifference = 0;
 
+        final HudModule hm = (HudModule) Harakiri.INSTANCE.getModuleManager().find(HudModule.class);
+        boolean useRainbow;
+        if(hm.rainbow.getValue())
+            useRainbow = true;
+        else
+            useRainbow = false;
+
+        // pls
+        this.updateValues();
+
         for (Module mod : Harakiri.INSTANCE.getModuleManager().getModuleList()) {
             if (mod != null && mod.getType() != Module.ModuleType.HIDDEN && mod.isEnabled() && !mod.isHidden()) {
                 mods.add(mod);
@@ -123,11 +133,11 @@ public final class ArrayListComponent extends DraggableHudComponent {
                     final float width = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(name);
 
                     int color;
-                    if (RAINBOW && mc.player != null) {
+                    if (useRainbow) {
                         Color rainbow = new Color(Color.HSBtoRGB((float) ((curHue * 7.5f) / (100.0D - RAINBOW_HUE_SPEED) + Math.sin(hueDifference / (100.0D - RAINBOW_HUE_SPEED * Math.PI / 2.0D))) % 1.0F, RAINBOW_SATURATION, RAINBOW_BRIGHTNESS));
                         color = ColorUtil.changeAlpha((new Color(rainbow.getRed(), rainbow.getGreen(), rainbow.getBlue())).getRGB(), 0xFF);
                     } else {
-                        color = ColorUtil.changeAlpha(mod.getColorByGroup(), 0xFF);
+                        color = mod.getColorByGroup();
                     }
 
                     if (width >= maxWidth) {
@@ -192,7 +202,7 @@ public final class ArrayListComponent extends DraggableHudComponent {
 
         if (isInHudEditor) {
             if (maxWidth == 0) { // no mods
-                final String arraylist = "(enabled mods)";
+                final String arraylist = "(enabled modules)";
                 Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(arraylist, this.getX(), this.getY(), 0xFFAAAAAA);
                 maxWidth = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(arraylist) + 1 /* right side gap */;
                 yOffset = Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1 /* right side gap */;

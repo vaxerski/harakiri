@@ -42,8 +42,6 @@ public final class ModuleManager {
         add(new HudModule());
         add(new ArrayListModule());
 
-
-
         add(new ThreatCamModule());
         add(new PlexusModule());
         add(new NoOverlayModule());
@@ -102,11 +100,9 @@ public final class ModuleManager {
         add(new CriticalsModule());
         add(new RotationLock());
         add(new ElytraFlyModule());
-        add(new ItemSpoofModule());
         add(new AutoWalkModule());
         add(new AvoidModule());
         add(new MacroModule());
-        add(new WaypointsModule());
         add(new SpeedModule());
         add(new AntiHungerModule());
         add(new HorseJumpModule());
@@ -125,8 +121,6 @@ public final class ModuleManager {
         add(new NukerModule());
         add(new SlimeChunksModule());
         add(new AutoSignModule());
-        add(new IgnoreModule());
-        add(new AutoIgnoreModule());
         add(new StepModule());
         add(new AutoCraftModule());
         add(new ViewClipModule());
@@ -154,7 +148,6 @@ public final class ModuleManager {
         add(new TotemNotifierModule());
         add(new MiddleClickPearlModule());
         add(new NameAlertModule());
-        add(new AutoMountModule());
         add(new EntityDesyncModule());
         add(new NoPacketModule());
         add(new NoEffectsModule());
@@ -165,7 +158,6 @@ public final class ModuleManager {
         add(new AutoEatModule());
         add(new NoFriendHurtModule());
         add(new ReachModule());
-        add(new AutoWitherModule());
         HitsoundModule hitsoundModule = new HitsoundModule();
         add(hitsoundModule);
 
@@ -173,7 +165,7 @@ public final class ModuleManager {
         MinecraftForge.EVENT_BUS.register(recmod);
         MinecraftForge.EVENT_BUS.register(hitsoundModule);
 
-        this.loadExternalModules();
+        //this.loadExternalModules();
 
         moduleList.sort(Comparator.comparing(Module::getDisplayName));
     }
@@ -186,7 +178,7 @@ public final class ModuleManager {
     public void loadExternalModules() {
         try {
             //create a directory at "harakiri/Modules"
-            final File dir = new File("harakiri/Modules");
+            final File dir = new File("harakiri/modules");
 
             //if it doesnt exist create it
             if (!dir.exists()) {

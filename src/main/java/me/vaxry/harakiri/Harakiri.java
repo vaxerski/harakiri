@@ -56,15 +56,11 @@ public final class Harakiri {
 
     private MacroManager macroManager;
 
-    private WaypointManager waypointManager;
-
     private TickRateManager tickRateManager;
 
     private ChatManager chatManager;
 
     private WorldManager worldManager;
-
-    private IgnoredManager ignoredManager;
 
     private PositionManager positionManager;
 
@@ -99,11 +95,9 @@ public final class Harakiri {
             this.eventManager = new AnnotatedEventManager();
             this.apiManager = new APIManager();
             this.configManager = new ConfigManager();
-            this.ignoredManager = new IgnoredManager();
             this.friendManager = new FriendManager();
             this.rotationManager = new RotationManager();
             this.macroManager = new MacroManager();
-            this.waypointManager = new WaypointManager();
             this.tickRateManager = new TickRateManager();
             this.chatManager = new ChatManager();
             this.worldManager = new WorldManager();
@@ -170,11 +164,9 @@ public final class Harakiri {
         this.apiManager.unload();
         this.commandManager.unload();
         this.friendManager.unload();
-        this.waypointManager.unload();
         this.macroManager.unload();
         this.tickRateManager.unload();
         this.chatManager.unload();
-        this.ignoredManager.unload();
         this.joinLeaveManager.unload();
         this.hudManager.unload();
         this.animationManager.unload();
@@ -203,11 +195,9 @@ public final class Harakiri {
 
     //TODO fix multi event firing when reloading modules
     public void reload() {
-        this.waypointManager.getWaypointDataList().clear();
         this.friendManager.getFriendList().clear();
         this.macroManager.getMacroList().clear();
         this.worldManager.getWorldDataList().clear();
-        this.ignoredManager.getIgnoredList().clear();
 
         this.configManager.getConfigurableList().clear();
         this.configManager = new ConfigManager();
@@ -291,13 +281,6 @@ public final class Harakiri {
         return this.macroManager;
     }
 
-    public WaypointManager getWaypointManager() {
-        if (this.waypointManager == null) {
-            this.waypointManager = new WaypointManager();
-        }
-        return this.waypointManager;
-    }
-
     public TickRateManager getTickRateManager() {
         if (this.tickRateManager == null) {
             this.tickRateManager = new TickRateManager();
@@ -317,13 +300,6 @@ public final class Harakiri {
             this.worldManager = new WorldManager();
         }
         return this.worldManager;
-    }
-
-    public IgnoredManager getIgnoredManager() {
-        if (this.ignoredManager == null) {
-            this.ignoredManager = new IgnoredManager();
-        }
-        return this.ignoredManager;
     }
 
     public PositionManager getPositionManager() {

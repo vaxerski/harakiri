@@ -9,8 +9,9 @@ public class CustomFontModule extends Module {
 
     public CustomFontModule() {
         super("CustomFont", new String[]{"CustomFont"}, "Enables a custom TTF Font.", "NONE", -1, Module.ModuleType.RENDER);
-        //this.setEnabled(true);
-        Harakiri.INSTANCE.getTTFFontUtil().isTTF = this.isEnabled();
+        this.setEnabled(true);
+        this.onEnable();
+        this.setHidden(true);
     }
 
     @Override

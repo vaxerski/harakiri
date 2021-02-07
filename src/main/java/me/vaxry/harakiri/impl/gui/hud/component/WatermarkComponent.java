@@ -27,6 +27,8 @@ public final class WatermarkComponent extends HudComponent {
         final ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
         this.setH(res.getScaledHeight());
         this.setW(res.getScaledWidth());
+        this.setX(3);
+        this.setY(149);
         watermarkTex = new Texture("harawatermark.png");
     }
 

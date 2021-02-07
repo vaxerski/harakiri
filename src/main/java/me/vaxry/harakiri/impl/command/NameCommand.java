@@ -28,7 +28,7 @@ public final class NameCommand extends Command {
             Minecraft.getMinecraft().session = new Session(split[1], Minecraft.getMinecraft().session.getPlayerID(), Minecraft.getMinecraft().session.getToken(), "mojang");
             Harakiri.INSTANCE.logChat("Set username to " + split[1]);
         } else {
-            Harakiri.INSTANCE.errorChat("Name must match");
+            Harakiri.INSTANCE.errorChat("Name must match.");
         }
     }
 }

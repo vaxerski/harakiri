@@ -3,6 +3,7 @@ package me.vaxry.harakiri.framework.gui.hud.component;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.util.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -15,7 +16,10 @@ public class ToolTipComponent extends HudComponent {
     public String text;
     public int alpha;
 
+    private Timer timer = new Timer();
+
     public ToolTipComponent(String text) {
+        this.timer.reset();
         this.text = text;
         this.alpha = 0;
 
@@ -25,12 +29,25 @@ public class ToolTipComponent extends HudComponent {
         this.setH(tooltipHeight);
     }
 
+    public float framejitter;
+
+    private float getJitter() {
+        final float seconds = ((System.currentTimeMillis() - this.timer.getTime()) / 1000.0f) % 60.0f;
+
+        final float desiredTimePerSecond = 1; // general
+
+        this.timer.reset();
+        return Math.min(desiredTimePerSecond * seconds, 1.0f);
+    }
+
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
 
+        framejitter = getJitter();
+
         if (this.alpha < 0xFF/*max alpha*/) {
-            this.alpha += 8/* arbitrary value, the speed at which it fades in essentially */;
+            this.alpha += 8.f * 60.f * framejitter;
             if(this.alpha > 0xFF)
                 this.alpha = 0xFF;
         }

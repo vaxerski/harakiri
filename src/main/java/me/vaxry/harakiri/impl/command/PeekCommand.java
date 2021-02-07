@@ -27,7 +27,7 @@ public final class PeekCommand extends Command {
     private String entity;
 
     public PeekCommand() {
-        super("Peek", new String[]{"Pk"}, "Allows you to see inside shulker boxes without having to place them", "Peek <Username>\nPeek");
+        super("Peek", new String[]{"Pk"}, "Allows you to see inside shulker boxes held in hand.", "Peek");
     }
 
     @Override

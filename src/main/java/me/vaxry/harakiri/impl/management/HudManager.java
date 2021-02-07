@@ -78,9 +78,7 @@ public final class HudManager {
 
         add(new PlexusComponent());
         add(new WatermarkComponent());
-        add(new ArrayListComponent(TOP_RIGHT)); // creates the enabled mods component & by default anchors in the top right (to aid new users)
         add(new TpsComponent());
-        add(new PotionEffectsComponent());
         add(new FpsComponent());
         add(new CoordsComponent());
         add(new NetherCoordsComponent());
@@ -95,7 +93,6 @@ public final class HudManager {
         add(new PacketTimeComponent());
         add(rfc);
         add(new TimeComponent());
-        add(new EnemyPotionsComponent());
         add(new HubComponent());
         add(new SwitchViewComponent());
         add(new InventoryComponent());
@@ -106,11 +103,14 @@ public final class HudManager {
         MinecraftForge.EVENT_BUS.register(rfc);
         //MinecraftForge.EVENT_BUS.register(new ThreatCamComponent());
 
+        ArrayListComponent arrayListComponent = new ArrayListComponent(TOP_RIGHT);
+        arrayListComponent.setAnchorPoint(TOP_RIGHT);
+        add(arrayListComponent);
         NotificationsComponent notificationsComponent = new NotificationsComponent();
-        notificationsComponent.setAnchorPoint(TOP_CENTER);
+        notificationsComponent.setAnchorPoint(TOP_LEFT);
         add(notificationsComponent);
 
-        this.loadExternalHudComponents();
+        //this.loadExternalHudComponents();
 
         // Organize alphabetically
         this.componentList = this.componentList.stream().sorted((obj1, obj2) -> obj1.getName().compareTo(obj2.getName())).collect(Collectors.toList());
@@ -182,7 +182,7 @@ public final class HudManager {
 
     public void loadExternalHudComponents() {
         try {
-            final File dir = new File("harakiri/Hud");
+            final File dir = new File("harakiri/hud");
 
             if (!dir.exists()) {
                 dir.mkdirs();

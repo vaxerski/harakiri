@@ -22,8 +22,8 @@ public final class MacroCommand extends Command {
     private final String[] clearAlias = new String[]{"Clear", "C"};
 
     public MacroCommand() {
-        super("Macro", new String[]{"Mac"}, "Allows you to create chat macros", "Macro Add <Name> <Key> <Macro>\n" +
-                "Macro Remove <Name>\n" +
+        super("Macro", new String[]{"Mac"}, "Allows you to create macros", "Macro Add <name> <key> <macro>\n" +
+                "Macro Remove <name>\n" +
                 "Macro List\n" +
                 "Macro Clear");
     }

@@ -6,5 +6,6 @@ public class PlexusComponent extends HudComponent {
 
     public PlexusComponent() {
         super("Plexus");
+        this.setVisible(true);
     }
 }

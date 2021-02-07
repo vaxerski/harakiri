@@ -23,7 +23,7 @@ public final class ConfigManager {
 
     private List<Configurable> configurableList = new ArrayList<>();
 
-    public static final String CONFIG_PATH = "Harakiri/Config/";
+    public static final String CONFIG_PATH = "harakiri/config/";
 
     public ConfigManager() {
         this.generateDirectories();
@@ -36,12 +36,12 @@ public final class ConfigManager {
             this.configDir.mkdirs();
         }
 
-        this.moduleConfigDir = new File(CONFIG_PATH + "Modules" + "/");
+        this.moduleConfigDir = new File(CONFIG_PATH + "mods" + "/");
         if (!this.moduleConfigDir.exists()) {
             this.moduleConfigDir.mkdirs();
         }
 
-        this.hudComponentConfigDir = new File(CONFIG_PATH + "HudComponents" + "/");
+        this.hudComponentConfigDir = new File(CONFIG_PATH + "hud" + "/");
         if (!this.hudComponentConfigDir.exists()) {
             this.hudComponentConfigDir.mkdirs();
         }
@@ -60,10 +60,7 @@ public final class ConfigManager {
         this.configurableList.add(new XrayConfig(configDir));
         this.configurableList.add(new SearchConfig(configDir));
         this.configurableList.add(new MacroConfig(configDir));
-        this.configurableList.add(new WaypointsConfig(configDir));
         this.configurableList.add(new WorldConfig(configDir));
-        this.configurableList.add(new IgnoreConfig(configDir));
-        this.configurableList.add(new AutoIgnoreConfig(configDir));
 
         if (this.firstLaunch) {
             this.saveAll();

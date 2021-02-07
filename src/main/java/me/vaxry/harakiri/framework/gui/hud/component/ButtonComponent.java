@@ -75,7 +75,7 @@ public class ButtonComponent extends HudComponent {
         }
 
         // draw text
-        Harakiri.INSTANCE.getTTFFontUtil().drawString(this.getName(), (int) this.getX() + 1, (int) this.getY() + 1, this.enabled ? ACCENT_COLOR : 0xFFAAAAB7);
+        Harakiri.INSTANCE.getTTFFontUtil().drawString(this.getName(), (int) this.getX() + 1, (int) this.getY() + 1, this.enabled ? this.useRainbow ? rainbowCol : ACCENT_COLOR : 0xFFAAAAB7);
     }
 
     @Override

@@ -37,7 +37,7 @@ public final class SpectateCommand extends Command {
         }
 
         if (target != null) {
-            Harakiri.INSTANCE.logChat("Now spectating " + target.getName());
+            Harakiri.INSTANCE.logChat("Now spectating: " + target.getName());
             Minecraft.getMinecraft().setRenderViewEntity(target);
         } else {
             Harakiri.INSTANCE.errorChat("\"" + split[1] + "\" is not within range");

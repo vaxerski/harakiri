@@ -21,6 +21,9 @@ public class HudComponent {
     private String name;
     private String tooltipText = "";
 
+    public float xOffset = 0;
+    public float highlightA = 0;
+
     private boolean visible;
 
     private List<Value> valueList = new ArrayList<Value>();

@@ -15,7 +15,7 @@ public final class BindCommand extends Command {
     private String[] clearAlias = new String[]{"Clear", "C"};
 
     public BindCommand() {
-        super("Bind", new String[]{"B"}, "Allows you to change keybinds for modules", "Bind <Module> <Key>\nBind Clear");
+        super("Bind", new String[]{"B"}, "Allows you to bind modules.", "Bind <module> <key>\nBind Clear");
     }
 
     @Override
