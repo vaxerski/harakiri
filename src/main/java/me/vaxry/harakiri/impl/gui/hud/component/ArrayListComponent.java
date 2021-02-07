@@ -10,6 +10,7 @@ import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
+import me.vaxry.harakiri.impl.module.combat.VelocityModule;
 import me.vaxry.harakiri.impl.module.hidden.ArrayListModule;
 import me.vaxry.harakiri.impl.module.render.HudModule;
 import net.minecraft.client.gui.ScaledResolution;
@@ -112,7 +113,10 @@ public final class ArrayListComponent extends DraggableHudComponent {
 
             for (Module mod : mods) {
                 if (mod != null && mod.getType() != Module.ModuleType.HIDDEN && (mod.isEnabled() || mc.fontRenderer.getStringWidth(mod.getDisplayName()) > mod.activexOffset) && !mod.isHidden()) {
-                    String name = mod.getDisplayName() + (SHOW_METADATA ? (mod.getMetaData() != null ? " " + ChatFormatting.GRAY + "[" + ChatFormatting.WHITE + mod.getMetaData().toLowerCase() + ChatFormatting.GRAY + "]" : "") : "");
+                    String name = mod.getDisplayName() + (SHOW_METADATA ? (mod.getMetaData() != null ? " " + ChatFormatting.GRAY + "[" + ChatFormatting.WHITE + mod.getMetaData().charAt(0) + mod.getMetaData().substring(1, mod.getMetaData().length()).toLowerCase() + ChatFormatting.GRAY + "]" : "") : "");
+                    if(mod instanceof VelocityModule)
+                        name = mod.getDisplayName() + (SHOW_METADATA ? (mod.getMetaData() != null ? " " + ChatFormatting.GRAY + "[" + ChatFormatting.WHITE + mod.getMetaData().toUpperCase() + ChatFormatting.GRAY + "]" : "") : "");
+
                     if (LOWERCASE)
                         name = name.toLowerCase();
 
@@ -123,7 +127,7 @@ public final class ArrayListComponent extends DraggableHudComponent {
                         Color rainbow = new Color(Color.HSBtoRGB((float) ((curHue * 7.5f) / (100.0D - RAINBOW_HUE_SPEED) + Math.sin(hueDifference / (100.0D - RAINBOW_HUE_SPEED * Math.PI / 2.0D))) % 1.0F, RAINBOW_SATURATION, RAINBOW_BRIGHTNESS));
                         color = ColorUtil.changeAlpha((new Color(rainbow.getRed(), rainbow.getGreen(), rainbow.getBlue())).getRGB(), 0xFF);
                     } else {
-                        color = ColorUtil.changeAlpha(mod.getColor(), 0xFF);
+                        color = ColorUtil.changeAlpha(mod.getColorByGroup(), 0xFF);
                     }
 
                     if (width >= maxWidth) {

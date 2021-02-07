@@ -1,9 +1,12 @@
 package me.vaxry.harakiri.framework.gui.hud.component;
 
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.MathUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.impl.module.render.HudModule;
+import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.Minecraft;
 
 import java.text.DecimalFormat;
@@ -66,7 +69,7 @@ public final class SliderComponent extends HudComponent {
                 this.sliderBar.render(mouseX, mouseY, partialTicks);
             }
 
-            Minecraft.getMinecraft().fontRenderer.drawString(this.getName(), (int) this.getX() + 1, (int) this.getY() + 1, 0xFFAAAAAA);
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.getName(), (int) this.getX() + 1, (int) this.getY() + 1, 0xFFAAAAAA);
 
             String displayedValue = this.decimalFormat.format(this.value.getValue());
             if (this.sliding) {
@@ -75,7 +78,7 @@ public final class SliderComponent extends HudComponent {
                     displayedValue = draggedValue;
             }
 
-            Minecraft.getMinecraft().fontRenderer.drawString(displayedValue, (int) (this.getX() + this.getW()) - Minecraft.getMinecraft().fontRenderer.getStringWidth(displayedValue) - 1, (int) this.getY() + 1, 0xFFAAAAAA);
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(displayedValue, (int) (this.getX() + this.getW()) - Minecraft.getMinecraft().fontRenderer.getStringWidth(displayedValue) - 1, (int) this.getY() + 1, 0xFFAAAAAA);
         } else {
             this.textComponent.setX(this.getX());
             this.textComponent.setY(this.getY());
@@ -203,6 +206,14 @@ public final class SliderComponent extends HudComponent {
         public int width, height, alpha;
         public SliderComponent parent;
 
+        private int rainbowCol = 0xFFFFFFFF;
+        private int rainbowColBG = 0xFFFFFFFF;
+
+        private int ACCENT_COLOR = 0xFFCCFF66;
+        private int ACCENT_COLOR_BG = 0x44CCFF66;
+
+        private boolean useRainbow = false;
+
         public SliderBarComponent(int width, int height, int alpha, SliderComponent parent) {
             super("SliderBar");
             this.width = width;
@@ -218,6 +229,20 @@ public final class SliderComponent extends HudComponent {
         @Override
         public void render(int mouseX, int mouseY, float partialTicks) {
             //super.render(mouseX, mouseY, partialTicks);
+
+            final HudModule hm = (HudModule) Harakiri.INSTANCE.getModuleManager().find(HudModule.class);
+            if(hm.rainbow.getValue())
+                useRainbow = true;
+            else
+                useRainbow = false;
+
+            rainbowCol = Harakiri.INSTANCE.getHudEditor().rainbowColor;
+            rainbowColBG = 0x45000000 + Harakiri.INSTANCE.getHudEditor().rainbowColor - 0xFF000000;
+
+            final HudEditorModule hem = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
+            ACCENT_COLOR = 0xFF000000 + hem.color.getValue().getRGB();
+            ACCENT_COLOR_BG = 0x44000000 + hem.color.getValue().getRGB();
+
             if (this.isDragging()) {
                 this.setX(mouseX - this.getDeltaX());
                 this.setY(mouseY - this.getDeltaY());
@@ -228,8 +253,8 @@ public final class SliderComponent extends HudComponent {
 
             this.clampSlider();
 
-            RenderUtil.drawRect(this.parent.getX(), this.getY(), this.getX(), this.getY() + this.getH(), ColorUtil.changeAlpha(0x453B005F, this.alpha));
-            RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), ColorUtil.changeAlpha(0xFFC255FF, this.alpha));
+            RenderUtil.drawRect(this.parent.getX(), this.getY(), this.getX(), this.getY() + this.getH(), ColorUtil.changeAlpha(this.useRainbow ? rainbowColBG : ACCENT_COLOR_BG, this.alpha));
+            RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), ColorUtil.changeAlpha(this.useRainbow ? rainbowCol : ACCENT_COLOR, this.alpha));
         }
 
         @Override

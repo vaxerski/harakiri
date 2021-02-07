@@ -187,6 +187,27 @@ public class Module {
         return color;
     }
 
+    public int getColorByGroup(){
+        switch (this.type){
+            case UI:
+            case HIDDEN:
+                return 0xFF000000;
+            case MISC:
+                return 0xFF3BB300;
+            case WORLD:
+                return 0xFF007ACC;
+            case COMBAT:
+                return 0xFFFF6600;
+            case PLAYER:
+                return 0xFF00CC99;
+            case RENDER:
+                return 0xFFB366FF;
+            case MOVEMENT:
+                return 0xFF009933;
+        }
+        return 0xFF000000;
+    }
+
     public void setColor(int color) {
         this.color = color;
     }

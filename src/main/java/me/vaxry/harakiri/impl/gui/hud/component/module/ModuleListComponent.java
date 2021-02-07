@@ -46,16 +46,20 @@ public final class ModuleListComponent extends ResizableHudComponent {
     private final int TEXT_GAP = 2;
     private final int TEXTURE_SIZE = 8;
     private final int TITLE_BAR_HEIGHT = mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
+    private int ACCENT_COLOR = 0xFFCCFF66;
+    private int ACCENT_COLOR_BG = 0x44CCFF66;
 
     private String originalName = "";
     private String title = "";
 
     private final HudEditorModule hudEditorModule;
     private final Texture texture;
+    private final Texture arrowTexture;
     //private final Texture gearTexture;
 
     private ToolTipComponent currentToolTip;
-    private ModuleSettingsComponent currentSettings;
+    private ArrayList<ModuleSettingsComponent> currentSettingsArr = new ArrayList<>();
+   //private ModuleSettingsComponent currentSettings;
 
     private int rainbowCol = 0xFFFFFFFF;
     private int rainbowColBG = 0x45FFFFFF;
@@ -67,6 +71,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
         this.originalName = StringUtils.capitalize(type.name().toLowerCase());
         this.hudEditorModule = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
         this.texture = new Texture("module-" + type.name().toLowerCase() + ".png");
+        this.arrowTexture = new Texture("arrow.png");
         //this.gearTexture = new Texture("gear_wheel_modulelist.png");
 
         this.setSnappable(false);
@@ -91,6 +96,10 @@ public final class ModuleListComponent extends ResizableHudComponent {
         // rainbow
         rainbowCol = Harakiri.INSTANCE.getHudEditor().rainbowColor;
         rainbowColBG = 0x45000000 + Harakiri.INSTANCE.getHudEditor().rainbowColor - 0xFF000000;
+
+        final HudEditorModule hem = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
+        ACCENT_COLOR = 0xFF000000 + hem.color.getValue().getRGB();
+        ACCENT_COLOR_BG = 0x44000000 + hem.color.getValue().getRGB();
 
         final HudModule hm = (HudModule) Harakiri.INSTANCE.getModuleManager().find(HudModule.class);
         if(hm.rainbow.getValue())
@@ -132,12 +141,16 @@ public final class ModuleListComponent extends ResizableHudComponent {
         // Background & title
         //RenderUtil.begin2D();
         //RenderUtil.drawRoundedRect(this.getX() - 1, this.getY() - 1, this.getW() + 1, this.getH() + 1, 5,0x11101010); //0x99
-        RenderUtil.drawRoundedRect(this.getX(), this.getY(), this.getW(), this.getH(), 5, 0x22202020); //0xFF
-        GlStateManager.enableBlend();
-        texture.bind();
-        texture.render(this.getX() + BORDER, this.getY() + BORDER, TEXTURE_SIZE, TEXTURE_SIZE);
-        GlStateManager.disableBlend();
-        mc.fontRenderer.drawStringWithShadow(this.title, this.getX() + BORDER + /* texture width */ TEXTURE_SIZE + BORDER, this.getY() + BORDER, 0xFFDDDDDD);
+        RenderUtil.drawRoundedRect(this.getX(), this.getY(), this.getW(), this.getH() + BORDER, 5, 0x22202020); //0xFF
+
+        // Draw top area
+        RenderUtil.drawRoundedRectTop(this.getX(), this.getY(), this.getW(), mc.fontRenderer.FONT_HEIGHT + BORDER, 5, this.useRainbow ? ColorUtil.changeAlpha(rainbowCol, 0x77) : ColorUtil.changeAlpha(ACCENT_COLOR, 0x77));
+
+        //GlStateManager.enableBlend();
+        //texture.bind();
+        //texture.render(this.getX() + BORDER, this.getY() + BORDER, TEXTURE_SIZE, TEXTURE_SIZE);
+        //GlStateManager.disableBlend();
+        mc.fontRenderer.drawStringWithShadow(this.title, this.getX() - mc.fontRenderer.getStringWidth(this.title)/2.f + this.getW() / 2.f, this.getY() + BORDER, 0xFFDDDDDD);
         offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
 
         // Behind hub
@@ -169,10 +182,14 @@ public final class ModuleListComponent extends ResizableHudComponent {
         for (Module module : Harakiri.INSTANCE.getModuleManager().getModuleList(this.type)) {
 
             // draw module button bg
+           // if(useRainbow)
+           //     RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, module.isEnabled() ? rainbowColBG : 0x451F1C22);
+            //else
+            //    RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, module.isEnabled() ? ACCENT_COLOR_BG : 0x451F1C22);
             if(useRainbow)
-                RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, module.isEnabled() ? rainbowColBG : 0x451F1C22);
+                RenderUtil.drawGradientRectLeftRight(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, module.isEnabled() ? rainbowColBG : 0x451F1C22, 0x00000000);
             else
-                RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, module.isEnabled() ? 0x453B005F : 0x451F1C22);
+                RenderUtil.drawGradientRectLeftRight(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + mc.fontRenderer.FONT_HEIGHT - this.scroll, module.isEnabled() ? ACCENT_COLOR_BG : 0x451F1C22, 0x00000000);
 
             final boolean insideModule = mouseX >= (this.getX() + BORDER) * SCALING && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 1) * SCALING && mouseY >= (this.getY() + BORDER + mc.fontRenderer.FONT_HEIGHT + TEXT_GAP + offsetY - this.scroll - mc.fontRenderer.FONT_HEIGHT + TEXT_GAP) * SCALING && mouseY <= (this.getY() + BORDER + (mc.fontRenderer.FONT_HEIGHT) + 1 + offsetY - this.scroll) * SCALING;
             if (insideModule) { // draw options line
@@ -207,43 +224,91 @@ public final class ModuleListComponent extends ResizableHudComponent {
             if(useRainbow)
                 mc.fontRenderer.drawStringWithShadow(module.getDisplayName(), this.getX() + BORDER + TEXT_GAP + 1 + module.xOffset, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, module.isEnabled() ? rainbowCol : 0xFFAAAAB7);
             else
-                mc.fontRenderer.drawStringWithShadow(module.getDisplayName(), this.getX() + BORDER + TEXT_GAP + 1 + module.xOffset, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, module.isEnabled() ? 0xFFC255FF : 0xFFAAAAB7);
+                mc.fontRenderer.drawStringWithShadow(module.getDisplayName(), this.getX() + BORDER + TEXT_GAP + 1 + module.xOffset, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, module.isEnabled() ? ACCENT_COLOR : 0xFFAAAAB7);
 
             offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
 
-            if(this.currentSettings != null){
-                if(this.currentSettings.module.getDisplayName().equalsIgnoreCase(module.getDisplayName())){
-                    // DRAW YEET
-                    float tempOffsetY = 0;
+            if(!this.currentSettingsArr.isEmpty()) {
+                for (ModuleSettingsComponent currentSettings : currentSettingsArr) {
+                    if (currentSettings.module.getDisplayName().equalsIgnoreCase(module.getDisplayName())) {
+                        // DRAW YEET
+                        float tempOffsetY = 0;
 
-                    this.currentSettings.setX(this.getX() + BORDER);
-                    this.currentSettings.setY(this.getY() + offsetY + BORDER - this.scroll);
-                    this.currentSettings.setW(this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2);
-                    this.currentSettings.setH(this.getH() - BORDER);
-                    this.currentSettings.render((int)(mouseX * SCALING), (int)(mouseY * SCALING), partialTicks);
-                    for (HudComponent settingComponent : this.currentSettings.components) {
-                        //if (settingComponent.getY() > this.getY() + this.currentSettings.getH())
-                        tempOffsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
+                        // Arrow
+                        float theta = currentSettings.percOpen * 90.f;
+
+                        offsetY -= mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
+                        GlStateManager.enableBlend();
+                        this.arrowTexture.bind();
+                        GL11.glTranslatef(this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 10 + 4, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll + 0.5f + 4, 0);
+                        GL11.glRotatef(theta, 0F, 0F, 1.0F);
+                        this.arrowTexture.render(-4, -4, 8, 8);
+                        GL11.glRotatef(-theta, 0F, 0F, 1.0F);
+                        GL11.glTranslatef(-(this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 10 + 4), -(this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll + 0.5f + 4), 0);
+                        GlStateManager.disableBlend();
+                        offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
+
+                        currentSettings.setX(this.getX() + BORDER);
+                        currentSettings.setY(this.getY() + offsetY + BORDER - this.scroll);
+                        currentSettings.setW(this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2);
+                        currentSettings.setH(this.getH() - BORDER);
+
+                        int LINE_HAS_ERRORS = 2;
+
+                        // Draw behind white box
+                        RenderUtil.drawRect(currentSettings.getX() + LINE_HAS_ERRORS, currentSettings.getY(), currentSettings.getX() + currentSettings.getW() + LINE_HAS_ERRORS, (currentSettings.percOpen * currentSettings.effectiveH) + currentSettings.getY(), (int)(currentSettings.percOpen * (float)0x88) * 0x1000000);
+
+                        currentSettings.render((int) (mouseX * SCALING), (int) (mouseY * SCALING), partialTicks);
+                        for (HudComponent settingComponent : currentSettings.components) {
+                            //if (settingComponent.getY() > this.getY() + this.currentSettings.getH())
+                            tempOffsetY += mc.fontRenderer.FONT_HEIGHT + 1 /* TextGap */;
+                        }
+
+                        // Fix height
+                        currentSettings.setH(tempOffsetY);
+                        currentSettings.effectiveH = tempOffsetY * currentSettings.percOpen;
+
+                        // Slow opening.
+                        offsetY += tempOffsetY * currentSettings.percOpen;
+
+
+                        // Draw outline to see where the stuff is easier
+                        RenderUtil.drawLine(currentSettings.getX() + LINE_HAS_ERRORS, currentSettings.getY(), currentSettings.getX() + currentSettings.getW() + LINE_HAS_ERRORS, currentSettings.getY(), 0.5f, ColorUtil.changeAlpha(this.useRainbow ? this.rainbowCol : ACCENT_COLOR, currentSettings.alphaForBorder)); //top
+                        RenderUtil.drawLine(currentSettings.getX() + currentSettings.getW() + LINE_HAS_ERRORS, currentSettings.getY(), currentSettings.getX() + currentSettings.getW() + LINE_HAS_ERRORS, currentSettings.getY() + currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(this.useRainbow ? this.rainbowCol : ACCENT_COLOR, currentSettings.alphaForBorder)); //right
+                        RenderUtil.drawLine(currentSettings.getX() + LINE_HAS_ERRORS, currentSettings.getY() + currentSettings.getH(), currentSettings.getX() + currentSettings.getW() + LINE_HAS_ERRORS, currentSettings.getY() + currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(this.useRainbow ? this.rainbowCol : ACCENT_COLOR, currentSettings.alphaForBorder)); //bottom
+                        RenderUtil.drawLine(currentSettings.getX() + LINE_HAS_ERRORS, currentSettings.getY(), currentSettings.getX() + LINE_HAS_ERRORS, currentSettings.getY() + currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(this.useRainbow ? this.rainbowCol : ACCENT_COLOR, currentSettings.alphaForBorder)); //left
+
+                    } else if(!isCurrentSettingOpen(module.getDisplayName())){ // dont render if its open Xd
+
+                        //draw the arrow with normal 0 deg rotation
+                        GlStateManager.enableBlend();
+                        offsetY -= mc.fontRenderer.FONT_HEIGHT + TEXT_GAP; //undo the offset
+                        this.arrowTexture.bind();
+                        this.arrowTexture.render(this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 10, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll + 0.5f, 8, 8);
+                        offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP; //redo
+                        GlStateManager.disableBlend();
                     }
-
-                    // Fix height
-                    this.currentSettings.setH(tempOffsetY);
-                    this.currentSettings.effectiveH = tempOffsetY * this.currentSettings.percOpen;
-
-                    // Slow opening.
-                    offsetY += tempOffsetY * this.currentSettings.percOpen;
-
-                    int LINE_HAS_ERRORS = 2;
-
-                    // Draw outline to see where the stuff is easier
-                    RenderUtil.drawLine(this.currentSettings.getX() + LINE_HAS_ERRORS, this.currentSettings.getY(), this.currentSettings.getX() + this.currentSettings.getW() + LINE_HAS_ERRORS, this.currentSettings.getY(), 0.5f, ColorUtil.changeAlpha(0xFFFFFFFF, this.currentSettings.alphaForBorder)); //top
-                    RenderUtil.drawLine(this.currentSettings.getX() + this.currentSettings.getW() + LINE_HAS_ERRORS, this.currentSettings.getY(), this.currentSettings.getX() + this.currentSettings.getW() + LINE_HAS_ERRORS, this.currentSettings.getY() + this.currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(0xFFFFFFFF, this.currentSettings.alphaForBorder)); //right
-                    RenderUtil.drawLine(this.currentSettings.getX() + LINE_HAS_ERRORS, this.currentSettings.getY() + this.currentSettings.getH(), this.currentSettings.getX() + this.currentSettings.getW() + LINE_HAS_ERRORS, this.currentSettings.getY() + this.currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(0xFFFFFFFF, this.currentSettings.alphaForBorder)); //bottom
-                    RenderUtil.drawLine(this.currentSettings.getX() + LINE_HAS_ERRORS, this.currentSettings.getY(), this.currentSettings.getX() + LINE_HAS_ERRORS, this.currentSettings.getY() + this.currentSettings.getH(), 0.5f, ColorUtil.changeAlpha(0xFFFFFFFF, this.currentSettings.alphaForBorder)); //left
                 }
+            }else{
+                //draw the arrow with normal 0 deg rotation
+                GlStateManager.enableBlend();
+                offsetY -= mc.fontRenderer.FONT_HEIGHT + TEXT_GAP; //undo the offset
+                this.arrowTexture.bind();
+                this.arrowTexture.render(this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 10, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll + 0.5f, 8, 8);
+                offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP; //redo
+                GlStateManager.disableBlend();
             }
         }
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
+
+        // Clean up the open settings
+        for(int i = 0; i < this.currentSettingsArr.size(); ++i){
+            ModuleSettingsComponent msc = this.currentSettingsArr.get(i);
+            if(msc.toClose && msc.percOpen <= 0.f){
+                this.currentSettingsArr.remove(i);
+                i--;
+            }
+        }
 
         // Handle tooltips
         if (this.hudEditorModule != null && this.hudEditorModule.tooltips.getValue() && !insideTitlebar) {
@@ -251,18 +316,20 @@ public final class ModuleListComponent extends ResizableHudComponent {
                 String tooltipText = "";
                 int height = BORDER;
 
-                if (this.currentSettings != null) {
-                    for (HudComponent valueComponent : this.currentSettings.components) {
-                        if (valueComponent.isMouseInside(mouseX, mouseY)) {
-                            tooltipText = valueComponent.getTooltipText();
-                        } else {
-                            if (this.currentToolTip != null) {
-                                if (this.currentToolTip.text.equals(valueComponent.getTooltipText())) {
-                                    this.currentToolTip = null;
+                if (!this.currentSettingsArr.isEmpty()) {
+                    for (ModuleSettingsComponent currentSettings : currentSettingsArr) {
+                        for (HudComponent valueComponent : currentSettings.components) {
+                            if (valueComponent.isMouseInside(mouseX, mouseY)) {
+                                tooltipText = valueComponent.getTooltipText();
+                            } else {
+                                if (this.currentToolTip != null) {
+                                    if (this.currentToolTip.text.equals(valueComponent.getTooltipText())) {
+                                        this.currentToolTip = null;
+                                    }
                                 }
                             }
+                            height += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
                         }
-                        height += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
                     }
                 } else {
                     for (Module module : Harakiri.INSTANCE.getModuleManager().getModuleList(this.type)) {
@@ -312,8 +379,10 @@ public final class ModuleListComponent extends ResizableHudComponent {
         final int titleBarHeight = mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
         final boolean insideTitlebar = mouseY <= this.getY() + BORDER + titleBarHeight;
 
-        if(this.currentSettings != null) {
-            this.currentSettings.mouseRelease(mouseX, mouseY, button);
+        if(!this.currentSettingsArr.isEmpty()) {
+            for (ModuleSettingsComponent currentSettings : currentSettingsArr) {
+                currentSettings.mouseRelease(mouseX, mouseY, button);
+            }
         }
 
         if (inside && !insideTitlebar && !isResizeDragging()) {
@@ -327,27 +396,24 @@ public final class ModuleListComponent extends ResizableHudComponent {
                             this.setDragging(false);
                             break;
                         case 1:
-                            if(this.currentSettings != null){
-                                if(this.currentSettings.module.getDisplayName().equalsIgnoreCase(module.getDisplayName())){
-                                    this.currentSettings = null;
-                                }else{
-                                    this.currentSettings = null;
-                                    this.currentSettings = new ModuleSettingsComponent(module, this, offsetY);
-                                }
+                            if(isCurrentSettingOpen(module.getDisplayName())){
+                                closeOpenSetting(module.getDisplayName());
                             }else{
-                                this.currentSettings = new ModuleSettingsComponent(module, this, offsetY);
+                                currentSettingsArr.add(new ModuleSettingsComponent(module, this, offsetY));
                             }
                             this.removeTooltip();
                             break;
                     }
                 }
                 offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
-                if(this.currentSettings != null){
-                    if(this.currentSettings.module.getDisplayName().equalsIgnoreCase(module.getDisplayName())){
-                        componentY = offsetY;
-                        scomponentY = offsetY;
-                        for (HudComponent settingComponent : this.currentSettings.components) {
-                            offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
+                if(!this.currentSettingsArr.isEmpty()) {
+                    for (ModuleSettingsComponent currentSettings : currentSettingsArr) {
+                        if (currentSettings.module.getDisplayName().equalsIgnoreCase(module.getDisplayName())) {
+                            componentY = offsetY;
+                            scomponentY = offsetY;
+                            for (HudComponent settingComponent : currentSettings.components) {
+                                offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
+                            }
                         }
                     }
                 }
@@ -376,8 +442,10 @@ public final class ModuleListComponent extends ResizableHudComponent {
         if (insideDragZone) {
             super.mouseClick(mouseX, mouseY, button);
         } else {
-            if (this.currentSettings != null) {
-                this.currentSettings.mouseClick(mouseX, mouseY, button);
+            if(!this.currentSettingsArr.isEmpty()) {
+                for (ModuleSettingsComponent currentSettings : currentSettingsArr) {
+                    currentSettings.mouseClick(mouseX, mouseY, button);
+                }
             }
         }
     }
@@ -386,8 +454,10 @@ public final class ModuleListComponent extends ResizableHudComponent {
     public void keyTyped(char typedChar, int keyCode) {
         super.keyTyped(typedChar, keyCode);
 
-        if (this.currentSettings != null) {
-            this.currentSettings.keyTyped(typedChar, keyCode);
+        if(!this.currentSettingsArr.isEmpty()) {
+            for (ModuleSettingsComponent currentSettings : currentSettingsArr) {
+                currentSettings.keyTyped(typedChar, keyCode);
+            }
         }
     }
 
@@ -397,6 +467,32 @@ public final class ModuleListComponent extends ResizableHudComponent {
 
         if (this.currentToolTip != null) {
             this.currentToolTip = null;
+        }
+    }
+
+    private boolean isCurrentSettingOpen(String title){
+        for (ModuleSettingsComponent currentSettings : currentSettingsArr) {
+            if(currentSettings.getName().equalsIgnoreCase(title))
+                return true;
+        }
+        return false;
+    }
+
+    private void removeOpenSetting(String title){
+        for(int i = 0; i < currentSettingsArr.size(); ++i){
+            if(currentSettingsArr.get(i).getName().equalsIgnoreCase(title)){
+                currentSettingsArr.remove(i);
+                break;
+            }
+        }
+    }
+
+    private void closeOpenSetting(String title){
+        for(int i = 0; i < currentSettingsArr.size(); ++i){
+            if(currentSettingsArr.get(i).getName().equalsIgnoreCase(title)){
+                currentSettingsArr.get(i).toClose = true;
+                break;
+            }
         }
     }
 
@@ -418,7 +514,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
             }
 
             if (this.getOldScroll() != 0) {
-                if (this.currentSettings == null) {
+                if(this.currentSettingsArr.isEmpty()) {
                     this.setScroll(this.getOldScroll());
                     this.setOldScroll(0);
                 }
@@ -471,8 +567,8 @@ public final class ModuleListComponent extends ResizableHudComponent {
         return currentToolTip;
     }
 
-    public ModuleSettingsComponent getCurrentSettings() {
-        return currentSettings;
+    public ArrayList<ModuleSettingsComponent> getCurrentSettings() {
+        return currentSettingsArr;
     }
 
     public static class BackButtonComponent extends HudComponent {
@@ -505,7 +601,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
                 if (component instanceof ModuleListComponent) {
                     ModuleListComponent moduleList = (ModuleListComponent) component;
                     if (moduleList.getName().equals(parentModuleList.getName())) {
-                        moduleList.currentSettings = null;
+                        //moduleList.currentSettings = null;
                         moduleList.removeTooltip();
                     }
                 }
@@ -521,6 +617,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
         private boolean isAlphaDown = true;
         public float percOpen = 0;
         public float effectiveH = 0;
+        public boolean toClose = false;
 
         public ModuleSettingsComponent(Module module, ModuleListComponent parentModuleList, int yoff) {
             super(module.getDisplayName());
@@ -718,13 +815,23 @@ public final class ModuleListComponent extends ResizableHudComponent {
             }
 
             // Increase perc
-            percOpen += 0.05f;
-            if(percOpen > 1.f)
-                percOpen = 1.f;
+            if(!toClose) {
+                percOpen += 0.05f;
+                if (percOpen > 1.f)
+                    percOpen = 1.f;
+            }else{
+                percOpen -= 0.05f;
+                if (percOpen < 0.f)
+                    percOpen = 0.f;
+            }
+
+            final ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
 
             int offsetY = 1;
+            GL11.glEnable(GL11.GL_SCISSOR_TEST);
+            RenderUtil.glScissor(this.getX(), this.getY(), this.getW() + this.getX(), this.getY() + this.effectiveH, sr);
             for (HudComponent component : this.components) {
-                int offsetX = 4;
+                int offsetX = 1;
 
                 for (HudComponent otherComponent : this.components) {
                     if (otherComponent == component || otherComponent.getName().equals(component.getName()))
@@ -746,11 +853,8 @@ public final class ModuleListComponent extends ResizableHudComponent {
                 component.render(mouseX, mouseY, partialTicks);
 
                 offsetY += component.getH() + 1;
-
-                if(offsetY > effectiveH) {
-                    break;
-                }
             }
+            GL11.glDisable(GL11.GL_SCISSOR_TEST);
         }
 
         @Override

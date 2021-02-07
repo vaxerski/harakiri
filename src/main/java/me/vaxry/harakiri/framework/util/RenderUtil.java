@@ -130,6 +130,62 @@ public final class RenderUtil {
         GlStateManager.enableTexture2D();
     }
 
+    public static void drawRoundedRectTop(float x, float y, float w, float h, float radius, int color) {
+        float alpha = (float) (color >> 24 & 255) / 255.0F;
+        float red = (float) (color >> 16 & 255) / 255.0F;
+        float green = (float) (color >> 8 & 255) / 255.0F;
+        float blue = (float) (color & 255) / 255.0F;
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+
+        glColor(color);
+
+        GL11.glBegin(GL11.GL_POLYGON);
+        int SIDES = 32; // 32 sides
+        int SIDES34 = 8 * 3;
+
+
+        // Bottom Line
+        GL11.glVertex2d(x, y + h);
+        GL11.glVertex2d(x + w, y + h);
+
+        float x1;
+        float y1;
+
+        // Right Line
+        GL11.glVertex2d(x + w, y + radius);
+
+        x1 = x + w - radius;
+        y1 = y + radius;
+
+        for (int i = SIDES / 4; i <= SIDES / 2; i++)
+        {
+            GL11.glVertex2d(x1 + (Math.sin((i * (360.f / (float)SIDES) * 3.141526D / 180)) * radius), y1 + (Math.cos((i * (360.f / (float)SIDES) * 3.141526D / 180)) * radius));
+        }
+
+        // Top Line
+        GL11.glVertex2d(x + radius, y);
+
+        x1 = x + radius;
+        y1 = y + radius;
+
+        for (int i = SIDES / 2; i <= SIDES34; i++)
+        {
+            GL11.glVertex2d(x1 + (Math.sin((i * (360.f / (float)SIDES) * 3.141526D / 180)) * radius), y1 + (Math.cos((i * (360.f / (float)SIDES) * 3.141526D / 180)) * radius));
+        }
+
+        // Left Line
+        GL11.glVertex2d(x, y + h);
+
+        GL11.glEnd();
+
+        GlStateManager.disableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.enableTexture2D();
+    }
+
     //todo: fix this
     public static void drawResizeAnchor(float x, float y, float w, float h, int color) {
         GlStateManager.disableTexture2D();

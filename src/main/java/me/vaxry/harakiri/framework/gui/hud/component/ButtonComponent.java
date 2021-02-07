@@ -1,7 +1,12 @@
 package me.vaxry.harakiri.framework.gui.hud.component;
 
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.impl.module.render.HudModule;
+import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.Minecraft;
+
+import java.util.HashMap;
 
 /**
  * @author noil
@@ -11,7 +16,13 @@ public class ButtonComponent extends HudComponent {
     public boolean enabled, rightClickEnabled;
     public ComponentListener mouseClickListener, rightClickListener;
 
-    private int rainbowColor = 0xFFFFFFFF;
+    private int rainbowCol = 0xFFFFFFFF;
+    private int rainbowColBG = 0xFFFFFFFF;
+
+    private int ACCENT_COLOR = 0xFFCCFF66;
+    private int ACCENT_COLOR_BG = 0x44CCFF66;
+
+    private boolean useRainbow = false;
 
     public ButtonComponent(String name) {
         super(name);
@@ -23,14 +34,27 @@ public class ButtonComponent extends HudComponent {
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
 
+        final HudModule hm = (HudModule) Harakiri.INSTANCE.getModuleManager().find(HudModule.class);
+        if(hm.rainbow.getValue())
+            useRainbow = true;
+        else
+            useRainbow = false;
+
+        final HudEditorModule hem = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
+        ACCENT_COLOR = 0xFF000000 + hem.color.getValue().getRGB();
+        ACCENT_COLOR_BG = 0x44000000 + hem.color.getValue().getRGB();
+
+        rainbowCol = Harakiri.INSTANCE.getHudEditor().rainbowColor;
+        rainbowColBG = 0x45000000 + Harakiri.INSTANCE.getHudEditor().rainbowColor - 0xFF000000;
+
         if (isMouseInside(mouseX, mouseY))
             RenderUtil.drawGradientRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x30909090, 0x30909090);
 
         // draw bg
         if(this.enabled)
-            RenderUtil.drawGradientRectLeftRight(this.getX(), this.getY(), this.getX() + (this.rightClickListener != null ? this.getW() - 8 : this.getW()), this.getY() + this.getH(), 0x99001F00, 0x00001F00);
+            RenderUtil.drawGradientRectLeftRight(this.getX(), this.getY(), this.getX() + (this.rightClickListener != null ? this.getW() - 8 : this.getW()), this.getY() + this.getH(), this.useRainbow ? this.rainbowColBG : ACCENT_COLOR_BG, 0x00001F00);
         else
-            RenderUtil.drawGradientRectLeftRight(this.getX(), this.getY(), this.getX() + (this.rightClickListener != null ? this.getW() - 8 : this.getW()), this.getY() + this.getH(), 0x991F0000, 0x001F0000);
+            RenderUtil.drawGradientRectLeftRight(this.getX(), this.getY(), this.getX() + (this.rightClickListener != null ? this.getW() - 8 : this.getW()), this.getY() + this.getH(), 0x001F0000, 0x001F0000);
 
         if (this.rightClickListener != null) {
             final boolean isMousingHoveringDropdown = mouseX >= this.getX() + this.getW() - 8 && mouseX <= this.getX() + this.getW() && mouseY >= this.getY() && mouseY <= this.getY() + this.getH();
@@ -51,7 +75,7 @@ public class ButtonComponent extends HudComponent {
         }
 
         // draw text
-        Minecraft.getMinecraft().fontRenderer.drawString(this.getName(), (int) this.getX() + 1, (int) this.getY() + 1, this.enabled ? 0xFF45FF45 : 0xFFFF4545);
+        Minecraft.getMinecraft().fontRenderer.drawString(this.getName(), (int) this.getX() + 1, (int) this.getY() + 1, this.enabled ? ACCENT_COLOR : 0xFFAAAAB7);
     }
 
     @Override

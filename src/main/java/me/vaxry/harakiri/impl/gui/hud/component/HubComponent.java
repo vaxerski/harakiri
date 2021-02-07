@@ -5,10 +5,12 @@ import me.vaxry.harakiri.framework.event.gui.hud.EventHubComponentClick;
 import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
 import me.vaxry.harakiri.framework.gui.hud.component.ResizableHudComponent;
 import me.vaxry.harakiri.framework.texture.Texture;
+import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
 import me.vaxry.harakiri.impl.module.render.HudModule;
+import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
@@ -29,6 +31,9 @@ public final class HubComponent extends ResizableHudComponent {
     private final int TEXT_GAP = 1;
     private final int TEXTURE_SIZE = 8;
     private final int TITLE_BAR_HEIGHT = mc.fontRenderer.FONT_HEIGHT + 1;
+
+    private int ACCENT_COLOR = 0xFFCCFF66;
+    private int ACCENT_COLOR_BG = 0x44CCFF66;
 
     private boolean useRainbow = false;
     private int rainbowCol = 0xFFFFFFFF;
@@ -80,6 +85,10 @@ public final class HubComponent extends ResizableHudComponent {
             }
         }
 
+        final HudEditorModule hem = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
+        ACCENT_COLOR = 0xFF000000 + hem.color.getValue().getRGB();
+        ACCENT_COLOR_BG = 0x44000000 + hem.color.getValue().getRGB();
+
         final HudModule hm = (HudModule) Harakiri.INSTANCE.getModuleManager().find(HudModule.class);
         if(hm.rainbow.getValue())
             useRainbow = true;
@@ -90,14 +99,19 @@ public final class HubComponent extends ResizableHudComponent {
         rainbowColBG = 0x45000000 + Harakiri.INSTANCE.getHudEditor().rainbowColor - 0xFF000000;
 
         // Background & title
-        //RenderUtil.drawRoundedRect(this.getX() - 1, this.getY() - 1, this.getW() + 1, this.getH() + 1, 5, 0x11101010); //0x99
-        RenderUtil.drawRoundedRect(this.getX(), this.getY(), this.getW(), this.getH(), 5, 0x22202020); //0xFF
-        GlStateManager.enableBlend();
-        texture.bind();
-        texture.render(this.getX() + BORDER, this.getY() + BORDER, TEXTURE_SIZE, TEXTURE_SIZE);
-        GlStateManager.disableBlend();
-        mc.fontRenderer.drawStringWithShadow(this.getName(), this.getX() + BORDER + /* texture width */ TEXTURE_SIZE + BORDER, this.getY() + BORDER, 0xFFFFFFFF);
-        offsetY += mc.fontRenderer.FONT_HEIGHT + 1;
+        //RenderUtil.begin2D();
+        //RenderUtil.drawRoundedRect(this.getX() - 1, this.getY() - 1, this.getW() + 1, this.getH() + 1, 5,0x11101010); //0x99
+        RenderUtil.drawRoundedRect(this.getX(), this.getY(), this.getW(), this.getH() + BORDER, 5, 0x22202020); //0xFF
+
+        // Draw top area
+        RenderUtil.drawRoundedRectTop(this.getX(), this.getY(), this.getW(), mc.fontRenderer.FONT_HEIGHT + BORDER, 5, this.useRainbow ? ColorUtil.changeAlpha(rainbowCol, 0x77) : ColorUtil.changeAlpha(ACCENT_COLOR, 0x77));
+
+        //GlStateManager.enableBlend();
+        //texture.bind();
+        //texture.render(this.getX() + BORDER, this.getY() + BORDER, TEXTURE_SIZE, TEXTURE_SIZE);
+        //GlStateManager.disableBlend();
+        mc.fontRenderer.drawStringWithShadow(this.getName(), this.getX() - mc.fontRenderer.getStringWidth(this.getName())/2.f + this.getW() / 2.f, this.getY() + BORDER, 0xFFDDDDDD);
+        offsetY += mc.fontRenderer.FONT_HEIGHT + TEXT_GAP;
 
         // Behind hub
         //RenderUtil.drawRoundedRect(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getW() - SCROLL_WIDTH - BORDER, this.getH() - BORDER, 5, 0x22101010); //0xff
