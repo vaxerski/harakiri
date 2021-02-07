@@ -139,7 +139,7 @@ public final class Harakiri {
     }
 
     public void errorChat(String message) {
-        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("\2477[Harakiri]\247c " + message));
+        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("\2475[Harakiri]\247c " + message));
     }
 
     public void errorfChat(String format, Object... objects) {
@@ -147,11 +147,11 @@ public final class Harakiri {
     }
 
     public void logChat(String message) {
-        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("\2477[Harakiri]\247f " + message));
+        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("\2475[Harakiri]\247f " + message));
     }
 
     public void logcChat(ITextComponent textComponent) {
-        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("\2477[Harakiri]\247f ").appendSibling(textComponent));
+        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("\2475[Harakiri]\247f ").appendSibling(textComponent));
     }
 
     public void logfChat(String format, Object... objects) {
