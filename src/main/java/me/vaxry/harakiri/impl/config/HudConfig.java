@@ -1,7 +1,9 @@
 package me.vaxry.harakiri.impl.config;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonReader;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.config.Configurable;
 import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
@@ -11,157 +13,142 @@ import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 
 import java.io.File;
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Map;
 
-/**
- * @author noil
- */
 public final class HudConfig extends Configurable {
 
-    private HudComponent hudComponent;
+    class HudConfigJSON{
+        public HudConfigJSON(String name, float x, float y, float w, float h, boolean vis, boolean lock, String anch, String stick, String stickside){
+            this.name = name;
+            this.x = x;
+            this.y = y;
+            this.w = w;
+            this.h = h;
+            this.vis = vis;
+            this.lock = lock;
+            this.anch = anch;
+            this.stick = stick;
+            this.stickside = stickside;
+        }
+        public String name;
+        public float x;
+        public float y;
+        public float w;
+        public float h;
+        public boolean vis;
+        public boolean lock;
+        public String anch;
+        public String stick;
+        public String stickside;
+    }
 
-    public HudConfig(File dir, HudComponent hudComponent) {
-        super(FileUtil.createJsonFile(dir, hudComponent.getName()));
-        this.hudComponent = hudComponent;
+    public HudConfig(File dir) {
+        super(FileUtil.createJsonFile(dir, "hud"));
     }
 
     @Override
     public void onLoad() {
         super.onLoad();
 
-        if (this.hudComponent instanceof DraggableHudComponent) {
-            final DraggableHudComponent draggableHudComponent = (DraggableHudComponent) this.hudComponent;
-            this.getJsonObject().entrySet().forEach(entry -> {
-                switch (entry.getKey()) {
-                    case "X":
-                        hudComponent.setX(entry.getValue().getAsFloat());
-                        break;
-                    case "Y":
-                        hudComponent.setY(entry.getValue().getAsFloat());
-                        break;
-                    case "W":
-                        hudComponent.setW(entry.getValue().getAsFloat());
-                        break;
-                    case "H":
-                        hudComponent.setH(entry.getValue().getAsFloat());
-                        break;
-                    case "Visible":
-                        hudComponent.setVisible(entry.getValue().getAsBoolean());
-                        break;
-                    case "Locked":
-                        draggableHudComponent.setLocked(entry.getValue().getAsBoolean());
-                        break;
-                    case "Anchor":
-                        if (!entry.getValue().getAsString().equals("NONE")) {
-                            for (AnchorPoint anchorPoint : Harakiri.INSTANCE.getHudManager().getAnchorPoints()) {
-                                if (anchorPoint.getPoint().equals(AnchorPoint.Point.valueOf(entry.getValue().getAsString()))) {
-                                    draggableHudComponent.setAnchorPoint(anchorPoint);
-                                }
-                            }
-                        } else {
-                            draggableHudComponent.setAnchorPoint(null);
-                        }
-                        break;
-                    case "Stick":
-                        if (!entry.getValue().getAsString().equals("NONE")) {
-                            draggableHudComponent.setGlued((DraggableHudComponent) Harakiri.INSTANCE.getHudManager().findComponent(entry.getValue().getAsString()));
-                        } else {
-                            draggableHudComponent.setGlued(null);
-                        }
-                        break;
-                    case "StickSide":
-                        if (!entry.getValue().getAsString().equals("NONE")) {
-                            draggableHudComponent.setGlueSide(DraggableHudComponent.GlueSide.valueOf(entry.getValue().getAsString()));
-                        } else {
-                            draggableHudComponent.setGlueSide(null);
-                        }
-                        break;
+        String rawdata = loadRawFile();
+        if(rawdata.equalsIgnoreCase(""))
+            return;
 
+        Gson gson = new Gson();
+
+        //JsonObject obj = gson.fromJson(rawdata, JsonObject.class);
+        JsonReader reader = new JsonReader(new StringReader(rawdata));
+        reader.setLenient(true);
+
+        // Retrieve array
+        HudConfigJSON[] hudConfigJSONS = gson.fromJson(reader, HudConfigJSON[].class);
+
+        for(HudConfigJSON settings : hudConfigJSONS) {
+
+            if(settings == null)
+                continue;
+
+            HudComponent component = Harakiri.INSTANCE.getHudManager().findComponent(settings.name);
+
+            component.setX(settings.x);
+            component.setY(settings.y);
+            component.setW(settings.w);
+            component.setH(settings.h);
+            component.setVisible(settings.vis);
+
+            if(component instanceof DraggableHudComponent){
+                // its dragebl xdxd
+                DraggableHudComponent dhc = (DraggableHudComponent)component;
+
+                // Anchor
+                dhc.setAnchorPoint(null);
+                if (!settings.anch.equalsIgnoreCase("na")) {
+                    for (AnchorPoint anchorPoint : Harakiri.INSTANCE.getHudManager().getAnchorPoints()) {
+                        if (anchorPoint.getPoint().equals(AnchorPoint.Point.valueOf(settings.anch))) {
+                            dhc.setAnchorPoint(anchorPoint);
+                        }
+                    }
                 }
 
-                this.loadValues(entry);
-            });
-        } else {
-            this.getJsonObject().entrySet().forEach(entry -> {
-                switch (entry.getKey()) {
-                    case "X":
-                        hudComponent.setX(entry.getValue().getAsFloat());
-                        break;
-                    case "Y":
-                        hudComponent.setY(entry.getValue().getAsFloat());
-                        break;
-                    case "W":
-                        hudComponent.setW(entry.getValue().getAsFloat());
-                        break;
-                    case "H":
-                        hudComponent.setH(entry.getValue().getAsFloat());
-                        break;
-                    case "Visible":
-                        hudComponent.setVisible(entry.getValue().getAsBoolean());
-                        break;
+                // Stick
+                dhc.setGlued(null);
+                if (!settings.stick.equalsIgnoreCase("na")) {
+                    dhc.setGlued((DraggableHudComponent) Harakiri.INSTANCE.getHudManager().findComponent(settings.stick));
                 }
 
-                this.loadValues(entry);
-            });
+                // StickSide
+                dhc.setGlueSide(null);
+                if (!settings.stickside.equalsIgnoreCase("na")) {
+                    dhc.setGlueSide(DraggableHudComponent.GlueSide.valueOf(settings.stickside));
+                }
+            }
         }
     }
 
     @Override
     public void onSave() {
         JsonObject componentsListJsonObject = new JsonObject();
-        componentsListJsonObject.addProperty("Name", hudComponent.getName());
-        componentsListJsonObject.addProperty("X", hudComponent.getX());
-        componentsListJsonObject.addProperty("Y", hudComponent.getY());
-        componentsListJsonObject.addProperty("W", hudComponent.getW());
-        componentsListJsonObject.addProperty("H", hudComponent.getH());
-        componentsListJsonObject.addProperty("Visible", hudComponent.isVisible());
 
-        if (hudComponent instanceof DraggableHudComponent) {
-            DraggableHudComponent draggableHudComponent = (DraggableHudComponent) hudComponent;
-            componentsListJsonObject.addProperty("Locked", draggableHudComponent.isLocked());
-            componentsListJsonObject.addProperty("Anchor", draggableHudComponent.getAnchorPoint() == null ? "NONE" : draggableHudComponent.getAnchorPoint().getPoint().name());
-            componentsListJsonObject.addProperty("Stick", draggableHudComponent.getGlued() == null ? "NONE" : draggableHudComponent.getGlued().getName());
-            componentsListJsonObject.addProperty("StickSide", draggableHudComponent.getGlued() == null ? "NONE" : ((DraggableHudComponent) hudComponent).getGlueSide().name());
-        }
+        String strObj = "";
 
-        if (hudComponent.getValueList().size() != 0) {
-            hudComponent.getValueList().forEach(value -> {
-                if (value.getValue() instanceof Boolean)
-                    componentsListJsonObject.addProperty(value.getName(), (Boolean) value.getValue());
-                else if (value.getValue() instanceof Number && !(value.getValue() instanceof Enum)) {
-                    if (value.getValue().getClass() == Float.class) {
-                        componentsListJsonObject.addProperty(value.getName(), (Float) value.getValue());
-                    } else if (value.getValue().getClass() == Double.class) {
-                        componentsListJsonObject.addProperty(value.getName(), (Double) value.getValue());
-                    } else if (value.getValue().getClass() == Integer.class) {
-                        componentsListJsonObject.addProperty(value.getName(), (Integer) value.getValue());
-                    }
-                } else if (value.getValue() instanceof Enum) {
-                    componentsListJsonObject.addProperty(value.getName(), ((Enum) value.getValue()).name());
-                }
-            });
-        }
+        ArrayList<HudConfigJSON> hudConfigJSONS = new ArrayList<>();
 
-        this.saveJsonObjectToFile(componentsListJsonObject);
-    }
-
-    private void loadValues(Map.Entry<String, JsonElement> entry) {
-        for (Value val : hudComponent.getValueList()) {
-            if (val.getName().equalsIgnoreCase(entry.getKey())) {
-                if (val.getValue() instanceof Boolean) {
-                    val.setValue(entry.getValue().getAsBoolean());
-                } else if (val.getValue() instanceof Number && !(val.getValue() instanceof Enum)) {
-                    if (val.getValue().getClass() == Float.class) {
-                        val.setValue(entry.getValue().getAsFloat());
-                    } else if (val.getValue().getClass() == Double.class) {
-                        val.setValue(entry.getValue().getAsDouble());
-                    } else if (val.getValue().getClass() == Integer.class) {
-                        val.setValue(entry.getValue().getAsInt());
-                    }
-                } else if (val.getValue() instanceof Enum) {
-                    val.setEnumValue(entry.getValue().getAsString());
-                }
+        for(HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+            if(component instanceof DraggableHudComponent) {
+                DraggableHudComponent draggableHudComponent = (DraggableHudComponent)component;
+                hudConfigJSONS.add(new HudConfigJSON(
+                        draggableHudComponent.getName(),
+                        draggableHudComponent.getX(),
+                        draggableHudComponent.getY(),
+                        draggableHudComponent.getW(),
+                        draggableHudComponent.getH(),
+                        draggableHudComponent.isVisible(),
+                        draggableHudComponent.isLocked(),
+                        draggableHudComponent.getAnchorPoint() == null ? "na" : draggableHudComponent.getAnchorPoint().getPoint().name(),
+                        draggableHudComponent.getGlued() == null ? "na" : draggableHudComponent.getGlued().getName(),
+                        draggableHudComponent.getGlueSide() == null ? "na" : draggableHudComponent.getGlueSide().name()
+                ));
+            }else{
+                hudConfigJSONS.add(new HudConfigJSON(
+                        component.getName(),
+                        component.getX(),
+                        component.getY(),
+                        component.getW(),
+                        component.getH(),
+                        component.isVisible(),
+                        false,
+                        "na",
+                        "na",
+                        "na"
+                ));
             }
         }
+
+        strObj = new Gson().toJson(hudConfigJSONS);
+
+        this.saveStringToFile(strObj);
+        //this.saveJsonObjectToFile(componentsListJsonObject);
     }
 }

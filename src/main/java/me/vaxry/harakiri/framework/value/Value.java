@@ -59,6 +59,14 @@ public class Value<T> {
         }
     }
 
+    public void setValueForceInt(Double value){
+        this.value = (T)(Number)Integer.valueOf(value.intValue());
+    }
+
+    public void setValueForceFloat(Double value){
+        this.value = (T)(Number)Float.valueOf(value.floatValue());
+    }
+
     public int getEnum(String input) {
         for (int i = 0; i < this.value.getClass().getEnumConstants().length; i++) {
             final Enum e = (Enum) this.value.getClass().getEnumConstants()[i];

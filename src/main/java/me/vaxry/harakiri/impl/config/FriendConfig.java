@@ -15,7 +15,7 @@ import java.io.File;
 public final class FriendConfig extends Configurable {
 
     public FriendConfig(File dir) {
-        super(FileUtil.createJsonFile(dir, "Friends"));
+        super(FileUtil.createJsonFile(dir, "friend"));
     }
 
     @Override

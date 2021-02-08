@@ -35,27 +35,11 @@ public final class ConfigManager {
             this.setFirstLaunch(true);
             this.configDir.mkdirs();
         }
-
-        this.moduleConfigDir = new File(CONFIG_PATH + "mods" + "/");
-        if (!this.moduleConfigDir.exists()) {
-            this.moduleConfigDir.mkdirs();
-        }
-
-        this.hudComponentConfigDir = new File(CONFIG_PATH + "hud" + "/");
-        if (!this.hudComponentConfigDir.exists()) {
-            this.hudComponentConfigDir.mkdirs();
-        }
     }
 
     public void init() {
-        Harakiri.INSTANCE.getModuleManager().getModuleList().forEach(module -> {
-            this.configurableList.add(new ModuleConfig(this.moduleConfigDir, module));
-        });
-
-        Harakiri.INSTANCE.getHudManager().getComponentList().stream().forEach(hudComponent -> {
-            this.configurableList.add(new HudConfig(this.hudComponentConfigDir, hudComponent));
-        });
-
+        this.configurableList.add(new ModuleConfig(configDir));
+        this.configurableList.add(new HudConfig(configDir));
         this.configurableList.add(new FriendConfig(configDir));
         this.configurableList.add(new XrayConfig(configDir));
         this.configurableList.add(new SearchConfig(configDir));
