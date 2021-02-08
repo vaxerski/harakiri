@@ -9,12 +9,14 @@ import me.vaxry.harakiri.framework.util.TTFFontUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.effect.PlexusEffect;
+import me.vaxry.harakiri.impl.gui.menu.HaraMainMenu;
 import me.vaxry.harakiri.impl.management.*;
 import me.vaxry.harakiri.impl.module.render.CustomFontModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import team.stiff.pomelo.EventManager;
@@ -35,6 +37,7 @@ public final class Harakiri {
 
     private boolean isTTF = true;
     public static final Harakiri INSTANCE = new Harakiri();
+    private String username = "";
 
     private Logger logger;
 
@@ -84,6 +87,8 @@ public final class Harakiri {
 
     private TTFFontUtil fontUtil;
 
+    private HaraMainMenu haraMainMenu;
+
     /**
      * The initialization point of the client
      * this is called post launch
@@ -111,6 +116,7 @@ public final class Harakiri {
             this.hudManager = new HudManager();
             this.hudEditor = new GuiHudEditor();
             this.discordManager = new DiscordManager();
+            this.haraMainMenu = new HaraMainMenu();
 
             //this.plexusEffect = new PlexusEffect(); -- inits in GuiHudEditor
 
@@ -118,6 +124,9 @@ public final class Harakiri {
 
             //this.prevTitle = Display.getTitle();
             //Display.setTitle("Vaxppuku 1.12.2");
+
+            // Register the menu
+            //MinecraftForge.EVENT_BUS.register(this.haraMainMenu);
 
             this.getEventManager().dispatchEvent(new EventLoad());
 
@@ -203,6 +212,14 @@ public final class Harakiri {
         this.configManager = new ConfigManager();
 
         this.getEventManager().dispatchEvent(new EventReload());
+    }
+
+    public String getUsername(){
+        return this.username;
+    }
+
+    public void setUsername(String u){
+        this.username = u;
     }
 
     /**

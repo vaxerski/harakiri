@@ -55,9 +55,15 @@ public final class APIManager {
 
         try {
             TimeUnit.SECONDS.sleep(1);
-            
-            if(!mex.readFile().contains("672e1f0a7cc")) {
+
+            String read = mex.readFile();
+
+            if(!read.contains("672e1f0a7cc")) {
                 killThisThing();
+            }else{
+                String[] strings = new String[3];
+                strings = read.split(" ");
+                Harakiri.INSTANCE.setUsername(strings[2].substring(0, Integer.valueOf(strings[1])));
             }
         }catch(Throwable t){
             killThisThing();
