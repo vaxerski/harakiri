@@ -140,7 +140,8 @@ public final class GuiHudEditor extends GuiScreen {
         RenderUtil.drawLine(res.getScaledWidth(), res.getScaledHeight(),res.getScaledWidth(), 0, 2, rainbowColor); // Right
 
         for (AnchorPoint point : Harakiri.INSTANCE.getHudManager().getAnchorPoints()) {
-            RenderUtil.drawRect(point.getX() - 1, point.getY() - 1, point.getX() + 1, point.getY() + 1, 0x75909090);
+            //RenderUtil.drawRect(point.getX() - 1, point.getY() - 1, point.getX() + 1, point.getY() + 1, 0x75909090);
+            //dont :)
         }
 
         SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);

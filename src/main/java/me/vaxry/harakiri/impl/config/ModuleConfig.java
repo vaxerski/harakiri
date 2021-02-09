@@ -66,6 +66,9 @@ public class ModuleConfig extends Configurable {
 
             Module mod = Harakiri.INSTANCE.getModuleManager().find(settings.name);
 
+            if(mod == null)
+                continue;
+
             if(!mod.isEnabled() && settings.enabled || mod.isEnabled() && !settings.enabled)
                 mod.toggle();
             mod.setHidden(settings.hidden);

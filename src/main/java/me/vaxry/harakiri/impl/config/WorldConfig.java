@@ -15,7 +15,7 @@ import java.io.File;
 public final class WorldConfig extends Configurable {
 
     public WorldConfig(File dir) {
-        super(FileUtil.createJsonFile(dir, "Worlds"));
+        super(FileUtil.createJsonFile(dir, "world"));
     }
 
     @Override

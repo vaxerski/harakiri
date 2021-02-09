@@ -27,23 +27,13 @@ import java.util.regex.Pattern;
  */
 public final class NameAlertModule extends Module {
 
-    public final Value<Boolean> saveToFile = new Value<Boolean>("SaveToFile", new String[]{"Save", "Saves"}, "Saves the alert to a file in your harakiri 'Config' directory.", false);
+    //public final Value<Boolean> saveToFile = new Value<Boolean>("SaveToFile", new String[]{"Save", "Saves"}, "Saves the alert to a file in your harakiri 'Config' directory.", false);
 
     //private final String REGEX_NAME = "(?<=<).*?(?=>)";
     private final String REGEX_NAME = "<(\\S+)\\s*(\\S+?)?>\\s(.*)";
 
-    private final File messagesFile;
-
     public NameAlertModule() {
         super("MentionAlert", new String[]{"MentionAlert", "SayMyName", "WhoSaid"}, "Alerts you when someone says your name in chat.", "NONE", -1, ModuleType.MISC);
-
-        this.messagesFile = new File(Harakiri.INSTANCE.getConfigManager().getConfigDir(), "NameAlerts.txt");
-        try {
-            if (!this.messagesFile.exists())
-                this.messagesFile.createNewFile();
-        } catch (IOException e) {
-            Harakiri.INSTANCE.getLogger().log(Level.WARNING, "Couldn't create NameAlert messages file.");
-        }
     }
 
     @Listener
@@ -57,9 +47,6 @@ public final class NameAlertModule extends Module {
                 if ((text.contains(":") && text.toLowerCase().contains(ChatFormatting.LIGHT_PURPLE + "from")) ||
                         (text.toLowerCase().contains(ChatFormatting.GRAY + "") && StringUtils.stripControlCodes(text).contains("whispers to you"))) {
                     Harakiri.INSTANCE.getNotificationManager().addNotification("Whisper", "Someone whispered to you.");
-                    if (this.saveToFile.getValue()) {
-                        this.saveMessageToFile("Whisper", StringUtils.stripControlCodes(text));
-                    }
                     return;
                 }
 
@@ -73,24 +60,10 @@ public final class NameAlertModule extends Module {
                         String username = chatUsernameMatcher.group(1).replaceAll(">", "");
                         if (!username.equals(localUsername)) {
                             Harakiri.INSTANCE.getNotificationManager().addNotification("Public Chat", String.format("Someone mentioned you in chat. <%s>", username));
-                            if (this.saveToFile.getValue()) {
-                                this.saveMessageToFile(username, text);
-                            }
                         }
                     }
                 }
             }
         }
-    }
-
-    public void saveMessageToFile(String fromWho, String messageContent) {
-        final String time = new SimpleDateFormat().format(new Date());
-        final String host = Minecraft.getMinecraft().getCurrentServerData() != null ? Minecraft.getMinecraft().getCurrentServerData().serverIP : "localhost";
-
-        final List<String> linesToAdd = new ArrayList<>();
-        final String data = String.format("server: %s, date: %s, from: %s, message: %s", host, time, fromWho, messageContent);
-        linesToAdd.add(data);
-
-        FileUtil.write(this.messagesFile, linesToAdd, false);
     }
 }

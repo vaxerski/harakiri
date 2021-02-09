@@ -68,7 +68,7 @@ public abstract class Command {
 
     public void printUsage() {
         final String[] usage = this.getUsage().split("\n");
-        Harakiri.INSTANCE.logChat(ChatFormatting.GRAY + this.getDisplayName() + "'s usage: ");
+        Harakiri.INSTANCE.logChat("Showing usage for " + this.displayName);
 
         if (this.textComponentUsage != null) {
             this.getTextComponentUsage().getSiblings().forEach(Harakiri.INSTANCE::logcChat);

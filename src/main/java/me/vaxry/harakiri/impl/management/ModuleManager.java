@@ -80,7 +80,6 @@ public final class ModuleManager {
         add(new AutoFishModule());
         add(new InteractModule());
         add(new TracersModule());
-        add(new ChamsModule());
         add(new FastPlaceModule());
         add(new SpeedMineModule());
         add(new AutoToolModule());
@@ -130,7 +129,6 @@ public final class ModuleManager {
         add(new BlockHighlightModule());
         add(new NoWeatherModule());
         add(new ObsidianReplaceModule());
-        add(new ChatTimeStampsModule());
         add(new HudEditorModule());
         add(new WatermarkModule());
         add(new StorageAlertModule());

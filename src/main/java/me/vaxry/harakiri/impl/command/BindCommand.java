@@ -76,7 +76,7 @@ public final class BindCommand extends Command {
                     }
                 }
             } else {
-                Harakiri.INSTANCE.errorChat("Unknown module " + "\247f\"" + split[1] + "\"");
+                Harakiri.INSTANCE.errorChat("Unknown module: " + "\247f\"" + split[1] + "\"");
                 final Module similar = Harakiri.INSTANCE.getModuleManager().findSimilar(split[1]);
                 if (similar != null) {
                     Harakiri.INSTANCE.logChat("Did you mean " + "\247c" + similar.getDisplayName() + "\247f?");

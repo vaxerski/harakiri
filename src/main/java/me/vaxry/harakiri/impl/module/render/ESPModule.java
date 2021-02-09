@@ -164,8 +164,8 @@ public final class ESPModule extends Module {
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
             }catch(Throwable t){
-                //Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
-                JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
+                Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
+                //JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
             }
 
             toLoadShader = false;
@@ -207,8 +207,8 @@ public final class ESPModule extends Module {
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
             }catch(Throwable t){
-                //Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
-                JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
+                Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
+                //JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
             }
 
             toLoadShader = false;

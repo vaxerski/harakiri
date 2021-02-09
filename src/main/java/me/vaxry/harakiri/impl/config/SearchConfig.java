@@ -19,7 +19,7 @@ public final class SearchConfig extends Configurable {
     private final SearchModule searchModule;
 
     public SearchConfig(File dir) {
-        super(FileUtil.createJsonFile(dir, "SearchIds"));
+        super(FileUtil.createJsonFile(dir, "search"));
         this.searchModule = (SearchModule) Harakiri.INSTANCE.getModuleManager().find("Search");
     }
 
@@ -32,7 +32,7 @@ public final class SearchConfig extends Configurable {
 
         JsonArray searchIdsJsonArray = null;
 
-        final JsonElement blockIds = this.getJsonObject().get("SearchBlockIds");
+        final JsonElement blockIds = this.getJsonObject().get("SearchID");
         if (blockIds != null)
             searchIdsJsonArray = blockIds.getAsJsonArray();
 
@@ -54,7 +54,7 @@ public final class SearchConfig extends Configurable {
         for (Integer i : this.searchModule.getIds())
             searchIdsJsonArray.add(i);
 
-        save.add("SearchBlockIds", searchIdsJsonArray);
+        save.add("SearchID", searchIdsJsonArray);
 
         this.saveJsonObjectToFile(save);
     }

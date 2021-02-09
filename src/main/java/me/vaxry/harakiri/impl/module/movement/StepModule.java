@@ -2,6 +2,7 @@ package me.vaxry.harakiri.impl.module.movement;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.player.EventMove;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.value.Value;
@@ -29,6 +30,7 @@ public final class StepModule extends Module {
     public final Value<Float> timer = new Value<Float>("TimerSpeed", new String[]{"TimerSpeed", "Timer"}, "Timer to use when stepping.", 1.f, 0.1f, 2.f, 0.1f);
     public final Value<Boolean> sureStep = new Value<Boolean>("SureStep", new String[]{"SureStep", "S"}, "SureStep.", false);
     public final Value<Float> sureStepAm = new Value<Float>("SureStepPerc", new String[]{"SureStepPerc", "SSP"}, "SureStep amount.", 0.25f, 0.f, 2.f, 0.1f);
+    public final Value<Boolean> stopMotion = new Value<Boolean>("StopMotion", new String[]{"StopMotion", "SM"}, "StopMotion.", false);
 
 
     //public final Value<Boolean> spoof = new Value<Boolean>("Spoof", new String[]{"Spoof", "S"}, "Whether to spoof.", false);
@@ -43,6 +45,8 @@ public final class StepModule extends Module {
 
     private int ticksLast = 0;
     private int waitS = 0;
+    private boolean isStepping = false;
+    private boolean stepX = false;
 
     public StepModule() {
         super("Step", new String[]{"stp"}, "Allows you to step up blocks you shouldn't.", "NONE", -1, ModuleType.MOVEMENT);
@@ -76,6 +80,10 @@ public final class StepModule extends Module {
             if(!(mc.player.collidedHorizontally && mc.player.onGround)){
                 return;
             }
+
+            stepX = Math.abs(mc.player.motionX) > Math.abs(mc.player.motionZ);
+
+            isStepping = true;
 
             if(waitS < this.wiait.getValue()){
                 waitS++;
@@ -189,6 +197,24 @@ public final class StepModule extends Module {
 
             ticksLast = mc.player.ticksExisted;
             waitS = 0;
+            isStepping = false;
+        }
+    }
+
+    @Listener
+    public void move(EventMove event){
+        if(!isStepping){
+            return;
+        }
+
+        if(this.stopMotion.getValue()){
+            // we colliding already
+            if(stepX)
+                event.setX(0);
+            else
+                event.setZ(0);
+
+            isStepping = false;
         }
     }
 }
