@@ -15,7 +15,7 @@ public final class SafeWalkModule extends Module {
 
     //public final Value<Integer> height = new Value<Integer>("Height", new String[]{"Hei", "H"}, "The distance from the player on the Y-axis to run safe-walk checks for.", 1, 0, 32, 1);
 
-    int height = 8;
+    int height = 1;
 
     public SafeWalkModule() {
         super("SafeWalk", new String[]{"SWalk"}, "Prevents you from walking off certain blocks.", "NONE", -1, ModuleType.MOVEMENT);

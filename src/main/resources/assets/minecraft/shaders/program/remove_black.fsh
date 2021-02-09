@@ -15,12 +15,12 @@ uniform vec3 Offset = vec3(0.0, 0.0, 0.0);
 uniform vec3 ColorScale = vec3(1.0, 1.0, 1.0);
 uniform float Saturation = 1.0;
 
-bool islow(int rgb) {
-    int red = (color >> 16 & 255);
-    int green = (color >> 8 & 255);
-    int blue = (color & 255);
+bool islow(vec3 rgb) {
+    float red = dot(rgb, RedMatrix);
+    float green = dot(rgb, GreenMatrix);
+    float blue = dot(rgb, BlueMatrix);
 
-    if(red < 50 && green < 50 && blue < 50)
+    if(red < 0.2 && green < 0.2 && blue < 0.2)
     {
         return true;
     }

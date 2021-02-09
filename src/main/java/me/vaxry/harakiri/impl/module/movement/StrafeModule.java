@@ -4,6 +4,7 @@ import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.player.EventMove;
 import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.MobEffects;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
@@ -39,6 +40,9 @@ public final class StrafeModule extends Module {
             if (mc.player.onGround)
                 return;
         }
+
+        if(Harakiri.INSTANCE.getModuleManager().find(FreeCamModule.class).isEnabled())
+            return; // dont run when freecam, bugs out.
 
         // check for flight, could be an option maybe but it bugs out  packet fly
         final FlightModule flightModule = (FlightModule) Harakiri.INSTANCE.getModuleManager().find(FlightModule.class);

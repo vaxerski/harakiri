@@ -12,11 +12,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
+import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.*;
 import net.minecraft.entity.monster.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.ResourceLocation;
@@ -27,6 +29,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
+import javax.swing.*;
 import java.util.*;
 import java.util.List;
 
@@ -43,7 +46,7 @@ public final class ESPModule extends Module {
     public final Value<Boolean> crystals = new Value<Boolean>("Crystals", new String[]{"Crystals", "c"}, "Draw Crystals", false);
 
     private ResourceLocation shader;
-    private boolean toLoadShader = false;
+    private boolean toLoadShader = true;
     private ICamera cam = new Frustum();
 
     private float ITEM_A = 0.35f;
@@ -65,7 +68,9 @@ public final class ESPModule extends Module {
     public ESPModule() {
         super("ESP", new String[]{"ESP"}, "Highlights entities", "NONE", -1, ModuleType.RENDER);
 
-        shader = new ResourceLocation("harakirimod", "shaders/shader.json");
+        Minecraft mc = Minecraft.getMinecraft();
+
+        shader = new ResourceLocation("shaders/post/esp.json");
     }
 
     private float getJitter() {
@@ -144,12 +149,6 @@ public final class ESPModule extends Module {
 
             // Create the shader
             try {
-                mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
-                mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
-                mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
-
-                GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-
                 this.board = mc.player.getWorldScoreboard();
                 this.green = board.createTeam("haraGreen");
                 this.red = board.createTeam("haraRed");
@@ -158,9 +157,15 @@ public final class ESPModule extends Module {
                 this.red.setPrefix(TextFormatting.RED.toString());
                 this.purple.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
 
+                mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
+                mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
+                mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
+
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
             }catch(Throwable t){
-                Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
-               // JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
+                //Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
+                JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
             }
 
             toLoadShader = false;
@@ -174,7 +179,7 @@ public final class ESPModule extends Module {
             ent.getEntity().setGlowing(false);
 
 
-        if(hostileMobsList.contains(ent.getEntity().getClass()) || ent.getEntity() instanceof EntitySpider)
+        if(hostileMobsList.contains(ent.getEntity().getClass()) || ent.getEntity() instanceof EntitySpider || ent.getEntity() instanceof EntityPlayer)
             board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), red.getName());
         else
             board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), green.getName());
@@ -187,12 +192,6 @@ public final class ESPModule extends Module {
 
             // Create the shader
             try {
-                mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
-                mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
-                mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
-
-                GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-
                 this.board = mc.player.getWorldScoreboard();
                 this.green = board.createTeam("haraGreen");
                 this.red = board.createTeam("haraRed");
@@ -201,9 +200,15 @@ public final class ESPModule extends Module {
                 this.red.setPrefix(TextFormatting.RED.toString());
                 this.purple.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
 
+                mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
+                mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
+                mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
+
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
             }catch(Throwable t){
-                Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
-                // JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
+                //Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
+                JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
             }
 
             toLoadShader = false;
@@ -221,10 +226,10 @@ public final class ESPModule extends Module {
     @SubscribeEvent
     public void onRenderLivingBasePost(RenderLivingEvent.Specials.Post<EntityLivingBase> ent){
 
-       // if(ent.getEntity() instanceof EntityPlayer)
-       //     board.removePlayerFromTeam(ent.getEntity().getUniqueID().toString(), red);
-       // else
-       //     board.removePlayerFromTeam(ent.getEntity().getUniqueID().toString(), green);
+        // if(ent.getEntity() instanceof EntityPlayer)
+        //     board.removePlayerFromTeam(ent.getEntity().getUniqueID().toString(), red);
+        // else
+        //     board.removePlayerFromTeam(ent.getEntity().getUniqueID().toString(), green);
 
     }
 }

@@ -8,6 +8,6 @@ import java.io.IOException;
 
 public class ShaderManagerExt extends ShaderManager {
     public ShaderManagerExt(IResourceManager resourceManager, String programName) throws JsonException, IOException {
-        super(resourceManager, "harakirimod:" + programName);
+        super(resourceManager, programName);
     }
 }

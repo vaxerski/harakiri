@@ -2,10 +2,10 @@
     "blend": {
         "func": "add",
         "srcrgb": "one",
-        "dstrgb": "zero"
+        "dstrgb": "1-srcalpha"
     },
     "vertex": "sobel",
-    "fragment": "sobel",
+    "fragment": "remove_black",
     "attributes": [ "Position" ],
     "samplers": [
         { "name": "DiffuseSampler" }
