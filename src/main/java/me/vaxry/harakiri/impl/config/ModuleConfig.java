@@ -77,9 +77,9 @@ public class ModuleConfig extends Configurable {
             // Retrieve values :)
             for(Value value : mod.getValueList()){
                 if(value.getValue().getClass() == Float.class){
-                    for(Value<Float> savedValue : settings.values){
+                    for(Value<Double> savedValue : settings.values){
                         if(value.getName().equalsIgnoreCase(savedValue.getName())){
-                            //value.setValueForceFloat((double)(savedValue.getValue()));
+                            value.setValueForceFloat((double)(savedValue.getValue()));
                         }
                     }
                 } else if(value.getValue().getClass() == Double.class){

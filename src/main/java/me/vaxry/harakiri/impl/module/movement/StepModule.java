@@ -26,7 +26,7 @@ public final class StepModule extends Module {
 
     //public final Value<Integer> height = new Value<Integer>("Height", new String[]{"Height", "H"}, "The step block-height.", 2, 1, 4, 1);
     public final Value<Integer> ticks = new Value<Integer>("Ticks", new String[]{"Ticks", "T"}, "Tick delay.", 2, 0, 10, 0);
-    public final Value<Integer> wiait = new Value<Integer>("Wait", new String[]{"Wait", "W"}, "Wait delay.", 2, 0, 10, 0);
+    public final Value<Integer> wiait = new Value<Integer>("Wait", new String[]{"Wait", "W"}, "Wait delay.", 2, 1, 10, 0);
     public final Value<Float> timer = new Value<Float>("TimerSpeed", new String[]{"TimerSpeed", "Timer"}, "Timer to use when stepping.", 1.f, 0.1f, 2.f, 0.1f);
     public final Value<Boolean> sureStep = new Value<Boolean>("SureStep", new String[]{"SureStep", "S"}, "SureStep.", false);
     public final Value<Float> sureStepAm = new Value<Float>("SureStepPerc", new String[]{"SureStepPerc", "SSP"}, "SureStep amount.", 0.25f, 0.f, 2.f, 0.1f);
@@ -75,9 +75,9 @@ public final class StepModule extends Module {
                 return;
             }
 
-            // Check if the collision is 1 or 2
+
             int height = 1;
-            if(!(mc.player.collidedHorizontally && mc.player.onGround)){
+            if(!(mc.player.collidedHorizontally && mc.player.onGround) && !isStepping){
                 return;
             }
 
@@ -98,6 +98,7 @@ public final class StepModule extends Module {
                     bb.maxY - 0.1f,
                     bb.maxZ + 0.1f);
 
+            // Check if the collision is 1 or 2
             for (int x = MathHelper.floor(extendedbb.minX); x < MathHelper.floor(extendedbb.maxX + 1.0D); x++) {
                 for (int z = MathHelper.floor(extendedbb.minZ); z < MathHelper.floor(extendedbb.maxZ + 1.0D); z++) {
                     BlockPos blockPos = new BlockPos(x, mc.player.getPosition().getY() + 1.0D, z);
@@ -156,8 +157,11 @@ public final class StepModule extends Module {
                 }
             }
 
-            if(!legal)
+            if(!legal) {
+                Harakiri.INSTANCE.logChat("not legal");
+                isStepping = false;
                 return;
+            }
 
 
             switch (height) {
@@ -174,6 +178,8 @@ public final class StepModule extends Module {
                 for (int z = MathHelper.floor(bb.minZ); z < MathHelper.floor(bb.maxZ + 1.0D); z++) {
                     Block block = mc.world.getBlockState(new BlockPos(x, bb.maxY + 1.0D, z)).getBlock();
                     if (!(block instanceof net.minecraft.block.BlockAir)) {
+                        Harakiri.INSTANCE.logChat("not air");
+                        isStepping = false;
                         return;
                     }
                 }
@@ -213,8 +219,6 @@ public final class StepModule extends Module {
                 event.setX(0);
             else
                 event.setZ(0);
-
-            isStepping = false;
         }
     }
 }

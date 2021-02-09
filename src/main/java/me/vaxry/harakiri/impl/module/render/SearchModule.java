@@ -101,7 +101,8 @@ public final class SearchModule extends Module {
 
         for(TileEntity te : mc.world.loadedTileEntityList){
             if(te instanceof TileEntityChest && this.ids.contains(54) ||
-                    te instanceof TileEntityEnderChest && this.ids.contains(130)){
+                    te instanceof TileEntityEnderChest && this.ids.contains(130) ||
+                        te instanceof TileEntityBed && this.ids.contains(355)) {
                 Coordinate coord2D = conv3Dto2DSpace(te.getPos().getX() + 0.5f - mc.getRenderManager().renderPosX, te.getPos().getY() + 0.5f - mc.getRenderManager().renderPosY, te.getPos().getZ() + 0.5f - mc.getRenderManager().renderPosZ);
                 final int color = ColorUtil.changeAlpha(this.getTileColor(te), this.alpha.getValue());
                 RenderUtil.drawLine(res.getScaledWidth()/2.f,res.getScaledHeight()/2.f, (float)coord2D.x, (float)coord2D.y, this.width.getValue(), color);
@@ -260,6 +261,9 @@ public final class SearchModule extends Module {
             //final TileEntityShulkerBox shulkerBox = (TileEntityShulkerBox) te;
             //return (255 << 24) | shulkerBox.getColor().getColorValue();
             return 0xFFFF0066;
+        }
+        if (te instanceof TileEntityBed){
+            return 0xFFFF2222;
         }
         return 0xFFFFFFFF;
     }

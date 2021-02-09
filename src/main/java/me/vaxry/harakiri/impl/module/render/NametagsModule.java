@@ -29,6 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import org.apache.tools.ant.taskdefs.PathConvert;
 import org.locationtech.jts.geom.Coordinate;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
@@ -94,7 +95,7 @@ public final class NametagsModule extends Module {
                 continue;
             }
 
-            HashMap<String, Integer> toDraw = new HashMap<>();
+            ArrayList<Pair<String, Integer>> toDraw = new ArrayList<>();
 
             EntityPlayer e = (EntityPlayer)ent;
             if(!isPlayerCached(e))
@@ -144,19 +145,19 @@ public final class NametagsModule extends Module {
 
             if(health > 20) {
                 nametagstr += "\2472\247o" + health;
-                toDraw.put(health + " ", 0xFF11DD11);
+                toDraw.add(new Pair<>(health + " ", 0xFF11DD11));
             }
             else if(health > 13) {
                 nametagstr += "\2472" + health;
-                toDraw.put(health + " ", 0xFF11DD11);
+                toDraw.add(new Pair<>(health + " ", 0xFF11DD11));
             }
             else if(health > 7) {
                 nametagstr += "\2476" + health;
-                toDraw.put(health + " ", 0xFFAAAA00);
+                toDraw.add(new Pair<>(health + " ", 0xFFAAAA00));
             }
             else {
                 nametagstr += "\247c" + health;
-                toDraw.put(health + " ", 0xFFFF3333);
+                toDraw.add(new Pair<>(health + " ", 0xFFFF3333));
             }
 
 
@@ -165,11 +166,11 @@ public final class NametagsModule extends Module {
 
             if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null) {
                 nametagstr += "\2473" + e.getName();
-                toDraw.put(e.getName() + " ", 0xFF3333FF);
+                toDraw.add(new Pair<>(e.getName() + " ", 0xFF3333FF));
             }
             else {
                 nametagstr += "\247f" + e.getName();
-                toDraw.put(e.getName() + " ", 0xFFFFFFFF);
+                toDraw.add(new Pair<>(e.getName() + " ", 0xFFFFFFFF));
             }
 
             nametagstr += "\247f ";
@@ -183,23 +184,23 @@ public final class NametagsModule extends Module {
 
             if(ping == -1) {
                 nametagstr += "\2478?";
-                toDraw.put("?", 0xFF888888);
+                toDraw.add(new Pair<>("?", 0xFF888888));
             }
             else if (ping > 200) {
                 nametagstr += "\247c" + ping + "ms";
-                toDraw.put(ping + "ms", 0xFFFF3333);
+                toDraw.add(new Pair<>(ping + "ms", 0xFFFF3333));
             }
             else if(ping > 100) {
                 nametagstr += "\2476" + ping + "ms";
-                toDraw.put(ping + "ms", 0xFFAAAA00);
+                toDraw.add(new Pair<>(ping + "ms", 0xFFAAAA00));
             }
             else if(ping > 50) {
                 nametagstr += "\2472" + ping + "ms";
-                toDraw.put(ping + "ms", 0xFF11DD11);
+                toDraw.add(new Pair<>(ping + "ms", 0xFF11DD11));
             }
             else {
                 nametagstr += "\247a" + ping + "ms";
-                toDraw.put(ping + "ms", 0xFF11FF11);
+                toDraw.add(new Pair<>(ping + "ms", 0xFF11FF11));
             }
 
             float nametagX = 0;
@@ -285,7 +286,7 @@ public final class NametagsModule extends Module {
                 nametagMiddleNew.x = Math.abs(right.x + left.x) / 2.f;
                 nametagMiddleNew.y = left.y;
 
-                xoffset = 2.9f;
+                xoffset = 2.9f * this.additionalScale.getValue();
 
             }
 
@@ -298,9 +299,10 @@ public final class NametagsModule extends Module {
             // New rendering
             float xoff = 0;
             GlStateManager.enableBlend();
-            for(Map.Entry<String, Integer> entry : toDraw.entrySet()){
-                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(entry.getKey(), nametagX + xoffset + xoff, nametagY + NAMETAG_SAFEAREA, (int)(0xFF * alphaPerc) * 0x1000000 + entry.getValue());
-                xoff += Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(entry.getKey());
+            for(int iter = 0; iter < toDraw.size(); iter++){
+                Pair<String, Integer> entry = toDraw.get(iter);
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(entry.first(), nametagX + xoffset + xoff, nametagY + NAMETAG_SAFEAREA, (int)(0xFF * alphaPerc) * 0x1000000 + entry.second());
+                xoff += Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(entry.first());
             }
             GlStateManager.disableBlend();
 
