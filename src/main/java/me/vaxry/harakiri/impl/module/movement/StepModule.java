@@ -158,7 +158,6 @@ public final class StepModule extends Module {
             }
 
             if(!legal) {
-                Harakiri.INSTANCE.logChat("not legal");
                 isStepping = false;
                 return;
             }
@@ -178,7 +177,6 @@ public final class StepModule extends Module {
                 for (int z = MathHelper.floor(bb.minZ); z < MathHelper.floor(bb.maxZ + 1.0D); z++) {
                     Block block = mc.world.getBlockState(new BlockPos(x, bb.maxY + 1.0D, z)).getBlock();
                     if (!(block instanceof net.minecraft.block.BlockAir)) {
-                        Harakiri.INSTANCE.logChat("not air");
                         isStepping = false;
                         return;
                     }

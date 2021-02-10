@@ -275,19 +275,18 @@ public final class NametagsModule extends Module {
                 left.x /= scale;
                 left.y /= scale;
 
-                if(left.x > right.x){
-                    nametagX = (float)right.x + xoffset;
-                    nametagY = (float)right.y;
-                }else{
-                    nametagX = (float)left.x + xoffset;
-                    nametagY = (float)left.y;
-                }
-
                 nametagMiddleNew.x = Math.abs(right.x + left.x) / 2.f;
                 nametagMiddleNew.y = left.y;
 
-                xoffset = 2.9f * this.additionalScale.getValue();
+                if(left.x > right.x){
+                    nametagY = (float)right.y;
+                }else{
+                    nametagY = (float)left.y;
+                }
 
+                nametagX = (float)nametagMiddleNew.x - textLength / 2.f;
+
+                //xoffset = 2.9f * this.additionalScale.getValue();
             }
 
             // Draw basic nametag
@@ -301,8 +300,7 @@ public final class NametagsModule extends Module {
             GlStateManager.enableBlend();
             for(int iter = 0; iter < toDraw.size(); iter++){
                 Pair<String, Integer> entry = toDraw.get(iter);
-                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(entry.first(), nametagX + xoffset + xoff, nametagY + NAMETAG_SAFEAREA, (int)(0xFF * alphaPerc) * 0x1000000 + entry.second());
-                xoff += Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(entry.first());
+                xoff += Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(entry.first(), nametagX + xoffset + xoff, nametagY + NAMETAG_SAFEAREA, (int)(0xFF * alphaPerc) * 0x1000000 + entry.second());
             }
             GlStateManager.disableBlend();
 

@@ -32,10 +32,15 @@ public class AutoReconnectButton extends GuiButton {
         {
             if(reconnectModule.auto.getValue()){
                 final float seconds = ((System.currentTimeMillis() - this.timer.getTime()) / 1000.0f) % 60.0f;
+                if(seconds < 0.5f)
+                    return;
                 final float recAm = reconnectModule.delay.getValue()/1000.f;
                 this.displayString = "Mechanically Re-Entering (" + ((int)recAm - (int)seconds) + "s)";
                 if(this.timer.passed(recAm * 1000.f)){
-                    reconnectModule.reconnect();
+                    if(!reconnectModule.reconnect())
+                    {
+                        this.displayString = "Mechanical Re-Entering failed.";
+                    }
                 }
             }else{
                 this.displayString = "Mechanical Re-Entering Disabled.";

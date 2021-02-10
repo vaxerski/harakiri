@@ -61,12 +61,14 @@ public final class ReconnectModule extends Module {
         }
     }
 
-    public void reconnect(){
+    public boolean reconnect(){
         if (this.lastIp != null && this.lastPort > 0) {
             Minecraft.getMinecraft().displayGuiScreen(new GuiConnecting(Minecraft.getMinecraft().currentScreen, Minecraft.getMinecraft(), this.lastIp, this.lastPort));
             this.timer.reset();
             this.reconnect = false;
-        }
+        }else
+            return false;
+        return true;
     }
 
     @SubscribeEvent
