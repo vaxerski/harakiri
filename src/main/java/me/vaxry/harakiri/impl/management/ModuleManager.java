@@ -119,9 +119,7 @@ public final class ModuleManager {
         add(new NoDesyncModule());
         add(new NukerModule());
         add(new SlimeChunksModule());
-        add(new AutoSignModule());
         add(new StepModule());
-        add(new AutoCraftModule());
         add(new ViewClipModule());
         add(new NoGlobalSoundsModule());
         add(new NoBiomeColorModule());

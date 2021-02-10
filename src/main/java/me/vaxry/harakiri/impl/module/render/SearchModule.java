@@ -202,6 +202,10 @@ public final class SearchModule extends Module {
 
     public void add(String name) {
         final Block blockFromName = Block.getBlockFromName(name);
+        if(name.equalsIgnoreCase("bed")){
+            this.ids.add(355);
+            return;
+        }
         if (blockFromName != null) {
             final int id = Block.getIdFromBlock(blockFromName);
             if (!contains(id)) {
@@ -221,6 +225,11 @@ public final class SearchModule extends Module {
 
     public void remove(String name) {
         final Block blockFromName = Block.getBlockFromName(name);
+        if(name.equalsIgnoreCase("bed")){
+            final Integer id = 355;
+            this.ids.remove(id);
+            return;
+        }
         if (blockFromName != null) {
             final int id = Block.getIdFromBlock(blockFromName);
             if (contains(id)) {

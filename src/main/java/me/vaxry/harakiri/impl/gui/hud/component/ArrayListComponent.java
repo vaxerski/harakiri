@@ -78,9 +78,6 @@ public final class ArrayListComponent extends DraggableHudComponent {
         else
             useRainbow = false;
 
-        // pls
-        this.updateValues();
-
         for (Module mod : Harakiri.INSTANCE.getModuleManager().getModuleList()) {
             if (mod != null && mod.getType() != Module.ModuleType.HIDDEN && mod.isEnabled() && !mod.isHidden()) {
                 mods.add(mod);

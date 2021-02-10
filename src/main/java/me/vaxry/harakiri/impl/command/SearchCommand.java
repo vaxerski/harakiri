@@ -58,6 +58,9 @@ public final class SearchCommand extends Command {
                         if (searchModule.contains(Block.getIdFromBlock(block))) {
                             Harakiri.INSTANCE.logChat("Search already contains " + block.getLocalizedName());
                         } else {
+                            if(block == Blocks.BED){
+                                searchModule.add("bed");
+                            }
                             searchModule.add(Block.getIdFromBlock(block));
                             if (searchModule.isEnabled()) {
                                 searchModule.clearBlocks();
@@ -79,6 +82,9 @@ public final class SearchCommand extends Command {
                             if (searchModule.contains(Block.getIdFromBlock(block))) {
                                 Harakiri.INSTANCE.logChat("Search already contains " + block.getLocalizedName());
                             } else {
+                                if(block == Blocks.BED){
+                                    searchModule.add("bed");
+                                }
                                 searchModule.add(Block.getIdFromBlock(block));
                                 if (searchModule.isEnabled()) {
                                     searchModule.clearBlocks();
@@ -105,6 +111,9 @@ public final class SearchCommand extends Command {
                         final Block block = Block.getBlockById(id);
 
                         if (searchModule.contains(Block.getIdFromBlock(block))) {
+                            if(block == Blocks.BED){
+                                searchModule.remove("bed");
+                            }
                             searchModule.remove(Block.getIdFromBlock(block));
                             if (searchModule.isEnabled()) {
                                 searchModule.clearBlocks();
@@ -126,6 +135,9 @@ public final class SearchCommand extends Command {
                             Harakiri.INSTANCE.errorChat("Cannot remove Air from search");
                         } else {
                             if (searchModule.contains(Block.getIdFromBlock(block))) {
+                                if(block == Blocks.BED){
+                                    searchModule.remove("bed");
+                                }
                                 searchModule.remove(Block.getIdFromBlock(block));
                                 if (searchModule.isEnabled()) {
                                     searchModule.clearBlocks();
