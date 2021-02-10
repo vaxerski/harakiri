@@ -17,7 +17,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: "com.github.johnrengelman.shadow"
 
 
-version = "1.5-dev"
+version = "1.5"
 group = "me.vaxry"
 archivesBaseName = "HARAKIRI"
 def buildmode = "RELEASE"
