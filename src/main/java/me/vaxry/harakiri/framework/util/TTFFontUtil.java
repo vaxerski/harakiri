@@ -3,29 +3,29 @@ package me.vaxry.harakiri.framework.util;
 /// Credit: https://github.com/HyperiumClient/Hyperium/blob/mcgradle/src/main/java/cc/hyperium/utils/HyperiumFontRenderer.java
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.impl.module.render.CustomFontModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.StringUtils;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 
-import javax.naming.spi.DirectoryManager;
-import javax.swing.*;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import static org.lwjgl.opengl.GL11.GL_QUADS;
 
 public class TTFFontUtil
 {
@@ -40,6 +40,9 @@ public class TTFFontUtil
     private String name;
     private float size;
     public boolean isTTF = false;
+
+    private Timer cleanupTimer = new Timer();
+    final private ArrayList<CachedTextString> cachedStringsArray = new ArrayList<>();
 
     private boolean isTTF(){
         return isTTF;
@@ -77,6 +80,7 @@ public class TTFFontUtil
             }
         }
 
+        this.cleanupTimer.reset();
         this.antiAliasingFactor = resolution.getScaleFactor();
     }
 
@@ -223,6 +227,217 @@ public class TTFFontUtil
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.bindTexture(0);
         GlStateManager.popMatrix();
+        return (int) getWidth(text);
+    }
+
+    public int drawStringCached(String text, float x, float y, int color)
+    {
+        if (text == null)
+            return 0;
+
+        if(!isTTF())
+            return Minecraft.getMinecraft().fontRenderer.drawString(text, x, y, color, false);
+
+        ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
+
+        // check for cache
+        final ScaledResolution res = resolution;
+
+        CachedTextString cachedTextString = getCachedString(text);
+        if(cachedTextString != null){
+            final Framebuffer framebuffer = cachedTextString.framebuffer;
+
+            GlStateManager.pushMatrix();
+
+            GlStateManager.enableAlpha();
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            GlStateManager.enableBlend();
+
+            GlStateManager.enableTexture2D();
+            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+
+            framebuffer.bindFramebufferTexture();
+
+            GlStateManager.enableTexture2D();
+            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+            RenderUtil.drawTexture(cachedTextString.x,
+                    cachedTextString.y,
+                    cachedTextString.w,
+                    cachedTextString.h,
+                    0,0,1,1);
+
+            GlStateManager.disableTexture2D();
+            GlStateManager.disableBlend();
+            GlStateManager.disableAlpha();
+
+            GlStateManager.bindTexture(0);
+
+            cachedTextString.lastUsed = System.currentTimeMillis();
+
+            GlStateManager.popMatrix();
+
+            return (int) getWidth(text);
+        }
+
+        // idk fix shit
+        y -= 1.5f;
+
+        try
+        {
+            if (resolution.getScaleFactor() != prevScaleFactor)
+            {
+                prevScaleFactor = resolution.getScaleFactor();
+                unicodeFont = new UnicodeFont(getFontByName(name).deriveFont(size * prevScaleFactor / 2));
+                unicodeFont.addAsciiGlyphs();
+                unicodeFont.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
+                unicodeFont.loadGlyphs();
+            }
+        }
+        catch (FontFormatException | IOException | SlickException e)
+        {
+            e.printStackTrace();
+        }
+
+        this.antiAliasingFactor = resolution.getScaleFactor();
+
+        float width = getWidth(text);
+
+        Framebuffer framebuffer = new Framebuffer((int)width, FONT_HEIGHT, false);
+        framebuffer.createFramebuffer((int)width, FONT_HEIGHT);
+
+        //Framebuffer framebuffer = new Framebuffer((int)res.getScaledWidth() * res.getScaleFactor(), (int)res.getScaledHeight() * res.getScaleFactor(), false);
+        //framebuffer.createFramebuffer((int)res.getScaledWidth() * res.getScaleFactor(), (int)res.getScaledHeight() * res.getScaleFactor());
+
+        GL11.glPushMatrix();
+        GlStateManager.scale(1 / antiAliasingFactor, 1 / antiAliasingFactor, 1 / antiAliasingFactor);
+        x *= antiAliasingFactor;
+        y *= antiAliasingFactor;
+        float originalX = x;
+        float red = (float) (color >> 16 & 255) / 255.0F;
+        float green = (float) (color >> 8 & 255) / 255.0F;
+        float blue = (float) (color & 255) / 255.0F;
+        float alpha = (float) (color >> 24 & 255) / 255.0F;
+        GlStateManager.color(red, green, blue, alpha);
+        GlStateManager.color(1,1,1,1);
+
+        int currentColor = color;
+
+        // Save buffer 1
+        CachedTextString cachedTextStringNew = new CachedTextString(text, x, y, width, FONT_HEIGHT, false);
+
+        char[] characters = text.toCharArray();
+
+        GlStateManager.disableLighting();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        framebuffer.bindFramebuffer(false);
+        String[] parts = COLOR_CODE_PATTERN.split(text);
+
+        // Cuz we drawing to a buffer
+        originalX = 0;
+        x = 0;
+        y = 0;
+
+        int index = 0;
+        for (String s : parts)
+        {
+            for (String s2 : s.split("\n"))
+            {
+                for (String s3 : s2.split("\r"))
+                {
+
+                    unicodeFont.drawString(x, y, s3, new org.newdawn.slick.Color(currentColor));
+                    x += unicodeFont.getWidth(s3);
+
+                    index += s3.length();
+                    if (index < characters.length && characters[index] == '\r')
+                    {
+                        x = originalX;
+                        index++;
+                    }
+                }
+                if (index < characters.length && characters[index] == '\n')
+                {
+                    x = originalX;
+                    y += getHeight(s2) * 2;
+                    index++;
+                }
+            }
+            if (index < characters.length)
+            {
+                char colorCode = characters[index];
+                if (colorCode == '\247')
+                {
+                    char colorChar = characters[index + 1];
+                    int codeIndex = ("0123456789" + "abcdef").indexOf(colorChar);
+                    if (codeIndex < 0)
+                    {
+                        if (colorChar == 'r')
+                        {
+                            currentColor = color;
+                        }
+                    }
+                    else
+                    {
+                        currentColor = colorCodes[codeIndex];
+                    }
+                    index += 2;
+                }
+            }
+        }
+        framebuffer.unbindFramebuffer();
+
+        //save 2
+        cachedTextStringNew.framebuffer = framebuffer;
+        cachedStringsArray.add(cachedTextStringNew);
+
+        // Buffer cleanup every 5s
+        if(this.cleanupTimer.passed(5000)){
+            for(int i = 0; i < cachedStringsArray.size() / 2; ++i){
+                // Will remove all even elements.
+                cachedStringsArray.remove(i);
+            }
+        }
+
+        // Render the framebuffer :)
+
+        cachedTextString = cachedTextStringNew;
+
+        // render texture
+        GlStateManager.enableAlpha();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.enableBlend();
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+        framebuffer.bindFramebufferTexture();
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderUtil.drawTexture(cachedTextString.x,
+                cachedTextString.y,
+                cachedTextString.w,
+                cachedTextString.h,
+                0,0,1,1);
+       /* RenderUtil.drawTexture(0,
+                0,
+                res.getScaledWidth(),
+                res.getScaledHeight(),
+                0,0,1,1);*/
+
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableBlend();
+        GlStateManager.disableAlpha();
+
+        cachedTextString.lastUsed = System.currentTimeMillis();
+
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.bindTexture(0);
+
+        GlStateManager.popMatrix();
+
         return (int) getWidth(text);
     }
 
@@ -416,5 +631,32 @@ public class TTFFontUtil
         }
 
         return stringbuilder.toString();
+    }
+
+    private CachedTextString getCachedString(String text){
+        for(CachedTextString entry : cachedStringsArray){
+            if(entry.text.equalsIgnoreCase(text))
+                return entry;
+        }
+        return null;
+    }
+
+    private class CachedTextString{
+        public CachedTextString(String text, float x, float y, float w, float h, boolean shadow){
+            this.text = text;
+            this.x = x;
+            this.y = y;
+            this.w = w;
+            this.h = h;
+            this.shadow = shadow;
+        }
+        public String text;
+        public float x;
+        public float y;
+        public float w;
+        public float h;
+        public boolean shadow;
+        public Framebuffer framebuffer;
+        public float lastUsed = 0;
     }
 }

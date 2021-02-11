@@ -33,14 +33,14 @@ public final class CoordsComponent extends DraggableHudComponent {
                 if (mc.player.dimension == 0) {
                     coordz += ChatFormatting.GRAY + " [" + ChatFormatting.RESET + df.format(Minecraft.getMinecraft().player.posX / 8.f) +
                             ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
-                            df.format(Minecraft.getMinecraft().player.posY / 8.f) + ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
+                            df.format(Minecraft.getMinecraft().player.posY) + ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
                             df.format(Minecraft.getMinecraft().player.posZ / 8.f) +
                             ChatFormatting.GRAY + "]";
                 }
                 else if (mc.player.dimension == -1){ // Nether
                     coordz += ChatFormatting.GRAY + " [" + ChatFormatting.RESET + df.format(Minecraft.getMinecraft().player.posX * 8.f) +
                             ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
-                            df.format(Minecraft.getMinecraft().player.posY * 8.f) + ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
+                            df.format(Minecraft.getMinecraft().player.posY) + ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
                             df.format(Minecraft.getMinecraft().player.posZ * 8.f) +
                             ChatFormatting.GRAY + "]";
                 }else{

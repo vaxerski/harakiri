@@ -161,7 +161,7 @@ public final class HubComponent extends ResizableHudComponent {
                 final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1 + offsetY - this.scroll - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1) && mouseY <= (this.getY() + BORDER + (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT) + 1 + offsetY - this.scroll);
                 if (insideComponent) {
                     if(component.highlightA < 48.f){
-                        component.highlightA += 5.f * 60.f * framejitter;
+                        component.highlightA += Math.min(5.f * 60.f * framejitter, 10);
                     }else{
                         component.highlightA = 48.f;
                     }
@@ -178,7 +178,7 @@ public final class HubComponent extends ResizableHudComponent {
                         component.xOffset = 0.f;
 
                     if(component.highlightA > 0.f){
-                        component.highlightA -= 1.f * 60.f * framejitter;
+                        component.highlightA -= Math.min(1.f * 60.f * framejitter, 10);
                     }else{
                         component.highlightA = 0.f;
                     }
