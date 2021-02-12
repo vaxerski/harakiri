@@ -126,7 +126,7 @@ public final class MathUtil {
     }
 
     public static double parabolic(double from, double to, double incline) {
-        return from + (to - from) / incline;
+        return from + ((to - from) / incline);
     }
 
     public static double getDistance(Vec3d pos, double x, double y, double z) {

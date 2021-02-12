@@ -26,7 +26,11 @@ public final class Notification {
 
     public float alpha = 0;
 
+    public float percFrac = 0;
+    public float percFracBack = 0;
+
     private final Timer timer = new Timer();
+    private final Timer jittertimer = new Timer();
 
     public Notification(String title, String text, Type type, int duration) {
         this.title = title;
@@ -45,20 +49,46 @@ public final class Notification {
         }
 
         this.timer.reset();
+        this.jittertimer.reset();
     }
 
     public Notification(String title, String text) {
         this(title, text, Type.INFO, 3000);
     }
 
+    private float getJitter() {
+        final float seconds = ((System.currentTimeMillis() - this.jittertimer.getTime()) / 1000.0f) % 60.0f;
+
+        final float desiredTimePerSecond = 1;
+
+        this.jittertimer.reset();
+        return 1 / Math.min(desiredTimePerSecond * seconds, 1.0f);
+    }
+
     public void update() {
         int incline = 8;
-        this.transitionX = (float) MathUtil.parabolic(this.transitionX, this.x, incline);
         //this.transitionY = (float) MathUtil.parabolic(this.transitionY, this.y, incline);
-        this.alpha = Math.min(255.f, this.alpha + 2);
+
+        //if(this.timer.passed(this.duration - 1000)){
+        //    this.alpha = Math.min(255.f, this.alpha -4);
+        //}
+        final float jitter = 1;//getJitter();
+
         if(this.timer.passed(this.duration - 1000)){
-            this.alpha = Math.min(255.f, this.alpha -4);
+            this.percFrac = (float) MathUtil.parabolic(this.percFrac, 0, incline * jitter);
+            this.percFracBack = (float) MathUtil.parabolic(this.percFracBack, 0, incline * jitter * 1.3f);
+            this.percFrac = Math.max(this.percFrac, 0);
+            this.percFracBack = Math.max(this.percFracBack, 0);
+        }else if(this.percFrac < 1){
+            this.percFrac = (float) MathUtil.parabolic(this.percFrac, 1.0f, incline * jitter * 1.3f);
+            this.percFracBack = (float) MathUtil.parabolic(this.percFracBack, 1.015f, incline * jitter);
+            this.percFracBack = Math.min(this.percFracBack, 1.03f);
+            this.percFrac = Math.min(this.percFrac, 1);
+        }else if(this.percFrac >= 1){
+            this.percFrac = 1;
+            this.percFracBack = 1.03f;
         }
+
         if (this.timer.passed((this.duration))) {
             Harakiri.INSTANCE.getNotificationManager().removeNotification(this);
         }
