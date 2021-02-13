@@ -41,8 +41,6 @@ public final class NametagsModule extends Module {
     private float NAMETAG_SAFEAREA = 1.f;
     private ICamera camera = new Frustum();
 
-    private RenderItemAlpha renderItemAlpha;
-
     private HashMap<EntityPlayer, Float> playersList = new HashMap<>();
 
     public final Value<Float> additionalScale = new Value<Float>("Scale", new String[]{"Scale", "s"}, "Scale the nametag", 1.f, 0.5f, 2.5f, 0.5f);
@@ -53,7 +51,6 @@ public final class NametagsModule extends Module {
     public NametagsModule() {
         super("Nametags", new String[]{"Nametags"}, "Adds custom nametags for players.", "NONE", -1, ModuleType.RENDER);
         Minecraft mc = Minecraft.getMinecraft();
-        renderItemAlpha = new RenderItemAlpha(mc.getTextureManager(), mc.modelManager, mc.getItemColors());
     }
 
     @Listener
@@ -77,24 +74,6 @@ public final class NametagsModule extends Module {
 
             camera.setPosition(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().posY, mc.getRenderViewEntity().posZ);
 
-            AxisAlignedBB bb = new AxisAlignedBB(
-                    blockPos.getX() - mc.getRenderManager().viewerPosX,
-                    blockPos.getY() - mc.getRenderManager().viewerPosY,
-                    blockPos.getZ() - mc.getRenderManager().viewerPosZ,
-                    blockPos.getX() + 1 - mc.getRenderManager().viewerPosX,
-                    blockPos.getY() + 1 - mc.getRenderManager().viewerPosY,
-                    blockPos.getZ() + 1 - mc.getRenderManager().viewerPosZ);
-
-
-            if (!camera.isBoundingBoxInFrustum(new AxisAlignedBB(bb.minX + mc.getRenderManager().viewerPosX,
-                    bb.minY + mc.getRenderManager().viewerPosY,
-                    bb.minZ + mc.getRenderManager().viewerPosZ,
-                    bb.maxX + mc.getRenderManager().viewerPosX,
-                    bb.maxY + mc.getRenderManager().viewerPosY,
-                    bb.maxZ + mc.getRenderManager().viewerPosZ))) {
-                continue;
-            }
-
             ArrayList<Pair<String, Integer>> toDraw = new ArrayList<>();
 
             EntityPlayer e = (EntityPlayer)ent;
@@ -110,32 +89,10 @@ public final class NametagsModule extends Module {
             Vec3d nametagvec = new Vec3d(e.getPositionEyes(event.getPartialTicks()).x, e.getPositionEyes(event.getPartialTicks()).y, e.getPositionEyes(event.getPartialTicks()).z);
 
             Coordinate nametagMiddle = conv3Dto2DSpace(nametagvec.x, nametagvec.y + 0.67334f, nametagvec.z);
+            if(nametagMiddle == null)
+                continue;
 
             double distancetoent = get3DDistance(e);
-
-            Vector3d anglesToEnt = calculateRelativeAngle(mc.player.getPositionEyes(event.getPartialTicks()), nametagvec, new Vector3d(mc.player.rotationPitch, mc.player.rotationYaw, 0));
-            if(anglesToEnt.x > 90 || anglesToEnt.y > 110)
-                continue; // Dont
-
-            if(distancetoent < 2.f){
-                Vec3d accuratePos = e.getPositionEyes(0);
-                bb = new AxisAlignedBB(
-                        accuratePos.x - 0.1f - mc.getRenderManager().viewerPosX,
-                        accuratePos.y + 0.9f - mc.getRenderManager().viewerPosY,
-                        accuratePos.z - 0.1f - mc.getRenderManager().viewerPosZ,
-                        accuratePos.x + 0.1f - mc.getRenderManager().viewerPosX,
-                        accuratePos.y + 1.8f - mc.getRenderManager().viewerPosY,
-                        accuratePos.z + 0.1f - mc.getRenderManager().viewerPosZ);
-                //RenderUtil.drawBoundingBox(bb, 1, 255, 0, 0, 255);
-                if (!camera.isBoundingBoxInFrustum(new AxisAlignedBB(bb.minX + mc.getRenderManager().viewerPosX,
-                        bb.minY + mc.getRenderManager().viewerPosY,
-                        bb.minZ + mc.getRenderManager().viewerPosZ,
-                        bb.maxX + mc.getRenderManager().viewerPosX,
-                        bb.maxY + mc.getRenderManager().viewerPosY,
-                        bb.maxZ + mc.getRenderManager().viewerPosZ))) {
-                    continue;
-                }
-            }
 
             // Nametag string setup
             String nametagstr = "";
@@ -257,10 +214,21 @@ public final class NametagsModule extends Module {
                 Coordinate right = conv3Dto2DSpace(x1.x, nametagvec.y + 0.67334f,x1.y);
                 Coordinate left = conv3Dto2DSpace(y1.x, nametagvec.y + 0.67334f,y1.y);
 
-                if(isOutOfScreen(right) && isOutOfScreen(left))
-                    continue; // Dont render if out of screen, duh
+                if(right == null && left == null){
+                    continue;
+                }
 
-                float scaledwidth = (float)Math.abs(right.x - left.x);
+                float scaledwidth;
+
+                if(right == null){
+                    scaledwidth = (float)(2*Math.abs(nametagMiddle.x - left.x));
+                    right = new Coordinate(left.x - scaledwidth, left.y);
+                }else if(left == null){
+                    scaledwidth = (float)(2*Math.abs(right.x - nametagMiddle.x));
+                    left = new Coordinate(right.x + scaledwidth, right.y);
+                }else{
+                    scaledwidth = (float)Math.abs(right.x - left.x);
+                }
 
                 scale = scaledwidth / Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(nametagstr);
                 scale *= additionalScale.getValue();
@@ -363,9 +331,9 @@ public final class NametagsModule extends Module {
                         RenderHelper.enableGUIStandardItemLighting();
                         GlStateManager.translate(nametagMiddleNew.x - rectWidth/2.f + NAMETAG_SAFEAREA + currentX, nametagMiddleNew.y + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 3 * NAMETAG_SAFEAREA, 0);
 
-                        renderItemAlpha.alpha = alphaPerc;
-                        renderItemAlpha.renderItemAndEffectIntoGUI(stack, 0, 0);
-                        renderItemAlpha.renderItemOverlays(mc.fontRenderer, stack, 0, 0);
+                        Harakiri.INSTANCE.getRenderItemAlpha().alpha = alphaPerc;
+                        Harakiri.INSTANCE.getRenderItemAlpha().renderItemAndEffectIntoGUI(mc.player, stack, 0, 0);
+                        Harakiri.INSTANCE.getRenderItemAlpha().renderItemOverlayIntoGUI(mc.fontRenderer, stack, 0, 0, (String)null);
 
                         RenderHelper.disableStandardItemLighting();
                         GlStateManager.disableBlend();
@@ -435,9 +403,13 @@ public final class NametagsModule extends Module {
     private Coordinate conv3Dto2DSpace(double x, double y, double z) {
         final GLUProjection.Projection projection = GLUProjection.getInstance().project(x - Minecraft.getMinecraft().getRenderManager().viewerPosX, y - Minecraft.getMinecraft().getRenderManager().viewerPosY, z - Minecraft.getMinecraft().getRenderManager().viewerPosZ, GLUProjection.ClampMode.NONE, false);
 
-        final Coordinate returns = new Coordinate(projection.getX(), projection.getY());
+        return projection.getType() == GLUProjection.Projection.Type.OUTSIDE || projection.getType() == GLUProjection.Projection.Type.INVERTED ? null : new Coordinate(projection.getX(), projection.getY());
+    }
 
-        return returns;
+    private Coordinate conv3Dto2DSpaceForceOutside(double x, double y, double z) {
+        final GLUProjection.Projection projection = GLUProjection.getInstance().project(x - Minecraft.getMinecraft().getRenderManager().viewerPosX, y - Minecraft.getMinecraft().getRenderManager().viewerPosY, z - Minecraft.getMinecraft().getRenderManager().viewerPosZ, GLUProjection.ClampMode.NONE, false);
+
+        return projection.getType() == GLUProjection.Projection.Type.INVERTED ? null : new Coordinate(projection.getX(), projection.getY());
     }
 
     private int get3DDistance(EntityPlayer e) {

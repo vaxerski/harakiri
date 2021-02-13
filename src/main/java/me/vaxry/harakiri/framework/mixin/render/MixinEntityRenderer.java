@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = EntityRenderer.class, priority = 2222)
+@Mixin(value = EntityRenderer.class, priority = 2147483647)
 public class MixinEntityRenderer {
     @Inject(method = "updateCameraAndRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;renderGameOverlay(F)V"))
     private void onRenderGameOverlay(float partialTicks, long nanoTime, CallbackInfo ci) {

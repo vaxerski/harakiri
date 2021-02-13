@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(GuiScreen.class)
+@Mixin(value = GuiScreen.class, priority = 2147483647)
 public abstract class MixinGuiScreen extends Gui {
     @Inject(method = "renderToolTip", at = @At("HEAD"), cancellable = true)
     private void onRenderTooltip(ItemStack stack, int x, int y, CallbackInfo ci) {

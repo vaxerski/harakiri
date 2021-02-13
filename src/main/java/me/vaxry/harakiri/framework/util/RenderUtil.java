@@ -304,6 +304,7 @@ public final class RenderUtil {
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glRotatef(-180 - theta, 0F, 0F, 1.0F);
         GL11.glTranslated(-x, -y, 0);
+        GL11.glColor4f(1,1,1,1);
     }
 
     public static void drawOutlineRect(float x, float y, float w, float h, float lineWidth, int c) {

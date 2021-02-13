@@ -4,6 +4,7 @@ import me.vaxry.harakiri.framework.event.client.EventLoad;
 import me.vaxry.harakiri.framework.event.client.EventReload;
 import me.vaxry.harakiri.framework.event.client.EventUnload;
 import me.vaxry.harakiri.framework.extd.FontRendererExtd;
+import me.vaxry.harakiri.framework.extd.RenderItemAlpha;
 import me.vaxry.harakiri.framework.logging.harakiriFormatter;
 import me.vaxry.harakiri.framework.util.TTFFontUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
@@ -88,6 +89,8 @@ public final class Harakiri {
     private TTFFontUtil fontUtil;
 
     private HaraMainMenu haraMainMenu;
+
+    private RenderItemAlpha renderItemAlpha;
 
     /**
      * The initialization point of the client
@@ -387,6 +390,13 @@ public final class Harakiri {
             this.fontUtil = new TTFFontUtil("gravity", 20);
         }
         return this.fontUtil;
+    }
+
+    public RenderItemAlpha getRenderItemAlpha(){
+        if(this.renderItemAlpha == null){
+            this.renderItemAlpha = new RenderItemAlpha(Minecraft.getMinecraft().getTextureManager(), Minecraft.getMinecraft().modelManager, Minecraft.getMinecraft().getItemColors());
+        }
+        return this.renderItemAlpha;
     }
 
     public boolean isTTF(){

@@ -9,6 +9,7 @@ import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.entity.Entity;
@@ -169,11 +170,13 @@ public class OffscreenModule extends Module {
 
             final Vector2f points_center = divVec2f(addVec2f(addVec2f(triPoints[0], triPoints[1]), triPoints[2]), 3);
 
+            GlStateManager.pushMatrix();
             RenderUtil.begin2D();
 
             RenderUtil.drawTriangle(points_center.x, points_center.y, size.getValue(), angle.y + 90, colourToUse);
 
             RenderUtil.end2D();
+            GlStateManager.popMatrix();
         }
     }
 

@@ -221,6 +221,8 @@ public final class GuiHudEditor extends GuiScreen {
 
             if (component.isVisible()) {
                 component.mouseClickMove(mouseX, mouseY, clickedMouseButton);
+                if(component instanceof ModuleListComponent && component.isMouseInside(mouseX, mouseY))
+                    break;
             }
         }
     }
@@ -243,6 +245,8 @@ public final class GuiHudEditor extends GuiScreen {
 
                 if (component.isVisible()) {
                     component.mouseClick(mouseX, mouseY, mouseButton);
+                    if(component instanceof ModuleListComponent && component.isMouseInside(mouseX, mouseY))
+                        break;
                 }
             }
         } catch (Exception e) {
@@ -266,6 +270,8 @@ public final class GuiHudEditor extends GuiScreen {
 
             if (component.isVisible()) {
                 component.mouseRelease(mouseX, mouseY, state);
+                if(component instanceof ModuleListComponent && component.isMouseInside(mouseX, mouseY))
+                    break;
             }
         }
         try {
