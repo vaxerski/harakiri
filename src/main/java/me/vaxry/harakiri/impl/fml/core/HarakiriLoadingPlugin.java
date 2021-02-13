@@ -2,6 +2,9 @@ package me.vaxry.harakiri.impl.fml.core;
 
 import me.vaxry.harakiri.impl.management.PatchManager;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import org.spongepowered.asm.launch.MixinBootstrap;
+import org.spongepowered.asm.mixin.MixinEnvironment;
+import org.spongepowered.asm.mixin.Mixins;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -11,17 +14,19 @@ import java.util.Map;
  * 4/5/2019 @ 1:24 AM.
  */
 @IFMLLoadingPlugin.TransformerExclusions(value = "me.vaxry.harakiri.impl.fml.core")
+@IFMLLoadingPlugin.Name(value = "Harakiri")
 @IFMLLoadingPlugin.MCVersion(value = "1.12.2")
 public final class HarakiriLoadingPlugin implements IFMLLoadingPlugin {
 
     public HarakiriLoadingPlugin() {
+        MixinBootstrap.init();
+        Mixins.addConfiguration("mixins.harakiri.json");
+        MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
     }
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[]{
-                HarakiriClassTransformer.class.getName()
-        };
+        return new String[0];
     }
 
     @Override
@@ -37,9 +42,6 @@ public final class HarakiriLoadingPlugin implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
-        final boolean runtimeDeobfuscationEnabled =
-                (boolean) data.getOrDefault("runtimeDeobfuscationEnabled", true);
-        HarakiriClassTransformer.PATCH_MANAGER = new PatchManager(!runtimeDeobfuscationEnabled);
     }
 
     @Override

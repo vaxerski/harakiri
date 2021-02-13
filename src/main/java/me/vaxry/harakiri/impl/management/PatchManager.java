@@ -21,6 +21,9 @@ public final class PatchManager {
     private Environment env;
 
     public PatchManager(final boolean devEnv) {
+
+        if(true)
+            return;
         //set our environment for mappings
         this.setEnv(devEnv ? Environment.IDE : Environment.RELEASE);
 

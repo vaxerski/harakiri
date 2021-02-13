@@ -19,6 +19,8 @@ import java.util.logging.Level;
  * Author Seth
  * 4/4/2019 @ 11:49 PM.
  */
+
+/*
 public final class HarakiriClassTransformer implements IClassTransformer {
     public static PatchManager PATCH_MANAGER = null;
 
@@ -29,7 +31,7 @@ public final class HarakiriClassTransformer implements IClassTransformer {
      * @param transformedName
      * @param basicClass
      * @return
-     */
+     *//*
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
 
@@ -154,3 +156,4 @@ public final class HarakiriClassTransformer implements IClassTransformer {
     }
 
 }
+*/

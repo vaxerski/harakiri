@@ -4,16 +4,21 @@ buildscript {
         mavenCentral()
         jcenter()
         maven { url = "http://files.minecraftforge.net/maven" }
+        maven {
+            url = 'https://repo.spongepowered.org/maven'
+        }
     }
 
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         classpath "com.github.jengelman.gradle.plugins:shadow:1.2.3"
+        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'org.spongepowered.mixin'
 apply plugin: "com.github.johnrengelman.shadow"
 
 
@@ -53,6 +58,12 @@ repositories {
 }
 
 dependencies {
+    compile("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
+        exclude module: 'launchwrapper'
+        exclude module: 'guava'
+        exclude module: 'gson'
+        exclude module: 'commons-io'
+    }
     compile group: "com.googlecode.json-simple", name: "json-simple", version: "1.1.1"
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'club.minnced:java-discord-rpc:2.0.2'
@@ -60,9 +71,13 @@ dependencies {
 
 jar {
     manifest {
+        attributes 'MixinConfigs': 'mixins.harakiri.json'
+        attributes 'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker'
+        attributes 'TweakOrder': 0
         attributes 'FMLCorePlugin': 'me.vaxry.harakiri.impl.fml.core.HarakiriLoadingPlugin'
         attributes 'FMLCorePluginContainsFMLMod': 'true'
         attributes 'FMLAT': 'harakiri_at.cfg'
+        attributes 'ForceLoadAsMod': 'true'
     }
 }
 
@@ -80,6 +95,7 @@ reobf {
 
 shadowJar {
     dependencies {
+        include(dependency('org.spongepowered:mixin:0.7.11-SNAPSHOT'))
         include(dependency('com.googlecode.json-simple:json-simple:1.1.1'))
         include(dependency('net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'))
         include(dependency('club.minnced:java-discord-rpc'))
@@ -89,6 +105,7 @@ shadowJar {
         attributes 'FMLCorePlugin': 'me.vaxry.harakiri.impl.fml.core.HarakiriLoadingPlugin'
         attributes 'FMLCorePluginContainsFMLMod': 'true'
         attributes 'FMLAT': 'harakiri_at.cfg'
+        attributes 'ForceLoadAsMod': 'true'
     }
 
     exclude 'dummyyy'
@@ -133,6 +150,11 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+mixin {
+    defaultObfuscationEnv searge
+    add sourceSets.main, 'mixins.harakiri.refmap.json'
 }
 
 if (buildmode.equals("IDE")) {
