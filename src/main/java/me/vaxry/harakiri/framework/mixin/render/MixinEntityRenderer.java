@@ -21,10 +21,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = EntityRenderer.class, priority = 2147483647)
 public class MixinEntityRenderer {
-    @Inject(method = "updateCameraAndRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;renderGameOverlay(F)V"))
-    private void onRenderGameOverlay(float partialTicks, long nanoTime, CallbackInfo ci) {
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventRender2D(partialTicks, new ScaledResolution(Minecraft.getMinecraft())));
-    }
+    //@Inject(method = "updateCameraAndRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;renderGameOverlay(F)V"))
+    //private void onRenderGameOverlay(float partialTicks, long nanoTime, CallbackInfo ci) {
+
+    //}
 
 
     // This will call when the hand is rendered

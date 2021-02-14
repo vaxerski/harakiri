@@ -8,12 +8,20 @@ import me.vaxry.harakiri.framework.event.minecraft.EventRunTick;
 import me.vaxry.harakiri.framework.event.minecraft.EventUpdateFramebufferSize;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
 import me.vaxry.harakiri.framework.duck.MixinMinecraftInterface;
+import me.vaxry.harakiri.framework.util.GUIUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.*;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.settings.GameSettings;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.Timer;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,6 +35,86 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public abstract class MixinMinecraft implements MixinMinecraftInterface {
     @Accessor(value = "timer")
     public abstract Timer getTimer();
+    @Shadow
+    GuiIngame ingameGUI;
+    @Shadow
+    WorldClient world;
+    @Shadow
+    EntityPlayerSP player;
+    @Shadow
+    GuiScreen currentScreen;
+    @Shadow
+    GameSettings gameSettings;
+    @Shadow
+    boolean skipRenderWorld;
+    @Shadow
+    SoundHandler soundHandler;
+
+    @Inject(method = "init", at = @At("RETURN"))
+    private void init(CallbackInfo callbackInfo)
+    {
+        ingameGUI = new GUIUtil(Minecraft.getMinecraft());
+    }
+
+    @Inject(method = "displayGuiScreen", at = @At("HEAD"), cancellable = true)
+    public void displayGuiScreen(GuiScreen guiScreenIn, CallbackInfo info)
+    {
+        if (guiScreenIn == null && this.world == null)
+        {
+            guiScreenIn = new GuiMainMenu();
+        }
+        else if (guiScreenIn == null && this.player.getHealth() <= 0.0F)
+        {
+            guiScreenIn = new GuiGameOver(null);
+        }
+
+        GuiScreen old = this.currentScreen;
+        net.minecraftforge.client.event.GuiOpenEvent event = new net.minecraftforge.client.event.GuiOpenEvent(guiScreenIn);
+
+        if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
+            return;
+
+        guiScreenIn = event.getGui();
+        if (old != null && guiScreenIn != old)
+        {
+            old.onGuiClosed();
+        }
+
+        if (guiScreenIn instanceof GuiMainMenu || guiScreenIn instanceof GuiMultiplayer)
+        {
+            this.gameSettings.showDebugInfo = false;
+            this.ingameGUI.getChatGUI().clearChatMessages(true);
+        }
+
+        this.currentScreen = guiScreenIn;
+
+        if (guiScreenIn != null)
+        {
+            Minecraft.getMinecraft().setIngameNotInFocus();
+            KeyBinding.unPressAllKeys();
+
+            while (Mouse.next())
+            {
+            }
+
+            while (Keyboard.next())
+            {
+            }
+
+            ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft());
+            int i = scaledresolution.getScaledWidth();
+            int j = scaledresolution.getScaledHeight();
+            guiScreenIn.setWorldAndResolution(Minecraft.getMinecraft(), i, j);
+            this.skipRenderWorld = false;
+        }
+        else
+        {
+            this.soundHandler.resumeSounds();
+            Minecraft.getMinecraft().setIngameFocus();
+        }
+
+        info.cancel();
+    }
 
     @Inject(method = "updateFramebufferSize", at = @At("HEAD"))
     private void onUpdateFramebufferSize(CallbackInfo ci) {
