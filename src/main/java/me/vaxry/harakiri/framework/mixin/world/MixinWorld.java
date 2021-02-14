@@ -1,12 +1,10 @@
 package me.vaxry.harakiri.framework.mixin.world;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.event.world.EventAddEntity;
-import me.vaxry.harakiri.framework.event.world.EventLightUpdate;
-import me.vaxry.harakiri.framework.event.world.EventRainStrength;
-import me.vaxry.harakiri.framework.event.world.EventRemoveEntity;
+import me.vaxry.harakiri.framework.event.world.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -46,5 +44,13 @@ public abstract class MixinWorld {
     @Inject(method = "onEntityRemoved", at = @At("HEAD"))
     private void onEntityRemoved(Entity entityIn, CallbackInfo ci) {
         Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventRemoveEntity(entityIn));
+    }
+
+    @Inject(method = "spawnEntity", at = @At("HEAD"))
+    private void spawnEntity(Entity entityIn, CallbackInfo ci) {
+        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventSpawnEntity(entityIn));
+        if (entityIn instanceof EntityFireworkRocket) {
+            entityIn.setDead();
+        }
     }
 }
