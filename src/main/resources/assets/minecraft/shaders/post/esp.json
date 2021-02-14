@@ -1,34 +1,65 @@
 {
   "targets": [
     "swap",
+    "previous",
     "final"
   ],
   "passes": [
     {
-      "name": "entity_outline",
-      "intarget": "final",
+      "name": "blur",
+      "intarget": "minecraft:main",
       "outtarget": "swap",
       "uniforms": [
         {
-          "name": "InSize",
-          "values": [ 2, 2 ]
+          "name": "BlurDir",
+          "values": [ 0.0, 0.0 ]
         },
         {
-          "name": "OutSize",
-          "values": [ 2, 2 ]
+          "name": "Radius",
+          "values": [ 0.0 ]
+        }
+      ]
+    },
+    {
+      "name": "blur",
+      "intarget": "swap",
+      "outtarget": "previous",
+      "uniforms": [
+        {
+          "name": "BlurDir",
+          "values": [ 0.0, 0.0 ]
+        },
+        {
+          "name": "Radius",
+          "values": [ 0.0 ]
+        }
+      ]
+    },
+    {
+      "name": "entity_outlinea",
+      "intarget": "final",
+      "outtarget": "swap",
+      "auxtargets": [
+        {
+          "name": "PrevSampler",
+          "id": "previous"
+        }
+      ],
+      "uniforms": [
+        {
+          "name": "outlineAlpha",
+          "values": [ 0.8 ]
+        },
+        {
+          "name": "width",
+          "values": [ 1.0 ]
         }
       ]
     },
     {
       "name": "blit",
       "intarget": "swap",
-      "outtarget": "final",
-      "uniforms": [
-        {
-          "name": "ColorModulate",
-          "values": [ 1.0, 1.0, 1.0, 0.75 ]
-        }
-      ]
+      "outtarget": "final"
     }
   ]
 }

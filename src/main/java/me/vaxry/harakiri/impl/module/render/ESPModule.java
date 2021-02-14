@@ -1,9 +1,12 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.netty.util.internal.ReflectionUtil;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.event.render.EventRenderEntity;
 import me.vaxry.harakiri.framework.extd.ShaderGroupExt;
+import me.vaxry.harakiri.framework.layeredit.LayerEnderman;
+import me.vaxry.harakiri.framework.layeredit.LayerSpider;
 import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.util.*;
 import me.vaxry.harakiri.framework.util.Timer;
@@ -12,6 +15,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderEnderman;
+import net.minecraft.client.renderer.entity.RenderLivingBase;
+import net.minecraft.client.renderer.entity.RenderSpider;
+import net.minecraft.client.renderer.entity.layers.LayerEndermanEyes;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.layers.LayerSpiderEyes;
 import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -27,9 +37,11 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import javax.swing.*;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.List;
 
@@ -44,6 +56,7 @@ public final class ESPModule extends Module {
     public final Value<Boolean> hostile = new Value<Boolean>("Hostile", new String[]{"Hostile", "h"}, "Draw Hostile Entities", false);
     public final Value<Boolean> passive = new Value<Boolean>("Passive", new String[]{"Passive", "p"}, "Draw Hostile Entities", false);
     public final Value<Boolean> crystals = new Value<Boolean>("Crystals", new String[]{"Crystals", "c"}, "Draw Crystals", false);
+    public final Value<Boolean> players = new Value<Boolean>("Players", new String[]{"Players", "pl"}, "Draw Players", false);
 
     private ResourceLocation shader;
     private boolean toLoadShader = true;
@@ -53,11 +66,15 @@ public final class ESPModule extends Module {
     private HashMap<EntityItem, Float> opacity = new HashMap<>();
     private Timer timer = new Timer();
 
+    private ArrayList<EntityLivingBase> livingBases = new ArrayList<>();
+    private static List<LayerRenderer<EntityLivingBase>> renderLivingBaseLayerRenderersField;
+
     // scoreboard stuff //
     private Scoreboard board;
     private ScorePlayerTeam green;
     private ScorePlayerTeam red;
     private ScorePlayerTeam purple;
+    private ScorePlayerTeam lblue;
 
     private Class[] hostileMobs = {EntitySpider.class, EntityCaveSpider.class, EntityEnderman.class,EntityPigZombie.class,
         EntityEvoker.class, EntityVindicator.class, EntityVex.class, EntityEndermite.class, EntityGuardian.class, EntityElderGuardian.class,
@@ -153,9 +170,11 @@ public final class ESPModule extends Module {
                 this.green = board.createTeam("haraGreen");
                 this.red = board.createTeam("haraRed");
                 this.purple = board.createTeam("haraPurple");
+                this.lblue = board.createTeam("haraLBlue");
                 this.green.setPrefix(TextFormatting.GREEN.toString());
                 this.red.setPrefix(TextFormatting.RED.toString());
                 this.purple.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
+                this.lblue.setPrefix(TextFormatting.BLUE.toString());
 
                 mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
                 mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
@@ -171,18 +190,35 @@ public final class ESPModule extends Module {
             toLoadShader = false;
         }
 
+        if(!livingBases.contains(ent.getEntity())){
+            livingBases.add(ent.getEntity());
+            replaceLayers(ent.getEntity());
+        }
+
         if(this.isEnabled() &&
                 ((hostileMobsList.contains(ent.getEntity().getClass()) && hostile.getValue()) ||
-                        (!hostileMobsList.contains(ent.getEntity().getClass()) && passive.getValue())) ) {
+                        (!hostileMobsList.contains(ent.getEntity().getClass()) && passive.getValue())) ||
+                            (ent.getEntity() instanceof EntityPlayer && players.getValue())) {
             ent.getEntity().setGlowing(true);
         } else
             ent.getEntity().setGlowing(false);
 
 
-        if(hostileMobsList.contains(ent.getEntity().getClass()) || ent.getEntity() instanceof EntitySpider || ent.getEntity() instanceof EntityPlayer)
+        if(hostileMobsList.contains(ent.getEntity().getClass())) {
             board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), red.getName());
-        else
+        }
+        else if(!(ent.getEntity() instanceof EntityPlayer)){
             board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), green.getName());
+        }else{
+            // Player.
+            if(Harakiri.INSTANCE.getFriendManager().isFriend(ent.getEntity()) != null){
+                //friend
+                board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), lblue.getName());
+            }else{
+                // Not friend.
+                board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), red.getName());
+            }
+        }
     }
 
     @Listener
@@ -196,9 +232,11 @@ public final class ESPModule extends Module {
                 this.green = board.createTeam("haraGreen");
                 this.red = board.createTeam("haraRed");
                 this.purple = board.createTeam("haraPurple");
+                this.lblue = board.createTeam("haraLBlue");
                 this.green.setPrefix(TextFormatting.GREEN.toString());
                 this.red.setPrefix(TextFormatting.RED.toString());
                 this.purple.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
+                this.lblue.setPrefix(TextFormatting.BLUE.toString());
 
                 mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
                 mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
@@ -231,5 +269,32 @@ public final class ESPModule extends Module {
         // else
         //     board.removePlayerFromTeam(ent.getEntity().getUniqueID().toString(), green);
 
+    }
+
+    private static void replaceLayers(EntityLivingBase livingBase)
+    {
+        Render render = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(livingBase);
+        renderLivingBaseLayerRenderersField = ReflectionHelper.getPrivateValue(RenderLivingBase.class, (RenderLivingBase)render, "field_177097_h", "layerRenderers");
+        try
+        {
+            List<LayerRenderer<EntityLivingBase>> list = renderLivingBaseLayerRenderersField;
+            for (LayerRenderer layer : list.toArray(new LayerRenderer[list.size()]))
+            {
+                if (layer instanceof LayerSpiderEyes)
+                {
+                    list.remove(layer);
+                    list.add(new LayerSpider((RenderSpider) render));
+                }
+                else if (layer instanceof LayerEndermanEyes)
+                {
+                    list.remove(layer);
+                    list.add(new LayerEnderman((RenderEnderman) render));
+                }
+            }
+        }
+        catch (Throwable t)
+        {
+            //oops
+        }
     }
 }
