@@ -9,6 +9,7 @@ import me.vaxry.harakiri.framework.event.minecraft.EventUpdateFramebufferSize;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
 import me.vaxry.harakiri.framework.duck.MixinMinecraftInterface;
 import me.vaxry.harakiri.framework.util.GUIUtil;
+import me.vaxry.harakiri.impl.gui.menu.HaraMainMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -61,7 +62,7 @@ public abstract class MixinMinecraft implements MixinMinecraftInterface {
     {
         if (guiScreenIn == null && this.world == null)
         {
-            guiScreenIn = new GuiMainMenu();
+            guiScreenIn = new HaraMainMenu();
         }
         else if (guiScreenIn == null && this.player.getHealth() <= 0.0F)
         {
@@ -80,7 +81,7 @@ public abstract class MixinMinecraft implements MixinMinecraftInterface {
             old.onGuiClosed();
         }
 
-        if (guiScreenIn instanceof GuiMainMenu || guiScreenIn instanceof GuiMultiplayer)
+        if (guiScreenIn instanceof HaraMainMenu || guiScreenIn instanceof GuiMultiplayer)
         {
             this.gameSettings.showDebugInfo = false;
             this.ingameGUI.getChatGUI().clearChatMessages(true);
@@ -113,6 +114,10 @@ public abstract class MixinMinecraft implements MixinMinecraftInterface {
             Minecraft.getMinecraft().setIngameFocus();
         }
 
+        final EventDisplayGui eventEE = new EventDisplayGui(guiScreenIn);
+        Harakiri.INSTANCE.getEventManager().dispatchEvent(eventEE);
+        if (event.isCanceled()) info.cancel();
+
         info.cancel();
     }
 
@@ -136,13 +141,6 @@ public abstract class MixinMinecraft implements MixinMinecraftInterface {
         if (Keyboard.getEventKeyState()) {
             Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventKeyPress(i));
         }
-    }
-
-    @Inject(method = "displayGuiScreen", at = @At("HEAD"), cancellable = true)
-    private void onDisplayGuiScreen(GuiScreen guiScreenIn, CallbackInfo ci) {
-        final EventDisplayGui event = new EventDisplayGui(guiScreenIn);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
-        if (event.isCanceled()) ci.cancel();
     }
 
     @Inject(method = "loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V", cancellable = true, at = @At("HEAD"))

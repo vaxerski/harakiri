@@ -389,20 +389,19 @@ public final class ModuleListComponent extends ResizableHudComponent {
                             height += Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
                         }
                     }
-                } else {
-                    for (Module module : Harakiri.INSTANCE.getModuleManager().getModuleList(this.type)) {
-                        final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP + height - this.scroll) && mouseY <= (this.getY() + BORDER + (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT * 2) + 1 + height - this.scroll);
-                        if (insideComponent) {
-                            tooltipText = module.getDesc();
-                        } else {
-                            if (this.currentToolTip != null) {
-                                if (this.currentToolTip.text.equals(module.getDesc())) {
-                                    this.currentToolTip = null;
-                                }
+                }
+                for (Module module : Harakiri.INSTANCE.getModuleManager().getModuleList(this.type)) {
+                    final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP + height - this.scroll) && mouseY <= (this.getY() + BORDER + (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT * 2) + 1 + height - this.scroll);
+                    if (insideComponent) {
+                        tooltipText = module.getDesc();
+                    } else {
+                        if (this.currentToolTip != null) {
+                            if (this.currentToolTip.text.equals(module.getDesc())) {
+                                this.currentToolTip = null;
                             }
                         }
-                        height += Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
                     }
+                    height += Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
                 }
 
                 if (!tooltipText.equals("")) {
