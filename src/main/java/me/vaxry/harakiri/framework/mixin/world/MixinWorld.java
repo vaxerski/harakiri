@@ -47,7 +47,7 @@ public abstract class MixinWorld {
     }
 
     @Inject(method = "spawnEntity", at = @At("HEAD"))
-    private void spawnEntity(Entity entityIn, CallbackInfo ci) {
+    private void spawnEntity(Entity entityIn, CallbackInfoReturnable<Boolean> ci) {
         Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventSpawnEntity(entityIn));
         if (entityIn instanceof EntityFireworkRocket) {
             entityIn.setDead();

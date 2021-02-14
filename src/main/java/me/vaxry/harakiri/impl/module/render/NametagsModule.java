@@ -132,7 +132,7 @@ public final class NametagsModule extends Module {
 
             nametagstr += "\247f ";
 
-            final NetworkPlayerInfo playerInfo = mc.player.connection.getPlayerInfo(mc.player.getUniqueID());
+            final NetworkPlayerInfo playerInfo = mc.player.connection.getPlayerInfo(e.getUniqueID());
             int ping = -1;
             if (Objects.nonNull(playerInfo)) {
                 if(playerInfo.getResponseTime() != 0)
