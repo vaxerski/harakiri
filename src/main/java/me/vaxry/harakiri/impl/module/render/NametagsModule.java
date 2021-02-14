@@ -123,7 +123,7 @@ public final class NametagsModule extends Module {
 
             if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null) {
                 nametagstr += "\2473" + e.getName();
-                toDraw.add(new Pair<>(e.getName() + " ", 0xFF3333FF));
+                toDraw.add(new Pair<>(e.getName() + " ", 0xFF80FFFF));
             }
             else {
                 nametagstr += "\247f" + e.getName();
@@ -145,19 +145,19 @@ public final class NametagsModule extends Module {
             }
             else if (ping > 200) {
                 nametagstr += "\247c" + ping + "ms";
-                toDraw.add(new Pair<>(ping + "ms", 0xFFFF3333));
+                toDraw.add(new Pair<>(ping + "ms", 0xFFFF5050));
             }
             else if(ping > 100) {
                 nametagstr += "\2476" + ping + "ms";
-                toDraw.add(new Pair<>(ping + "ms", 0xFFAAAA00));
+                toDraw.add(new Pair<>(ping + "ms", 0xFFFFCC00));
             }
             else if(ping > 50) {
                 nametagstr += "\2472" + ping + "ms";
-                toDraw.add(new Pair<>(ping + "ms", 0xFF11DD11));
+                toDraw.add(new Pair<>(ping + "ms", 0xFFCCFF33));
             }
             else {
                 nametagstr += "\247a" + ping + "ms";
-                toDraw.add(new Pair<>(ping + "ms", 0xFF11FF11));
+                toDraw.add(new Pair<>(ping + "ms", 0xFF66FF66));
             }
 
             float nametagX = 0;
