@@ -12,6 +12,8 @@ import me.vaxry.harakiri.framework.util.*;
 import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
@@ -29,6 +31,7 @@ import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.*;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.ResourceLocation;
@@ -198,7 +201,7 @@ public final class ESPModule extends Module {
         if(this.isEnabled() &&
                 ((hostileMobsList.contains(ent.getEntity().getClass()) && hostile.getValue()) ||
                         (!hostileMobsList.contains(ent.getEntity().getClass()) && passive.getValue())) ||
-                            (ent.getEntity() instanceof EntityPlayer && players.getValue())) {
+                            ((ent.getEntity() instanceof EntityOtherPlayerMP || ent.getEntity() instanceof EntityPlayerMP || ent.getEntity() instanceof EntityPlayerSP) && players.getValue())) {
             ent.getEntity().setGlowing(true);
         } else
             ent.getEntity().setGlowing(false);
@@ -207,7 +210,7 @@ public final class ESPModule extends Module {
         if(hostileMobsList.contains(ent.getEntity().getClass())) {
             board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), red.getName());
         }
-        else if(!(ent.getEntity() instanceof EntityPlayer)){
+        else if(!(ent.getEntity() instanceof EntityOtherPlayerMP || ent.getEntity() instanceof EntityPlayerMP || ent.getEntity() instanceof EntityPlayerSP)){
             board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), green.getName());
         }else{
             // Player.
