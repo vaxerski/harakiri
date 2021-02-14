@@ -86,19 +86,7 @@ public final class GuiHudEditor extends GuiScreen {
         if(Harakiri.INSTANCE.getPlexusEffect() == null)
             Harakiri.INSTANCE.initPlexusEffect((PlexusComponent) Harakiri.INSTANCE.getHudManager().findComponent(PlexusComponent.class));
 
-        HudEditorModule hudmodule = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
-        rainSpeed = hudmodule.rainspeed.getValue();
-
-        // Shift RGB
-
-        final float jitter = getJitter();
-
-        hue += jitter;
-        if(hue > 1)
-            hue -= 1;
-
-        Color rainbowColorC = Color.getHSBColor(hue, 1, 1);
-        rainbowColor = 0xFF000000 + rainbowColorC.getRed() * 0x10000 + rainbowColorC.getGreen() * 0x100 + rainbowColorC.getBlue();
+        rainbowColor = Harakiri.INSTANCE.getHudManager().rainbowColor;
 
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.drawDefaultBackground();
@@ -251,7 +239,6 @@ public final class GuiHudEditor extends GuiScreen {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Harakiri.INSTANCE.logChat("mouseClicked on ERROR SWC!! -> " + e.getMessage());
         }
     }
 
@@ -277,7 +264,6 @@ public final class GuiHudEditor extends GuiScreen {
         try {
             swc.mouseReleased(mouseX, mouseY, state);
         }catch(Throwable t){
-            Harakiri.INSTANCE.logChat("MouseReleased on ERROR SWC!! -> " + t.getMessage());
         }
     }
 

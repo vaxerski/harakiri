@@ -133,6 +133,7 @@ public final class ModuleManager {
         add(new StrafeModule());
         add(new NoBossHealthModule());
         add(new DiscordRPCModule());
+        add(new ExtraTabModule());
         add(new HolesModule());
         add(new SmallShieldModule());
         add(new PullDownModule());

@@ -30,7 +30,9 @@ public final class NotificationsComponent extends DraggableHudComponent {
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
 
-        int offsetY = 5;
+        WatermarkComponent watermarkComponent = (WatermarkComponent)Harakiri.INSTANCE.getHudManager().findComponent(WatermarkComponent.class);
+
+        int offsetY = watermarkComponent.isVisible() ? Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 4 : 1;
         float maxWidth = 0;
 
         final ScaledResolution sr = new ScaledResolution(mc);

@@ -4,18 +4,22 @@ import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
 import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.texture.Texture;
 import me.vaxry.harakiri.framework.util.ReflectionUtil;
+import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.gui.hud.component.*;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
+import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.common.MinecraftForge;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
+import java.awt.*;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -32,6 +36,11 @@ public final class HudManager {
 
     private List<HudComponent> componentList = new CopyOnWriteArrayList<>();
     private List<AnchorPoint> anchorPoints = new ArrayList<>();
+
+    private Timer timer = new Timer();
+    float rainSpeed = 0.1f; // +0.1 default
+    public int rainbowColor = 0x00000000;
+    private float hue = 0;
 
     public HudManager() {
         final ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
@@ -178,6 +187,20 @@ public final class HudManager {
                 point.setY(event.getScaledResolution().getScaledHeight() - 2);
             }
         }
+
+        HudEditorModule hudmodule = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
+        rainSpeed = hudmodule.rainspeed.getValue();
+
+        // Shift RGB
+
+        final float jitter = getJitter();
+
+        hue += jitter;
+        if(hue > 1)
+            hue -= 1;
+
+        Color rainbowColorC = Color.getHSBColor(hue, 1, 1);
+        rainbowColor = 0xFF000000 + rainbowColorC.getRed() * 0x10000 + rainbowColorC.getGreen() * 0x100 + rainbowColorC.getBlue();
     }
 
     public void loadExternalHudComponents() {
@@ -255,6 +278,15 @@ public final class HudManager {
 
     public List<HudComponent> getComponentList() {
         return this.componentList.stream().sorted((obj1, obj2) -> obj1.getName().compareTo(obj2.getName())).collect(Collectors.toList());
+    }
+
+    private float getJitter() {
+        final float seconds = ((System.currentTimeMillis() - this.timer.getTime()) / 1000.0f) % 60.0f;
+
+        final float desiredTimePerSecond = rainSpeed;
+
+        this.timer.reset();
+        return Math.min(desiredTimePerSecond * seconds, 1.0f);
     }
 
     public void setComponentList(List<HudComponent> componentList) {

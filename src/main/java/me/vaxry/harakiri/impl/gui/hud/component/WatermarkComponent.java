@@ -7,10 +7,17 @@ import me.vaxry.harakiri.framework.texture.Texture;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.impl.fml.harakiriMod;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
+import me.vaxry.harakiri.impl.module.render.HudModule;
+import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import me.vaxry.harakiri.impl.module.ui.WatermarkModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * Author Seth
@@ -22,14 +29,17 @@ public final class WatermarkComponent extends HudComponent {
 
     protected Texture watermarkTex;
 
+    private final float OFFSET_X = 2;
+    private final float OFFSET_Y = 2;
+
     public WatermarkComponent() {
         super("Watermark");
         final ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
         this.setH(res.getScaledHeight());
         this.setW(res.getScaledWidth());
-        this.setX(3);
-        this.setY(149);
-        watermarkTex = new Texture("harawatermark.png");
+        this.setX(0);
+        this.setY(0);
+        //watermarkTex = new Texture("harawatermark.png");
     }
 
     @Override
@@ -45,25 +55,42 @@ public final class WatermarkComponent extends HudComponent {
         WatermarkModule watermarkModule = (WatermarkModule) Harakiri.INSTANCE.getModuleManager().find(WatermarkModule.class);
         watermarkModule.setWMOnState(this.isVisible());
 
+        final NetworkPlayerInfo playerInfo = Minecraft.getMinecraft().player.connection.getPlayerInfo(Minecraft.getMinecraft().player.getUniqueID());
+        String ping = "";
+        if (Objects.nonNull(playerInfo)) {
+            final String ms = playerInfo.getResponseTime() != 0 ? playerInfo.getResponseTime() + "ms" : "?";
+            ping = ms;
+        }
+
+        final HudModule hudModule = (HudModule)Harakiri.INSTANCE.getModuleManager().find(HudModule.class);
+        final boolean useRainbow = hudModule.rainbow.getValue();
+
+        final HudEditorModule hem = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
+
+        final String time = new SimpleDateFormat("h:mm a").format(new Date());
+
         final ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
 
-        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(WATERMARK, 1, watermarkModule.Xoff.getValue(), 0xFF9C00FF);
+        final String watermarkText = "HARAKIRI v" + harakiriMod.VERSION + " | "
+                + Minecraft.getMinecraft().player.getGameProfile().getName()
+                + " (" + Harakiri.INSTANCE.getUsername() + ") | "
+                + (Minecraft.getMinecraft().isSingleplayer() ? "singleplayer" : Minecraft.getMinecraft().getCurrentServerData().serverIP) + " | "
+                + "ping: " + ping + " | "
+                + time;
 
-        GlStateManager.enableAlpha();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.enableBlend();
+        float SCALE = 0.8f;
 
-        GlStateManager.enableTexture2D();
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+        GlStateManager.scale(SCALE, SCALE, SCALE);
 
-        this.watermarkTex.bind();
-        this.watermarkTex.render(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        // Back
+        RenderUtil.drawRoundedRect(OFFSET_X, OFFSET_Y, Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(watermarkText) + 5, Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 4, 2, 0xFF444444);
+        // Top Box
+        RenderUtil.drawRoundedRect(OFFSET_X, OFFSET_Y, Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(watermarkText) + 5, 1, 0.4f, useRainbow ? Harakiri.INSTANCE.getHudManager().rainbowColor : 0xFF000000 + hem.color.getValue().getRGB());
+        GlStateManager.scale(1f/SCALE, 1f/SCALE, 1f/SCALE);
 
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-        GlStateManager.disableTexture2D();
-        GlStateManager.disableBlend();
-        GlStateManager.disableAlpha();
+        // Text
+        Harakiri.INSTANCE.getTTFFontUtil().drawStringScaled(watermarkText, (int)((OFFSET_X + 2) * SCALE), (int)((OFFSET_Y + 2) * SCALE), 0xFFDDDDDD, SCALE);
 
-        RenderUtil.end2D();
+
     }
 }
