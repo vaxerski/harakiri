@@ -108,6 +108,7 @@ public final class HudManager {
         add(new TotemCountComponent());
         add(new PlayerCountComponent());
         add(new EntityListComponent());
+        add(new WarningsComponent());
 
         MinecraftForge.EVENT_BUS.register(rfc);
         //MinecraftForge.EVENT_BUS.register(new ThreatCamComponent());
