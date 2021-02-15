@@ -8,6 +8,7 @@ import me.vaxry.harakiri.framework.event.player.*;
 import me.vaxry.harakiri.framework.event.render.EventRenderOverlay;
 import me.vaxry.harakiri.framework.event.world.EventAddCollisionBox;
 import me.vaxry.harakiri.framework.event.world.EventLiquidCollisionBB;
+import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
 import me.vaxry.harakiri.framework.event.world.EventSetOpaqueCube;
 import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.util.MathUtil;
@@ -42,6 +43,8 @@ public final class FreeCamModule extends Module {
 
     public FreeCamModule() {
         super("FreeCam", new String[]{"FreeCamera"}, "Allows you to noclip.", "NONE", -1, ModuleType.PLAYER);
+        this.onDisable();
+        this.setEnabled(false);
     }
 
     @Override
@@ -161,6 +164,12 @@ public final class FreeCamModule extends Module {
                 }
             }
         }
+    }
+
+    @Listener
+    public void onLoadWorld(EventLoadWorld event) {
+        this.setEnabled(false);
+        this.onDisable();
     }
 
     @Listener
