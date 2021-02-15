@@ -47,6 +47,7 @@ public final class NewChunksModule extends Module {
     public void onToggle() {
         super.onToggle();
         this.chunkDataList.clear();
+        this.currentColor = new Color(this.color.getValue().getRed(), this.color.getValue().getGreen(), this.color.getValue().getBlue(), this.alpha.getValue());
     }
 
     @Listener

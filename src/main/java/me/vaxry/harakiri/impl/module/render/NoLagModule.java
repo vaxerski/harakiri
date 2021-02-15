@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import com.yworks.yguard.test.A;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.event.render.*;
@@ -9,6 +10,7 @@ import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.block.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.item.EntityFireworkRocket;
@@ -20,7 +22,13 @@ import net.minecraft.network.play.server.SPacketSpawnMob;
 import net.minecraft.tileentity.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import org.spongepowered.asm.mixin.Mixin;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Author Seth
@@ -41,8 +49,13 @@ public final class NoLagModule extends Module {
     public final Value<Boolean> witherSkulls = new Value<Boolean>("WitherSkulls", new String[]{"WitherSkull", "skulls", "skull", "ws"}, "Disables the rendering of flying wither skulls.", false);
     public final Value<Boolean> crystals = new Value<Boolean>("Crystals", new String[]{"Wither", "w"}, "Disables the rendering of crystals.", false);
     public final Value<Boolean> tnt = new Value<Boolean>("TNT", new String[]{"Wither", "w"}, "Disables the rendering of TNT.", false);
+    //public final Value<Boolean> tiles = new Value<Boolean>("TileEntities", new String[]{"TileEntities", "t"}, "Remove Tile entities.", false);
+    //public final Value<Float> tileDist = new Value<Float>("TileDistance", new String[]{"TileDistance", "td"}, "Distance to remove the tile entities.", 50.f, 0.f, 100.f, 1.f);
     public final Value<Boolean> firework = new Value<Boolean>("Fireworks", new String[]{"Fir", "f"}, "Disables the rendering of fireworks.", false);
     public final Value<Boolean> removeChunkBan = new Value<Boolean>("NoChunkBan", new String[]{"NoChunk", "nw"}, "Remove certain chunkbans.", false);
+
+
+    private final HashMap<TileEntity, String> signTexts = new HashMap<>();
 
     public NoLagModule() {
         super("NoLag", new String[]{"AntiLag", "NoRender"}, "Fixes malicious lag exploits and bugs.", "NONE", -1, ModuleType.RENDER);
@@ -94,7 +107,11 @@ public final class NoLagModule extends Module {
             for (TileEntity te : mc.world.loadedTileEntityList) {
                 if (te instanceof TileEntitySign && this.signs.getValue()) {
                     final TileEntitySign sign = (TileEntitySign) te;
-                    sign.signText = new ITextComponent[]{new TextComponentString(""), new TextComponentString(""), new TextComponentString(""), new TextComponentString("")};
+                    if(!sign.signText[0].toString().equalsIgnoreCase("") || !sign.signText[1].toString().equalsIgnoreCase("") ||
+                            !sign.signText[2].toString().equalsIgnoreCase("") || !sign.signText[3].toString().equalsIgnoreCase("")) {
+                        signTexts.put(sign, sign.signText[0].getFormattedText() + "<br>" + sign.signText[1].getFormattedText() + "<br>" + sign.signText[2].getFormattedText() + "<br>" + sign.signText[3].getFormattedText());
+                        sign.signText = new ITextComponent[]{new TextComponentString(""), new TextComponentString(""), new TextComponentString(""), new TextComponentString("")};
+                    }
                 }
                 else if (te instanceof TileEntityBeacon && this.removeChunkBan.getValue()) {
                     te.invalidate();
@@ -106,6 +123,19 @@ public final class NoLagModule extends Module {
                     te.invalidate();
                 }
             }
+        }
+
+        if(!this.signs.getValue() && !signTexts.isEmpty()){
+            // Restore signs
+            for(Map.Entry<TileEntity, String> entry : signTexts.entrySet()){
+                if(entry.getKey() == null)
+                    continue;
+
+                String[] str = entry.getValue().split("<br>");
+                ((TileEntitySign)entry.getKey()).signText = new ITextComponent[]{new TextComponentString(str[0]),new TextComponentString(str[1]),new TextComponentString(str[2]),new TextComponentString(str[3])};
+            }
+
+            signTexts.clear();
         }
     }
 
@@ -177,5 +207,21 @@ public final class NoLagModule extends Module {
         if (this.names.getValue()) {
             event.setCanceled(true);
         }
+    }
+
+    @Override
+    public void onDisable() {
+        super.onDisable();
+
+        // Restore signs
+        for(Map.Entry<TileEntity, String> entry : signTexts.entrySet()){
+            if(entry.getKey() == null)
+                continue;
+
+            String[] str = entry.getValue().split("<br>");
+            ((TileEntitySign)entry.getKey()).signText = new ITextComponent[]{new TextComponentString(str[0]),new TextComponentString(str[1]),new TextComponentString(str[2]),new TextComponentString(str[3])};
+        }
+
+        signTexts.clear();
     }
 }
