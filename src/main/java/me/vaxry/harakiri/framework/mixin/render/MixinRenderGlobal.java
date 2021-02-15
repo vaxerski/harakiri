@@ -1,12 +1,15 @@
 package me.vaxry.harakiri.framework.mixin.render;
 
 import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.render.EventRenderBlockDamage;
+import me.vaxry.harakiri.framework.event.render.EventRenderEntities;
 import me.vaxry.harakiri.framework.event.render.EventRenderEntityOutlines;
 import me.vaxry.harakiri.framework.event.render.EventRenderSky;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,5 +41,12 @@ public class MixinRenderGlobal {
         final EventRenderBlockDamage event = new EventRenderBlockDamage();
         Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
         if (event.isCanceled()) ci.cancel();
+    }
+
+    @Inject(method = "renderEntities", at = @At("RETURN"), cancellable = true)
+    private void renderEntities(Entity renderViewEntity, ICamera camera, float partialTicks, CallbackInfo ci){
+        final EventRenderEntities eventRenderEntities = new EventRenderEntities(EventStageable.EventStage.POST, renderViewEntity, camera, partialTicks);
+        Harakiri.INSTANCE.getEventManager().dispatchEvent(eventRenderEntities);
+        if(eventRenderEntities.isCanceled()) ci.cancel();
     }
 }
