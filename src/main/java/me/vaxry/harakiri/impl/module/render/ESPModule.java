@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import ibxm.Player;
 import io.netty.util.internal.ReflectionUtil;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
@@ -74,10 +75,10 @@ public final class ESPModule extends Module {
 
     // scoreboard stuff //
     private Scoreboard board;
-    private ScorePlayerTeam green;
-    private ScorePlayerTeam red;
-    private ScorePlayerTeam purple;
-    private ScorePlayerTeam lblue;
+    public ScorePlayerTeam green;
+    public ScorePlayerTeam red;
+    public ScorePlayerTeam purple;
+    public ScorePlayerTeam lblue;
 
     private Class[] hostileMobs = {EntitySpider.class, EntityCaveSpider.class, EntityEnderman.class,EntityPigZombie.class,
         EntityEvoker.class, EntityVindicator.class, EntityVex.class, EntityEndermite.class, EntityGuardian.class, EntityElderGuardian.class,
@@ -177,7 +178,7 @@ public final class ESPModule extends Module {
                 this.green.setPrefix(TextFormatting.GREEN.toString());
                 this.red.setPrefix(TextFormatting.RED.toString());
                 this.purple.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
-                this.lblue.setPrefix(TextFormatting.BLUE.toString());
+                this.lblue.setPrefix(TextFormatting.AQUA.toString());
 
                 mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
                 mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
@@ -186,7 +187,7 @@ public final class ESPModule extends Module {
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
             }catch(Throwable t){
-                Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
+                //Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
                 //JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
             }
 
@@ -200,27 +201,16 @@ public final class ESPModule extends Module {
 
         if(this.isEnabled() &&
                 ((hostileMobsList.contains(ent.getEntity().getClass()) && hostile.getValue()) ||
-                        (!hostileMobsList.contains(ent.getEntity().getClass()) && passive.getValue())) ||
-                            ((ent.getEntity() instanceof EntityOtherPlayerMP || ent.getEntity() instanceof EntityPlayerMP || ent.getEntity() instanceof EntityPlayerSP) && players.getValue())) {
-            ent.getEntity().setGlowing(true);
+                        (!hostileMobsList.contains(ent.getEntity().getClass()) && passive.getValue()))) {
+                ent.getEntity().setGlowing(true);
         } else
             ent.getEntity().setGlowing(false);
 
 
         if(hostileMobsList.contains(ent.getEntity().getClass())) {
             board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), red.getName());
-        }
-        else if(!(ent.getEntity() instanceof EntityOtherPlayerMP || ent.getEntity() instanceof EntityPlayerMP || ent.getEntity() instanceof EntityPlayerSP)){
-            board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), green.getName());
         }else{
-            // Player.
-            if(Harakiri.INSTANCE.getFriendManager().isFriend(ent.getEntity()) != null){
-                //friend
-                board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), lblue.getName());
-            }else{
-                // Not friend.
-                board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), red.getName());
-            }
+            board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), green.getName());
         }
     }
 
@@ -239,7 +229,7 @@ public final class ESPModule extends Module {
                 this.green.setPrefix(TextFormatting.GREEN.toString());
                 this.red.setPrefix(TextFormatting.RED.toString());
                 this.purple.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
-                this.lblue.setPrefix(TextFormatting.BLUE.toString());
+                this.lblue.setPrefix(TextFormatting.AQUA.toString());
 
                 mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
                 mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
@@ -248,7 +238,7 @@ public final class ESPModule extends Module {
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
             }catch(Throwable t){
-                Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
+                //Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
                 //JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
             }
 
@@ -260,6 +250,23 @@ public final class ESPModule extends Module {
             board.addPlayerToTeam(event.getEntity().getUniqueID().toString(), purple.getName());
         }else if(event.getEntity() instanceof EntityEnderCrystal){
             event.getEntity().setGlowing(false);
+        }
+
+        if(event.getEntity() instanceof EntityPlayerMP || event.getEntity() instanceof EntityPlayer || event.getEntity() instanceof EntityOtherPlayerMP || event.getEntity() instanceof  EntityPlayerSP) {
+            // player
+
+            if(this.isEnabled() && this.players.getValue())
+                event.getEntity().setGlowing(true);
+            else
+                event.getEntity().setGlowing(false);
+
+            if(Harakiri.INSTANCE.getFriendManager().isFriend(event.getEntity()) != null){
+                //friend
+                board.addPlayerToTeam(event.getEntity().getName().toString(), lblue.getName());
+            }else{
+                // Not friend.
+                board.addPlayerToTeam(event.getEntity().getName().toString(), red.getName());
+            }
         }
 
     }
@@ -299,5 +306,17 @@ public final class ESPModule extends Module {
         {
             //oops
         }
+    }
+
+    public ScorePlayerTeam getTeamFromStr(String s){
+        if(s.equalsIgnoreCase(red.toString()))
+            return red;
+        else if(s.equalsIgnoreCase(green.toString()))
+            return green;
+        else if(s.equalsIgnoreCase(purple.toString()))
+            return purple;
+        else if(s.equalsIgnoreCase(lblue.toString()))
+            return lblue;
+        return null;
     }
 }
