@@ -41,6 +41,10 @@
     "render.MixinRenderLivingBase",
     "render.MixinVisGraph",
     "world.MixinWorld",
-    "entity.MixinEntity"
+    "entity.MixinEntity",
+    "render.layers.MixinLayerElytra",
+    "render.layers.MixinLayerArmorBase",
+    "render.model.MixinModelElytra",
+    "render.model.MixinModelPlayer"
   ]
 }

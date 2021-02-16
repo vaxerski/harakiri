@@ -2,6 +2,7 @@ package me.vaxry.harakiri.framework.mixin.render;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRenderName;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -24,5 +25,10 @@ public abstract class MixinRenderLivingBase extends Render {
         final EventRenderName event = new EventRenderName(entity);
         Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
         if (event.isCanceled()) ci.cancel();
+    }
+
+    @Inject(method = "renderLayers", at = @At("HEAD"), cancellable = true)
+    private void renderLayers(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scaleIn, CallbackInfo ci){
+
     }
 }

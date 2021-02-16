@@ -71,6 +71,7 @@ public final class ModuleManager {
         add(new NoSwingModule());
         ESPModule espmod = new ESPModule();
         add(espmod);
+        add(new ChamsModule());
         add(new NametagsModule());
         add(new SneakModule());
         add(new MiddleClickFriendsModule());

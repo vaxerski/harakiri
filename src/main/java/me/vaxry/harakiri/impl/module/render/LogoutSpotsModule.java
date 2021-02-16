@@ -76,7 +76,7 @@ public final class LogoutSpotsModule extends Module {
             GlStateManager.enableLighting();
             GlStateManager.enableBlend();
             GlStateManager.enableDepth();
-            GlStateManager.color(1, 1, 1, 1);
+            GlStateManager.color(1, 1, 1, 0.3f);
             mc.getRenderManager().renderEntity(data.ghost, data.position.x - mc.getRenderManager().renderPosX, data.position.y - mc.getRenderManager().renderPosY, data.position.z - mc.getRenderManager().renderPosZ, data.ghost.rotationYaw, mc.getRenderPartialTicks(), false);
             GlStateManager.disableLighting();
             GlStateManager.disableBlend();

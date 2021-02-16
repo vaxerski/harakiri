@@ -42,9 +42,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import org.lwjgl.opengl.GL11;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import javax.swing.*;
@@ -166,6 +168,39 @@ public final class ESPModule extends Module {
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
         toLoadShader = true;
+    }
+
+    @SubscribeEvent
+    public void onRenderPlayerEvent(RenderPlayerEvent.Pre event){
+        if(!(event.getEntity() instanceof EntityPlayer))
+            return;
+
+        EntityPlayer e = (EntityPlayer)event.getEntity();
+
+        ChamsModule chamsModule = (ChamsModule)Harakiri.INSTANCE.getModuleManager().find(ChamsModule.class);
+
+        if(!chamsModule.isEnabled() || e == null)
+            return;
+
+        if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null && chamsModule.friend.getValue() ||
+                Harakiri.INSTANCE.getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
+                Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName()) && chamsModule.self.getValue()){
+
+            GlStateManager.enableAlpha();
+            GlStateManager.enableBlend();
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            GlStateManager.depthMask(false);
+
+            if(Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName())){
+                GL11.glColor4f(chamsModule.selfR.getValue() / 255.f,chamsModule.selfG.getValue() / 255.f,chamsModule.selfB.getValue() / 255.f,chamsModule.selfA.getValue() / 255.f);
+            } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null){
+                //friend settings
+                GL11.glColor4f(chamsModule.friendR.getValue() / 255.f,chamsModule.friendG.getValue() / 255.f,chamsModule.friendB.getValue() / 255.f,chamsModule.friendA.getValue() / 255.f);
+            } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) == null){
+                //enemy settings
+                GL11.glColor4f(chamsModule.enemyR.getValue() / 255.f,chamsModule.enemyG.getValue() / 255.f,chamsModule.enemyB.getValue() / 255.f,chamsModule.enemyA.getValue() / 255.f);
+            }
+        }
     }
 
     @SubscribeEvent
