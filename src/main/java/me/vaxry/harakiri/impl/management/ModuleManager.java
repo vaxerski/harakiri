@@ -71,7 +71,8 @@ public final class ModuleManager {
         add(new NoSwingModule());
         ESPModule espmod = new ESPModule();
         add(espmod);
-        add(new ChamsModule());
+        ChamsModule chammod = new ChamsModule();
+        add(chammod);
         add(new NametagsModule());
         add(new SneakModule());
         add(new MiddleClickFriendsModule());
@@ -162,6 +163,7 @@ public final class ModuleManager {
         MinecraftForge.EVENT_BUS.register(espmod);
         MinecraftForge.EVENT_BUS.register(recmod);
         MinecraftForge.EVENT_BUS.register(hitsoundModule);
+        MinecraftForge.EVENT_BUS.register(chammod);
 
         //this.loadExternalModules();
 

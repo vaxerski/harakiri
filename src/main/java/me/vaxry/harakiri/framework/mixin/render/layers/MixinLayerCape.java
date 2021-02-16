@@ -20,8 +20,10 @@ public class MixinLayerCape {
         ChamsModule chamsModule = (ChamsModule) Harakiri.INSTANCE.getModuleManager().find(ChamsModule.class);
         EntityPlayer e = chamsModule.lastPlayer;
 
-        if(!chamsModule.isEnabled() || e == null)
+        if(!chamsModule.isEnabled() || e == null) {
+            GL11.glColor4f(1,1,1,1);
             return;
+        }
 
         if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null && chamsModule.friend.getValue() ||
                 Harakiri.INSTANCE.getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
@@ -40,6 +42,8 @@ public class MixinLayerCape {
                 //enemy settings
                 GL11.glColor4f(chamsModule.enemyR.getValue() / 255.f,chamsModule.enemyG.getValue() / 255.f,chamsModule.enemyB.getValue() / 255.f,chamsModule.enemyA.getValue() / 255.f);
             }
+        }else{
+            GL11.glColor4f(1,1,1,1);
         }
     }
 }

@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,15 +38,20 @@ public abstract class MixinRenderLivingBase extends Render {
         if (event.isCanceled()) ci.cancel();
     }
 
-    @Inject(method = "renderLayers", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "renderLayers", at = @At("HEAD"), cancellable = true)
     private void renderLayers(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scaleIn, CallbackInfo ci){
+
+        if(!(entitylivingbaseIn instanceof EntityPlayer))
+            return; // DONT PARSE ANIMALS AND SHIT!!!!!!!!!!
 
         ChamsModule chamsModule = (ChamsModule)Harakiri.INSTANCE.getModuleManager().find(ChamsModule.class);
 
         EntityPlayer e = (EntityPlayer)entitylivingbaseIn;
 
-        if(!chamsModule.isEnabled() || e == null)
+        if(!chamsModule.isEnabled() || e == null) {
+            GL11.glColor4f(1,1,1,1);
             return;
+        }
 
         if(Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName()) && chamsModule.self.getValue() && chamsModule.selfLTH.getValue()){
             // Lightning

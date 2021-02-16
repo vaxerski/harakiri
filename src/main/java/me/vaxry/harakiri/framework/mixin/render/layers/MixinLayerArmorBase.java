@@ -44,8 +44,10 @@ public class MixinLayerArmorBase {
         ChamsModule chamsModule = (ChamsModule)Harakiri.INSTANCE.getModuleManager().find(ChamsModule.class);
         chamsModule.lastPlayer = e;
 
-        if(!chamsModule.isEnabled() || e == null)
+        if(!chamsModule.isEnabled() || e == null) {
+            GL11.glColor4f(1,1,1,1);
             return;
+        }
 
         if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null && chamsModule.friend.getValue() ||
                 Harakiri.INSTANCE.getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
@@ -82,6 +84,8 @@ public class MixinLayerArmorBase {
                 this.colorG = chamsModule.enemyG.getValue() / 255f;
                 this.colorB = chamsModule.enemyB.getValue() / 255f;
             }
+        }else{
+            GL11.glColor4f(1,1,1,1);
         }
     }
 
