@@ -51,24 +51,27 @@ public class WarningsComponent extends DraggableHudComponent {
         final ItemStack feetItem = ((EntityLivingBase)mc.player).getItemStackFromSlot(EntityEquipmentSlot.FEET);
 
         int lowItems = 0;
-        if(headItem.getItemDamage() > headItem.getMaxDamage() * 0.4f){
+        if(headItem.getItemDamage() > headItem.getMaxDamage() * 0.4f && headItem.isItemStackDamageable()){
             lowItems += 1;
         }
-        if(chestItem.getItemDamage() > chestItem.getMaxDamage() * 0.4f){
+        if(chestItem.getItemDamage() > chestItem.getMaxDamage() * 0.4f && headItem.isItemStackDamageable() && chestItem.getItem() != Items.ELYTRA){
             lowItems += 1;
         }
-        if(legItem.getItemDamage() > legItem.getMaxDamage() * 0.4f){
+        if(legItem.getItemDamage() > legItem.getMaxDamage() * 0.4f && headItem.isItemStackDamageable()){
             lowItems += 1;
         }
-        if(feetItem.getItemDamage() > feetItem.getMaxDamage() * 0.4f){
+        if(feetItem.getItemDamage() > feetItem.getMaxDamage() * 0.4f && headItem.isItemStackDamageable()){
             lowItems += 1;
         }
 
         boolean brokenElytra = false;
+        boolean lowElytra = false;
         // Check for broken elytra
         if(chestItem.getItem() == Items.ELYTRA){
             if(chestItem.getItemDamage() == chestItem.getMaxDamage()){
                 brokenElytra = true;
+            }else if(chestItem.getItemDamage() > chestItem.getMaxDamage() * 0.2f){
+                lowElytra = true;
             }
         }
 
@@ -83,6 +86,9 @@ public class WarningsComponent extends DraggableHudComponent {
         }
         if(brokenElytra){
             warns.add("Your elytra is broken.");
+        }
+        if(lowElytra){
+            warns.add("Your elytra is low.");
         }
         if(noTotems){
             warns.add("You have no totems.");
