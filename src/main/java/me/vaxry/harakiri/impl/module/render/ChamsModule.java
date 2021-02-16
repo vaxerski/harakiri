@@ -24,6 +24,10 @@ public class ChamsModule extends Module {
     public final Value<Integer> selfA = new Value<Integer>("Local A", new String[]{"LocalA", "la"}, "Local player A", 255, 0, 255, 1);
     public final Value<Boolean> selfBL = new Value<Boolean>("Local Blink", new String[]{"LocalB", "lb"}, "Local player Blink", false);
     public final Value<Float> selfBS = new Value<Float>("Local Blink Speed", new String[]{"LocalBS", "lbs"}, "Local player Blink speed", 1.f, 0.1f, 10f, 0.2f);
+    public final Value<Boolean> selfNoAr = new Value<Boolean>("Local No Armor", new String[]{"LocalNA", "lna"}, "Local player no armor render", false);
+    public final Value<Boolean> selfFGl = new Value<Boolean>("Local Force Glint", new String[]{"LocalFG", "lfg"}, "Local player force glint", false);
+    public final Value<Boolean> selfLTH = new Value<Boolean>("Local Lightning", new String[]{"LocalLTH", "llth"}, "Local player force lightning", false);
+    public final Value<Boolean> selfANG = new Value<Boolean>("Local Angel", new String[]{"LocalANG", "lang"}, "Local player angel effect", false);
 
 
     public final Value<Boolean> friend = new Value<Boolean>("Friends", new String[]{"Friends", "f"}, "Friends master switch", false);
@@ -31,8 +35,10 @@ public class ChamsModule extends Module {
     public final Value<Integer> friendG = new Value<Integer>("Friends G", new String[]{"FriendsG", "fg"}, "Friends G", 255, 0, 255, 1);
     public final Value<Integer> friendB = new Value<Integer>("Friends B", new String[]{"FriendsB", "fb"}, "Friends B", 255, 0, 255, 1);
     public final Value<Integer> friendA = new Value<Integer>("Friends A", new String[]{"FriendsA", "fa"}, "Friends A", 255, 0, 255, 1);
-    public final Value<Boolean> friendBL = new Value<Boolean>("Friends Blink", new String[]{"FriendsB", "lb"}, "Friends Blink", false);
-    public final Value<Float> friendBS = new Value<Float>("Friends Blink Speed", new String[]{"FriendsBS", "lbs"}, "Friends Blink speed", 1.f, 0.1f, 10f, 0.2f);
+    public final Value<Boolean> friendBL = new Value<Boolean>("Friends Blink", new String[]{"FriendsB", "fb"}, "Friends Blink", false);
+    public final Value<Float> friendBS = new Value<Float>("Friends Blink Speed", new String[]{"FriendsBS", "fbs"}, "Friends Blink speed", 1.f, 0.1f, 10f, 0.2f);
+    public final Value<Boolean> friendNoAr = new Value<Boolean>("Friends No Armor", new String[]{"FriendsNA", "fna"}, "Friends no armor render", false);
+    public final Value<Boolean> friendFGl = new Value<Boolean>("Friends Force Glint", new String[]{"FriendsFG", "ffg"}, "Friends force glint", false);
 
 
     public final Value<Boolean> enemy = new Value<Boolean>("Enemies", new String[]{"Enemies", "e"}, "Enemies master switch", false);
@@ -40,8 +46,11 @@ public class ChamsModule extends Module {
     public final Value<Integer> enemyG = new Value<Integer>("Enemies G", new String[]{"EnemiesG", "eg"}, "Enemies G", 255, 0, 255, 1);
     public final Value<Integer> enemyB = new Value<Integer>("Enemies B", new String[]{"EnemiesB", "eb"}, "Enemies B", 255, 0, 255, 1);
     public final Value<Integer> enemyA = new Value<Integer>("Enemies A", new String[]{"EnemiesA", "ea"}, "Enemies A", 255, 0, 255, 1);
-    public final Value<Boolean> enemyBL = new Value<Boolean>("Enemy Blink", new String[]{"EnemyB", "lb"}, "Enemy Blink", false);
-    public final Value<Float> enemyBS = new Value<Float>("Enemy Blink Speed", new String[]{"EnemyBS", "lbs"}, "Enemy Blink speed", 1.f, 0.1f, 10f, 0.2f);
+    public final Value<Boolean> enemyBL = new Value<Boolean>("Enemy Blink", new String[]{"EnemyB", "eb"}, "Enemy Blink", false);
+    public final Value<Float> enemyBS = new Value<Float>("Enemy Blink Speed", new String[]{"EnemyBS", "ebs"}, "Enemy Blink speed", 1.f, 0.1f, 10f, 0.2f);
+    public final Value<Boolean> enemyNoAr = new Value<Boolean>("Enemy No Armor", new String[]{"EnemyNA", "ena"}, "Enemy no armor render", false);
+    public final Value<Boolean> enemyFGl = new Value<Boolean>("Enemy Force Glint", new String[]{"EnemyFG", "efg"}, "Enemy force glint", false);
+
 
     public EntityPlayer lastPlayer = null;
 

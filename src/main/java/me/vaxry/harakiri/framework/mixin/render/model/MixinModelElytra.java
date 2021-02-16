@@ -34,7 +34,6 @@ public class MixinModelElytra {
             GlStateManager.enableAlpha();
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            GlStateManager.depthMask(false);
 
             if(Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName())){
                 GL11.glColor4f(chamsModule.selfR.getValue() / 255.f,chamsModule.selfG.getValue() / 255.f,chamsModule.selfB.getValue() / 255.f,chamsModule.selfA.getValue() / 255.f);

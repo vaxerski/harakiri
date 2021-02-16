@@ -24,6 +24,16 @@ public class MixinLayerArmorBase {
     @Shadow
     float alpha;
 
+    @Shadow
+    float colorR;
+
+    @Shadow
+    float colorB;
+
+    @Shadow
+    float colorG;
+
+
     @Inject(method = "renderArmorLayer", at = @At("HEAD"), cancellable = true)
     public void renderArmorLayerPre(EntityLivingBase entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale, EntityEquipmentSlot slotIn, CallbackInfo ci){
         if(!(entityLivingBaseIn instanceof EntityPlayer))
@@ -44,24 +54,38 @@ public class MixinLayerArmorBase {
             GlStateManager.enableAlpha();
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            GlStateManager.depthMask(false);
 
             if(Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName())){
                 GL11.glColor4f(chamsModule.selfR.getValue() / 255.f,chamsModule.selfG.getValue() / 255.f,chamsModule.selfB.getValue() / 255.f,chamsModule.selfA.getValue() / 255.f);
-                this.alpha = chamsModule.selfA.getValue() / 255.f;
+                this.alpha = chamsModule.selfNoAr.getValue() ? 0.f : chamsModule.selfA.getValue() / 255.f;
+                if(chamsModule.selfNoAr.getValue())
+                    ci.cancel();
+                this.colorR = chamsModule.selfR.getValue() / 255f;
+                this.colorG = chamsModule.selfG.getValue() / 255f;
+                this.colorB = chamsModule.selfB.getValue() / 255f;
             } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null){
                 //friend settings
                 GL11.glColor4f(chamsModule.friendR.getValue() / 255.f,chamsModule.friendG.getValue() / 255.f,chamsModule.friendB.getValue() / 255.f,chamsModule.friendA.getValue() / 255.f);
-                this.alpha = chamsModule.friendA.getValue() / 255.f;
+                this.alpha = chamsModule.friendNoAr.getValue() ? 0.f : chamsModule.friendA.getValue() / 255.f;
+                if(chamsModule.selfNoAr.getValue())
+                    ci.cancel();
+                this.colorR = chamsModule.friendR.getValue() / 255f;
+                this.colorG = chamsModule.friendG.getValue() / 255f;
+                this.colorB = chamsModule.friendB.getValue() / 255f;
             } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) == null){
                 //enemy settings
                 GL11.glColor4f(chamsModule.enemyR.getValue() / 255.f,chamsModule.enemyG.getValue() / 255.f,chamsModule.enemyB.getValue() / 255.f,chamsModule.enemyA.getValue() / 255.f);
-                this.alpha = chamsModule.enemyA.getValue() / 255.f;
+                this.alpha = chamsModule.enemyNoAr.getValue() ? 0.f : chamsModule.enemyA.getValue() / 255.f;
+                if(chamsModule.selfNoAr.getValue())
+                    ci.cancel();
+                this.colorR = chamsModule.enemyR.getValue() / 255f;
+                this.colorG = chamsModule.enemyG.getValue() / 255f;
+                this.colorB = chamsModule.enemyB.getValue() / 255f;
             }
         }
     }
 
-    @Inject(method = "renderArmorLayer", at = @At("RETURN"), cancellable = true)
+    /*@Inject(method = "renderArmorLayer", at = @At("RETURN"), cancellable = true)
     public void renderArmorLayerPost(EntityLivingBase entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale, EntityEquipmentSlot slotIn, CallbackInfo ci){
         if(!(entityLivingBaseIn instanceof EntityPlayer))
             return;
@@ -81,7 +105,6 @@ public class MixinLayerArmorBase {
             GlStateManager.enableAlpha();
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            GlStateManager.depthMask(false);
 
             if(Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName())){
                 GL11.glColor4f(chamsModule.selfR.getValue() / 255.f,chamsModule.selfG.getValue() / 255.f,chamsModule.selfB.getValue() / 255.f,chamsModule.selfA.getValue() / 255.f);
@@ -96,9 +119,9 @@ public class MixinLayerArmorBase {
                 this.alpha = chamsModule.enemyA.getValue() / 255.f;
             }
         }
-    }
+    }*/
 
-    @Redirect(method = "renderArmorLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;color(FFFF)V", remap = false))
+    /*@Redirect(method = "renderArmorLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;color(FFFF)V", remap = false))
     public void color(float r, float g, float b, float a){
         // Overwrite with our color
         ChamsModule chamsModule = (ChamsModule) Harakiri.INSTANCE.getModuleManager().find(ChamsModule.class);
@@ -121,9 +144,16 @@ public class MixinLayerArmorBase {
                 GL11.glColor4f(chamsModule.enemyR.getValue() / 255.f,chamsModule.enemyG.getValue() / 255.f,chamsModule.enemyB.getValue() / 255.f,chamsModule.enemyA.getValue() / 255.f);
             }
         }
+    }*/
+
+    @Inject(method = "renderEnchantedGlint", at = @At("HEAD"))
+    private static void renderEnchantedGlintPre(RenderLivingBase p_188364_0_, EntityLivingBase p_188364_1_, ModelBase model, float p_188364_3_, float p_188364_4_, float p_188364_5_, float p_188364_6_, float p_188364_7_, float p_188364_8_, float p_188364_9_, CallbackInfo ci) {
+        GlStateManager.disableAlpha();
+        GlStateManager.disableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ONE);
     }
 
-    @Inject(method = "renderEnchantedGlint", at = @At("RETURN"))
+    /*@Inject(method = "renderEnchantedGlint", at = @At("RETURN"))
     private static void renderEnchantedGlint(RenderLivingBase p_188364_0_, EntityLivingBase p_188364_1_, ModelBase model, float p_188364_3_, float p_188364_4_, float p_188364_5_, float p_188364_6_, float p_188364_7_, float p_188364_8_, float p_188364_9_, CallbackInfo ci){
         if(!(p_188364_1_ instanceof EntityPlayer))
             return;
@@ -154,6 +184,6 @@ public class MixinLayerArmorBase {
                 GL11.glColor4f(chamsModule.enemyR.getValue() / 255.f,chamsModule.enemyG.getValue() / 255.f,chamsModule.enemyB.getValue() / 255.f,chamsModule.enemyA.getValue() / 255.f);
             }
         }
-    }
+    }*/
 
 }

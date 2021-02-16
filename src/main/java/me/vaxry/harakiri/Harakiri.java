@@ -414,4 +414,7 @@ public final class Harakiri {
         this.plexusEffect = new PlexusEffect(plx);
     }
 
+
+    public static final ResourceLocation LIGHTNING_TEXTURE = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
+    public static final ResourceLocation ENCHANTED_ITEM_GLINT_RES = new ResourceLocation("textures/misc/enchanted_item_glint.png");
 }
