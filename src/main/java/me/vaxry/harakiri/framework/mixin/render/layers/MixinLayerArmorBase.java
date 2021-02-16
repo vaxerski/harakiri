@@ -57,7 +57,7 @@ public class MixinLayerArmorBase {
 
             if(Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName())){
                 GL11.glColor4f(chamsModule.selfR.getValue() / 255.f,chamsModule.selfG.getValue() / 255.f,chamsModule.selfB.getValue() / 255.f,chamsModule.selfA.getValue() / 255.f);
-                this.alpha = chamsModule.selfNoAr.getValue() ? 0.f : chamsModule.selfA.getValue() / 255.f;
+                this.alpha = chamsModule.selfA.getValue() > 250 ? 1.f : chamsModule.selfA.getValue() / 255.f;
                 if(chamsModule.selfNoAr.getValue())
                     ci.cancel();
                 this.colorR = chamsModule.selfR.getValue() / 255f;
@@ -66,8 +66,8 @@ public class MixinLayerArmorBase {
             } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null){
                 //friend settings
                 GL11.glColor4f(chamsModule.friendR.getValue() / 255.f,chamsModule.friendG.getValue() / 255.f,chamsModule.friendB.getValue() / 255.f,chamsModule.friendA.getValue() / 255.f);
-                this.alpha = chamsModule.friendNoAr.getValue() ? 0.f : chamsModule.friendA.getValue() / 255.f;
-                if(chamsModule.selfNoAr.getValue())
+                this.alpha = chamsModule.friendA.getValue() > 250 ? 1.f : chamsModule.selfA.getValue() / 255.f;
+                if(chamsModule.friendNoAr.getValue())
                     ci.cancel();
                 this.colorR = chamsModule.friendR.getValue() / 255f;
                 this.colorG = chamsModule.friendG.getValue() / 255f;
@@ -75,8 +75,8 @@ public class MixinLayerArmorBase {
             } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) == null){
                 //enemy settings
                 GL11.glColor4f(chamsModule.enemyR.getValue() / 255.f,chamsModule.enemyG.getValue() / 255.f,chamsModule.enemyB.getValue() / 255.f,chamsModule.enemyA.getValue() / 255.f);
-                this.alpha = chamsModule.enemyNoAr.getValue() ? 0.f : chamsModule.enemyA.getValue() / 255.f;
-                if(chamsModule.selfNoAr.getValue())
+                this.alpha = chamsModule.enemyA.getValue() > 250 ? 1.f : chamsModule.selfA.getValue() / 255.f;
+                if(chamsModule.enemyNoAr.getValue())
                     ci.cancel();
                 this.colorR = chamsModule.enemyR.getValue() / 255f;
                 this.colorG = chamsModule.enemyG.getValue() / 255f;
