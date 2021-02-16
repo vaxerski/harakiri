@@ -31,6 +31,7 @@ import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.*;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -84,7 +85,7 @@ public final class ESPModule extends Module {
 
     private ArrayList<EntityPlayer> coloredPlayers = new ArrayList<>();
 
-    private Class[] hostileMobs = {EntitySpider.class, EntityCaveSpider.class, EntityEnderman.class,EntityPigZombie.class,
+    private Class[] hostileMobs = {EntityWither.class, EntityWitherSkeleton.class, EntitySpider.class, EntityCaveSpider.class, EntityEnderman.class,EntityPigZombie.class,
         EntityEvoker.class, EntityVindicator.class, EntityVex.class, EntityEndermite.class, EntityGuardian.class, EntityElderGuardian.class,
         EntityShulker.class, EntityHusk.class, EntityStray.class, EntityBlaze.class, EntityCreeper.class, EntityGhast.class, EntityMagmaCube.class,
         EntitySilverfish.class, EntitySkeleton.class, EntitySlime.class, EntityZombie.class, EntityZombieVillager.class, EntityDragon.class, EntityWitch.class};
