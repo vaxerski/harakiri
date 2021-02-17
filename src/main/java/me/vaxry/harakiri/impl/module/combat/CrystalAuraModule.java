@@ -43,6 +43,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public final class CrystalAuraModule extends Module {
 
+    public boolean crystalAuraHit = false;
+
     public final Value<Boolean> attack = new Value<Boolean>("Attack", new String[]{"AutoAttack"}, "Automatically attack crystals.", true);
     public final Value<Float> attackDelay = new Value<Float>("AttackDelay", new String[]{"AttackDelay", "AttackDel", "Del"}, "The delay to attack in milliseconds.", 50.0f, 0.0f, 500.0f, 1.0f);
     public final Value<Float> attackRadius = new Value<Float>("AttackRadius", new String[]{"ARange", "HitRange", "AttackDistance", "AttackRange", "ARadius"}, "The minimum range to attack crystals.", 5.0f, 0.0f, 7.0f, 0.1f);
@@ -197,12 +199,15 @@ public final class CrystalAuraModule extends Module {
                 if (this.currentAttackEntity != null) {
                     if (this.attackTimer.passed(this.attackDelay.getValue()) && this.attackRotationTask.isOnline()) {
                         mc.player.swingArm(this.offHand.getValue() ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND);
+                        this.crystalAuraHit = true;
                         mc.playerController.attackEntity(mc.player, this.currentAttackEntity);
                         this.attackTimer.reset();
                     }
                 } else {
                     Harakiri.INSTANCE.getRotationManager().finishTask(this.attackRotationTask);
                 }
+
+                this.crystalAuraHit = false;
                 break;
         }
     }

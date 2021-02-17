@@ -14,7 +14,7 @@ public class HitsoundModule extends Module {
     String audiopath;
 
     public final Value<Float> volume = new Value<Float>("Volume", new String[]{"Volume", "Vol"}, "Volume of the hitsound", 0.5f, 0f, 1.f, 0.01f);
-
+    CPacketUseEntity lastPacket = null;
 
     public HitsoundModule(){
         super("Hitsounds", new String[]{"Hitsounds"}, "Plays a sound when you hit an entity.", "NONE", -1, ModuleType.MISC);
@@ -25,8 +25,10 @@ public class HitsoundModule extends Module {
     public void onPacketSend(EventSendPacket event){
         if(event.getPacket() instanceof CPacketUseEntity){
             CPacketUseEntity packet = (CPacketUseEntity) event.getPacket();
-            if(packet.getAction() == CPacketUseEntity.Action.ATTACK)
+            if(packet.getAction() == CPacketUseEntity.Action.ATTACK && packet != lastPacket) {
                 PlaySound(new File(audiopath));
+                lastPacket = packet;
+            }
         }
     }
 

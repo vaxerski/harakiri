@@ -77,6 +77,7 @@ public final class ModuleManager {
         add(new SneakModule());
         add(new MiddleClickFriendsModule());
         add(new FullbrightModule());
+        add(new HitmarkersModule());
         ReconnectModule recmod = new ReconnectModule();
         add(recmod);
         add(new AutoFishModule());
