@@ -44,18 +44,22 @@ public class MixinLayerArmorBase {
         ChamsModule chamsModule = (ChamsModule)Harakiri.INSTANCE.getModuleManager().find(ChamsModule.class);
         chamsModule.lastPlayer = e;
 
+        GlStateManager.enableAlpha();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
         if(!chamsModule.isEnabled() || e == null) {
             GL11.glColor4f(1,1,1,1);
+            alpha = 1;
+            colorR = 1;
+            colorB = 1;
+            colorG = 1;
             return;
         }
 
         if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null && chamsModule.friend.getValue() ||
                 Harakiri.INSTANCE.getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
                 Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName()) && chamsModule.self.getValue()){
-
-            GlStateManager.enableAlpha();
-            GlStateManager.enableBlend();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
             if(Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName())){
                 GL11.glColor4f(chamsModule.selfR.getValue() / 255.f,chamsModule.selfG.getValue() / 255.f,chamsModule.selfB.getValue() / 255.f,chamsModule.selfA.getValue() / 255.f);
@@ -85,6 +89,10 @@ public class MixinLayerArmorBase {
                 this.colorB = chamsModule.enemyB.getValue() / 255f;
             }
         }else{
+            alpha = 1;
+            colorR = 1;
+            colorB = 1;
+            colorG = 1;
             GL11.glColor4f(1,1,1,1);
         }
     }
