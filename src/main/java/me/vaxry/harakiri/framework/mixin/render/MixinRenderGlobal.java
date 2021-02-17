@@ -7,6 +7,7 @@ import me.vaxry.harakiri.framework.event.render.EventRenderEntities;
 import me.vaxry.harakiri.framework.event.render.EventRenderEntityOutlines;
 import me.vaxry.harakiri.framework.event.render.EventRenderSky;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.culling.ICamera;
@@ -14,6 +15,7 @@ import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -48,5 +50,11 @@ public class MixinRenderGlobal {
         final EventRenderEntities eventRenderEntities = new EventRenderEntities(EventStageable.EventStage.POST, renderViewEntity, camera, partialTicks);
         Harakiri.INSTANCE.getEventManager().dispatchEvent(eventRenderEntities);
         if(eventRenderEntities.isCanceled()) ci.cancel();
+    }
+
+    @Redirect(method = "renderEntityOutlineFramebuffer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;tryBlendFuncSeparate(IIII)V", remap = false))
+    private void tryBlendFuncSeparate(int a, int b, int c, int d, CallbackInfo ci){
+        GlStateManager.enableAlpha();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.DST_ALPHA);
     }
 }

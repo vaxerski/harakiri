@@ -53,6 +53,9 @@ public abstract class MixinRenderLivingBase extends Render {
             return;
         }
 
+        GlStateManager.pushMatrix();
+        GlStateManager.pushAttrib();
+
         if(Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName()) && chamsModule.self.getValue() && chamsModule.selfLTH.getValue()){
             // Lightning
             boolean flag = entitylivingbaseIn.isInvisible();
@@ -172,5 +175,20 @@ public abstract class MixinRenderLivingBase extends Render {
             GlStateManager.disableBlend();
             Minecraft.getMinecraft().entityRenderer.setupFogColor(false);*/
         }
+
+        GlStateManager.popMatrix();
+        GlStateManager.popAttrib();
+
+        GlStateManager.enableAlpha();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.matrixMode(5890);
+        GlStateManager.loadIdentity();
+        GlStateManager.matrixMode(5888);
+        GlStateManager.enableLighting();
+        GlStateManager.depthMask(true);
+        GlStateManager.depthFunc(515);
+        GlStateManager.disableBlend();
+        Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
     }
 }

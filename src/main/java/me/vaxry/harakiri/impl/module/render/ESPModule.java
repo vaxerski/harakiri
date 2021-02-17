@@ -61,6 +61,12 @@ import java.util.List;
 
 public final class ESPModule extends Module {
 
+    enum SHADER {
+        OUTLINE,
+        GLOW
+    }
+
+    //public final Value<SHADER> shaderV = new Value<SHADER>("Style", new String[]{"Style", "s"}, "Select the shader to use.", SHADER.OUTLINE);
     public final Value<Boolean> items = new Value<Boolean>("Items", new String[]{"Items", "i"}, "Draw Items", false);
     public final Value<Boolean> hostile = new Value<Boolean>("Hostile", new String[]{"Hostile", "h"}, "Draw Hostile Entities", false);
     public final Value<Boolean> passive = new Value<Boolean>("Passive", new String[]{"Passive", "p"}, "Draw Hostile Entities", false);
@@ -68,8 +74,10 @@ public final class ESPModule extends Module {
     public final Value<Boolean> players = new Value<Boolean>("Players", new String[]{"Players", "pl"}, "Draw Players", false);
 
     private ResourceLocation shader;
+    private ResourceLocation shaderGlow;
     private boolean toLoadShader = true;
     private ICamera cam = new Frustum();
+    private SHADER lastShader = SHADER.OUTLINE;
 
     private float ITEM_A = 0.35f;
     private HashMap<EntityItem, Float> opacity = new HashMap<>();
@@ -99,6 +107,7 @@ public final class ESPModule extends Module {
         Minecraft mc = Minecraft.getMinecraft();
 
         shader = new ResourceLocation("shaders/post/esp.json");
+        shaderGlow = new ResourceLocation("shaders/post/espglow.json");
     }
 
     private float getJitter() {
@@ -187,11 +196,16 @@ public final class ESPModule extends Module {
                 this.purple.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
                 this.lblue.setPrefix(TextFormatting.AQUA.toString());
 
-                mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
+                //if(this.shaderV.getValue() == SHADER.OUTLINE)
+                    mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
+               // else
+                   //mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shaderGlow);
                 mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
                 mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
 
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+                //this.lastShader = this.shaderV.getValue();
 
             }catch(Throwable t){
                 //Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
@@ -200,6 +214,24 @@ public final class ESPModule extends Module {
 
             toLoadShader = false;
         }
+
+        /*if(this.lastShader != this.shaderV.getValue()) {
+            try {
+                if (this.shaderV.getValue() == SHADER.OUTLINE)
+                    mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
+                else
+                    mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shaderGlow);
+                mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
+                mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
+
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+                this.lastShader = this.shaderV.getValue();
+            }catch(Throwable t){
+                Harakiri.INSTANCE.logChat("Shader failed 2: " + t.getMessage());
+                //JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }*/
 
         if(!livingBases.contains(ent.getEntity())){
             livingBases.add(ent.getEntity());
@@ -239,11 +271,16 @@ public final class ESPModule extends Module {
                     this.purple.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
                     this.lblue.setPrefix(TextFormatting.AQUA.toString());
 
-                    mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
+                    //if(this.shaderV.getValue() == SHADER.OUTLINE)
+                        mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
+                    //else
+                        //mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shaderGlow);
                     mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
                     mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
 
                     GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+                    //this.lastShader = this.shaderV.getValue();
 
                 } catch (Throwable t) {
                     //Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
@@ -252,6 +289,24 @@ public final class ESPModule extends Module {
 
                 toLoadShader = false;
             }
+
+            /*if(this.lastShader != this.shaderV.getValue()) {
+                try {
+                    if (this.shaderV.getValue() == SHADER.OUTLINE)
+                        mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
+                    else
+                        mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shaderGlow);
+                    mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
+                    mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
+
+                    GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+                    this.lastShader = this.shaderV.getValue();
+                }catch(Throwable t){
+                    Harakiri.INSTANCE.logChat("Shader failed 2: " + t.getMessage());
+                    //JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }*/
 
             if (this.isEnabled() && event.getEntity() instanceof EntityEnderCrystal && this.crystals.getValue()) {
                 event.getEntity().setGlowing(true);

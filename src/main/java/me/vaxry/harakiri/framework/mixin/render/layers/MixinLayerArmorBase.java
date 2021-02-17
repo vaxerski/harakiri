@@ -97,6 +97,21 @@ public class MixinLayerArmorBase {
         }
     }
 
+    @Inject(method = "doRenderLayer", at = @At("HEAD"), cancellable = true)
+    public void doRenderLayerPre(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale, CallbackInfo ci) {
+        GlStateManager.pushAttrib();
+        GlStateManager.pushMatrix();
+    }
+
+    @Inject(method = "doRenderLayer", at = @At("RETURN"), cancellable = true)
+    public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale, CallbackInfo ci) {
+        GlStateManager.disableAlpha();
+        GlStateManager.disableBlend();
+        GlStateManager.color(1,1,1,1);
+        GlStateManager.popMatrix();
+        GlStateManager.popAttrib();
+    }
+
     /*@Inject(method = "renderArmorLayer", at = @At("RETURN"), cancellable = true)
     public void renderArmorLayerPost(EntityLivingBase entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale, EntityEquipmentSlot slotIn, CallbackInfo ci){
         if(!(entityLivingBaseIn instanceof EntityPlayer))
