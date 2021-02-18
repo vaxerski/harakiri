@@ -11,6 +11,7 @@ import me.vaxry.harakiri.framework.util.EntityUtil;
 import me.vaxry.harakiri.framework.util.MathUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -82,7 +83,7 @@ public final class NukerModule extends Module {
     @Listener
     public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
         final Minecraft mc = Minecraft.getMinecraft();
-        if (mc.player == null || mc.world == null)
+        if (mc.player == null || mc.world == null || Harakiri.INSTANCE.getModuleManager().find(FreeCamModule.class).isEnabled())
             return;
 
         switch (event.getStage()) {
