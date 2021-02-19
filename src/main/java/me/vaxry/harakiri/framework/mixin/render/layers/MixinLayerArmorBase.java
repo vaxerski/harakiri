@@ -99,12 +99,16 @@ public class MixinLayerArmorBase {
 
     @Inject(method = "doRenderLayer", at = @At("HEAD"), cancellable = true)
     public void doRenderLayerPre(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale, CallbackInfo ci) {
+        if(!(entitylivingbaseIn instanceof EntityPlayer))
+            return;
         GlStateManager.pushAttrib();
         GlStateManager.pushMatrix();
     }
 
     @Inject(method = "doRenderLayer", at = @At("RETURN"), cancellable = true)
     public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale, CallbackInfo ci) {
+        if(!(entitylivingbaseIn instanceof EntityPlayer))
+            return;
         GlStateManager.disableAlpha();
         GlStateManager.disableBlend();
         GlStateManager.color(1,1,1,1);
@@ -175,6 +179,8 @@ public class MixinLayerArmorBase {
 
     @Inject(method = "renderEnchantedGlint", at = @At("HEAD"))
     private static void renderEnchantedGlintPre(RenderLivingBase p_188364_0_, EntityLivingBase p_188364_1_, ModelBase model, float p_188364_3_, float p_188364_4_, float p_188364_5_, float p_188364_6_, float p_188364_7_, float p_188364_8_, float p_188364_9_, CallbackInfo ci) {
+        if(!(p_188364_1_ instanceof EntityPlayer))
+            return;
         GlStateManager.disableAlpha();
         GlStateManager.disableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ONE);
