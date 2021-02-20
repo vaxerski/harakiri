@@ -38,6 +38,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextFormatting;
@@ -92,6 +93,9 @@ public final class ESPModule extends Module {
     public ScorePlayerTeam red;
     public ScorePlayerTeam purple;
     public ScorePlayerTeam lblue;
+    public ScorePlayerTeam yellow;
+    public ScorePlayerTeam pink;
+    public ScorePlayerTeam gray;
 
     private ArrayList<EntityPlayer> coloredPlayers = new ArrayList<>();
 
@@ -172,6 +176,27 @@ public final class ESPModule extends Module {
 
             RenderUtil.end3D();
         }
+
+        // process storageesp
+        StorageESPModule storageESPModule = (StorageESPModule)Harakiri.INSTANCE.getModuleManager().find(StorageESPModule.class);
+
+        if(storageESPModule.isEnabled() && storageESPModule.modeValue.getValue() == StorageESPModule.MODE.SHADER){
+            for (TileEntity te : mc.world.loadedTileEntityList) {
+                switch (storageESPModule.getColorShader(te)){
+                    case 0:
+                        // Yellow
+                        board.addPlayerToTeam(te.toString(), yellow.getName());
+                        break;
+                    case 1:
+                        board.addPlayerToTeam(te.toString(), pink.getName());
+                        break;
+                    case 2:
+                        board.addPlayerToTeam(te.toString(), gray.getName());
+                        break;
+                }
+                //te.setGlowing
+            }
+        }
     }
 
     @SubscribeEvent
@@ -191,10 +216,17 @@ public final class ESPModule extends Module {
                 this.red = board.createTeam("haraRed");
                 this.purple = board.createTeam("haraPurple");
                 this.lblue = board.createTeam("haraLBlue");
+                this.yellow = board.createTeam("haraYellow");
+                this.gray = board.createTeam("haraGray");
+                this.pink = board.createTeam("haraPink");
+
                 this.green.setPrefix(TextFormatting.GREEN.toString());
                 this.red.setPrefix(TextFormatting.RED.toString());
                 this.purple.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
                 this.lblue.setPrefix(TextFormatting.AQUA.toString());
+                this.yellow.setPrefix(TextFormatting.YELLOW.toString());
+                this.gray.setPrefix(TextFormatting.GRAY.toString());
+                this.pink.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
 
                 //if(this.shaderV.getValue() == SHADER.OUTLINE)
                     mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
@@ -266,10 +298,17 @@ public final class ESPModule extends Module {
                     this.red = board.createTeam("haraRed");
                     this.purple = board.createTeam("haraPurple");
                     this.lblue = board.createTeam("haraLBlue");
+                    this.yellow = board.createTeam("haraYellow");
+                    this.gray = board.createTeam("haraGray");
+                    this.pink = board.createTeam("haraPink");
+
                     this.green.setPrefix(TextFormatting.GREEN.toString());
                     this.red.setPrefix(TextFormatting.RED.toString());
                     this.purple.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
                     this.lblue.setPrefix(TextFormatting.AQUA.toString());
+                    this.yellow.setPrefix(TextFormatting.YELLOW.toString());
+                    this.gray.setPrefix(TextFormatting.GRAY.toString());
+                    this.pink.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
 
                     //if(this.shaderV.getValue() == SHADER.OUTLINE)
                         mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);

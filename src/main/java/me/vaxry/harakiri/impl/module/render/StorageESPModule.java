@@ -2,7 +2,9 @@ package me.vaxry.harakiri.impl.module.render;
 
 import akka.japi.Pair;
 import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.event.render.EventRenderEntity;
 import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.GLUProjection;
@@ -12,8 +14,16 @@ import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.tileentity.*;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.locationtech.jts.geom.*;
 import org.lwjgl.util.vector.Vector3f;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
@@ -29,6 +39,12 @@ import java.util.*;
  */
 public final class StorageESPModule extends Module {
 
+    enum MODE {
+        CPU,
+        SHADER
+    }
+
+    //public final Value<MODE> modeValue = new Value<MODE>("Mode", new String[]{"Mode"}, "Changes the render mode. Shader is incompatible with rainbow, but might run faster with more storage.", MODE.CPU);
     public final Value<Float> thickness = new Value<Float>("Thickness", new String[]{"Thickness", "Thick", "t"}, "Thickness of the line", 1.f, 0.1f, 2.f, 0.1f);
     public final Value<Boolean> rainbow = new Value<Boolean>("Rainbow", new String[]{"Rainbow", "Rain", "r"}, "Rainbow mode for the ESP", false);
     public final Value<Integer> rainspeed = new Value<Integer>("RainbowSpeed", new String[]{"RainbowSpeed", "RainSpeed", "rs"}, "Rainbow mode speed", 5, 1, 20, 1);
@@ -55,6 +71,11 @@ public final class StorageESPModule extends Module {
 
     @Listener
     public void render2D(EventRender2D event) {
+
+        if(this.modeValue.getValue() != MODE.CPU)
+            return;
+
+        // Note: Shader mode is processed in ESPModule.
 
         this.CoordTracker3D.clear();
 
@@ -294,7 +315,7 @@ public final class StorageESPModule extends Module {
         Minecraft.getMinecraft().gameSettings.viewBobbing = bobbing;
     }
 
-    private boolean isTileStorage(TileEntity te) {
+    public boolean isTileStorage(TileEntity te) {
         if (te instanceof TileEntityChest) {
             return true;
         }
@@ -409,6 +430,36 @@ public final class StorageESPModule extends Module {
             return 0xFFFF0066;
         }
         return 0xFFFFFFFF;
+    }
+
+    public int getColorShader(TileEntity te) {
+        if (te instanceof TileEntityChest) {
+            return 0;
+        }
+        if (te instanceof TileEntityDropper) {
+            return 2;
+        }
+        if (te instanceof TileEntityDispenser) {
+            return 2;
+        }
+        if (te instanceof TileEntityHopper) {
+            return 2;
+        }
+        if (te instanceof TileEntityFurnace) {
+            return 2;
+        }
+        if (te instanceof TileEntityBrewingStand) {
+            return 1;
+        }
+        if (te instanceof TileEntityEnderChest) {
+            return 1;
+        }
+        if (te instanceof TileEntityShulkerBox) {
+            //final TileEntityShulkerBox shulkerBox = (TileEntityShulkerBox) te;
+            //return (255 << 24) | shulkerBox.getColor().getColorValue();
+            return 1;
+        }
+        return 0;
     }
 
     private Coordinate conv3Dto2DSpace(double x, double y, double z) {
