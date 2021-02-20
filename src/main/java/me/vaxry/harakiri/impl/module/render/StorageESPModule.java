@@ -33,10 +33,6 @@ import java.io.StringWriter;
 import java.util.*;
 
 
-/**
- * Author Seth
- * 5/17/2019 @ 8:45 PM.
- */
 public final class StorageESPModule extends Module {
 
     enum MODE {
@@ -72,8 +68,8 @@ public final class StorageESPModule extends Module {
     @Listener
     public void render2D(EventRender2D event) {
 
-        if(this.modeValue.getValue() != MODE.CPU)
-            return;
+        //if(this.modeValue.getValue() != MODE.CPU)
+            //return;
 
         // Note: Shader mode is processed in ESPModule.
 
