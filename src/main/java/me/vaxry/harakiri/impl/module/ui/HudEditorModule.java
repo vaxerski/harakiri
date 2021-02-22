@@ -46,7 +46,7 @@ public final class HudEditorModule extends Module {
 
             if (this.blur.getValue()) {
                 if (OpenGlHelper.shadersSupported) {
-                    mc.entityRenderer.loadShader(new ResourceLocation("minecraft", "assets/harakirimod/shaders/post/blur.json"));
+                    mc.entityRenderer.loadShader(new ResourceLocation("minecraft", "assets/harakirimod/shaders/post/blura.json"));
                 }
             }
 

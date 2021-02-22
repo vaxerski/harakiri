@@ -6,36 +6,6 @@
   ],
   "passes": [
     {
-      "name": "blur",
-      "intarget": "minecraft:main",
-      "outtarget": "swap",
-      "uniforms": [
-        {
-          "name": "BlurDir",
-          "values": [ 0.0, 0.0 ]
-        },
-        {
-          "name": "Radius",
-          "values": [ 0.0 ]
-        }
-      ]
-    },
-    {
-      "name": "blur",
-      "intarget": "swap",
-      "outtarget": "previous",
-      "uniforms": [
-        {
-          "name": "BlurDir",
-          "values": [ 0.0, 0.0 ]
-        },
-        {
-          "name": "Radius",
-          "values": [ 0.0 ]
-        }
-      ]
-    },
-    {
       "name": "entity_outlinea",
       "intarget": "final",
       "outtarget": "swap",
@@ -63,17 +33,32 @@
       "uniforms": [
         {
           "name": "BlurDir",
-          "values": [ 1.0, 1.0 ]
+          "values": [ 1.0, 0.0 ]
         },
         {
           "name": "Radius",
-          "values": [ 4.0 ]
+          "values": [ 10.0 ]
+        }
+      ]
+    },
+    {
+      "name": "blur",
+      "intarget": "previous",
+      "outtarget": "swap",
+      "uniforms": [
+        {
+          "name": "BlurDir",
+          "values": [ 0.0, 1.0 ]
+        },
+        {
+          "name": "Radius",
+          "values": [ 10.0 ]
         }
       ]
     },
     {
       "name": "blit",
-      "intarget": "previous",
+      "intarget": "swap",
       "outtarget": "final"
     }
   ]
