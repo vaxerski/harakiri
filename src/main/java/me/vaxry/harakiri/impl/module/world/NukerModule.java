@@ -172,7 +172,7 @@ public final class NukerModule extends Module {
     @Listener
     public void render3D(EventRender3D event) {
 
-        if (!this.drawMining.getValue()) return;
+        if (!this.drawMining.getValue() || Harakiri.INSTANCE.getModuleManager().find(FreeCamModule.class).isEnabled()) return;
 
         switch (stage) {
             case 0:
