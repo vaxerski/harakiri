@@ -53,6 +53,7 @@ public final class NoLagModule extends Module {
     //public final Value<Float> tileDist = new Value<Float>("TileDistance", new String[]{"TileDistance", "td"}, "Distance to remove the tile entities.", 50.f, 0.f, 100.f, 1.f);
     public final Value<Boolean> firework = new Value<Boolean>("Fireworks", new String[]{"Fir", "f"}, "Disables the rendering of fireworks.", false);
     public final Value<Boolean> removeChunkBan = new Value<Boolean>("NoChunkBan", new String[]{"NoChunk", "nw"}, "Remove certain chunkbans.", false);
+    public final Value<Boolean> hardRemove = new Value<Boolean>("HardRemove", new String[]{"HardRemove", "hr"}, "Hard removes certain entities (e.g. items)", false);
 
 
     private final HashMap<TileEntity, String> signTexts = new HashMap<>();
