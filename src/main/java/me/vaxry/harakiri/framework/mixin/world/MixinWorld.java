@@ -2,6 +2,7 @@ package me.vaxry.harakiri.framework.mixin.world;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.world.*;
+import me.vaxry.harakiri.impl.module.render.NoLagModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFireworkRocket;
@@ -49,7 +50,7 @@ public abstract class MixinWorld {
     @Inject(method = "spawnEntity", at = @At("HEAD"))
     private void spawnEntity(Entity entityIn, CallbackInfoReturnable<Boolean> ci) {
         Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventSpawnEntity(entityIn));
-        if (entityIn instanceof EntityFireworkRocket) {
+        if (entityIn instanceof EntityFireworkRocket && ((NoLagModule)Harakiri.INSTANCE.getModuleManager().find(NoLagModule.class)).firework.getValue()) {
             entityIn.setDead();
         }
     }
