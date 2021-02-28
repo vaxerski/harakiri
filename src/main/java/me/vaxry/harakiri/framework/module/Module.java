@@ -2,7 +2,12 @@ package me.vaxry.harakiri.framework.module;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
+<<<<<<< HEAD:src/main/java/me/vaxry/harakiri/api/module/Module.java
+import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.impl.module.lua.ReloadLuasModule;
+=======
 import me.vaxry.harakiri.framework.value.Value;
+>>>>>>> main:src/main/java/me/vaxry/harakiri/framework/module/Module.java
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -29,6 +34,7 @@ public class Module {
 
     public float activexOffset = 0;
     public float xOffset = 0;
+    public String luaName = "";
     public float highlightA = 0;
 
     private List<Value> valueList = new ArrayList<Value>();
@@ -37,12 +43,25 @@ public class Module {
 
     }
 
+    public Module(String luaname, ModuleType type){
+        String[] aliases = new String[1];
+        aliases[0] = luaname;
+        this.displayName = luaname;
+        this.alias = aliases;
+        this.hidden = false;
+        this.desc = "A custom LUA script.";
+        this.luaName = luaname;
+        this.type = type;
+        this.key = "NONE";
+    }
+
     public Module(String displayName, String[] alias, String key, int color, ModuleType type) {
         this.displayName = displayName;
         this.alias = alias;
         this.key = key;
         this.color = color;
         this.type = type;
+
     }
 
     public Module(String displayName, String[] alias, String desc, String key, int color, ModuleType type) {
@@ -61,6 +80,8 @@ public class Module {
     }
 
     public void onDisable() {
+        if(this instanceof ReloadLuasModule)
+            return; // Never
         Harakiri.INSTANCE.getEventManager().removeEventListener(this);
     }
 
@@ -142,7 +163,7 @@ public class Module {
     }
 
     public enum ModuleType {
-        COMBAT, MOVEMENT, RENDER, PLAYER, WORLD, MISC, HIDDEN, UI
+        COMBAT, MOVEMENT, RENDER, PLAYER, WORLD, MISC, HIDDEN, UI, LUA
     }
 
     public String getDisplayName() {
@@ -239,6 +260,14 @@ public class Module {
 
     public List<Value> getValueList() {
         return valueList;
+    }
+
+    public void clearValues(){
+        valueList.clear();
+    }
+
+    public void addValueInt(String n, String[] a, int def, int min, int max){
+        valueList.add(new Value<Integer>(n, a, n, def, min, max, 1));
     }
 
     public void setValueList(List<Value> valueList) {

@@ -8,6 +8,7 @@ import me.vaxry.harakiri.framework.util.StringUtil;
 import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.module.combat.*;
 import me.vaxry.harakiri.impl.module.hidden.*;
+import me.vaxry.harakiri.impl.module.lua.ReloadLuasModule;
 import me.vaxry.harakiri.impl.module.misc.*;
 import me.vaxry.harakiri.impl.module.movement.*;
 import me.vaxry.harakiri.impl.module.player.*;
@@ -154,6 +155,7 @@ public final class ModuleManager {
         add(new NoEntityTraceModule());
         add(new MultitaskModule());
         add(new SearchModule());
+        add(new ReloadLuasModule());
         add(new AutoGappleModule());
         add(new AutoEatModule());
         add(new NoFriendHurtModule());
@@ -262,6 +264,17 @@ public final class ModuleManager {
         return null;
     }
 
+    public Module findLua(String luaName) {
+        for (Module mod : this.getModuleList()) {
+            if(mod.luaName.equals(""))
+                continue;
+            if (luaName.equalsIgnoreCase(mod.luaName)) {
+                return mod;
+            }
+        }
+        return null;
+    }
+
     /**
      * Returns a given module based on the class
      *
@@ -297,6 +310,20 @@ public final class ModuleManager {
         }
 
         return mod;
+    }
+
+    public void removeLuaModule(String name){
+        Module toRemove = null;
+        for(Module mod : moduleList){
+            if(mod.getType() != Module.ModuleType.LUA || mod.luaName.equals(""))
+                continue;
+            if(mod.luaName.equalsIgnoreCase(name)) {
+                toRemove = mod;
+                break;
+            }
+        }
+        if(toRemove != null)
+            moduleList.remove(toRemove);
     }
 
     public List<Module> getModuleList() {

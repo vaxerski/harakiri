@@ -79,7 +79,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
     }
 
     public ModuleListComponent(Module.ModuleType type) {
-        super(StringUtils.capitalize(type.name().toLowerCase()), 110, 150, 160, 400);
+        super(StringUtils.capitalize(type.name().toLowerCase()), 100, type == Module.ModuleType.LUA ? 50 : 150, 160, 400);
         this.type = type;
         this.originalName = StringUtils.capitalize(type.name().toLowerCase());
         this.hudEditorModule = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
@@ -166,6 +166,16 @@ public final class ModuleListComponent extends ResizableHudComponent {
         this.scroll += (this.realScroll - this.scroll) / 2.f;
 
         // clamp max width & height
+<<<<<<< HEAD
+        if (this.isResizeDragging()) {
+            if (this.getH() > this.getTotalHeight() && type != Module.ModuleType.LUA) {
+                this.setH(this.getTotalHeight());
+                this.setResizeDragging(false);
+            }
+        } else if (!this.isLocked() && this.currentSettings == null && this.getH() > this.getTotalHeight() && this.type != Module.ModuleType.LUA) {
+            this.setH(this.getTotalHeight());
+        } else if (this.currentSettings == null && this.getH() > this.getTotalHeight() && this.getTotalHeight() > this.getInitialHeight() && this.type != Module.ModuleType.LUA) {
+=======
         /*if (this.isResizeDragging()) {
             if (this.getH() > this.getTotalHeight()) {
                 this.setH(this.getTotalHeight());
@@ -174,6 +184,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
         } else if (!this.isLocked() && this.getH() > this.getTotalHeight()) {
             this.setH(this.getTotalHeight());
         } else if (this.getH() > this.getTotalHeight() && this.getTotalHeight() > this.getInitialHeight()) {
+>>>>>>> main
             this.setH(this.getTotalHeight());
         }*/
 
@@ -563,11 +574,20 @@ public final class ModuleListComponent extends ResizableHudComponent {
                 this.realScroll = 0;
             }
 
+<<<<<<< HEAD
+            if (this.scroll > this.totalHeight - this.getH() && this.type != Module.ModuleType.LUA) {
+                this.scroll = this.totalHeight - (int) this.getH();
+            }else if(this.type == Module.ModuleType.LUA){
+                if(this.scroll > 0){
+                    this.scroll = 0;
+                }
+=======
             if (this.realScroll > this.totalHeight - this.getH()) {
                 this.realScroll = this.totalHeight - (int) this.getH();
             }
             if(this.totalHeight - this.getH() < 0){
                 this.realScroll = 0;
+>>>>>>> main
             }
 
             if (this.getOldScroll() != 0) {
