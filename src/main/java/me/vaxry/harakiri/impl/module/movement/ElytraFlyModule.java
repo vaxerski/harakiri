@@ -1,25 +1,26 @@
 package me.vaxry.harakiri.impl.module.movement;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.event.player.EventMove;
-import me.vaxry.harakiri.api.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.InventoryUtil;
-import me.vaxry.harakiri.api.util.MathUtil;
-import me.vaxry.harakiri.api.util.Timer;
-import me.vaxry.harakiri.api.value.Value;
-import me.vaxry.harakiri.impl.module.player.NoHungerModule;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.event.player.EventMove;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.MathUtil;
+import me.vaxry.harakiri.framework.util.Timer;
+import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.impl.module.player.FreeCamModule;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemElytra;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.server.SPacketChat;
+import net.minecraft.util.math.BlockPos;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 /**
@@ -39,14 +40,15 @@ public final class ElytraFlyModule extends Module {
 
     public final Value<Boolean> autoStart = new Value<Boolean>("AutoStart", new String[]{"AutoStart", "Auto-Start", "start", "autojump", "as"}, "Hold down the jump key to have an easy automated lift off.", true);
     public final Value<Float> autoStartDelay = new Value<Float>("StartDelay", new String[]{"AutoStartDelay", "startdelay", "autojumpdelay", "asd"}, "Delay(ms) between auto-start attempts.", 20.0f, 0.0f, 200.0f, 5.0f);
-    public final Value<Boolean> autoEquip = new Value<Boolean>("AutoEquip", new String[]{"AutoEquipt", "AutoElytra", "Equip", "Equipt", "ae"}, "Automatically equips a durable elytra before or during flight. (inventory only, not hotbar!)", false);
-    public final Value<Float> autoEquipDelay = new Value<Float>("EquipDelay", new String[]{"AutoEquipDelay", "AutoEquiptDelay", "equipdelay", "aed"}, "Delay(ms) between elytra equip swap attempts.", 200.0f, 0.0f, 1000.0f, 10.0f);
-    public final Value<Boolean> stayAirborne = new Value<Boolean>("StayAirborne", new String[]{"Airborne", "StayInAir", "Stay-Airborne", "air", "sa"}, "Attempts to always keep the player airborne (only use when AutoEquip is enabled).", false);
-    public final Value<Boolean> stayAirborneDisable = new Value<Boolean>("StayAirborneDisable", new String[]{"AutoDisableStayAirborne", "StayAirborneAutoDisable", "Stay-Airborne-Disable", "DisableStayInAir", "adsa", "dsa", "sad"}, "Automatically disables StayAirborne when touching the ground.", true);
-    public final Value<Float> stayAirborneDelay = new Value<Float>("StayAirborneDelay", new String[]{"StayAirborneWait", "Stay-Airborne-Delay", "sadelay"}, "Delay(ms) between stay-airborne attempts.", 100.0f, 0.0f, 400.0f, 5.0f);
-    public final Value<Boolean> disableInLiquid = new Value<Boolean>("DisableInLiquid", new String[]{"DisableInWater", "DisableInLava", "disableliquid", "liquidoff", "noliquid", "dil"}, "Disables all elytra flight when the player is in contact with liquid.", false);
-    public final Value<Boolean> infiniteDurability = new Value<Boolean>("InfiniteDurability", new String[]{"InfiniteDura", "dura", "inf", "infdura"}, "Enables an old exploit that sends the start elytra-flying packet each tick.", false);
-    public final Value<Boolean> noKick = new Value<Boolean>("NoKick", new String[]{"AntiKick", "Kick", "nk"}, "Bypass the server kicking you for flying while in elytra flight (Only works for Packet mode!).", true);
+    //public final Value<Boolean> autoEquip = new Value<Boolean>("AutoEquip", new String[]{"AutoEquipt", "AutoElytra", "Equip", "Equipt", "ae"}, "Automatically equips a durable elytra before or during flight. (inventory only, not hotbar!)", false);
+    //public final Value<Float> autoEquipDelay = new Value<Float>("EquipDelay", new String[]{"AutoEquipDelay", "AutoEquiptDelay", "equipdelay", "aed"}, "Delay(ms) between elytra equip swap attempts.", 200.0f, 0.0f, 1000.0f, 10.0f);
+    //public final Value<Boolean> stayAirborne = new Value<Boolean>("StayAirborne", new String[]{"Airborne", "StayInAir", "Stay-Airborne", "air", "sa"}, "Attempts to always keep the player airborne (only use when AutoEquip is enabled).", false);
+    public final Value<Boolean> autoDock = new Value<Boolean>("AutoDock", new String[]{"Autodock", "ad", "dock"}, "Stops your movement when 0.3 blocks off the ground.", false);
+    //public final Value<Boolean> stayAirborneDisable = new Value<Boolean>("StayAirborneDisable", new String[]{"AutoDisableStayAirborne", "StayAirborneAutoDisable", "Stay-Airborne-Disable", "DisableStayInAir", "adsa", "dsa", "sad"}, "Automatically disables StayAirborne when on the ground.", true);
+    //public final Value<Float> stayAirborneDelay = new Value<Float>("StayAirborneDelay", new String[]{"StayAirborneWait", "Stay-Airborne-Delay", "sadelay"}, "Delay (in ms) between stayairborne attempts.", 100.0f, 0.0f, 400.0f, 5.0f);
+    public final Value<Boolean> disableInLiquid = new Value<Boolean>("DisableInLiquid", new String[]{"DisableInWater", "DisableInLava", "disableliquid", "liquidoff", "noliquid", "dil"}, "Disables elytra flight when the player is in contact with water.", false);
+    public final Value<Boolean> infiniteDurability = new Value<Boolean>("InfiniteDurability", new String[]{"InfiniteDura", "dura", "inf", "infdura"}, "Only works on shitty servers.", false);
+    public final Value<Boolean> noKick = new Value<Boolean>("NoKick", new String[]{"AntiKick", "Kick", "nk"}, "Bypass the server kicking you for flying while packet elytra-flight.", true);
 
     private final Timer startDelayTimer = new Timer();
     private final Timer equipDelayTimer = new Timer();
@@ -59,11 +61,6 @@ public final class ElytraFlyModule extends Module {
     @Override
     public void onEnable() {
         super.onEnable();
-        final NoHungerModule nohunger = (NoHungerModule) Harakiri.INSTANCE.getModuleManager().find(NoHungerModule.class);
-        if (nohunger != null && nohunger.isEnabled()) {
-            nohunger.toggle();
-            Harakiri.INSTANCE.logChat("Toggled \247c" + nohunger.getDisplayName() + "\247r as it conflicts with \2477" + this.getDisplayName());
-        }
     }
 
     @Override
@@ -74,34 +71,34 @@ public final class ElytraFlyModule extends Module {
         }
     }
 
-    @Override
+    /*@Override
     public String getMetaData() {
         if (this.autoEquip.getValue())
             return "" + this.getElytraCount();
 
         return super.getMetaData();
-    }
+    }*/
 
     @Listener
     public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
         final Minecraft mc = Minecraft.getMinecraft();
 
-        if (!this.autoEquip.getValue() && mc.player.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() != Items.ELYTRA)
-            return;
+        //if (!this.autoEquip.getValue() && mc.player.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() != Items.ELYTRA)
+        //    return;
 
         switch (event.getStage()) {
             case PRE:
                 final ItemStack stackOnChestSlot = mc.player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 
                 // handle disabling stay airborne if it is on
-                if (this.stayAirborneDisable.getValue() && this.stayAirborne.getValue()) {
-                    if (mc.player.onGround) {
-                        this.stayAirborne.setValue(false);
-                        Harakiri.INSTANCE.logChat("\247rToggled\2477 ElytraFly " + this.stayAirborne.getName() + " \247coff\247r, as you've touched the ground.");
-                    }
-                }
+               // if (this.stayAirborneDisable.getValue() && this.stayAirborne.getValue()) {
+               //     if (mc.player.onGround) {
+               //         this.stayAirborne.setValue(false);
+                //        Harakiri.INSTANCE.logChat("\247rToggled\2477 ElytraFly " + this.stayAirborne.getName() + " \247coff\247r, as you've touched the ground.");
+                //    }
+                //}
 
-                if (this.autoEquip.getValue()) {
+               /* if (this.autoEquip.getValue()) {
                     // ensure player has an elytra on before running any code
                     if (stackOnChestSlot.isEmpty() && stackOnChestSlot.getItem() != Items.ELYTRA) {
                         if (InventoryUtil.hasItem(Items.ELYTRA)) {
@@ -132,7 +129,7 @@ public final class ElytraFlyModule extends Module {
                             }
                         }
                     }
-                }
+                }*/
 
                 // liquid check
                 if (this.disableInLiquid.getValue() && (mc.player.isInWater() || mc.player.isInLava())) {
@@ -230,10 +227,42 @@ public final class ElytraFlyModule extends Module {
                     mc.player.motionZ = directionSpeedControl[1];
                 }
 
+                // Dock
+                if(this.autoDock.getValue() && mc.player.movementInput.sneak && !Harakiri.INSTANCE.getModuleManager().find(FreeCamModule.class).isEnabled()) {
+                    BlockPos underMe = new BlockPos(mc.player.getPosition().getX(), mc.player.getPosition().getY() - 1, mc.player.getPosition().getZ());
+                    Block under = mc.world.getBlockState(underMe).getBlock();
+                    BlockPos underMe2 = new BlockPos(mc.player.getPosition().getX(), mc.player.getPosition().getY() - 2, mc.player.getPosition().getZ());
+                    Block under2 = mc.world.getBlockState(underMe2).getBlock();
+                    if(under == Blocks.AIR && (under2 != Blocks.AIR && under2 != Blocks.WATER && under2 != Blocks.FLOWING_WATER && under2 != Blocks.FLOWING_LAVA && under2 != Blocks.LAVA)){
+                        if(mc.player.motionY < 0)
+                            mc.player.motionY = -0.1f;
+                    }
+                    if (under != Blocks.AIR && under != Blocks.WATER && under != Blocks.LAVA && under != Blocks.FLOWING_WATER && under != Blocks.FLOWING_LAVA) {
+                        if (mc.player.motionY < 0) {
+                            mc.player.motionY = -0.03;
+                            mc.player.motionX = directionSpeedControl[0] / 10.f;
+                            mc.player.motionZ = directionSpeedControl[1] / 10.f;
+                            mc.player.rotationPitch = 0;
+                            if (mc.player.posY <= underMe.getY() + 1.34f) {
+                                mc.player.motionY = 0;
+                                mc.player.setSneaking(false);
+                                mc.player.movementInput.sneak = false;
+                            }
+                        }
+                    }
+                }
+
                 event.setX(mc.player.motionX);
                 event.setY(mc.player.motionY);
                 event.setZ(mc.player.motionZ);
             }
+        }
+
+
+        // Fix movement if avoid
+        if(Harakiri.INSTANCE.getModuleManager().find(AvoidModule.class).isEnabled()){
+            AvoidModule avm = (AvoidModule)Harakiri.INSTANCE.getModuleManager().find(AvoidModule.class);
+            avm.fixMovevemt(event);
         }
     }
 

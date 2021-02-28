@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.command;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.command.Command;
-import me.vaxry.harakiri.api.macro.Macro;
+import me.vaxry.harakiri.framework.command.Command;
+import me.vaxry.harakiri.framework.macro.Macro;
 import me.vaxry.harakiri.impl.config.MacroConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.Style;
@@ -22,8 +22,8 @@ public final class MacroCommand extends Command {
     private final String[] clearAlias = new String[]{"Clear", "C"};
 
     public MacroCommand() {
-        super("Macro", new String[]{"Mac"}, "Allows you to create chat macros", "Macro Add <Name> <Key> <Macro>\n" +
-                "Macro Remove <Name>\n" +
+        super("Macro", new String[]{"Mac"}, "Allows you to create macros", "Macro Add <name> <key> <macro>\n" +
+                "Macro Remove <name>\n" +
                 "Macro List\n" +
                 "Macro Clear");
     }

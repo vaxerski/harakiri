@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.player;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventSendPacket;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.network.Packet;
@@ -22,7 +22,7 @@ public final class BlinkModule extends Module {
     private final Queue<Packet> packets = new ConcurrentLinkedQueue();
 
     public BlinkModule() {
-        super("Blink", new String[]{"FL (Blink)"}, "Holds packets until disabled", "NONE", -1, ModuleType.PLAYER);
+        super("Blink", new String[]{"FL (Blink)"}, "Holds packets until disabled.", "NONE", -1, ModuleType.PLAYER);
     }
 
     @Override

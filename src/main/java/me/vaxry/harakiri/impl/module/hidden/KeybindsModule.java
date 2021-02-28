@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.hidden;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.minecraft.EventKeyPress;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.minecraft.EventKeyPress;
+import me.vaxry.harakiri.framework.module.Module;
 import org.lwjgl.input.Keyboard;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
@@ -15,7 +15,8 @@ public final class KeybindsModule extends Module {
     public KeybindsModule() {
         super("Keybinds", new String[]{"Binds"}, "Allows you to bind modules to keys", "NONE", -1, ModuleType.HIDDEN);
         this.setHidden(true);
-        this.toggle();
+        if(!this.isEnabled())
+            this.toggle();
     }
 
     @Listener

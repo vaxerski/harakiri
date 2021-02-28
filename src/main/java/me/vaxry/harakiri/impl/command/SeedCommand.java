@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.command;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.command.Command;
-import me.vaxry.harakiri.api.util.StringUtil;
+import me.vaxry.harakiri.framework.command.Command;
+import me.vaxry.harakiri.framework.util.StringUtil;
 import me.vaxry.harakiri.impl.config.WorldConfig;
 import me.vaxry.harakiri.impl.management.WorldManager;
 import net.minecraft.client.Minecraft;
@@ -15,7 +15,7 @@ import net.minecraft.client.multiplayer.ServerData;
 public final class SeedCommand extends Command {
 
     public SeedCommand() {
-        super("Seed", new String[]{"RandomSeed"}, "Sets the client-side seed used by certain features", "Seed <Number>");
+        super("Seed", new String[]{"RandomSeed"}, "Sets the client-side seed.", "Seed <Number>");
     }
 
     @Override

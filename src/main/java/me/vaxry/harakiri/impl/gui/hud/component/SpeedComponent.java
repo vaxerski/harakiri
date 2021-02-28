@@ -1,13 +1,12 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.api.util.Timer;
-import net.minecraft.util.math.MathHelper;
+import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.util.Timer;
 import net.minecraft.util.math.Vec3d;
 
 import javax.vecmath.Vector3f;
-import java.sql.Time;
 import java.text.DecimalFormat;
 
 
@@ -19,11 +18,11 @@ public final class SpeedComponent extends DraggableHudComponent {
 
     private Timer timer = new Timer();
     private Vector3f lastPos = new Vector3f(0,0,0);
-    private float speed = 0;
+    public float speed = 0;
 
     public SpeedComponent() {
         super("Speed");
-        this.setH(mc.fontRenderer.FONT_HEIGHT);
+        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
     }
 
     private float getSpeed() {
@@ -60,12 +59,12 @@ public final class SpeedComponent extends DraggableHudComponent {
 
             final String speed = ChatFormatting.GRAY + "Speed: " + ChatFormatting.RESET + df.format(getSpeed()) + ChatFormatting.GRAY + "km/h";
 
-            this.setW(mc.fontRenderer.getStringWidth(speed));
-            mc.fontRenderer.drawStringWithShadow(speed, this.getX(), this.getY(), -1);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(speed));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(speed, this.getX(), this.getY(), -1);
         } else {
             final String speed = ChatFormatting.GRAY + "Speed: " + ChatFormatting.RESET + "0" + ChatFormatting.GRAY + "km/h";
-            this.setW(mc.fontRenderer.getStringWidth(speed));
-            mc.fontRenderer.drawStringWithShadow(speed, this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(speed));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(speed, this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 

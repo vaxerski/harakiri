@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.module.movement;
 
-import me.vaxry.harakiri.api.event.entity.EventHorseSaddled;
-import me.vaxry.harakiri.api.event.entity.EventPigTravel;
-import me.vaxry.harakiri.api.event.entity.EventSteerEntity;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.entity.EventHorseSaddled;
+import me.vaxry.harakiri.framework.event.entity.EventPigTravel;
+import me.vaxry.harakiri.framework.event.entity.EventSteerEntity;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityPig;
@@ -16,7 +16,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class EntityControlModule extends Module {
 
     public EntityControlModule() {
-        super("EntityControl", new String[]{"AntiSaddle", "EntityRide", "NoSaddle"}, "Allows you to control llamas, horses, pigs without a saddle/carrot", "NONE", -1, ModuleType.MOVEMENT);
+        super("EntityControl", new String[]{"AntiSaddle", "EntityRide", "NoSaddle"}, "Allows you to control llamas, horses, pigs without a saddle/carrot on a stick", "NONE", -1, ModuleType.MOVEMENT);
     }
 
     @Listener

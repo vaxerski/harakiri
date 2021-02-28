@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import me.vaxry.harakiri.api.event.gui.EventRenderHelmet;
-import me.vaxry.harakiri.api.event.gui.EventRenderPortal;
-import me.vaxry.harakiri.api.event.render.EventRenderOverlay;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.gui.EventRenderHelmet;
+import me.vaxry.harakiri.framework.event.gui.EventRenderPortal;
+import me.vaxry.harakiri.framework.event.render.EventRenderOverlay;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 /**
@@ -13,14 +13,14 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class NoOverlayModule extends Module {
 
-    public final Value<Boolean> portal = new Value<Boolean>("Portal", new String[]{}, "Disables the portal screen overlay when using a portal.", true);
-    public final Value<Boolean> helmet = new Value<Boolean>("Helmet", new String[]{}, "Disables the helmet/pumpkin screen overlay.", true);
-    public final Value<Boolean> block = new Value<Boolean>("Block", new String[]{}, "Disables the block-side screen overlay when inside of a block.", true);
-    public final Value<Boolean> water = new Value<Boolean>("Water", new String[]{}, "Disables the water screen overlay when under water.", true);
-    public final Value<Boolean> fire = new Value<Boolean>("Fire", new String[]{}, "Disables the fire screen overlay when on fire.", true);
+    public final Value<Boolean> portal = new Value<Boolean>("Portal", new String[]{}, "Disables the portal overlay.", true);
+    public final Value<Boolean> helmet = new Value<Boolean>("Helmet", new String[]{}, "Disables the pumpkin overlay.", true);
+    public final Value<Boolean> block = new Value<Boolean>("Block", new String[]{}, "Disables the block-side screen overlay.", true);
+    public final Value<Boolean> water = new Value<Boolean>("Water", new String[]{}, "Disables the water overlay.", true);
+    public final Value<Boolean> fire = new Value<Boolean>("Fire", new String[]{}, "Disables the fire overlay.", true);
 
     public NoOverlayModule() {
-        super("NoOverlay", new String[]{"AntiOverlay"}, "Removes screen overlay effects.", "NONE", -1, ModuleType.RENDER);
+        super("NoOverlay", new String[]{"AntiOverlay"}, "Removes some overlay effects.", "NONE", -1, ModuleType.RENDER);
     }
 
     @Listener

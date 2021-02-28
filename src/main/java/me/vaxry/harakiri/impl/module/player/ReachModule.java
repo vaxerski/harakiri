@@ -1,12 +1,12 @@
 package me.vaxry.harakiri.impl.module.player;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.api.event.render.EventRender3D;
-import me.vaxry.harakiri.api.event.world.EventLoadWorld;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
+import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.module.render.BlockHighlightModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumActionResult;
@@ -22,7 +22,7 @@ public final class ReachModule extends Module {
 
     public final Value<Float> distance = new Value<Float>("Distance", new String[]{"Dist", "D"}, "The distance (in blocks) to reach.", 5.5f, 0.0f, 10.0f, 0.5f);
     public final Value<Boolean> highlight = new Value<Boolean>("Highlight", new String[]{"Hover", "H"}, "Enables rendering the BlockHighlight for the extended reach.", true);
-    public final Value<Boolean> blocks = new Value<Boolean>("Blocks", new String[]{"Block", "B"}, "Enables reaching for breaking & building blocks.", true);
+    public final Value<Boolean> blocks = new Value<Boolean>("Blocks", new String[]{"Block", "B"}, "Enables reaching for breaking and building blocks.", true);
     //public final Value<Boolean> entities = new Value<Boolean>("Entities", new String[]{"Entity", "Entitie", "E"}, "Enables reaching for attacking and interacting with entities.", false);
 
     private BlockHighlightModule blockHighlightModule = null;
@@ -31,7 +31,7 @@ public final class ReachModule extends Module {
     //private RayTraceResult currentEntityTrace = null;
 
     public ReachModule() {
-        super("Reach", new String[]{"Rch"}, "Extends the player's reach.", "NONE", -1, ModuleType.PLAYER);
+        super("Reach", new String[]{"Rch"}, "Extends your reach.", "NONE", -1, ModuleType.PLAYER);
     }
 
     @Listener

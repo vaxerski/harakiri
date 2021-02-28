@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import me.vaxry.harakiri.api.event.render.EventRenderBossHealth;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.render.EventRenderBossHealth;
+import me.vaxry.harakiri.framework.module.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 /**
@@ -10,7 +10,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class NoBossHealthModule extends Module {
 
     public NoBossHealthModule() {
-        super("NoBossHealth", new String[]{"NoBossHealthBar", "NoBossBar"}, "Disables the rendering of the boss health-bar located at the top of the screen.", "NONE", -1, ModuleType.RENDER);
+        super("NoBossHealth", new String[]{"NoBossHealthBar", "NoBossBar"}, "Disables the rendering of the boss health.", "NONE", -1, ModuleType.RENDER);
     }
 
     @Listener

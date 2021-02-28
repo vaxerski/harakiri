@@ -1,17 +1,17 @@
 package me.vaxry.harakiri.impl.module.combat;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.api.event.render.EventRender3D;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.task.rotation.RotationTask;
-import me.vaxry.harakiri.api.util.ColorUtil;
-import me.vaxry.harakiri.api.util.MathUtil;
-import me.vaxry.harakiri.api.util.RenderUtil;
-import me.vaxry.harakiri.api.util.Timer;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.task.rotation.RotationTask;
+import me.vaxry.harakiri.framework.util.ColorUtil;
+import me.vaxry.harakiri.framework.util.MathUtil;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.util.Timer;
+import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.module.player.GodModeModule;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -43,16 +43,22 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public final class CrystalAuraModule extends Module {
 
-    public final Value<Float> range = new Value<Float>("Range", new String[]{"Dist"}, "The minimum range to attack crystals.", 4.0f, 0.0f, 7.0f, 0.1f);
+    public boolean crystalAuraHit = false;
+
     public final Value<Boolean> attack = new Value<Boolean>("Attack", new String[]{"AutoAttack"}, "Automatically attack crystals.", true);
-    public final Value<Float> attackDelay = new Value<Float>("Attack_Delay", new String[]{"AttackDelay", "AttackDel", "Del"}, "The delay to attack (in ms).", 50.0f, 0.0f, 500.0f, 1.0f);
+    public final Value<Float> attackDelay = new Value<Float>("AttackDelay", new String[]{"AttackDelay", "AttackDel", "Del"}, "The delay to attack in milliseconds.", 50.0f, 0.0f, 500.0f, 1.0f);
+    public final Value<Float> attackRadius = new Value<Float>("AttackRadius", new String[]{"ARange", "HitRange", "AttackDistance", "AttackRange", "ARadius"}, "The minimum range to attack crystals.", 5.0f, 0.0f, 7.0f, 0.1f);
+    public final Value<Float> attackMaxDistance = new Value<Float>("AttackMaxDistance", new String[]{"AMaxRange", "MaxAttackRange", "AMaxRadius", "AMD", "AMR"}, "The max (block)distance an entity must be to the a crystal to begin attacking.", 14.0f, 1.0f, 20.0f, 1.0f);
     public final Value<Boolean> place = new Value<Boolean>("Place", new String[]{"AutoPlace"}, "Automatically place crystals.", true);
-    public final Value<Float> placeDelay = new Value<Float>("Place_Delay", new String[]{"PlaceDelay", "PlaceDel"}, "The delay to place crystals (in ms).", 50.0f, 0.0f, 500.0f, 1.0f);
-    public final Value<Float> minDamage = new Value<Float>("Min_Damage", new String[]{"MinDamage", "Min", "MinDmg"}, "The minimum explosion damage to the threat to place down a crystal.", 1.5f, 0.0f, 20.0f, 0.5f);
-    public final Value<Boolean> ignore = new Value<Boolean>("Ignore", new String[]{"Ig"}, "Ignore self-damage checks.", false);
-    public final Value<Boolean> render = new Value<Boolean>("Render", new String[]{"R"}, "Shows information about your placed crystals.", true);
-    public final Value<Boolean> renderDamage = new Value<Boolean>("Render_Damage", new String[]{"RD", "RenderDamage", "ShowDamage"}, "Draws calculated explosion damage on your placed crystals.", true);
-    public final Value<Boolean> offHand = new Value<Boolean>("Offhand", new String[]{"Hand", "otherhand", "off"}, "Use crystals in the offhand instead of holding them with the mainhand.", false);
+    public final Value<Float> placeDelay = new Value<Float>("PlaceDelay", new String[]{"PlaceDelay", "PlaceDel"}, "The delay to place crystals.", 50.0f, 0.0f, 500.0f, 1.0f);
+    public final Value<Float> placeRadius = new Value<Float>("PlaceRadius", new String[]{"Radius", "PR", "PlaceRange", "Range"}, "The radius in blocks around the player to process placing in.", 5.5f, 1.0f, 7.0f, 0.5f);
+    public final Value<Float> placeMaxDistance = new Value<Float>("PlaceMaxDistance", new String[]{"BlockDistance", "MaxBlockDistance", "PMBD", "MBD", "PBD", "BD"}, "The (max)distance an entity must be to the new crystal to begin placing.", 14.0f, 1.0f, 20.0f, 1.0f);
+    public final Value<Float> placeLocalDistance = new Value<Float>("PlaceLocalDistance", new String[]{"LocalDistance", "PLD", "LD"}, "The (max)distance away the entity must be from the local player to begin placing.", 6.0f, 1.0f, 20.0f, 0.5f);
+    public final Value<Float> minDamage = new Value<Float>("MinDamage", new String[]{"MinDamage", "Min", "MinDmg"}, "The minimum explosion damage calculated to place down a crystal.", 1.5f, 0.0f, 20.0f, 0.5f);
+    public final Value<Boolean> ignore = new Value<Boolean>("Ignore", new String[]{"Ig"}, "Ignore self damage checks.", false);
+    public final Value<Boolean> render = new Value<Boolean>("Render", new String[]{"R"}, "Draws information about recently placed crystals from your player.", true);
+    public final Value<Boolean> renderDamage = new Value<Boolean>("RenderDamage", new String[]{"RD", "RenderDamage", "ShowDamage"}, "Draws calculated explosion damage on recently placed crystals from your player.", true);
+    public final Value<Boolean> offHand = new Value<Boolean>("Offhand", new String[]{"Hand", "otherhand", "off"}, "Use crystals in the off-hand instead of holding them with the main-hand.", false);
 
     private final Timer attackTimer = new Timer();
     private final Timer placeTimer = new Timer();
@@ -90,10 +96,10 @@ public final class CrystalAuraModule extends Module {
                 if (mc.player.getHeldItem(this.offHand.getValue() ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND).getItem() == Items.END_CRYSTAL) {
                     if (this.place.getValue()) {
                         if (this.placeTimer.passed(this.placeDelay.getValue())) {
-                            final float radius = this.range.getValue();
+                            final float radius = this.placeRadius.getValue();
 
                             float damage = 0;
-                            double maxDist = 6.0f;
+                            double maxDistanceToLocal = this.placeLocalDistance.getValue();
 
                             EntityLivingBase targetPlayer = null;
 
@@ -109,9 +115,9 @@ public final class CrystalAuraModule extends Module {
                                                     if (player != mc.player && !player.getName().equals(mc.player.getName()) && player.getHealth() > 0 && Harakiri.INSTANCE.getFriendManager().isFriend(player) == null) {
                                                         final double distToBlock = entity.getDistance(blockPos.getX() + 0.5f, blockPos.getY() + 1, blockPos.getZ() + 0.5f);
                                                         final double distToLocal = entity.getDistance(mc.player.posX, mc.player.posY, mc.player.posZ);
-                                                        if (distToBlock <= 14 && distToLocal <= maxDist) {
+                                                        if (distToBlock <= this.placeMaxDistance.getValue() && distToLocal <= maxDistanceToLocal) {
                                                             targetPlayer = player;
-                                                            maxDist = distToLocal;
+                                                            maxDistanceToLocal = distToLocal;
                                                         }
                                                     }
                                                 }
@@ -152,9 +158,9 @@ public final class CrystalAuraModule extends Module {
                     if (this.attack.getValue()) {
                         for (Entity entity : mc.world.loadedEntityList) {
                             if (entity instanceof EntityEnderCrystal) {
-                                if (mc.player.getDistance(entity) <= this.range.getValue()) {
+                                if (mc.player.getDistance(entity) <= this.attackRadius.getValue()) {
                                     for (Entity ent : mc.world.loadedEntityList) {
-                                        if (ent != null && ent != mc.player && (ent.getDistance(entity) <= 14.0f) && ent != entity && ent instanceof EntityPlayer) {
+                                        if (ent != null && ent != mc.player && (ent.getDistance(entity) <= this.attackMaxDistance.getValue()) && ent != entity && ent instanceof EntityPlayer) {
                                             final EntityPlayer player = (EntityPlayer) ent;
                                             float currentDamage = calculateExplosionDamage(player, 6.0f, (float) entity.posX, (float) entity.posY, (float) entity.posZ) / 2.0f;
                                             float localDamage = calculateExplosionDamage(mc.player, 6.0f, (float) entity.posX, (float) entity.posY, (float) entity.posZ) / 2.0f;
@@ -193,12 +199,15 @@ public final class CrystalAuraModule extends Module {
                 if (this.currentAttackEntity != null) {
                     if (this.attackTimer.passed(this.attackDelay.getValue()) && this.attackRotationTask.isOnline()) {
                         mc.player.swingArm(this.offHand.getValue() ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND);
+                        this.crystalAuraHit = true;
                         mc.playerController.attackEntity(mc.player, this.currentAttackEntity);
                         this.attackTimer.reset();
                     }
                 } else {
                     Harakiri.INSTANCE.getRotationManager().finishTask(this.attackRotationTask);
                 }
+
+                this.crystalAuraHit = false;
                 break;
         }
     }
@@ -254,8 +263,8 @@ public final class CrystalAuraModule extends Module {
                     if (damage != -1) {
                         final String damageText = (Math.floor(damage) == damage ? (int) damage : String.format("%.1f", damage)) + "";
                         //GlStateManager.disableDepth();
-                        GlStateManager.translate(-(mc.fontRenderer.getStringWidth(damageText) / 2.0d), 0, 0);
-                        mc.fontRenderer.drawStringWithShadow(damageText, 0, 0, 0xFFAAAAAA);
+                        GlStateManager.translate(-(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(damageText) / 2.0d), 0, 0);
+                        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(damageText, 0, 0, 0xFFAAAAAA);
                     }
                     GlStateManager.popMatrix();
                 }
@@ -291,7 +300,7 @@ public final class CrystalAuraModule extends Module {
 
             if (floor == Blocks.AIR && ceil == Blocks.AIR) {
                 if (mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.add(0, 1, 0))).isEmpty()) {
-                    return mc.player.getDistance(pos.getX(), pos.getY(), pos.getZ()) <= this.range.getValue();
+                    return mc.player.getDistance(pos.getX(), pos.getY(), pos.getZ()) <= this.placeRadius.getValue();
                 }
             }
         }
@@ -318,10 +327,7 @@ public final class CrystalAuraModule extends Module {
 
     private float scaleExplosionDamage(EntityLivingBase entity, Explosion explosion, float damage) {
         damage = CombatRules.getDamageAfterAbsorb(damage, (float) entity.getTotalArmorValue(), (float) entity.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue());
-
         damage *= (1.0F - MathHelper.clamp(EnchantmentHelper.getEnchantmentModifierDamage(entity.getArmorInventoryList(), DamageSource.causeExplosionDamage(explosion)), 0.0F, 20.0F) / 25.0F);
-
-        damage = Math.max(damage - entity.getAbsorptionAmount(), 0.0F);
         return damage;
     }
 

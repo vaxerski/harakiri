@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.command;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.command.Command;
-import me.vaxry.harakiri.api.util.MathUtil;
-import me.vaxry.harakiri.api.util.StringUtil;
+import me.vaxry.harakiri.framework.command.Command;
+import me.vaxry.harakiri.framework.util.MathUtil;
+import me.vaxry.harakiri.framework.util.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.Vec3d;
 
@@ -37,10 +37,10 @@ public final class HClipCommand extends Command {
                 } else {
                     Minecraft.getMinecraft().player.setPosition(Minecraft.getMinecraft().player.posX + dir.x * num, Minecraft.getMinecraft().player.posY, Minecraft.getMinecraft().player.posZ + dir.z * num);
                 }
-                Harakiri.INSTANCE.logChat("Teleported you " + ((num > 0) ? "forward" : "backward") + " " + num);
+                Harakiri.INSTANCE.logChat("HClipped you " + ((num > 0) ? "forward" : "backward") + " " + num);
             }
         } else {
-            Harakiri.INSTANCE.errorChat("Unknown number " + "\247f\"" + split[1] + "\"");
+            Harakiri.INSTANCE.errorChat("Unknown number: " + "\247f\"" + split[1] + "\"");
         }
     }
 }

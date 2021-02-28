@@ -1,9 +1,10 @@
 package me.vaxry.harakiri.impl.module.movement;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.player.EventMove;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.player.EventMove;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.MobEffects;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
@@ -14,11 +15,11 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class StrafeModule extends Module {
 
-    public Value<Boolean> ground = new Value<Boolean>("Ground", new String[]{"Ground", "OnGround"}, "When enabled, enables strafe movement while on ground.", false);
-    public Value<Boolean> elytraCheck = new Value<Boolean>("ElytraCheck", new String[]{"Flycheck", "Elytra"}, "Lets you use ElytraFly and Strafe at the same time without bugging out.", true);
+    public Value<Boolean> ground = new Value<Boolean>("Ground", new String[]{"Ground", "OnGround"}, "Enables strafe movement while on ground.", false);
+    public Value<Boolean> elytraCheck = new Value<Boolean>("ElytraCheck", new String[]{"Flycheck", "Elytra"}, "Lets you use ElytraFly and Strafe.", true);
 
     public StrafeModule() {
-        super("Strafe", new String[]{"Strafe"}, "Unlocks full movement control while airborne, and optionally on ground too.", "NONE", -1, ModuleType.MOVEMENT);
+        super("Strafe", new String[]{"Strafe"}, "Full movement control while airborne, and optionally on ground.", "NONE", -1, ModuleType.MOVEMENT);
     }
 
     @Listener
@@ -39,6 +40,9 @@ public final class StrafeModule extends Module {
             if (mc.player.onGround)
                 return;
         }
+
+        if(Harakiri.INSTANCE.getModuleManager().find(FreeCamModule.class).isEnabled())
+            return; // dont run when freecam, bugs out.
 
         // check for flight, could be an option maybe but it bugs out  packet fly
         final FlightModule flightModule = (FlightModule) Harakiri.INSTANCE.getModuleManager().find(FlightModule.class);

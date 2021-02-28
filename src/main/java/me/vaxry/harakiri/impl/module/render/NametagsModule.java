@@ -1,29 +1,24 @@
 package me.vaxry.harakiri.impl.module.render;
 
 
-import com.google.common.collect.Lists;
-import com.mojang.realmsclient.gui.ChatFormatting;
-import jdk.nashorn.internal.ir.Block;
+import akka.japi.Pair;
+import com.yworks.yguard.test.A;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.render.EventRender2D;
-import me.vaxry.harakiri.api.event.render.EventRenderName;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.GLUProjection;
-import me.vaxry.harakiri.api.util.ItemUtil;
-import me.vaxry.harakiri.api.util.RenderUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.event.render.EventRenderName;
+import me.vaxry.harakiri.framework.extd.RenderItemAlpha;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.ColorUtil;
+import me.vaxry.harakiri.framework.util.GLUProjection;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,33 +26,31 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
+import org.apache.tools.ant.taskdefs.PathConvert;
 import org.locationtech.jts.geom.Coordinate;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector2f;
-import org.lwjgl.util.vector.Vector3f;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-import javax.print.attribute.standard.MediaSize;
 import javax.vecmath.Vector3d;
 import java.util.*;
 
 public final class NametagsModule extends Module {
 
     private float NAMETAG_SAFEAREA = 1.f;
-    private ICamera camera = new Frustum();;
+    private ICamera camera = new Frustum();
+
+    private HashMap<EntityPlayer, Float> playersList = new HashMap<>();
 
     public final Value<Float> additionalScale = new Value<Float>("Scale", new String[]{"Scale", "s"}, "Scale the nametag", 1.f, 0.5f, 2.5f, 0.5f);
     public final Value<Float> armorscale = new Value<Float>("ArmorScale", new String[]{"Armorscale", "as"}, "Scale the armor part", 1.f, 0.5f, 2.5f, 0.5f);
+    public final Value<Integer> fadein = new Value<Integer>("FadeInSpeed", new String[]{"Fadein", "f"}, "Background fade in speed. Doesnt work for items cuz I'm lazy and minecraft.", 5, 1, 25, 1);
 
 
     public NametagsModule() {
         super("Nametags", new String[]{"Nametags"}, "Adds custom nametags for players.", "NONE", -1, ModuleType.RENDER);
+        Minecraft mc = Minecraft.getMinecraft();
     }
 
     @Listener
@@ -81,55 +74,25 @@ public final class NametagsModule extends Module {
 
             camera.setPosition(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().posY, mc.getRenderViewEntity().posZ);
 
-            AxisAlignedBB bb = new AxisAlignedBB(
-                    blockPos.getX() - mc.getRenderManager().viewerPosX,
-                    blockPos.getY() - mc.getRenderManager().viewerPosY,
-                    blockPos.getZ() - mc.getRenderManager().viewerPosZ,
-                    blockPos.getX() + 1 - mc.getRenderManager().viewerPosX,
-                    blockPos.getY() + 1 - mc.getRenderManager().viewerPosY,
-                    blockPos.getZ() + 1 - mc.getRenderManager().viewerPosZ);
-
-
-            if (!camera.isBoundingBoxInFrustum(new AxisAlignedBB(bb.minX + mc.getRenderManager().viewerPosX,
-                    bb.minY + mc.getRenderManager().viewerPosY,
-                    bb.minZ + mc.getRenderManager().viewerPosZ,
-                    bb.maxX + mc.getRenderManager().viewerPosX,
-                    bb.maxY + mc.getRenderManager().viewerPosY,
-                    bb.maxZ + mc.getRenderManager().viewerPosZ))) {
-                continue;
-            }
+            ArrayList<Pair<String, Integer>> toDraw = new ArrayList<>();
 
             EntityPlayer e = (EntityPlayer)ent;
+            if(!isPlayerCached(e))
+                playersList.put(e, 0.f);
+
+            for(Map.Entry<EntityPlayer, Float> p : playersList.entrySet()){
+                p.setValue(Math.min(p.getValue() + fadein.getValue() / 3.f, 255));
+            }
+
+            float alphaPerc = playersList.get(ent) / 255.f;
 
             Vec3d nametagvec = new Vec3d(e.getPositionEyes(event.getPartialTicks()).x, e.getPositionEyes(event.getPartialTicks()).y, e.getPositionEyes(event.getPartialTicks()).z);
 
             Coordinate nametagMiddle = conv3Dto2DSpace(nametagvec.x, nametagvec.y + 0.67334f, nametagvec.z);
+            if(nametagMiddle == null)
+                continue;
 
             double distancetoent = get3DDistance(e);
-
-            Vector3d anglesToEnt = calculateRelativeAngle(mc.player.getPositionEyes(event.getPartialTicks()), nametagvec, new Vector3d(mc.player.rotationPitch, mc.player.rotationYaw, 0));
-            if(anglesToEnt.x > 90 || anglesToEnt.y > 110)
-                continue; // Dont
-
-            if(distancetoent < 2.f){
-                Vec3d accuratePos = e.getPositionEyes(0);
-                bb = new AxisAlignedBB(
-                        accuratePos.x - 0.1f - mc.getRenderManager().viewerPosX,
-                        accuratePos.y + 0.9f - mc.getRenderManager().viewerPosY,
-                        accuratePos.z - 0.1f - mc.getRenderManager().viewerPosZ,
-                        accuratePos.x + 0.1f - mc.getRenderManager().viewerPosX,
-                        accuratePos.y + 1.8f - mc.getRenderManager().viewerPosY,
-                        accuratePos.z + 0.1f - mc.getRenderManager().viewerPosZ);
-                //RenderUtil.drawBoundingBox(bb, 1, 255, 0, 0, 255);
-                if (!camera.isBoundingBoxInFrustum(new AxisAlignedBB(bb.minX + mc.getRenderManager().viewerPosX,
-                        bb.minY + mc.getRenderManager().viewerPosY,
-                        bb.minZ + mc.getRenderManager().viewerPosZ,
-                        bb.maxX + mc.getRenderManager().viewerPosX,
-                        bb.maxY + mc.getRenderManager().viewerPosY,
-                        bb.maxZ + mc.getRenderManager().viewerPosZ))) {
-                    continue;
-                }
-            }
 
             // Nametag string setup
             String nametagstr = "";
@@ -137,41 +100,65 @@ public final class NametagsModule extends Module {
             int health = Math.round(e.getHealth());
             health += e.getAbsorptionAmount();
 
-            if(health > 20)
+            if(health > 20) {
                 nametagstr += "\2472\247o" + health;
-            else if(health > 13)
+                toDraw.add(new Pair<>(health + " ", 0xFF11DD11));
+            }
+            else if(health > 13) {
                 nametagstr += "\2472" + health;
-            else if(health > 7)
+                toDraw.add(new Pair<>(health + " ", 0xFF11DD11));
+            }
+            else if(health > 7) {
                 nametagstr += "\2476" + health;
-            else
+                toDraw.add(new Pair<>(health + " ", 0xFFAAAA00));
+            }
+            else {
                 nametagstr += "\247c" + health;
+                toDraw.add(new Pair<>(health + " ", 0xFFFF3333));
+            }
+
+
 
             nametagstr += "\247f ";
 
-            if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null)
+            if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null) {
                 nametagstr += "\2473" + e.getName();
-            else
+                toDraw.add(new Pair<>(e.getName() + " ", 0xFF80FFFF));
+            }
+            else {
                 nametagstr += "\247f" + e.getName();
+                toDraw.add(new Pair<>(e.getName() + " ", 0xFFFFFFFF));
+            }
 
             nametagstr += "\247f ";
 
-            final NetworkPlayerInfo playerInfo = mc.player.connection.getPlayerInfo(mc.player.getUniqueID());
+            final NetworkPlayerInfo playerInfo = mc.player.connection.getPlayerInfo(e.getUniqueID());
             int ping = -1;
             if (Objects.nonNull(playerInfo)) {
                 if(playerInfo.getResponseTime() != 0)
                     ping = playerInfo.getResponseTime();
             }
 
-            if(ping == -1)
+            if(ping == -1) {
                 nametagstr += "\2478?";
-            else if (ping > 200)
+                toDraw.add(new Pair<>("?", 0xFF888888));
+            }
+            else if (ping > 200) {
                 nametagstr += "\247c" + ping + "ms";
-            else if(ping > 100)
+                toDraw.add(new Pair<>(ping + "ms", 0xFFFF5050));
+            }
+            else if(ping > 100) {
                 nametagstr += "\2476" + ping + "ms";
-            else if(ping > 50)
+                toDraw.add(new Pair<>(ping + "ms", 0xFFFFCC00));
+            }
+            else if(ping > 50) {
                 nametagstr += "\2472" + ping + "ms";
-            else
+                toDraw.add(new Pair<>(ping + "ms", 0xFFCCFF33));
+            }
+            else {
                 nametagstr += "\247a" + ping + "ms";
+                toDraw.add(new Pair<>(ping + "ms", 0xFF66FF66));
+            }
 
             float nametagX = 0;
             float nametagY = 0;
@@ -179,8 +166,6 @@ public final class NametagsModule extends Module {
             float textLength = 0;
             float xoffset = 0;
             Coordinate nametagMiddleNew = new Coordinate(0,0);
-
-
 
             if(distancetoent > 5.f) {
                 // draw without 3D scaling
@@ -203,12 +188,12 @@ public final class NametagsModule extends Module {
                 nametagMiddleNew.x = nametagX;
                 nametagMiddleNew.y = nametagY;
 
-                textLength = mc.fontRenderer.getStringWidth(nametagstr);
+                textLength = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(nametagstr);
                 nametagX -= textLength / 2.f;
             }else{
                 // draw with 3D scaling
 
-                float strwidth = mc.fontRenderer.getStringWidth(nametagstr) / 43.f; // real units
+                float strwidth = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(nametagstr) / 43.f; // real units
 
                 float playerYaw = (float)Math.toRadians(mc.player.rotationYaw);
 
@@ -229,43 +214,63 @@ public final class NametagsModule extends Module {
                 Coordinate right = conv3Dto2DSpace(x1.x, nametagvec.y + 0.67334f,x1.y);
                 Coordinate left = conv3Dto2DSpace(y1.x, nametagvec.y + 0.67334f,y1.y);
 
-                if(isOutOfScreen(right) && isOutOfScreen(left))
-                    continue; // Dont render if out of screen, duh
+                if(right == null && left == null){
+                    continue;
+                }
 
-                float scaledwidth = (float)Math.abs(right.x - left.x);
+                float scaledwidth;
 
-                scale = scaledwidth / mc.fontRenderer.getStringWidth(nametagstr);
+                if(right == null){
+                    scaledwidth = (float)(2*Math.abs(nametagMiddle.x - left.x));
+                    right = new Coordinate(left.x - scaledwidth, left.y);
+                }else if(left == null){
+                    scaledwidth = (float)(2*Math.abs(right.x - nametagMiddle.x));
+                    left = new Coordinate(right.x + scaledwidth, right.y);
+                }else{
+                    scaledwidth = (float)Math.abs(right.x - left.x);
+                }
+
+                scale = scaledwidth / Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(nametagstr);
                 scale *= additionalScale.getValue();
 
                 GlStateManager.pushMatrix();
                 GlStateManager.scale(scale, scale, scale);
 
-                textLength = mc.fontRenderer.getStringWidth(nametagstr);
+                textLength = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(nametagstr);
 
                 right.x /= scale;
                 right.y /= scale;
                 left.x /= scale;
                 left.y /= scale;
 
-                if(left.x > right.x){
-                    nametagX = (float)right.x + xoffset;
-                    nametagY = (float)right.y;
-                }else{
-                    nametagX = (float)left.x + xoffset;
-                    nametagY = (float)left.y;
-                }
-
                 nametagMiddleNew.x = Math.abs(right.x + left.x) / 2.f;
                 nametagMiddleNew.y = left.y;
 
-                xoffset = 2.9f;
+                if(left.x > right.x){
+                    nametagY = (float)right.y;
+                }else{
+                    nametagY = (float)left.y;
+                }
 
+                nametagX = (float)nametagMiddleNew.x - textLength / 2.f;
+
+                //xoffset = 2.9f * this.additionalScale.getValue();
             }
 
             // Draw basic nametag
 
-            RenderUtil.drawRect(nametagX - NAMETAG_SAFEAREA + xoffset, nametagY, nametagX + textLength + xoffset + NAMETAG_SAFEAREA, nametagY + mc.fontRenderer.FONT_HEIGHT + 2 * NAMETAG_SAFEAREA, 0x551d1d1d);
-            mc.fontRenderer.drawStringWithShadow(nametagstr, nametagX + xoffset, nametagY + NAMETAG_SAFEAREA, 0xFFDDDDDD);
+            RenderUtil.drawRect(nametagX - NAMETAG_SAFEAREA + xoffset, nametagY, nametagX + textLength + xoffset + NAMETAG_SAFEAREA, nametagY + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 2 * NAMETAG_SAFEAREA, ColorUtil.changeAlpha(0x551D1D1D, (int)(alphaPerc * 85)));
+
+            //Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(nametagstr, nametagX + xoffset, nametagY + NAMETAG_SAFEAREA, (int)(0xFF * alphaPerc) * 0x1000000 + 0xDDDDDD);
+
+            // New rendering
+            float xoff = 0;
+            GlStateManager.enableBlend();
+            for(int iter = 0; iter < toDraw.size(); iter++){
+                Pair<String, Integer> entry = toDraw.get(iter);
+                xoff += Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(entry.first(), nametagX + xoffset + xoff, nametagY + NAMETAG_SAFEAREA, (int)(0xFF * alphaPerc) * 0x1000000 + entry.second());
+            }
+            GlStateManager.disableBlend();
 
             // Draw Armor and stuff
 
@@ -306,12 +311,12 @@ public final class NametagsModule extends Module {
 
             GlStateManager.scale(armorscale.getValue(), armorscale.getValue(), armorscale.getValue());
 
-            nametagMiddleNew.y -= NAMETAG_SAFEAREA * 5 + mc.fontRenderer.FONT_HEIGHT + 16;
+            nametagMiddleNew.y -= NAMETAG_SAFEAREA * 5 + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 16;
 
             float rectWidth = NAMETAG_SAFEAREA*2 + stacks.size() * 16 + NAMETAG_SAFEAREA * Math.max(stacks.size() - 1, 0);
             if(stacks.size() == 0)
                 rectWidth = 0;
-            RenderUtil.drawRect((float)nametagMiddleNew.x - rectWidth/2.f, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + 2 * NAMETAG_SAFEAREA, (float)nametagMiddleNew.x + rectWidth/2.f, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + 16 + 4 * NAMETAG_SAFEAREA, 0x551d1d1d);
+            RenderUtil.drawRect((float)nametagMiddleNew.x - rectWidth/2.f, (float)nametagMiddleNew.y + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 2 * NAMETAG_SAFEAREA, (float)nametagMiddleNew.x + rectWidth/2.f, (float)nametagMiddleNew.y + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 16 + 4 * NAMETAG_SAFEAREA, ColorUtil.changeAlpha(0x551D1D1D, (int)(alphaPerc * 85)));
             // BG drawn.
 
             float currentX = 0;
@@ -324,10 +329,11 @@ public final class NametagsModule extends Module {
                         GlStateManager.enableBlend();
                         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
                         RenderHelper.enableGUIStandardItemLighting();
-                        GlStateManager.translate(nametagMiddleNew.x - rectWidth/2.f + NAMETAG_SAFEAREA + currentX, nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + 3 * NAMETAG_SAFEAREA, 0);
+                        GlStateManager.translate(nametagMiddleNew.x - rectWidth/2.f + NAMETAG_SAFEAREA + currentX, nametagMiddleNew.y + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 3 * NAMETAG_SAFEAREA, 0);
 
-                        mc.getRenderItem().renderItemAndEffectIntoGUI(stack, 0, 0);
-                        mc.getRenderItem().renderItemOverlays(mc.fontRenderer, stack, 0, 0);
+                        Harakiri.INSTANCE.getRenderItemAlpha().alpha = alphaPerc;
+                        Harakiri.INSTANCE.getRenderItemAlpha().renderItemAndEffectIntoGUI(mc.player, stack, 0, 0);
+                        Harakiri.INSTANCE.getRenderItemAlpha().renderItemOverlayIntoGUI(mc.fontRenderer, stack, 0, 0, (String)null);
 
                         RenderHelper.disableStandardItemLighting();
                         GlStateManager.disableBlend();
@@ -352,17 +358,30 @@ public final class NametagsModule extends Module {
 
             if(mainHandItem.getItem() == Items.AIR) itemName = "";
 
-            nametagMiddleNew.y -= mc.fontRenderer.FONT_HEIGHT / 2.f;
-            float nameRectWidth = NAMETAG_SAFEAREA*2 + mc.fontRenderer.getStringWidth(itemName);
+            nametagMiddleNew.y -= Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT / 2.f;
+            float nameRectWidth = NAMETAG_SAFEAREA*2 + Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(itemName);
 
-            //RenderUtil.drawRect((float)nametagMiddleNew.x - nameRectWidth / 2.f, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT + NAMETAG_SAFEAREA, (float)nametagMiddleNew.x + nameRectWidth / 2.f, (float)nametagMiddleNew.y - NAMETAG_SAFEAREA, 0x551d1d1d);
-            mc.fontRenderer.drawStringWithShadow(itemName, (float)nametagMiddleNew.x - nameRectWidth / 2.f + NAMETAG_SAFEAREA, (float)nametagMiddleNew.y + mc.fontRenderer.FONT_HEIGHT, 0xFFDDDDDD);
+            //RenderUtil.drawRect((float)nametagMiddleNew.x - nameRectWidth / 2.f, (float)nametagMiddleNew.y + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + NAMETAG_SAFEAREA, (float)nametagMiddleNew.x + nameRectWidth / 2.f, (float)nametagMiddleNew.y - NAMETAG_SAFEAREA, 0x551d1d1d);
 
+            // New rendering
+            GlStateManager.enableBlend();
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(itemName, (float)nametagMiddleNew.x - nameRectWidth / 2.f + NAMETAG_SAFEAREA, (float)nametagMiddleNew.y + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT, (int)(0xFF * alphaPerc) * 0x1000000 + 0xDDDDDD);
+            GlStateManager.disableBlend();
 
             GlStateManager.scale(1/nameScale, 1/nameScale, 1/nameScale);
             GlStateManager.scale(1/armorscale.getValue(), 1/armorscale.getValue(), 1/armorscale.getValue());
             GlStateManager.scale(1/scale, 1/scale, 1/scale);
             GlStateManager.popMatrix();
+        }
+
+        //Cleanup ent list
+        ArrayList<EntityPlayer> toRemove = new ArrayList<>();
+        for(Map.Entry<EntityPlayer, Float> p : playersList.entrySet()){
+            if(!mc.world.loadedEntityList.contains(p.getKey()))
+                toRemove.add(p.getKey());
+        }
+        for(EntityPlayer e : toRemove){
+            playersList.remove(e);
         }
     }
 
@@ -384,9 +403,13 @@ public final class NametagsModule extends Module {
     private Coordinate conv3Dto2DSpace(double x, double y, double z) {
         final GLUProjection.Projection projection = GLUProjection.getInstance().project(x - Minecraft.getMinecraft().getRenderManager().viewerPosX, y - Minecraft.getMinecraft().getRenderManager().viewerPosY, z - Minecraft.getMinecraft().getRenderManager().viewerPosZ, GLUProjection.ClampMode.NONE, false);
 
-        final Coordinate returns = new Coordinate(projection.getX(), projection.getY());
+        return projection.getType() == GLUProjection.Projection.Type.OUTSIDE || projection.getType() == GLUProjection.Projection.Type.INVERTED ? null : new Coordinate(projection.getX(), projection.getY());
+    }
 
-        return returns;
+    private Coordinate conv3Dto2DSpaceForceOutside(double x, double y, double z) {
+        final GLUProjection.Projection projection = GLUProjection.getInstance().project(x - Minecraft.getMinecraft().getRenderManager().viewerPosX, y - Minecraft.getMinecraft().getRenderManager().viewerPosY, z - Minecraft.getMinecraft().getRenderManager().viewerPosZ, GLUProjection.ClampMode.NONE, false);
+
+        return projection.getType() == GLUProjection.Projection.Type.INVERTED ? null : new Coordinate(projection.getX(), projection.getY());
     }
 
     private int get3DDistance(EntityPlayer e) {
@@ -409,6 +432,14 @@ public final class NametagsModule extends Module {
             Math.toDegrees(Math.atan2(delta.y, delta.x)) - viewAngles.y, 0);
         angles.normalize();
         return angles;
+    }
+
+    private boolean isPlayerCached(EntityPlayer e){
+        for(Map.Entry<EntityPlayer, Float> p : playersList.entrySet()){
+            if(p.getKey() == e)
+                return true;
+        }
+        return false;
     }
 
 }

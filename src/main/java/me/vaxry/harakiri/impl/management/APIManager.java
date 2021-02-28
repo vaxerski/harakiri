@@ -3,25 +3,18 @@ package me.vaxry.harakiri.impl.management;
 
 import com.google.common.collect.Maps;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.extd.MiscExtd;
+import me.vaxry.harakiri.framework.extd.MiscExtd;
 import org.apache.commons.io.IOUtils;
-import org.apache.tools.ant.taskdefs.Sleep;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
-import scala.reflect.internal.Trees;
-import sun.misc.Unsafe;
 
-import javax.swing.*;
 import java.io.*;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-
-import static java.lang.System.exit;
 
 public final class APIManager {
 
@@ -62,9 +55,15 @@ public final class APIManager {
 
         try {
             TimeUnit.SECONDS.sleep(1);
-            
-            if(!mex.readFile().contains("672e1f0a7cc")) {
+
+            String read = mex.readFile();
+
+            if(!read.contains("672e1f0a7cc")) {
                 killThisThing();
+            }else{
+                String[] strings = new String[3];
+                strings = read.split(" ");
+                Harakiri.INSTANCE.setUsername(strings[2].substring(0, Integer.valueOf(strings[1])));
             }
         }catch(Throwable t){
             killThisThing();

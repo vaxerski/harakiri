@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.gui.hud.component.effect;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.util.RenderUtil;
-import me.vaxry.harakiri.api.util.Timer;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
 import me.vaxry.harakiri.impl.module.hidden.PlexusModule;

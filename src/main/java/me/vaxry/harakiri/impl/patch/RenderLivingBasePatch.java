@@ -1,12 +1,12 @@
 package me.vaxry.harakiri.impl.patch;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.render.EventRenderLivingEntity;
-import me.vaxry.harakiri.api.event.render.EventRenderName;
-import me.vaxry.harakiri.api.patch.ClassPatch;
-import me.vaxry.harakiri.api.patch.MethodPatch;
-import me.vaxry.harakiri.api.util.ASMUtil;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.render.EventRenderLivingEntity;
+import me.vaxry.harakiri.framework.event.render.EventRenderName;
+import me.vaxry.harakiri.framework.patch.ClassPatch;
+import me.vaxry.harakiri.framework.patch.MethodPatch;
+import me.vaxry.harakiri.framework.util.ASMUtil;
 import me.vaxry.harakiri.impl.management.PatchManager;
 import net.minecraft.entity.EntityLivingBase;
 import org.objectweb.asm.Type;
@@ -86,9 +86,9 @@ public final class RenderLivingBasePatch extends ClassPatch {
         //add ALOAD to pass the entity into our hook function
         insnList.add(new VarInsnNode(ALOAD, 1));
         //PRE
-        insnList.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/api/event/EventStageable$EventStage", "PRE", "Lme/vaxry/harakiri/api/event/EventStageable$EventStage;"));
+        insnList.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/framework/event/EventStageable$EventStage", "PRE", "Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;"));
         //call our hook function
-        insnList.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "doRenderHook", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/entity/EntityLivingBase;Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z" : "(Lvp;Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z", false));
+        insnList.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "doRenderHook", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/entity/EntityLivingBase;Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;)Z" : "(Lvp;Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;)Z", false));
         //add a label to jump to
         final LabelNode jmp = new LabelNode();
         //add if equals and pass the label
@@ -105,9 +105,9 @@ public final class RenderLivingBasePatch extends ClassPatch {
         //add ALOAD to pass the entity into our hook function
         postInsn.add(new VarInsnNode(ALOAD, 1));
         //POST
-        postInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/api/event/EventStageable$EventStage", "POST", "Lme/vaxry/harakiri/api/event/EventStageable$EventStage;"));
+        postInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/framework/event/EventStageable$EventStage", "POST", "Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;"));
         //call our hook function
-        postInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "doRenderHook", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/entity/EntityLivingBase;Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z" : "(Lvp;Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)Z", false));
+        postInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "doRenderHook", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/entity/EntityLivingBase;Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;)Z" : "(Lvp;Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;)Z", false));
         //insert the list of instructions at the bottom of the function
         methodNode.instructions.insertBefore(ASMUtil.bottom(methodNode), postInsn);
     }

@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.module.player;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
@@ -20,7 +20,7 @@ public final class RotationLock extends Module {
     private float pitch;
 
     public RotationLock() {
-        super("RotationLock", new String[]{"RotLock", "Rotation"}, "Locks you rotation for precision", "NONE", -1, ModuleType.PLAYER);
+        super("RotationLock", new String[]{"RotLock", "Rotation"}, "Locks you rotation.", "NONE", -1, ModuleType.PLAYER);
     }
 
     @Override

@@ -1,16 +1,17 @@
 package me.vaxry.harakiri.impl.module.world;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.player.EventRightClickBlock;
-import me.vaxry.harakiri.api.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.api.event.render.EventRender3D;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.task.rotation.RotationTask;
-import me.vaxry.harakiri.api.util.BlockUtil;
-import me.vaxry.harakiri.api.util.EntityUtil;
-import me.vaxry.harakiri.api.util.MathUtil;
-import me.vaxry.harakiri.api.util.RenderUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.player.EventRightClickBlock;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.task.rotation.RotationTask;
+import me.vaxry.harakiri.framework.util.BlockUtil;
+import me.vaxry.harakiri.framework.util.EntityUtil;
+import me.vaxry.harakiri.framework.util.MathUtil;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -46,9 +47,9 @@ public final class NukerModule extends Module {
     }
 
     public final Value<Float> distance = new Value<Float>("Distance", new String[]{"Dist", "D"}, "Maximum distance in blocks the nuker will reach.", 4.5f, 0.0f, 5.0f, 0.1f);
-    public final Value<Boolean> fixed = new Value<Boolean>("FixedDistance", new String[]{"Fixed", "fdist", "F"}, "Use vertical and horizontal distances in blocks instead of distances relative to the camera.", false);
-    public final Value<Float> vDistance = new Value<Float>("VerticalDistance", new String[]{"Vertical", "vdist", "VD"}, "Maximum vertical distance in blocks the nuker will reach.", 4.5f, 0.0f, 5.0f, 0.1f);
-    public final Value<Float> hDistance = new Value<Float>("HorizontalDistance", new String[]{"Horizontal", "hist", "HD"}, "Maximum horizontal distance in blocks the nuker will reach.", 3f, 0.0f, 5.0f, 0.1f);
+    public final Value<Boolean> fixed = new Value<Boolean>("FixedDist", new String[]{"Fixed", "fdist", "F"}, "Use vertical and horizontal distances in blocks instead of distances relative to the camera.", false);
+    public final Value<Float> vDistance = new Value<Float>("Vertical", new String[]{"Vertical", "vdist", "VD"}, "Maximum vertical distance in blocks the nuker will reach.", 4.5f, 0.0f, 5.0f, 0.1f);
+    public final Value<Float> hDistance = new Value<Float>("Horizontal", new String[]{"Horizontal", "hist", "HD"}, "Maximum horizontal distance in blocks the nuker will reach.", 3f, 0.0f, 5.0f, 0.1f);
     public final Value<Boolean> flatten = new Value<Boolean>("Flatten", new String[]{"Flatten", "flat", "flt"}, "Flatten the region", false);
     public final Value<Boolean> drawMining = new Value<Boolean>("DrawMining", new String[]{"drawmining", "dm", "drawm"}, "Draw mined blocks' outlines", false);
 
@@ -82,7 +83,7 @@ public final class NukerModule extends Module {
     @Listener
     public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
         final Minecraft mc = Minecraft.getMinecraft();
-        if (mc.player == null || mc.world == null)
+        if (mc.player == null || mc.world == null || Harakiri.INSTANCE.getModuleManager().find(FreeCamModule.class).isEnabled())
             return;
 
         switch (event.getStage()) {
@@ -109,43 +110,42 @@ public final class NukerModule extends Module {
                 break;
             case POST:
                 if (this.mode.getValue().equals(Mode.CREATIVE)) {
-                    if (mc.player.capabilities.isCreativeMode) {
-                        /* the amazing creative 'nuker' straight from the latch hacked client */
-                        for (double y = Math.round(mc.player.posY - 1) + this.vDistance.getValue(); y > Math.round(mc.player.posY - 1); y -= 1.0D) {
-                            for (double x = mc.player.posX - this.hDistance.getValue(); x < mc.player.posX + this.hDistance.getValue(); x += 1.0D) {
-                                for (double z = mc.player.posZ - this.hDistance.getValue(); z < mc.player.posZ + this.hDistance.getValue(); z += 1.0D) {
-                                    final BlockPos blockPos = new BlockPos(x, y, z);
-                                    final Block block = BlockUtil.getBlock(blockPos);
-                                    if (block == Blocks.AIR || !mc.world.getBlockState(blockPos).isFullBlock())
+
+                    /* the amazing creative 'nuker' straight from the latch hacked client */
+                    for (double y = Math.round(mc.player.posY - 1) + this.vDistance.getValue(); y > Math.round(mc.player.posY - 1); y -= 1.0D) {
+                        for (double x = mc.player.posX - this.hDistance.getValue(); x < mc.player.posX + this.hDistance.getValue(); x += 1.0D) {
+                            for (double z = mc.player.posZ - this.hDistance.getValue(); z < mc.player.posZ + this.hDistance.getValue(); z += 1.0D) {
+                                final BlockPos blockPos = new BlockPos(x, y, z);
+                                final Block block = BlockUtil.getBlock(blockPos);
+                                if (block == Blocks.AIR || !mc.world.getBlockState(blockPos).isFullBlock() || block == Blocks.BEDROCK)
+                                    continue;
+
+                                if(this.flatten.getValue() && blockPos.getY() < mc.player.posY)
+                                    continue;
+
+                                final Vec3d eyesPos = new Vec3d(mc.player.posX, mc.player.posY + mc.player.getEyeHeight(), mc.player.posZ);
+                                final Vec3d posVec = new Vec3d(blockPos).add(0.5f, 0.5f, 0.5f);
+                                double distanceSqPosVec = eyesPos.squareDistanceTo(posVec);
+
+                                for (EnumFacing side : EnumFacing.values()) {
+                                    final Vec3d hitVec = posVec.add(new Vec3d(side.getDirectionVec()).scale(0.5f));
+                                    double distanceSqHitVec = eyesPos.squareDistanceTo(hitVec);
+
+                                    // check if hitVec is within range (6 blocks)
+                                    if (distanceSqHitVec > 36)
                                         continue;
 
-                                    if(this.flatten.getValue() && blockPos.getY() < mc.player.posY)
-                                        continue;
+                                    // check if side is facing towards player
+                                    //if (distanceSqHitVec >= distanceSqPosVec)
+                                        //continue;
 
-                                    final Vec3d eyesPos = new Vec3d(mc.player.posX, mc.player.posY + mc.player.getEyeHeight(), mc.player.posZ);
-                                    final Vec3d posVec = new Vec3d(blockPos).add(0.5f, 0.5f, 0.5f);
-                                    double distanceSqPosVec = eyesPos.squareDistanceTo(posVec);
+                                    // face block
+                                    final float[] rotations = EntityUtil.getRotations(hitVec.x, hitVec.y, hitVec.z);
+                                    Harakiri.INSTANCE.getRotationManager().setPlayerRotations(rotations[0], rotations[1]);
 
-                                    for (EnumFacing side : EnumFacing.values()) {
-                                        final Vec3d hitVec = posVec.add(new Vec3d(side.getDirectionVec()).scale(0.5f));
-                                        double distanceSqHitVec = eyesPos.squareDistanceTo(hitVec);
-
-                                        // check if hitVec is within range (6 blocks)
-                                        if (distanceSqHitVec > 36)
-                                            continue;
-
-                                        // check if side is facing towards player
-                                        if (distanceSqHitVec >= distanceSqPosVec)
-                                            continue;
-
-                                        // face block
-                                        final float[] rotations = EntityUtil.getRotations(hitVec.x, hitVec.y, hitVec.z);
-                                        Harakiri.INSTANCE.getRotationManager().setPlayerRotations(rotations[0], rotations[1]);
-
-                                        // damage block
-                                        if (mc.playerController.onPlayerDamageBlock(blockPos, side)) {
-                                            mc.player.swingArm(EnumHand.MAIN_HAND);
-                                        }
+                                    // damage block
+                                    if (mc.playerController.onPlayerDamageBlock(blockPos, side)) {
+                                        mc.player.swingArm(EnumHand.MAIN_HAND);
                                     }
                                 }
                             }
@@ -172,7 +172,7 @@ public final class NukerModule extends Module {
     @Listener
     public void render3D(EventRender3D event) {
 
-        if (!this.drawMining.getValue()) return;
+        if (!this.drawMining.getValue() || Harakiri.INSTANCE.getModuleManager().find(FreeCamModule.class).isEnabled()) return;
 
         switch (stage) {
             case 0:
@@ -269,7 +269,7 @@ public final class NukerModule extends Module {
                         for (double z = mc.player.posZ - this.hDistance.getValue(); z < mc.player.posZ + this.hDistance.getValue(); z += 1.0D) {
                             final BlockPos blockPos = new BlockPos(x, y, z);
                             final Block block = BlockUtil.getBlock(blockPos);
-                            if (block == Blocks.AIR || !mc.world.getBlockState(blockPos).isFullBlock())
+                            if (block == Blocks.AIR || !mc.world.getBlockState(blockPos).isFullBlock() || block == Blocks.BEDROCK)
                                 continue;
 
                             if (this.flatten.getValue() && blockPos.getY() < mc.player.posY)

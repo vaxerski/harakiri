@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import me.vaxry.harakiri.api.event.render.EventHurtCamEffect;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.render.EventHurtCamEffect;
+import me.vaxry.harakiri.framework.module.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 /**
@@ -11,7 +11,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class NoHurtCamModule extends Module {
 
     public NoHurtCamModule() {
-        super("NoHurtCam", new String[]{"AntiHurtCam"}, "Removes hurt camera effects", "NONE", -1, ModuleType.RENDER);
+        super("NoHurtCam", new String[]{"AntiHurtCam"}, "Removes annoying hurt camera effects.", "NONE", -1, ModuleType.RENDER);
     }
 
     @Listener

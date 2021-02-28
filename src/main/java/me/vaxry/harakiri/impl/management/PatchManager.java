@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.management;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.patch.ClassPatch;
-import me.vaxry.harakiri.api.util.ReflectionUtil;
+import me.vaxry.harakiri.framework.patch.ClassPatch;
+import me.vaxry.harakiri.framework.util.ReflectionUtil;
 import me.vaxry.harakiri.impl.patch.*;
 
 import java.io.File;
@@ -21,6 +21,9 @@ public final class PatchManager {
     private Environment env;
 
     public PatchManager(final boolean devEnv) {
+
+        if(true)
+            return;
         //set our environment for mappings
         this.setEnv(devEnv ? Environment.IDE : Environment.RELEASE);
 
@@ -63,7 +66,7 @@ public final class PatchManager {
 
         //load custom external patches
         //TODO this needs more testing
-        loadExternalPatches();
+        //loadExternalPatches();
     }
 
     /**
@@ -74,7 +77,7 @@ public final class PatchManager {
     void loadExternalPatches() {
         try {
             //create a directory at "harakiri/Patches"
-            final File dir = new File("harakiri/Patches");
+            final File dir = new File("harakiri/patches");
 
             //if it doesnt exist create it
             if (!dir.exists()) {

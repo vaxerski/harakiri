@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.ui;
 
-import me.vaxry.harakiri.api.event.render.EventRender2D;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public class WatermarkModule extends Module {

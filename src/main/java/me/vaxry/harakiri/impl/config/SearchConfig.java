@@ -4,8 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.config.Configurable;
-import me.vaxry.harakiri.api.util.FileUtil;
+import me.vaxry.harakiri.framework.config.Configurable;
+import me.vaxry.harakiri.framework.util.FileUtil;
 import me.vaxry.harakiri.impl.module.render.SearchModule;
 
 import java.io.File;
@@ -19,7 +19,7 @@ public final class SearchConfig extends Configurable {
     private final SearchModule searchModule;
 
     public SearchConfig(File dir) {
-        super(FileUtil.createJsonFile(dir, "SearchIds"));
+        super(FileUtil.createJsonFile(dir, "search"));
         this.searchModule = (SearchModule) Harakiri.INSTANCE.getModuleManager().find("Search");
     }
 
@@ -32,7 +32,7 @@ public final class SearchConfig extends Configurable {
 
         JsonArray searchIdsJsonArray = null;
 
-        final JsonElement blockIds = this.getJsonObject().get("SearchBlockIds");
+        final JsonElement blockIds = this.getJsonObject().get("SearchID");
         if (blockIds != null)
             searchIdsJsonArray = blockIds.getAsJsonArray();
 
@@ -54,7 +54,7 @@ public final class SearchConfig extends Configurable {
         for (Integer i : this.searchModule.getIds())
             searchIdsJsonArray.add(i);
 
-        save.add("SearchBlockIds", searchIdsJsonArray);
+        save.add("SearchID", searchIdsJsonArray);
 
         this.saveJsonObjectToFile(save);
     }

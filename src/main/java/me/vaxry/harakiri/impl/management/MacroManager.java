@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.management;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.macro.Macro;
+import me.vaxry.harakiri.framework.macro.Macro;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +15,9 @@ public final class MacroManager {
     private List<Macro> macroList = new ArrayList<>();
 
     public MacroManager() {
-        if (Harakiri.INSTANCE.getConfigManager().isFirstLaunch()) {
-            this.addMacro("HudEditorToggle", "RSHIFT", ".toggle hudeditor");
-        }
+        //if (Harakiri.INSTANCE.getConfigManager().isFirstLaunch()) {
+        //    this.addMacro("HudEditorToggle", "RSHIFT", ".toggle hudeditor");
+        //}
     }
 
     public Macro find(String name) {

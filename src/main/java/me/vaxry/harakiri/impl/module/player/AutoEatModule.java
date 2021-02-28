@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.module.player;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
@@ -24,7 +24,7 @@ public final class AutoEatModule extends Module {
     private int foodSlot = -1;
 
     public AutoEatModule() {
-        super("AutoEat", new String[]{"Eat", "AutoFeed"}, "Automatically swaps & eats food when hunger is below the set threshold.", "NONE", -1, ModuleType.PLAYER);
+        super("AutoEat", new String[]{"Eat", "AutoFeed"}, "Automatically eats food when hunger is below the set threshold.", "NONE", -1, ModuleType.PLAYER);
     }
 
     @Override

@@ -1,17 +1,17 @@
 package me.vaxry.harakiri.impl.patch;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.minecraft.EventDisplayGui;
-import me.vaxry.harakiri.api.event.minecraft.EventKeyPress;
-import me.vaxry.harakiri.api.event.minecraft.EventRunTick;
-import me.vaxry.harakiri.api.event.minecraft.EventUpdateFramebufferSize;
-import me.vaxry.harakiri.api.event.mouse.EventMouseLeftClick;
-import me.vaxry.harakiri.api.event.mouse.EventMouseRightClick;
-import me.vaxry.harakiri.api.event.world.EventLoadWorld;
-import me.vaxry.harakiri.api.patch.ClassPatch;
-import me.vaxry.harakiri.api.patch.MethodPatch;
-import me.vaxry.harakiri.api.util.ASMUtil;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
+import me.vaxry.harakiri.framework.event.minecraft.EventKeyPress;
+import me.vaxry.harakiri.framework.event.minecraft.EventRunTick;
+import me.vaxry.harakiri.framework.event.minecraft.EventUpdateFramebufferSize;
+import me.vaxry.harakiri.framework.event.mouse.EventMouseLeftClick;
+import me.vaxry.harakiri.framework.event.mouse.EventMouseRightClick;
+import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
+import me.vaxry.harakiri.framework.patch.ClassPatch;
+import me.vaxry.harakiri.framework.patch.MethodPatch;
+import me.vaxry.harakiri.framework.util.ASMUtil;
 import me.vaxry.harakiri.impl.management.PatchManager;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -70,18 +70,18 @@ public final class MinecraftPatch extends ClassPatch {
         //create a list of instructions and add the needed instructions to call our hook function
         final InsnList preInsn = new InsnList();
         //PRE
-        preInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/api/event/EventStageable$EventStage", "PRE", "Lme/vaxry/harakiri/api/event/EventStageable$EventStage;"));
+        preInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/framework/event/EventStageable$EventStage", "PRE", "Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;"));
         //MinecraftPatch.runTickHook();
-        preInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "runTickHook", "(Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)V", false));
+        preInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "runTickHook", "(Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;)V", false));
         //insert the list of instructions at the top of the function
         methodNode.instructions.insert(preInsn);
 
         //do the same thing as above but insert the list at the bottom of the method
         final InsnList postInsn = new InsnList();
         //POST
-        postInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/api/event/EventStageable$EventStage", "POST", "Lme/vaxry/harakiri/api/event/EventStageable$EventStage;"));
+        postInsn.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/framework/event/EventStageable$EventStage", "POST", "Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;"));
         //MinecraftPatch.runTickHook();
-        postInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "runTickHook", "(Lme/vaxry/harakiri/api/event/EventStageable$EventStage;)V", false));
+        postInsn.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(this.getClass()), "runTickHook", "(Lme/vaxry/harakiri/framework/event/EventStageable$EventStage;)V", false));
         //insert the list of instructions at the bottom of the function
         methodNode.instructions.insertBefore(ASMUtil.bottom(methodNode), postInsn);
     }

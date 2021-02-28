@@ -1,16 +1,15 @@
 package me.vaxry.harakiri.impl.module.world;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.gui.EventRenderHelmet;
-import me.vaxry.harakiri.api.event.network.EventSendPacket;
-import me.vaxry.harakiri.api.event.player.*;
-import me.vaxry.harakiri.api.event.player.*;
-import me.vaxry.harakiri.api.event.render.EventRenderOverlay;
-import me.vaxry.harakiri.api.event.world.EventAddCollisionBox;
-import me.vaxry.harakiri.api.event.world.EventSetOpaqueCube;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.MathUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.gui.EventRenderHelmet;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
+import me.vaxry.harakiri.framework.event.player.*;
+import me.vaxry.harakiri.framework.event.render.EventRenderOverlay;
+import me.vaxry.harakiri.framework.event.world.EventAddCollisionBox;
+import me.vaxry.harakiri.framework.event.world.EventSetOpaqueCube;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.MathUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.network.play.client.CPacketPlayer;
@@ -32,7 +31,7 @@ public final class PhaseModule extends Module {
     public final Value<Boolean> floor = new Value<Boolean>("Floor", new String[]{"Fl"}, "Prevents falling out of the world if enabled.", true);
 
     public PhaseModule() {
-        super("Phase", new String[]{"NoClip"}, "Allows you to glitch through blocks", "NONE", -1, ModuleType.WORLD);
+        super("Phase", new String[]{"NoClip"}, "Allows you to go through blocks.", "NONE", -1, ModuleType.WORLD);
     }
 
     @Override

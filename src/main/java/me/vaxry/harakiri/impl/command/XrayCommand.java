@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.command;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.command.Command;
-import me.vaxry.harakiri.api.util.StringUtil;
+import me.vaxry.harakiri.framework.command.Command;
+import me.vaxry.harakiri.framework.util.StringUtil;
 import me.vaxry.harakiri.impl.config.XrayConfig;
 import me.vaxry.harakiri.impl.module.render.XrayModule;
 import net.minecraft.block.Block;
@@ -23,7 +23,7 @@ public final class XrayCommand extends Command {
     private final String[] clearAlias = new String[]{"Clear", "C"};
 
     public XrayCommand() {
-        super("Xray", new String[]{"JadeVision", "Jade"}, "Allows you to change what blocks are visible on xray",
+        super("Xray", new String[]{"Xray", "Xr"}, "Allows you to change what blocks are visible on xray",
                 "Xray Add <Block_Name>\n" +
                         "Xray Add <ID>\n" +
                         "Xray Remove <Block_Name>\n" +

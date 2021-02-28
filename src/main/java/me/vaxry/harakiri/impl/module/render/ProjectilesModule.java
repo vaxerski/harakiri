@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import me.vaxry.harakiri.api.event.render.EventRender3D;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.MathUtil;
-import me.vaxry.harakiri.api.util.RenderUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.MathUtil;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -50,7 +50,7 @@ public final class ProjectilesModule extends Module {
     public final Value<Integer> alpha = new Value<Integer>("Path Alpha", new String[]{"pathalpha", "opacity", "a", "o", "pa", "po"}, "Alpha value for the predicted path.", 255, 1, 255, 1);
 
     public ProjectilesModule() {
-        super("Projectiles", new String[]{"Proj"}, "Projects the possible path of an entity that was fired.", "NONE", -1, ModuleType.RENDER);
+        super("Projectiles", new String[]{"Proj"}, "Projects the path of an entity that was fired.", "NONE", -1, ModuleType.RENDER);
     }
 
     @Listener

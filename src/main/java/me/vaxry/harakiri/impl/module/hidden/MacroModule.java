@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.module.hidden;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.minecraft.EventKeyPress;
-import me.vaxry.harakiri.api.macro.Macro;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.minecraft.EventKeyPress;
+import me.vaxry.harakiri.framework.macro.Macro;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
@@ -17,7 +17,8 @@ public final class MacroModule extends Module {
     public MacroModule() {
         super("Macros", new String[]{"mac"}, "Allows you to bind macros to keys", "NONE", -1, ModuleType.HIDDEN);
         this.setHidden(true);
-        this.toggle();
+        this.setEnabled(true);
+        this.onEnable();
     }
 
     @Listener

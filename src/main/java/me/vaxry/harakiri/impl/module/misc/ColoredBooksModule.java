@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.misc;
 
-import me.vaxry.harakiri.api.event.gui.EventBookPage;
-import me.vaxry.harakiri.api.event.gui.EventBookTitle;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.gui.EventBookPage;
+import me.vaxry.harakiri.framework.event.gui.EventBookTitle;
+import me.vaxry.harakiri.framework.module.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 /**
@@ -12,7 +12,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class ColoredBooksModule extends Module {
 
     public ColoredBooksModule() {
-        super("ColoredBooks", new String[]{"BookColor", "BookColors", "cbooks", "cbook"}, "Allows you to use the & character to color book text and titles", "NONE", -1, ModuleType.MISC);
+        super("BookColor", new String[]{"BookColor", "BookColors", "cbooks", "cbook"}, "Allows you to use the & character in books.", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener

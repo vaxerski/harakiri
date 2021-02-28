@@ -2,33 +2,45 @@ package me.vaxry.harakiri.impl.module.render;
 
 import akka.japi.Pair;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.render.EventRender2D;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.GLUProjection;
-import me.vaxry.harakiri.api.util.RenderUtil;
-import me.vaxry.harakiri.api.util.Timer;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.event.render.EventRenderEntity;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.ColorUtil;
+import me.vaxry.harakiri.framework.util.GLUProjection;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.util.Timer;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.tileentity.*;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.locationtech.jts.geom.*;
 import org.lwjgl.util.vector.Vector3f;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
-/**
- * Author Seth
- * 5/17/2019 @ 8:45 PM.
- */
 public final class StorageESPModule extends Module {
 
+    enum MODE {
+        CPU,
+        SHADER
+    }
+
+    //public final Value<MODE> modeValue = new Value<MODE>("Mode", new String[]{"Mode"}, "Changes the render mode. Shader is incompatible with rainbow, but might run faster with more storage.", MODE.CPU);
     public final Value<Float> thickness = new Value<Float>("Thickness", new String[]{"Thickness", "Thick", "t"}, "Thickness of the line", 1.f, 0.1f, 2.f, 0.1f);
     public final Value<Boolean> rainbow = new Value<Boolean>("Rainbow", new String[]{"Rainbow", "Rain", "r"}, "Rainbow mode for the ESP", false);
     public final Value<Integer> rainspeed = new Value<Integer>("RainbowSpeed", new String[]{"RainbowSpeed", "RainSpeed", "rs"}, "Rainbow mode speed", 5, 1, 20, 1);
@@ -37,6 +49,8 @@ public final class StorageESPModule extends Module {
     private final Timer timer = new Timer();
 
     private float hue = 0;
+
+    private HashMap<Coordinate, Coordinate> CoordTracker3D = new HashMap<>();
 
     public StorageESPModule() {
         super("StorageESP", new String[]{"StorageESP", "ChestFinder", "ChestESP"}, "Highlights different types of storage entities.", "NONE", -1, ModuleType.RENDER);
@@ -54,16 +68,28 @@ public final class StorageESPModule extends Module {
     @Listener
     public void render2D(EventRender2D event) {
 
+        //if(this.modeValue.getValue() != MODE.CPU)
+            //return;
+
+        // Note: Shader mode is processed in ESPModule.
+
+        this.CoordTracker3D.clear();
+
         // Rainbow stuf
         this.hue += getJitter();
         if(hue >= 1.f)
             hue = 0.f;
+
+        final boolean bobbing = Minecraft.getMinecraft().gameSettings.viewBobbing;
 
         try {
             // union array for storing the shit
             ArrayList<Pair<Geometry, Integer>> tileEntitiesPoly = new ArrayList<>();
 
             final Minecraft mc = Minecraft.getMinecraft();
+
+            mc.gameSettings.viewBobbing = false;
+
             for (TileEntity te : mc.world.loadedTileEntityList) {
                 if (te != null) {
                     if (this.isTileStorage(te)) {
@@ -100,6 +126,12 @@ public final class StorageESPModule extends Module {
                             // 7   6
                             // 4   5
 
+                            float distance = get3DDistance(bb.minX + mc.getRenderManager().viewerPosX + 0.5f, bb.minY + mc.getRenderManager().viewerPosY + 0.5f, bb.minZ + mc.getRenderManager().viewerPosZ + 0.5f);
+                            float alpha = 255;
+                            if(distance < 5){
+                                alpha = Math.min(Math.max(distance - 2.5f, 0) * (0xFF / 2.5f),0xFF);
+                            }
+
                             List<Coordinate> ProjectedPs = new ArrayList<>();
 
                             ProjectedPs.add(conv3Dto2DSpace(bb.minX, bb.maxY, bb.maxZ));
@@ -112,10 +144,19 @@ public final class StorageESPModule extends Module {
                             ProjectedPs.add(conv3Dto2DSpace(bb.maxX, bb.maxY, bb.minZ));
                             ProjectedPs.add(conv3Dto2DSpace(bb.minX, bb.maxY, bb.minZ));
 
+                            /*CoordTracker3D.put(ProjectedPs.get(0), new Coordinate(bb.minX, bb.maxY, bb.maxZ));
+                            CoordTracker3D.put(ProjectedPs.get(1), new Coordinate(bb.maxX, bb.maxY, bb.maxZ));
+                            CoordTracker3D.put(ProjectedPs.get(2), new Coordinate(bb.maxX, bb.minY, bb.maxZ));
+                            CoordTracker3D.put(ProjectedPs.get(3), new Coordinate(bb.minX, bb.minY, bb.maxZ));
+                            CoordTracker3D.put(ProjectedPs.get(4), new Coordinate(bb.minX, bb.minY, bb.minZ));
+                            CoordTracker3D.put(ProjectedPs.get(5), new Coordinate(bb.maxX, bb.minY, bb.minZ));
+                            CoordTracker3D.put(ProjectedPs.get(6), new Coordinate(bb.maxX, bb.maxY, bb.minZ));
+                            CoordTracker3D.put(ProjectedPs.get(7), new Coordinate(bb.minX, bb.maxY, bb.minZ));*/
+
                             Polygon[] polys = new Polygon[6];
                             boolean[] is = new boolean[6];
 
-                            if (bb.maxX < 0) {
+                            if (bb.maxX < 0 || Math.abs(bb.maxX) < 5) {
                                 polys[0] = new GeometryFactory().createPolygon(new Coordinate[]{
                                         new Coordinate(ProjectedPs.get(5).getX(), ProjectedPs.get(5).getY()),
                                         new Coordinate(ProjectedPs.get(2).getX(), ProjectedPs.get(2).getY()),
@@ -125,7 +166,7 @@ public final class StorageESPModule extends Module {
                                 });
                                 is[0] = true;
                             }
-                            if (bb.maxY < mc.player.eyeHeight) {
+                            if (bb.maxY < mc.player.eyeHeight || Math.abs(bb.maxY) < 5) {
                                 polys[1] = new GeometryFactory().createPolygon(new Coordinate[]{
                                         new Coordinate(ProjectedPs.get(6).getX(), ProjectedPs.get(6).getY()),
                                         new Coordinate(ProjectedPs.get(1).getX(), ProjectedPs.get(1).getY()),
@@ -135,7 +176,7 @@ public final class StorageESPModule extends Module {
                                 });
                                 is[1] = true;
                             }
-                            if (bb.minX > 0) {
+                            if (bb.minX > 0 || Math.abs(bb.minX) < 5) {
                                 polys[2] = new GeometryFactory().createPolygon(new Coordinate[]{
                                         new Coordinate(ProjectedPs.get(7).getX(), ProjectedPs.get(7).getY()),
                                         new Coordinate(ProjectedPs.get(0).getX(), ProjectedPs.get(0).getY()),
@@ -145,7 +186,7 @@ public final class StorageESPModule extends Module {
                                 });
                                 is[2] = true;
                             }
-                            if (bb.minY > mc.player.eyeHeight) {
+                            if (bb.minY > mc.player.eyeHeight || Math.abs(bb.minY) < 5) {
                                 polys[3] = new GeometryFactory().createPolygon(new Coordinate[]{
                                         new Coordinate(ProjectedPs.get(5).getX(), ProjectedPs.get(5).getY()),
                                         new Coordinate(ProjectedPs.get(2).getX(), ProjectedPs.get(2).getY()),
@@ -155,7 +196,7 @@ public final class StorageESPModule extends Module {
                                 });
                                 is[3] = true;
                             }
-                            if (bb.minZ > 0) {
+                            if (bb.minZ > 0 || Math.abs(bb.minZ) < 5) {
                                 polys[4] = new GeometryFactory().createPolygon(new Coordinate[]{
                                         new Coordinate(ProjectedPs.get(5).getX(), ProjectedPs.get(5).getY()),
                                         new Coordinate(ProjectedPs.get(6).getX(), ProjectedPs.get(6).getY()),
@@ -165,7 +206,7 @@ public final class StorageESPModule extends Module {
                                 });
                                 is[4] = true;
                             }
-                            if (bb.maxZ < 0) {
+                            if (bb.maxZ < 0 || Math.abs(bb.maxZ) < 5) {
                                 polys[5] = new GeometryFactory().createPolygon(new Coordinate[]{
                                         new Coordinate(ProjectedPs.get(2).getX(), ProjectedPs.get(2).getY()),
                                         new Coordinate(ProjectedPs.get(1).getX(), ProjectedPs.get(1).getY()),
@@ -184,13 +225,12 @@ public final class StorageESPModule extends Module {
                                     if (is[i])
                                         union = union.union(polys[i]);
                                 }catch(Throwable t){
-                                    // Fucking ignore it Xd
-                                    // sometimes happens
+                                    //happens on incorrect clipping. Recode this to use 3d in the future.
                                 }
                             }
 
                             // push it
-                            tileEntitiesPoly.add(new Pair<>(union, rainbow.getValue() ? 0xFFFFFFFF : getColor(te)));
+                            tileEntitiesPoly.add(new Pair<>(union, rainbow.getValue() ? (int)(alpha * 0x1000000) + 0xFFFFFF : ColorUtil.changeAlpha(getColor(te), (int)alpha)));
                         }
                     }
                 }
@@ -217,7 +257,7 @@ public final class StorageESPModule extends Module {
                                 anyIntersects = true;
                                 break;
                             }catch (Throwable e){
-                                // ignore as well lol Xd
+                                // ignore
                             }
                         }
                     }
@@ -227,19 +267,51 @@ public final class StorageESPModule extends Module {
                     break;
             }
 
+            /*
+            // Resolve 2D to 3D :))
+            final ArrayList<Pair<ArrayList<Coordinate>, Integer>> Fixed3DList = new ArrayList<>();
+
+            for(int i = 0; i < tileEntitiesPoly.size(); ++i) {
+                ArrayList<Coordinate> newArrList = new ArrayList<>();
+                int color = 0;
+                for(Pair<Geometry, Integer> p : tileEntitiesPoly){
+                    color = p.second();
+                    for(int j = 0; j < p.first().getNumPoints(); ++j){
+                        Coordinate c = p.first().getCoordinates()[j];
+                        newArrList.add(CoordTracker3D.get(c));
+                    }
+                }
+                Fixed3DList.add(new Pair<>(newArrList, color));
+            }
+
+            for(int i = 0; i < Fixed3DList.size(); ++i) {
+                RenderUtil.begin3D();
+                mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+                RenderUtil.drawOutlinePolygon3D(Fixed3DList.get(i).first(), thickness.getValue(), Fixed3DList.get(i).second(), this.rainbow.getValue(), this.hue);
+                mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+                RenderUtil.end3D();
+            }*/
+
+            //
+            // Leave for another day, throws "Already Building!" for no apparent reason.
+            //   :-/
+
             for(int i = 0; i < tileEntitiesPoly.size(); ++i) {
                 RenderUtil.drawOutlinePolygon(tileEntitiesPoly.get(i).first(), thickness.getValue(), tileEntitiesPoly.get(i).second(), this.rainbow.getValue(), this.hue);
             }
 
+            mc.gameSettings.viewBobbing = bobbing;
 
         }catch(Throwable e){
             StringWriter errors = new StringWriter();
             e.printStackTrace(new PrintWriter(errors));
             Harakiri.INSTANCE.logChat("StorageESP Threw an Error: " + e.getMessage());
         }
+
+        Minecraft.getMinecraft().gameSettings.viewBobbing = bobbing;
     }
 
-    private boolean isTileStorage(TileEntity te) {
+    public boolean isTileStorage(TileEntity te) {
         if (te instanceof TileEntityChest) {
             return true;
         }
@@ -356,11 +428,45 @@ public final class StorageESPModule extends Module {
         return 0xFFFFFFFF;
     }
 
+    public int getColorShader(TileEntity te) {
+        if (te instanceof TileEntityChest) {
+            return 0;
+        }
+        if (te instanceof TileEntityDropper) {
+            return 2;
+        }
+        if (te instanceof TileEntityDispenser) {
+            return 2;
+        }
+        if (te instanceof TileEntityHopper) {
+            return 2;
+        }
+        if (te instanceof TileEntityFurnace) {
+            return 2;
+        }
+        if (te instanceof TileEntityBrewingStand) {
+            return 1;
+        }
+        if (te instanceof TileEntityEnderChest) {
+            return 1;
+        }
+        if (te instanceof TileEntityShulkerBox) {
+            //final TileEntityShulkerBox shulkerBox = (TileEntityShulkerBox) te;
+            //return (255 << 24) | shulkerBox.getColor().getColorValue();
+            return 1;
+        }
+        return 0;
+    }
+
     private Coordinate conv3Dto2DSpace(double x, double y, double z) {
-        final GLUProjection.Projection projection = GLUProjection.getInstance().project(x, y, z, GLUProjection.ClampMode.NONE, true);
+        final GLUProjection.Projection projection = GLUProjection.getInstance().project(x, y, z, GLUProjection.ClampMode.NONE, false);
 
         final Coordinate returns = new Coordinate(projection.getX(), projection.getY());
 
         return returns;
+    }
+
+    private int get3DDistance(double x, double y, double z) {
+        return (int)(Math.sqrt(Math.pow((Minecraft.getMinecraft().player.posX - x),2) + Math.pow((Minecraft.getMinecraft().player.posY - y),2) + Math.pow((Minecraft.getMinecraft().player.posZ - z),2)));
     }
 }

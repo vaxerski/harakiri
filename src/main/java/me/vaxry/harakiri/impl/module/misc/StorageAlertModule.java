@@ -3,11 +3,11 @@ package me.vaxry.harakiri.impl.module.misc;
 import com.google.common.collect.Maps;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.FileUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.FileUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.module.hidden.CommandsModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,16 +35,14 @@ import java.util.logging.Level;
 public final class StorageAlertModule extends Module {
 
     public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "Change between alert modes.", Mode.BOTH);
-    public final Value<Boolean> saveToFile = new Value<Boolean>("SaveToFile", new String[]{"Save", "Saves"}, "Saves the alert to a file in your harakiri 'Config' directory.", false);
     public final Value<Boolean> chests = new Value<Boolean>("Chests", new String[]{"Chests", "chest"}, "Count chests.", true);
     public final Value<Boolean> echests = new Value<Boolean>("EnderChests", new String[]{"EnderChests", "echest", "echest"}, "Count ender chests.", false);
-    public final Value<Boolean> shulkers = new Value<Boolean>("ShulkerBoxes", new String[]{"ShulkerBoxes", "shul"}, "Count shulkers.", false);
-    public final Value<Boolean> hoppers = new Value<Boolean>("Hoppers", new String[]{"Hoppers", "hopp"}, "Count hoppers.", false);
-    public final Value<Boolean> droppers = new Value<Boolean>("Droppers", new String[]{"Droppers", "drop"}, "Count droppers.", false);
     public final Value<Boolean> dispensers = new Value<Boolean>("Dispensers", new String[]{"Dispensers", "disp"}, "Count dispensers.", false);
+    public final Value<Boolean> shulkers = new Value<Boolean>("ShulkerBoxes", new String[]{"ShulkerBoxes", "shul"}, "Count shulkers.", false);
     public final Value<Boolean> stands = new Value<Boolean>("BrewingStands", new String[]{"BrewingStands", "brew"}, "Count brewing stands.", false);
+    public final Value<Boolean> droppers = new Value<Boolean>("Droppers", new String[]{"Droppers", "drop"}, "Count droppers.", false);
+    public final Value<Boolean> hoppers = new Value<Boolean>("Hoppers", new String[]{"Hoppers", "hopp"}, "Count hoppers.", false);
 
-    private final File locationsFile;
     private CommandsModule commandsModule;
 
     private enum Mode {
@@ -53,14 +51,6 @@ public final class StorageAlertModule extends Module {
 
     public StorageAlertModule() {
         super("StorageAlert", new String[]{"StorageAlerts", "ChestAlert"}, "Alerts you how many storage blocks are in a chunk when it's loaded", "NONE", -1, ModuleType.MISC);
-
-        this.locationsFile = new File(Harakiri.INSTANCE.getConfigManager().getConfigDir(), "StorageAlerts.txt");
-        try {
-            if (!this.locationsFile.exists())
-                this.locationsFile.createNewFile();
-        } catch (IOException e) {
-            Harakiri.INSTANCE.getLogger().log(Level.WARNING, "Couldn't create StorageAlert locations file.");
-        }
     }
 
     @Listener
@@ -112,26 +102,8 @@ public final class StorageAlertModule extends Module {
                     if (this.mode.getValue() == Mode.NOTIFICATION || this.mode.getValue() == Mode.BOTH) {
                         Harakiri.INSTANCE.getNotificationManager().addNotification("", message);
                     }
-
-                    if (this.saveToFile.getValue()) {
-                        this.saveStorageToFile(foundStorage);
-                    }
                 }
             }
         }
-    }
-
-    public void saveStorageToFile(Map<String, Vec2f> foundStorage) {
-        final String time = new SimpleDateFormat().format(new Date());
-        final String host = Minecraft.getMinecraft().getCurrentServerData() != null ? Minecraft.getMinecraft().getCurrentServerData().serverIP : "localhost";
-        final List<String> linesToAdd = new ArrayList<>();
-
-        for (String type : foundStorage.keySet()) {
-            final Vec2f position = foundStorage.get(type);
-            String data = String.format("server: %s, date: %s, type: %s, position: %s", host, time, type, String.format("X: %s, Z: %s", position.x, position.y));
-            linesToAdd.add(data);
-        }
-
-        FileUtil.write(this.locationsFile, linesToAdd, false);
     }
 }

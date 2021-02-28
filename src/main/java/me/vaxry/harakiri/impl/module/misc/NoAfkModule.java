@@ -1,12 +1,12 @@
 package me.vaxry.harakiri.impl.module.misc;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventSendPacket;
-import me.vaxry.harakiri.api.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.task.rotation.RotationTask;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.task.rotation.RotationTask;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketPlayer;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
@@ -22,7 +22,7 @@ public final class NoAfkModule extends Module {
     private final RotationTask rotationTask = new RotationTask("NoAFKTask", 1); /* 1 == low priority */
 
     public NoAfkModule() {
-        super("NoAFK", new String[]{"AntiAFK"}, "Prevents you from being kicked while idle", "NONE", -1, ModuleType.MISC);
+        super("AntiAFK", new String[]{"AntiAFK"}, "Prevents you from being kicked while AFS.", "NONE", -1, ModuleType.MISC);
     }
 
     @Override

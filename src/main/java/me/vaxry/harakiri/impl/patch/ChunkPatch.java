@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.patch;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.world.EventChunk;
-import me.vaxry.harakiri.api.patch.ClassPatch;
-import me.vaxry.harakiri.api.patch.MethodPatch;
-import me.vaxry.harakiri.api.util.ASMUtil;
+import me.vaxry.harakiri.framework.event.world.EventChunk;
+import me.vaxry.harakiri.framework.patch.ClassPatch;
+import me.vaxry.harakiri.framework.patch.MethodPatch;
+import me.vaxry.harakiri.framework.util.ASMUtil;
 import me.vaxry.harakiri.impl.management.PatchManager;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
@@ -31,9 +31,9 @@ public final class ChunkPatch extends ClassPatch {
 
         insnList.add(new TypeInsnNode(NEW, Type.getInternalName(EventChunk.class)));
         insnList.add(new InsnNode(DUP));
-        insnList.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/api/event/world/EventChunk$ChunkType", "UNLOAD", "Lme/vaxry/harakiri/api/event/world/EventChunk$ChunkType;"));
+        insnList.add(new FieldInsnNode(GETSTATIC, "me/vaxry/harakiri/framework/event/world/EventChunk$ChunkType", "UNLOAD", "Lme/vaxry/harakiri/framework/event/world/EventChunk$ChunkType;"));
         insnList.add(new VarInsnNode(ALOAD, 0));
-        insnList.add(new MethodInsnNode(INVOKESPECIAL, Type.getInternalName(EventChunk.class), "<init>", env == PatchManager.Environment.IDE ? "(Lme/vaxry/harakiri/api/event/world/EventChunk$ChunkType;Lnet/minecraft/world/chunk/Chunk;)V" : "(Lme/vaxry/harakiri/api/event/world/EventChunk$ChunkType;Laxw;)V", false));
+        insnList.add(new MethodInsnNode(INVOKESPECIAL, Type.getInternalName(EventChunk.class), "<init>", env == PatchManager.Environment.IDE ? "(Lme/vaxry/harakiri/framework/event/world/EventChunk$ChunkType;Lnet/minecraft/world/chunk/Chunk;)V" : "(Lme/vaxry/harakiri/framework/event/world/EventChunk$ChunkType;Laxw;)V", false));
         insnList.add(new VarInsnNode(ASTORE, 7));
         insnList.add(new FieldInsnNode(GETSTATIC, Type.getInternalName(Harakiri.class), "INSTANCE", "Lme/vaxry/harakiri/Harakiri;"));
         insnList.add(new MethodInsnNode(INVOKEVIRTUAL, Type.getInternalName(Harakiri.class), "getEventManager", "()Lteam/stiff/pomelo/EventManager;", false));
@@ -47,11 +47,11 @@ public final class ChunkPatch extends ClassPatch {
     /**
      *     // access flags 0x9
      *     public static handleChunkDataHook(Lnet/minecraft/world/chunk/Chunk;)V
-     *     NEW me/vaxry/harakiri/api/event/world/EventChunk
+     *     NEW me/vaxry/harakiri/framework/event/world/EventChunk
      *     DUP
-     *     GETSTATIC me/vaxry/harakiri/api/event/world/EventChunk$ChunkType.LOAD : Lme/vaxry/harakiri/api/event/world/EventChunk$ChunkType;
+     *     GETSTATIC me/vaxry/harakiri/framework/event/world/EventChunk$ChunkType.LOAD : Lme/vaxry/harakiri/framework/event/world/EventChunk$ChunkType;
      *     ALOAD 0
-     *     INVOKESPECIAL me/vaxry/harakiri/api/event/world/EventChunk.<init> (Lme/vaxry/harakiri/api/event/world/EventChunk$ChunkType;Lnet/minecraft/world/chunk/Chunk;)V
+     *     INVOKESPECIAL me/vaxry/harakiri/framework/event/world/EventChunk.<init> (Lme/vaxry/harakiri/framework/event/world/EventChunk$ChunkType;Lnet/minecraft/world/chunk/Chunk;)V
      *     ASTORE 1
      *
      *     GETSTATIC me/vaxry/harakiri/Harakiri.INSTANCE : Lme/vaxry/harakiri/Harakiri;
@@ -61,7 +61,7 @@ public final class ChunkPatch extends ClassPatch {
      *     POP
      *
      *     LOCALVARIABLE chunk Lnet/minecraft/world/chunk/Chunk; L0 L3 0
-     *     LOCALVARIABLE event Lme/vaxry/harakiri/api/event/world/EventChunk; L1 L3 1
+     *     LOCALVARIABLE event Lme/vaxry/harakiri/framework/event/world/EventChunk; L1 L3 1
      *     MAXSTACK = 4
      *     MAXLOCALS = 2
      */

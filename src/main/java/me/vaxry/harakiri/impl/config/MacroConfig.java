@@ -3,9 +3,9 @@ package me.vaxry.harakiri.impl.config;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.config.Configurable;
-import me.vaxry.harakiri.api.macro.Macro;
-import me.vaxry.harakiri.api.util.FileUtil;
+import me.vaxry.harakiri.framework.config.Configurable;
+import me.vaxry.harakiri.framework.macro.Macro;
+import me.vaxry.harakiri.framework.util.FileUtil;
 
 import java.io.File;
 
@@ -15,7 +15,7 @@ import java.io.File;
 public final class MacroConfig extends Configurable {
 
     public MacroConfig(File dir) {
-        super(FileUtil.createJsonFile(dir, "Macros"));
+        super(FileUtil.createJsonFile(dir, "macro"));
     }
 
     @Override

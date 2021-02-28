@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.module.world;
 
-import me.vaxry.harakiri.api.event.world.EventCanCollide;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.world.EventCanCollide;
+import me.vaxry.harakiri.framework.module.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 /**
@@ -11,7 +11,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class LiquidInteractModule extends Module {
 
     public LiquidInteractModule() {
-        super("LiquidInteract", new String[]{"LiquidInt", "LiqInt"}, "Allows you to interact with liquids", "NONE", -1, ModuleType.WORLD);
+        super("LiquidInteract", new String[]{"LiquidInt", "LiqInt"}, "Allows you to interact with liquids. (Place blocks etc)", "NONE", -1, ModuleType.WORLD);
     }
 
     @Listener

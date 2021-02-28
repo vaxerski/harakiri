@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.module.movement;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.player.EventMove;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.player.EventMove;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.client.Minecraft;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
@@ -14,10 +14,10 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class SafeWalkModule extends Module {
 
-    public final Value<Integer> height = new Value<Integer>("Height", new String[]{"Hei", "H"}, "The distance from the player on the Y-axis to run safe-walk checks for.", 1, 0, 32, 1);
+    public final Value<Integer> height = new Value<Integer>("Height", new String[]{"Hei", "H"}, "Checks height.", 1, 0, 32, 1);
 
     public SafeWalkModule() {
-        super("SafeWalk", new String[]{"SWalk"}, "Prevents you from walking off certain blocks", "NONE", -1, ModuleType.MOVEMENT);
+        super("SafeWalk", new String[]{"SWalk"}, "Prevents you from walking off certain blocks.", "NONE", -1, ModuleType.MOVEMENT);
     }
 
     @Listener

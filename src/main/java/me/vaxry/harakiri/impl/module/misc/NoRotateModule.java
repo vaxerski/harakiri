@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.misc;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
@@ -14,7 +14,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class NoRotateModule extends Module {
 
     public NoRotateModule() {
-        super("NoRotate", new String[]{"NoRot", "AntiRotate"}, "Prevents you from processing server rotations", "NONE", -1, ModuleType.MISC);
+        super("NoRotate", new String[]{"NoRot", "AntiRotate"}, "Prevents you from processing server rotations.", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener

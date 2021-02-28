@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 /**
  * Author Seth
@@ -13,7 +13,7 @@ public final class FpsComponent extends DraggableHudComponent {
 
     public FpsComponent() {
         super("Fps");
-        this.setH(mc.fontRenderer.FONT_HEIGHT);
+        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -22,11 +22,11 @@ public final class FpsComponent extends DraggableHudComponent {
 
         if (mc.world != null) {
             final String fps = ChatFormatting.GRAY + "FPS: " + ChatFormatting.RESET + Minecraft.getDebugFPS();
-            this.setW(mc.fontRenderer.getStringWidth(fps));
-            mc.fontRenderer.drawStringWithShadow(fps, this.getX(), this.getY(), -1);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(fps));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(fps, this.getX(), this.getY(), -1);
         } else {
-            this.setW(mc.fontRenderer.getStringWidth("(fps)"));
-            mc.fontRenderer.drawStringWithShadow("(fps)", this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("(fps)"));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(fps)", this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 }

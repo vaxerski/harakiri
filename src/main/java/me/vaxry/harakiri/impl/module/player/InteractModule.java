@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.player;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventSendPacket;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -22,7 +22,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class InteractModule extends Module {
 
     public InteractModule() {
-        super("Interact", new String[]{"GhostHand"}, "Allows you to access entities and blocks through walls", "NONE", -1, ModuleType.PLAYER);
+        super("Interact", new String[]{"GhostHand"}, "Allows you to access entities and blocks through walls.", "NONE", -1, ModuleType.PLAYER);
     }
 
     private boolean clicked;

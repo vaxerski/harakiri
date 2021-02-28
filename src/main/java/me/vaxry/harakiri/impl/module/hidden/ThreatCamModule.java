@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.module.hidden;
 
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 
 public class ThreatCamModule extends Module {
     public final Value<Float> distance = new Value<Float>("Distance", new String[]{"Distance", "dist", "d"}, "Sets the distance of the Third-Person camera.", 1.2f, 0.5f, 5.0f, 1.0f);

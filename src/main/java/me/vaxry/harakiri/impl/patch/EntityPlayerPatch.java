@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.patch;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.player.EventApplyCollision;
-import me.vaxry.harakiri.api.event.player.EventPushedByWater;
-import me.vaxry.harakiri.api.patch.ClassPatch;
-import me.vaxry.harakiri.api.patch.MethodPatch;
+import me.vaxry.harakiri.framework.event.player.EventApplyCollision;
+import me.vaxry.harakiri.framework.event.player.EventPushedByWater;
+import me.vaxry.harakiri.framework.patch.ClassPatch;
+import me.vaxry.harakiri.framework.patch.MethodPatch;
 import me.vaxry.harakiri.impl.management.PatchManager;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;

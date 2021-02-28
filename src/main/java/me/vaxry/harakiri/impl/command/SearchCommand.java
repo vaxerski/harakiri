@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.command;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.command.Command;
-import me.vaxry.harakiri.api.util.StringUtil;
+import me.vaxry.harakiri.framework.command.Command;
+import me.vaxry.harakiri.framework.util.StringUtil;
 import me.vaxry.harakiri.impl.config.SearchConfig;
 import me.vaxry.harakiri.impl.module.render.SearchModule;
 import net.minecraft.block.Block;
@@ -23,10 +23,10 @@ public final class SearchCommand extends Command {
 
     public SearchCommand() {
         super("Search", new String[]{"find", "locate"}, "Allows you to change what blocks are visible on search",
-                "Search Add <Block_Name>\n" +
-                        "Search Add <ID>\n" +
-                        "Search Remove <Block_Name>\n" +
-                        "Search Remove <ID>\n" +
+                "Search Add <block_name>\n" +
+                        "Search Add <id>\n" +
+                        "Search Remove <block_name>\n" +
+                        "Search Remove <id>\n" +
                         "Search List\n" +
                         "Search Clear");
     }
@@ -58,6 +58,9 @@ public final class SearchCommand extends Command {
                         if (searchModule.contains(Block.getIdFromBlock(block))) {
                             Harakiri.INSTANCE.logChat("Search already contains " + block.getLocalizedName());
                         } else {
+                            if(block == Blocks.BED){
+                                searchModule.add("bed");
+                            }
                             searchModule.add(Block.getIdFromBlock(block));
                             if (searchModule.isEnabled()) {
                                 searchModule.clearBlocks();
@@ -79,6 +82,9 @@ public final class SearchCommand extends Command {
                             if (searchModule.contains(Block.getIdFromBlock(block))) {
                                 Harakiri.INSTANCE.logChat("Search already contains " + block.getLocalizedName());
                             } else {
+                                if(block == Blocks.BED){
+                                    searchModule.add("bed");
+                                }
                                 searchModule.add(Block.getIdFromBlock(block));
                                 if (searchModule.isEnabled()) {
                                     searchModule.clearBlocks();
@@ -105,6 +111,9 @@ public final class SearchCommand extends Command {
                         final Block block = Block.getBlockById(id);
 
                         if (searchModule.contains(Block.getIdFromBlock(block))) {
+                            if(block == Blocks.BED){
+                                searchModule.remove("bed");
+                            }
                             searchModule.remove(Block.getIdFromBlock(block));
                             if (searchModule.isEnabled()) {
                                 searchModule.clearBlocks();
@@ -126,6 +135,9 @@ public final class SearchCommand extends Command {
                             Harakiri.INSTANCE.errorChat("Cannot remove Air from search");
                         } else {
                             if (searchModule.contains(Block.getIdFromBlock(block))) {
+                                if(block == Blocks.BED){
+                                    searchModule.remove("bed");
+                                }
                                 searchModule.remove(Block.getIdFromBlock(block));
                                 if (searchModule.isEnabled()) {
                                     searchModule.clearBlocks();

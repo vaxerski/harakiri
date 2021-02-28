@@ -1,13 +1,13 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.client.EventSaveConfig;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.event.render.EventRender3D;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.ColorUtil;
-import me.vaxry.harakiri.api.util.RenderUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.client.EventSaveConfig;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.ColorUtil;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
@@ -25,10 +25,9 @@ import java.util.List;
  */
 public final class NewChunksModule extends Module {
 
-    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"M", "type", "t"}, "Select a mode to use to draw the chunk visual.", Mode.PLANE);
-    public final Value<Color> color = new Value<Color>("Color", new String[]{"color", "c"}, "Change the color of the chunk visual.", new Color(255, 255, 255));
-    public final Value<Integer> alpha = new Value<Integer>("Alpha", new String[]{"Alp", "Opacity", "a", "o"}, "Edit the alpha of the chunk visual.", 127, 1, 255, 1);
-    public final Value<Float> width = new Value<Float>("Width", new String[]{"W", "size", "s"}, "Edit the width chunk visual.", 1.5f, 0.1f, 5.0f, 0.1f);
+    public final Value<Color> color = new Value<Color>("Color", new String[]{"color", "c"}, "Change the color.", new Color(255, 255, 255));
+    public final Value<Integer> alpha = new Value<Integer>("Alpha", new String[]{"Alp", "Opacity", "a", "o"}, "Edit the alpha.", 127, 1, 255, 1);
+    public final Value<Float> width = new Value<Float>("Width", new String[]{"W", "size", "s"}, "Edit the width.", 1.5f, 0.1f, 5.0f, 0.1f);
 
     public enum Mode {
         BOX, OUTLINE, PLANE
@@ -40,7 +39,7 @@ public final class NewChunksModule extends Module {
     private final List<ChunkData> chunkDataList = new ArrayList<>();
 
     public NewChunksModule() {
-        super("NewChunks", new String[]{"ChunkGen"}, "Highlights newly generated chunks", "NONE", -1, ModuleType.RENDER);
+        super("NewChunks", new String[]{"ChunkGen"}, "Highlights newly generated chunks.", "NONE", -1, ModuleType.RENDER);
         this.currentColor = new Color(this.color.getValue().getRed(), this.color.getValue().getGreen(), this.color.getValue().getBlue(), this.alpha.getValue());
     }
 
@@ -48,6 +47,7 @@ public final class NewChunksModule extends Module {
     public void onToggle() {
         super.onToggle();
         this.chunkDataList.clear();
+        this.currentColor = new Color(this.color.getValue().getRed(), this.color.getValue().getGreen(), this.color.getValue().getBlue(), this.alpha.getValue());
     }
 
     @Listener
@@ -85,19 +85,9 @@ public final class NewChunksModule extends Module {
                     double x = chunkData.x - mc.getRenderManager().viewerPosX;
                     double y = -mc.getRenderManager().viewerPosY;
                     double z = chunkData.z - mc.getRenderManager().viewerPosZ;
-                    final AxisAlignedBB chunkBB = new AxisAlignedBB(0, 0, 0, 16, 2, 16);
+                    final AxisAlignedBB chunkBB = new AxisAlignedBB(0, 0, 0, 16, 0, 16);
 
-                    switch (this.mode.getValue()) {
-                        case BOX:
-                            RenderUtil.drawFilledBox(x, y, z, chunkBB, ColorUtil.changeAlpha(color, this.alpha.getValue()));
-                            break;
-                        case OUTLINE:
-                            RenderUtil.drawBoundingBox(x, y, z, chunkBB, this.width.getValue(), color);
-                            break;
-                        case PLANE:
-                            RenderUtil.drawPlane(x, y, z, new AxisAlignedBB(0, 0, 0, 16, 1, 16), this.width.getValue(), color);
-                            break;
-                    }
+                    RenderUtil.drawBoundingBox(x, y, z, chunkBB, this.width.getValue(), color);
                 }
             }
         }

@@ -1,23 +1,23 @@
 package me.vaxry.harakiri.impl.gui.hud;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.api.gui.hud.component.HudComponent;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.texture.Texture;
-import me.vaxry.harakiri.api.util.RenderUtil;
-import me.vaxry.harakiri.api.util.Timer;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
+import me.vaxry.harakiri.framework.texture.Texture;
+import me.vaxry.harakiri.framework.util.ColorUtil;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.SwitchViewComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
+import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleSearchComponent;
 import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.entity.Render;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -87,19 +87,7 @@ public final class GuiHudEditor extends GuiScreen {
         if(Harakiri.INSTANCE.getPlexusEffect() == null)
             Harakiri.INSTANCE.initPlexusEffect((PlexusComponent) Harakiri.INSTANCE.getHudManager().findComponent(PlexusComponent.class));
 
-        HudEditorModule hudmodule = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
-        rainSpeed = hudmodule.rainspeed.getValue();
-
-        // Shift RGB
-
-        final float jitter = getJitter();
-
-        hue += jitter;
-        if(hue > 1)
-            hue -= 1;
-
-        Color rainbowColorC = Color.getHSBColor(hue, 1, 1);
-        rainbowColor = 0xFF000000 + rainbowColorC.getRed() * 0x10000 + rainbowColorC.getGreen() * 0x100 + rainbowColorC.getBlue();
+        rainbowColor = Harakiri.INSTANCE.getHudManager().rainbowColor;
 
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.drawDefaultBackground();
@@ -141,17 +129,18 @@ public final class GuiHudEditor extends GuiScreen {
         RenderUtil.drawLine(res.getScaledWidth(), res.getScaledHeight(),res.getScaledWidth(), 0, 2, rainbowColor); // Right
 
         for (AnchorPoint point : Harakiri.INSTANCE.getHudManager().getAnchorPoints()) {
-            RenderUtil.drawRect(point.getX() - 1, point.getY() - 1, point.getX() + 1, point.getY() + 1, 0x75909090);
+            //RenderUtil.drawRect(point.getX() - 1, point.getY() - 1, point.getX() + 1, point.getY() + 1, 0x75909090);
+            //dont :)
         }
 
         SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);
 
         for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
 
-            if(component instanceof ModuleListComponent && !swc.isModules)
+            if((component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && !swc.isModules)
                 continue;
 
-            if(!(component instanceof ModuleListComponent) && swc.isModules && component != swc)
+            if(!(component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && swc.isModules && component != swc)
                 continue;
 
             if (component.isVisible()) {
@@ -173,10 +162,10 @@ public final class GuiHudEditor extends GuiScreen {
                                 DraggableHudComponent otherDraggable = (DraggableHudComponent) other;
                                 if (other != draggable && draggable.collidesWith(otherDraggable) && otherDraggable.isVisible() && draggable.isSnappable() && otherDraggable.isSnappable()) {
                                     colliding = true;
-                                    RenderUtil.drawBorderedRect(draggable.getX() - 1, draggable.getY() - 1, draggable.getX() + draggable.getW() + 1, draggable.getY() + draggable.getH() + 1, 1, 0x00000000, 0x3500FF00);
-                                    RenderUtil.drawRect(draggable.getX(), draggable.getY(), draggable.getX() + draggable.getW(), draggable.getY() + draggable.getH(), 0x3500FF00);
-                                    RenderUtil.drawBorderedRect(other.getX() - 1, other.getY() - 1, other.getX() + other.getW() + 1, other.getY() + other.getH() + 1, 1, 0x00000000, 0x3500FF00);
-                                    RenderUtil.drawRect(other.getX(), other.getY(), other.getX() + other.getW(), other.getY() + other.getH(), 0x3500FF00);
+                                    RenderUtil.drawBorderedRect(draggable.getX() - 1, draggable.getY() - 1, draggable.getX() + draggable.getW() + 1, draggable.getY() + draggable.getH() + 1, 1, 0x00000000, ColorUtil.changeAlpha(rainbowColor, 0x33));
+                                    RenderUtil.drawRect(draggable.getX(), draggable.getY(), draggable.getX() + draggable.getW(), draggable.getY() + draggable.getH(), ColorUtil.changeAlpha(rainbowColor, 0x33));
+                                    RenderUtil.drawBorderedRect(other.getX() - 1, other.getY() - 1, other.getX() + other.getW() + 1, other.getY() + other.getH() + 1, 1, 0x00000000, ColorUtil.changeAlpha(rainbowColor, 0x33));
+                                    RenderUtil.drawRect(other.getX(), other.getY(), other.getX() + other.getW(), other.getY() + other.getH(), ColorUtil.changeAlpha(rainbowColor, 0x33));
                                 }
                             }
                         }
@@ -187,11 +176,12 @@ public final class GuiHudEditor extends GuiScreen {
                             if (draggable.findClosest(mouseX, mouseY) != null) { // has an anchor point nearby
                                 snappableBackgroundColor = 0x35FFFFFF;
                             }
-                            RenderUtil.drawBorderedRect(draggable.getX() - 1, draggable.getY() - 1, draggable.getX() + draggable.getW() + 1, draggable.getY() + draggable.getH() + 1, 1, snappableBackgroundColor, 0x90FFFFFF);
-                            RenderUtil.drawRect(draggable.getX(), draggable.getY(), draggable.getX() + SIZE, draggable.getY() + SIZE, 0x90FFFFFF);
-                            RenderUtil.drawRect(draggable.getX() + draggable.getW() - SIZE, draggable.getY(), draggable.getX() + draggable.getW(), draggable.getY() + SIZE, 0x90FFFFFF);
-                            RenderUtil.drawRect(draggable.getX(), (draggable.getY() + draggable.getH()) - SIZE, draggable.getX() + SIZE, draggable.getY() + draggable.getH(), 0x90FFFFFF);
-                            RenderUtil.drawRect(draggable.getX() + draggable.getW() - SIZE, (draggable.getY() + draggable.getH()) - SIZE, draggable.getX() + draggable.getW(), draggable.getY() + draggable.getH(), 0x90FFFFFF);
+                            RenderUtil.drawRect(draggable.getX(), draggable.getY(), draggable.getW() + draggable.getX(), draggable.getH() + draggable.getY(), 0x22DDDDDD);
+                            //RenderUtil.drawBorderedRect(draggable.getX() - 1, draggable.getY() - 1, draggable.getX() + draggable.getW() + 1, draggable.getY() + draggable.getH() + 1, 1, snappableBackgroundColor, 0x90FFFFFF);
+                            //RenderUtil.drawRect(draggable.getX(), draggable.getY(), draggable.getX() + SIZE, draggable.getY() + SIZE, 0x90FFFFFF);
+                            //RenderUtil.drawRect(draggable.getX() + draggable.getW() - SIZE, draggable.getY(), draggable.getX() + draggable.getW(), draggable.getY() + SIZE, 0x90FFFFFF);
+                            //RenderUtil.drawRect(draggable.getX(), (draggable.getY() + draggable.getH()) - SIZE, draggable.getX() + SIZE, draggable.getY() + draggable.getH(), 0x90FFFFFF);
+                            //RenderUtil.drawRect(draggable.getX() + draggable.getW() - SIZE, (draggable.getY() + draggable.getH()) - SIZE, draggable.getX() + draggable.getW(), draggable.getY() + draggable.getH(), 0x90FFFFFF);
                         }
 
                         // dragging highlight
@@ -212,14 +202,16 @@ public final class GuiHudEditor extends GuiScreen {
 
         for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
 
-            if(component instanceof ModuleListComponent && !swc.isModules)
+            if((component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && !swc.isModules)
                 continue;
 
-            if(!(component instanceof ModuleListComponent) && swc.isModules && component != swc)
+            if(!(component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && swc.isModules && component != swc)
                 continue;
 
             if (component.isVisible()) {
                 component.mouseClickMove(mouseX, mouseY, clickedMouseButton);
+                if(component instanceof ModuleListComponent && component.isMouseInside(mouseX, mouseY))
+                    break;
             }
         }
     }
@@ -234,19 +226,20 @@ public final class GuiHudEditor extends GuiScreen {
             Harakiri.INSTANCE.getPlexusEffect().onMouseClicked();
 
             for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
-                if(component instanceof ModuleListComponent && !swc.isModules)
+                if((component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && !swc.isModules)
                     continue;
 
-                if(!(component instanceof ModuleListComponent) && swc.isModules && component != swc)
+                if(!(component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && swc.isModules && component != swc)
                     continue;
 
                 if (component.isVisible()) {
                     component.mouseClick(mouseX, mouseY, mouseButton);
+                    if(component instanceof ModuleListComponent && component.isMouseInside(mouseX, mouseY))
+                        break;
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Harakiri.INSTANCE.logChat("mouseClicked on ERROR SWC!! -> " + e.getMessage());
         }
     }
 
@@ -257,20 +250,21 @@ public final class GuiHudEditor extends GuiScreen {
         SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);
 
         for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
-            if(component instanceof ModuleListComponent && !swc.isModules)
+            if((component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && !swc.isModules)
                 continue;
 
-            if(!(component instanceof ModuleListComponent) && swc.isModules && component != swc)
+            if(!(component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && swc.isModules && component != swc)
                 continue;
 
             if (component.isVisible()) {
                 component.mouseRelease(mouseX, mouseY, state);
+                if(component instanceof ModuleListComponent && component.isMouseInside(mouseX, mouseY))
+                    break;
             }
         }
         try {
             swc.mouseReleased(mouseX, mouseY, state);
         }catch(Throwable t){
-            Harakiri.INSTANCE.logChat("MouseReleased on ERROR SWC!! -> " + t.getMessage());
         }
     }
 

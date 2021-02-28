@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.management;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.event.player.EventPlayerJoin;
-import me.vaxry.harakiri.api.event.player.EventPlayerLeave;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.event.player.EventPlayerJoin;
+import me.vaxry.harakiri.framework.event.player.EventPlayerLeave;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.server.SPacketPlayerListItem;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;

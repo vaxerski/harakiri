@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.module.misc;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.server.SPacketEffect;
@@ -21,17 +21,16 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class CoordLoggerModule extends Module {
 
-    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "Change between various coord-logger modes.", Mode.VANILLA);
+    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "Change between various coordlogger modes.", Mode.VANILLA);
 
     private enum Mode {
         VANILLA, SPIGOT
     }
 
-    public final Value<Boolean> thunder = new Value<Boolean>("Thunder", new String[]{"thund"}, "Logs positions of thunder/lightning sounds.", true);
-    public final Value<Boolean> endPortal = new Value<Boolean>("EndPortal", new String[]{"portal"}, "Logs position of end portal creation sound.", true);
-    public final Value<Boolean> wither = new Value<Boolean>("Wither", new String[]{"with"}, "Logs positions of wither sounds.", true);
-    public final Value<Boolean> endDragon = new Value<Boolean>("EndDragon", new String[]{"dragon"}, "Logs positions of end dragon sounds.", true);
-    public final Value<Boolean> slimes = new Value<Boolean>("Slimes", new String[]{"slime"}, "Logs positions of slime spawns.", false);
+    public final Value<Boolean> thunder = new Value<Boolean>("Thunder", new String[]{"thund"}, "Thunder/lightning sounds.", true);
+    public final Value<Boolean> endPortal = new Value<Boolean>("EndPortal", new String[]{"portal"}, "End portal creation sound.", true);
+    public final Value<Boolean> endDragon = new Value<Boolean>("EndDragon", new String[]{"dragon"}, "End dragon sounds.", true);
+    public final Value<Boolean> wither = new Value<Boolean>("Wither", new String[]{"with"}, "Wither sounds.", true);
 
     public CoordLoggerModule() {
         super("CoordLogger", new String[]{"CoordLog", "CLogger", "CLog"}, "Logs useful coordinates", "NONE", -1, ModuleType.MISC);
@@ -48,14 +47,6 @@ public final class CoordLoggerModule extends Module {
 
             if (event.getPacket() instanceof SPacketSpawnMob) {
                 final SPacketSpawnMob packet = (SPacketSpawnMob) event.getPacket();
-                if (this.slimes.getValue()) {
-                    final Minecraft mc = Minecraft.getMinecraft();
-
-                    if (packet.getEntityType() == 55 && packet.getY() <= 40 && !mc.world.getBiome(mc.player.getPosition()).getBiomeName().toLowerCase().contains("swamp")) {
-                        final BlockPos pos = new BlockPos(packet.getX(), packet.getY(), packet.getZ());
-                        Harakiri.INSTANCE.logChat("Slime Spawned in chunk X:" + mc.world.getChunk(pos).x + " Z:" + mc.world.getChunk(pos).z);
-                    }
-                }
             }
 
             if (event.getPacket() instanceof SPacketSoundEffect) {
@@ -76,14 +67,14 @@ public final class CoordLoggerModule extends Module {
                 final SPacketEffect packet = (SPacketEffect) event.getPacket();
                 if (this.endPortal.getValue()) {
                     if (packet.getSoundType() == 1038) {
-                        Harakiri.INSTANCE.logChat("End Portal activated at X:" + packet.getSoundPos().getX() + " Y:" + packet.getSoundPos().getY() + " Z:" + packet.getSoundPos().getZ());
+                        Harakiri.INSTANCE.logChat("End Portal activated X:" + packet.getSoundPos().getX() + " Y:" + packet.getSoundPos().getY() + " Z:" + packet.getSoundPos().getZ());
                     }
                 }
                 if (this.wither.getValue()) {
                     if (packet.getSoundType() == 1023) {
                         switch (this.mode.getValue()) {
                             case VANILLA:
-                                Harakiri.INSTANCE.logChat("Wither spawned at X:" + packet.getSoundPos().getX() + " Y:" + packet.getSoundPos().getY() + " Z:" + packet.getSoundPos().getZ());
+                                Harakiri.INSTANCE.logChat("Wither spawned X:" + packet.getSoundPos().getX() + " Y:" + packet.getSoundPos().getY() + " Z:" + packet.getSoundPos().getZ());
                                 break;
                             case SPIGOT:
                                 float yaw = 0;
@@ -105,7 +96,7 @@ public final class CoordLoggerModule extends Module {
 
                         yaw += MathHelper.wrapDegrees((Math.toDegrees(Math.atan2(difZ, difX)) - 90.0f) - yaw);
 
-                        Harakiri.INSTANCE.logChat("Ender Dragon killed at X:" + Minecraft.getMinecraft().player.posX + " Z:" + Minecraft.getMinecraft().player.posZ + " Angle:" + yaw);
+                        Harakiri.INSTANCE.logChat("Ender Dragon killed X:" + Minecraft.getMinecraft().player.posX + " Z:" + Minecraft.getMinecraft().player.posZ + " Angle:" + yaw);
                     }
                 }
             }

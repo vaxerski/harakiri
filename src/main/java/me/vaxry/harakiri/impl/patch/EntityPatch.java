@@ -1,6 +1,6 @@
 package me.vaxry.harakiri.impl.patch;
 
-import me.vaxry.harakiri.api.patch.ClassPatch;
+import me.vaxry.harakiri.framework.patch.ClassPatch;
 
 /**
  * Author Seth

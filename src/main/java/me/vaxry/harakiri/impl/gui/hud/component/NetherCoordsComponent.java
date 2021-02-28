@@ -1,10 +1,6 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.api.gui.hud.component.HudComponent;
-
-import java.text.DecimalFormat;
+import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
 
 /**
  * Author Seth

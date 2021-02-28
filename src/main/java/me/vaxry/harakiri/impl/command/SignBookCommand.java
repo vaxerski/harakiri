@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.command;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.command.Command;
+import me.vaxry.harakiri.framework.command.Command;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemWrittenBook;
@@ -16,7 +16,7 @@ import net.minecraft.network.play.client.CPacketCreativeInventoryAction;
 public final class SignBookCommand extends Command {
 
     public SignBookCommand() {
-        super("SignBook", new String[]{"SBook", "SignB"}, "Allows you to change the author of a signed book while in creative", "SignBook <Username>");
+        super("SignBook", new String[]{"SBook", "SignB"}, "Allows you to change the author of a signed book (creative)", "SignBook <Username>");
     }
 
     @Override

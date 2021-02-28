@@ -1,11 +1,11 @@
 package me.vaxry.harakiri.impl.module.world;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.event.render.EventRender3D;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.RenderUtil;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.impl.management.WorldManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
@@ -30,7 +30,7 @@ public final class SlimeChunksModule extends Module {
     private List<SlimeChunk> slimeChunkList = new ArrayList<>();
 
     public SlimeChunksModule() {
-        super("SlimeChunks", new String[]{"SlimesChunks", "SlimeC"}, "Highlights slime chunks(Requires the seed)", "NONE", -1, ModuleType.WORLD);
+        super("SlimeChunks", new String[]{"SlimesChunks", "SlimeC"}, "Highlights slime chunks (Requires the world seed)", "NONE", -1, ModuleType.WORLD);
     }
 
     @Listener

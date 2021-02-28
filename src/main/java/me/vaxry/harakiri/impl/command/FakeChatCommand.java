@@ -1,6 +1,6 @@
 package me.vaxry.harakiri.impl.command;
 
-import me.vaxry.harakiri.api.command.Command;
+import me.vaxry.harakiri.framework.command.Command;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 
@@ -11,7 +11,7 @@ import net.minecraft.util.text.TextComponentString;
 public final class FakeChatCommand extends Command {
 
     public FakeChatCommand() {
-        super("FakeChat", new String[]{"FChat", "TellRaw"}, "Allows you to add a fake chat message", "FakeChat <Message>");
+        super("FakeChat", new String[]{"FChat", "TellRaw"}, "Sends a fake chat message.", "FakeChat <message>");
     }
 
     @Override

@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.module.misc;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.event.player.EventDestroyBlock;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.event.player.EventDestroyBlock;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
@@ -21,14 +21,14 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class NoDesyncModule extends Module {
 
-    public final Value<Boolean> crystals = new Value<Boolean>("Crystals", new String[]{"Crystal", "c"}, "Attempts to fix crystal de-sync (could be buggy).", false);
-    public final Value<Boolean> destroyedBlocks = new Value<Boolean>("Blocks", new String[]{"DestroyedBlocks", "b"}, "Attempts to fix server->client block de-sync.", true);
+    public final Value<Boolean> crystals = new Value<Boolean>("Crystals", new String[]{"Crystal", "c"}, "Attempts to fix crystal desync.", false);
+    public final Value<Boolean> destroyedBlocks = new Value<Boolean>("Blocks", new String[]{"DestroyedBlocks", "b"}, "Attempts to fix server block de-sync.", true);
 
     private boolean destroy;
     private BlockPos pos;
 
     public NoDesyncModule() {
-        super("NoDesync", new String[]{"NoDes", "AntiDesync", "NoDe-sync"}, "Prevents the client from de-syncing in some situations", "NONE", -1, ModuleType.MISC);
+        super("NoDesync", new String[]{"NoDes", "AntiDesync", "NoDe-sync"}, "Prevents the client from desyncing in some situations.", "NONE", -1, ModuleType.MISC);
     }
 
     @Override

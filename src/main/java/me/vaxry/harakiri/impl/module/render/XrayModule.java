@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.module.render;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.render.EventRenderBlockModel;
-import me.vaxry.harakiri.api.event.render.EventRenderBlockSide;
-import me.vaxry.harakiri.api.event.world.EventSetOpaqueCube;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.render.EventRenderBlockModel;
+import me.vaxry.harakiri.framework.event.render.EventRenderBlockSide;
+import me.vaxry.harakiri.framework.event.world.EventSetOpaqueCube;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
@@ -24,10 +24,16 @@ public final class XrayModule extends Module {
     private int lastAO;
 
     public XrayModule() {
-        super("Xray", new String[]{"JadeVision", "Jade"}, "Allows you to filter what the world renders", "NONE", -1, ModuleType.RENDER);
+        super("Xray", new String[]{"JadeVision", "Jade"}, "Allows you to xray.", "NONE", -1, ModuleType.RENDER);
 
-        if (Harakiri.INSTANCE.getConfigManager().isFirstLaunch())
+        if (Harakiri.INSTANCE.getConfigManager().isFirstLaunch()) {
             this.add("diamond_ore");
+            this.add("coal_ore");
+            this.add("gold_ore");
+            this.add("redstone_ore");
+            this.add("iron_ore");
+            this.add("lapis_ore");
+        }
     }
 
     @Override

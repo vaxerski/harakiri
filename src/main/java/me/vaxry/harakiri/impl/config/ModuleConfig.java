@@ -1,103 +1,157 @@
 package me.vaxry.harakiri.impl.config;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import me.vaxry.harakiri.api.config.Configurable;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.FileUtil;
-import me.vaxry.harakiri.api.value.Value;
+import com.google.gson.stream.JsonReader;
+import com.yworks.yguard.test.A;
+import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.config.Configurable;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.FileUtil;
+import me.vaxry.harakiri.framework.value.Value;
+import scala.Int;
 
 import java.awt.*;
 import java.io.File;
+import java.io.StringReader;
+import java.util.ArrayList;
 
-/**
- * @author noil
- */
+
 public class ModuleConfig extends Configurable {
 
-    private final Module module;
+    public ModuleConfig(File dir) {
+        super(FileUtil.createJsonFile(dir, "mods"));
+    }
 
-    public ModuleConfig(File dir, Module module) {
-        super(FileUtil.createJsonFile(dir, module.getDisplayName()));
-        this.module = module;
+    class ModuleConfigJSON{
+        public ModuleConfigJSON(String name, boolean hidden, String key, boolean enabled){
+            this.name = name;
+            this.hidden = hidden;
+            this.keybind = key;
+            this.enabled = enabled;
+        }
+        public String name;
+        public boolean hidden;
+        public String keybind;
+        public boolean enabled;
+        public ArrayList<Value> values = new ArrayList<>();
+    }
+
+    class ColorShitKillMePls{
+        public int value;
+        public float falpha;
     }
 
     @Override
     public void onLoad() {
         super.onLoad();
 
-        this.getJsonObject().entrySet().forEach(entry -> {
-            if (entry.getKey().equalsIgnoreCase("Color")) {
-                module.setColor((int) Long.parseLong(entry.getValue().getAsString(), 16));
-            }
+        String rawdata = loadRawFile();
+        if(rawdata.equalsIgnoreCase(""))
+            return;
 
-            if (entry.getKey().equalsIgnoreCase("Hidden")) {
-                module.setHidden(entry.getValue().getAsBoolean());
-            }
+        Gson gson = new Gson();
 
-            if (entry.getKey().equalsIgnoreCase("Keybind")) {
-                module.setKey(entry.getValue().getAsString());
-            }
+        //JsonObject obj = gson.fromJson(rawdata, JsonObject.class);
+        JsonReader reader = new JsonReader(new StringReader(rawdata));
+        reader.setLenient(true);
 
-            if (entry.getKey().equalsIgnoreCase("Name")) {
-                module.setDisplayName(entry.getValue().getAsString());
-            }
+        // Retrieve array
+        ModuleConfigJSON[] moduleConfigJSONS = gson.fromJson(reader, ModuleConfigJSON[].class);
 
-            // Check if we are already enabled
-            if (entry.getKey().equalsIgnoreCase("Enabled") && !module.isEnabled() && module.getType() != Module.ModuleType.HIDDEN) {
-                if (entry.getValue().getAsBoolean()) {
-                    module.toggle();
-                }
-            }
+        for(ModuleConfigJSON settings : moduleConfigJSONS) {
 
-            for (Value val : module.getValueList()) {
-                if (val.getName().equalsIgnoreCase(entry.getKey())) {
-                    if (val.getValue() instanceof Boolean) {
-                        val.setValue(entry.getValue().getAsBoolean());
-                    } else if (val.getValue() instanceof Number && !(val.getValue() instanceof Enum)) {
-                        if (val.getValue().getClass() == Float.class) {
-                            val.setValue(entry.getValue().getAsFloat());
-                        } else if (val.getValue().getClass() == Double.class) {
-                            val.setValue(entry.getValue().getAsDouble());
-                        } else if (val.getValue().getClass() == Integer.class) {
-                            val.setValue(entry.getValue().getAsInt());
+            if(settings == null)
+                continue;
+
+            Module mod = Harakiri.INSTANCE.getModuleManager().find(settings.name);
+
+            if(mod == null)
+                continue;
+
+            if(!mod.isEnabled() && settings.enabled || mod.isEnabled() && !settings.enabled)
+                mod.toggle();
+            mod.setHidden(settings.hidden);
+            mod.setKey(settings.keybind);
+
+            // Retrieve values :)
+            for(Value value : mod.getValueList()){
+                if(value.getValue().getClass() == Float.class){
+                    for(Value<Double> savedValue : settings.values){
+                        if(value.getName().equalsIgnoreCase(savedValue.getName())){
+                            value.setValueForceFloat((double)(savedValue.getValue()));
                         }
-                    } else if (val.getValue() instanceof Enum) {
-                        val.setEnumValue(entry.getValue().getAsString());
-                    } else if (val.getValue() instanceof Color) {
-                        val.setValue(new Color((int) Long.parseLong(entry.getValue().getAsString(), 16)));
+                    }
+                } else if(value.getValue().getClass() == Double.class){
+                    for(Value<Double> savedValue : settings.values){
+                        if(value.getName().equalsIgnoreCase(savedValue.getName())){
+                            value.setValue(savedValue.getValue());
+                        }
+                    }
+                } else if(value.getValue().getClass() == Boolean.class){
+                    for(Value<Boolean> savedValue : settings.values){
+                        if(value.getName().equalsIgnoreCase(savedValue.getName())){
+                            value.setValue(Boolean.valueOf(savedValue.getValue()));
+                        }
+                    }
+                } else if(value.getValue().getClass() == Color.class){
+                    for(Value<Integer> savedValue : settings.values){ // Color is an int
+                        if(value.getName().equalsIgnoreCase(savedValue.getName())){
+                            try {
+                                String colorVal = String.valueOf(savedValue.getValue());
+                                ColorShitKillMePls colorShitKillMePls = gson.fromJson(colorVal, ColorShitKillMePls.class);
+                                Color col = new Color(Integer.valueOf(colorShitKillMePls.value));
+                                value.setValue(col);
+                            }catch(Throwable t){
+                                // oh well
+                            }
+                        }
+                    }
+                } else if(value.getValue().getClass() == Integer.class){
+                    for(Value savedValue : settings.values){
+                        if(value.getName().equalsIgnoreCase(savedValue.getName())){
+                            value.setValueForceInt((double)(savedValue.getValue()));
+                        }
+                    }
+                } /*else if(value.getValue().getClass() == String.class){
+                    for(Value<String> savedValue : settings.values){
+                        if(value.getName().equalsIgnoreCase(savedValue.getName())){
+                            value.setValue((String) savedValue.getValue());
+                        }
+                    }
+                }*/ else{
+                    // it's an enum, prolly
+                    for(Value savedValue : settings.values){
+                        if(value.getName().equalsIgnoreCase(savedValue.getName())){
+                            try {
+                                value.setEnumValue(String.valueOf(savedValue.getValue()));
+                            }catch(Throwable t){
+                                //ignoer
+                            }
+                        }
                     }
                 }
             }
-        });
+        }
     }
 
     @Override
     public void onSave() {
-        JsonObject moduleJsonObject = new JsonObject();
-        moduleJsonObject.addProperty("Name", module.getDisplayName());
-        moduleJsonObject.addProperty("Color", Integer.toHexString(module.getColor()).toUpperCase());
-        moduleJsonObject.addProperty("Hidden", module.isHidden());
-        moduleJsonObject.addProperty("Keybind", (module.getKey() != null) ? module.getKey() : "NONE");
-        moduleJsonObject.addProperty("Enabled", module.isEnabled());
-        if (module.getValueList().size() != 0) {
-            module.getValueList().forEach(value -> {
-                if (value.getValue() instanceof Boolean)
-                    moduleJsonObject.addProperty(value.getName(), (Boolean) value.getValue());
-                else if (value.getValue() instanceof Number && !(value.getValue() instanceof Enum)) {
-                    if (value.getValue().getClass() == Float.class) {
-                        moduleJsonObject.addProperty(value.getName(), (Float) value.getValue());
-                    } else if (value.getValue().getClass() == Double.class) {
-                        moduleJsonObject.addProperty(value.getName(), (Double) value.getValue());
-                    } else if (value.getValue().getClass() == Integer.class) {
-                        moduleJsonObject.addProperty(value.getName(), (Integer) value.getValue());
-                    }
-                } else if (value.getValue() instanceof Enum) {
-                    moduleJsonObject.addProperty(value.getName(), ((Enum) value.getValue()).name());
-                } else if (value.getValue() instanceof Color) {
-                    moduleJsonObject.addProperty(value.getName(), Integer.toHexString(((Color) value.getValue()).getRGB()).toUpperCase());
-                }
-            });
+
+        ArrayList<ModuleConfigJSON> moduleConfigJSONS = new ArrayList<>();
+
+        for(Module mod : Harakiri.INSTANCE.getModuleManager().getModuleList()){
+            ModuleConfigJSON config = new ModuleConfigJSON(mod.getDisplayName(), mod.isHidden(), mod.getKey(), mod.isEnabled());
+
+            for(Value val : mod.getValueList()){
+                config.values.add(val);
+            }
+
+            moduleConfigJSONS.add(config);
         }
-        this.saveJsonObjectToFile(moduleJsonObject);
+
+        String strObj = new Gson().toJson(moduleConfigJSONS);
+
+        this.saveStringToFile(strObj);
     }
 }

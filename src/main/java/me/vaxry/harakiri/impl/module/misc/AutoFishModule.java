@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.misc;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemFishingRod;
@@ -19,7 +19,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class AutoFishModule extends Module {
 
     public AutoFishModule() {
-        super("AutoFish", new String[]{"AutomaticFish"}, "Automatically catches fish and recasts", "NONE", -1, ModuleType.MISC);
+        super("AutoFish", new String[]{"AutomaticFish"}, "Automatically catches fish.", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener

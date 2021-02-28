@@ -1,11 +1,10 @@
 package me.vaxry.harakiri.impl.module.misc;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.StringUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.StringUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.util.text.TextComponentString;
@@ -21,16 +20,13 @@ import java.util.List;
 public final class ChatFilterModule extends Module {
 
     public final Value<Boolean> unicode = new Value<>("Unicode", new String[]{"uc"}, "Reverts \"Fancy Chat\" characters back into normal ones. ", true);
-    public final Value<Boolean> broadcasts = new Value<>("Broadcasts", new String[]{"broadcast", "broad", "bc"}, "Prevents displaying chat messages that begin with [SERVER].", false);
-    public final Value<Boolean> spam = new Value<>("Spam", new String[]{"sp", "s"}, "Attempts to prevent spam by checking recent chat messages for duplicates.", true);
+    public final Value<Boolean> spam = new Value<>("Spam", new String[]{"sp", "s"}, "Attempts to prevent spam.", true);
     public final Value<Boolean> death = new Value<>("Death", new String[]{"dead", "d"}, "Attempts to prevent death messages.", false);
-    public final Value<Boolean> blue = new Value<>("BlueText", new String[]{"Blue", "b"}, "Cancels blue-text containing messages.", false);
-    public final Value<Boolean> green = new Value<>("GreenText", new String[]{"Green", "g"}, "Cancels green-text containing messages.", false);
 
     private final List<String> cache = new ArrayList<>();
 
     public ChatFilterModule() {
-        super("ChatFilter", new String[]{"CFilter"}, "Filters out annoying chat messages", "NONE", -1, ModuleType.MISC);
+        super("ChatFilter", new String[]{"CFilter"}, "Filters out malicious or annoying chat messages", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener
@@ -56,18 +52,6 @@ public final class ChatFilterModule extends Module {
                 if (this.death.getValue()) {
                     if (packet.getChatComponent().getFormattedText().contains("\2474") || packet.getChatComponent().getFormattedText().contains("\247c")) {
                         event.setCanceled(true);
-                    }
-                }
-
-                if (this.broadcasts.getValue()) {
-                    if (packet.getChatComponent().getFormattedText().startsWith("\2475[SERVER]")) {
-                        event.setCanceled(true);
-                    }
-
-                    if (is9b9tOr2b2t) {
-                        if (packet.getChatComponent().getFormattedText().contains("\2472")) {
-                            event.setCanceled(true);
-                        }
                     }
                 }
 
@@ -118,18 +102,6 @@ public final class ChatFilterModule extends Module {
                         if (containsUnicode) {
                             packet.chatComponent = new TextComponentString(sb.toString());
                         }
-                    }
-                }
-
-                if (this.blue.getValue()) {
-                    if (packet.getChatComponent().getFormattedText().contains(ChatFormatting.BLUE + "")) {
-                        event.setCanceled(true);
-                    }
-                }
-
-                if (this.green.getValue()) {
-                    if (packet.getChatComponent().getFormattedText().contains(ChatFormatting.GREEN + "")) {
-                        event.setCanceled(true);
                     }
                 }
             }

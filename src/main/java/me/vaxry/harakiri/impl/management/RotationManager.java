@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.management;
 
-import me.vaxry.harakiri.api.task.rotation.RotationTask;
-import me.vaxry.harakiri.api.task.rotation.RotationTaskFactory;
+import me.vaxry.harakiri.framework.task.rotation.RotationTask;
+import me.vaxry.harakiri.framework.task.rotation.RotationTaskFactory;
 import net.minecraft.client.Minecraft;
 
 /**

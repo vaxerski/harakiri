@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.command;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.command.Command;
-import me.vaxry.harakiri.api.util.StringUtil;
+import me.vaxry.harakiri.framework.command.Command;
+import me.vaxry.harakiri.framework.util.StringUtil;
 import net.minecraft.client.Minecraft;
 
 /**
@@ -32,9 +32,9 @@ public final class PitchCommand extends Command {
                 Minecraft.getMinecraft().player.getRidingEntity().rotationPitch = num;
             }
 
-            Harakiri.INSTANCE.logChat("Set pitch to " + num);
+            Harakiri.INSTANCE.logChat("Set your pitch to " + num);
         } else {
-            Harakiri.INSTANCE.errorChat("Unknown number " + "\247f\"" + split[1] + "\"");
+            Harakiri.INSTANCE.errorChat("Unknown number: " + "\247f\"" + split[1] + "\"");
         }
     }
 }

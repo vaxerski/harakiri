@@ -2,11 +2,11 @@ package me.vaxry.harakiri.impl.module.misc;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.world.EventAddEntity;
-import me.vaxry.harakiri.api.event.world.EventRemoveEntity;
-import me.vaxry.harakiri.api.friend.Friend;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.world.EventAddEntity;
+import me.vaxry.harakiri.framework.event.world.EventRemoveEntity;
+import me.vaxry.harakiri.framework.friend.Friend;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
@@ -26,7 +26,7 @@ public final class VisualRangeModule extends Module {
     private int prevPlayer = -1;
 
     public VisualRangeModule() {
-        super("VisualRange", new String[]{"VisRange", "VRange", "VR"}, "Notifies you when players enter and leave your visual range", "NONE", -1, ModuleType.MISC);
+        super("VisualRange", new String[]{"VisRange", "VRange", "VR"}, "Sends a notification when someone enters your visual range.", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener

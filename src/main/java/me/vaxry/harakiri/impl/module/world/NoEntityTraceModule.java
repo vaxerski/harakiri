@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.world;
 
-import me.vaxry.harakiri.api.event.player.EventGetMouseOver;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.player.EventGetMouseOver;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemTool;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
@@ -15,7 +15,7 @@ public final class NoEntityTraceModule extends Module {
     public Value<Boolean> toolsOnly = new Value<Boolean>("Tools", new String[]{"OnlyTools", "Tool", "Pickaxe", "Axe", "Shovel"}, "Only enable when holding a tool.", true);
 
     public NoEntityTraceModule() {
-        super("MineThrough", new String[]{"MineThrough", "MineThrough", "MineThrough", "MineT"}, "Mine through entities.", "NONE", -1, ModuleType.WORLD);
+        super("NoEntityHit", new String[]{"MineThrough", "MineThrough", "MineThrough", "MineT"}, "Do stuff through entities.", "NONE", -1, ModuleType.WORLD);
     }
 
     @Listener

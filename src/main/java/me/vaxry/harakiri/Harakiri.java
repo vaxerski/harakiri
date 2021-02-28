@@ -1,16 +1,23 @@
 package me.vaxry.harakiri;
 
-import me.vaxry.harakiri.api.event.client.EventLoad;
-import me.vaxry.harakiri.api.event.client.EventReload;
-import me.vaxry.harakiri.api.event.client.EventUnload;
-import me.vaxry.harakiri.api.logging.harakiriFormatter;
+import me.vaxry.harakiri.framework.event.client.EventLoad;
+import me.vaxry.harakiri.framework.event.client.EventReload;
+import me.vaxry.harakiri.framework.event.client.EventUnload;
+import me.vaxry.harakiri.framework.extd.FontRendererExtd;
+import me.vaxry.harakiri.framework.extd.RenderItemAlpha;
+import me.vaxry.harakiri.framework.logging.harakiriFormatter;
+import me.vaxry.harakiri.framework.util.TTFFontUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.effect.PlexusEffect;
+import me.vaxry.harakiri.impl.gui.menu.HaraMainMenu;
 import me.vaxry.harakiri.impl.management.*;
+import me.vaxry.harakiri.impl.module.render.CustomFontModule;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import team.stiff.pomelo.EventManager;
@@ -29,7 +36,9 @@ import java.util.logging.Logger;
  */
 public final class Harakiri {
 
+    private boolean isTTF = true;
     public static final Harakiri INSTANCE = new Harakiri();
+    private String username = "";
 
     private Logger logger;
 
@@ -51,15 +60,11 @@ public final class Harakiri {
 
     private MacroManager macroManager;
 
-    private WaypointManager waypointManager;
-
     private TickRateManager tickRateManager;
 
     private ChatManager chatManager;
 
     private WorldManager worldManager;
-
-    private IgnoredManager ignoredManager;
 
     private PositionManager positionManager;
 
@@ -77,20 +82,30 @@ public final class Harakiri {
 
     private PlexusEffect plexusEffect = null;
 
+    private DiscordManager discordManager;
+
+    private FontRendererExtd fontRendererExtd;
+
+    private TTFFontUtil fontUtil;
+
+    private HaraMainMenu haraMainMenu;
+
+    private RenderItemAlpha renderItemAlpha;
+
     /**
      * The initialization point of the client
      * this is called post launch
      */
     public void init() {
         try {
+            this.fontUtil = new TTFFontUtil("gravity", 18);
+
             this.eventManager = new AnnotatedEventManager();
             this.apiManager = new APIManager();
             this.configManager = new ConfigManager();
-            this.ignoredManager = new IgnoredManager();
             this.friendManager = new FriendManager();
             this.rotationManager = new RotationManager();
             this.macroManager = new MacroManager();
-            this.waypointManager = new WaypointManager();
             this.tickRateManager = new TickRateManager();
             this.chatManager = new ChatManager();
             this.worldManager = new WorldManager();
@@ -103,6 +118,9 @@ public final class Harakiri {
             this.cameraManager = new CameraManager();
             this.hudManager = new HudManager();
             this.hudEditor = new GuiHudEditor();
+            this.discordManager = new DiscordManager();
+            this.haraMainMenu = new HaraMainMenu();
+
             //this.plexusEffect = new PlexusEffect(); -- inits in GuiHudEditor
 
             this.configManager.init(); // Keep last, so we load configs after everything else inits
@@ -110,7 +128,13 @@ public final class Harakiri {
             //this.prevTitle = Display.getTitle();
             //Display.setTitle("Vaxppuku 1.12.2");
 
+            // Register the menu
+            //MinecraftForge.EVENT_BUS.register(this.haraMainMenu);
+
             this.getEventManager().dispatchEvent(new EventLoad());
+
+            // Create the font renderer
+            fontRendererExtd = new FontRendererExtd(Minecraft.getMinecraft().gameSettings, new ResourceLocation("harakirimod", "textures/ascii.png"), Minecraft.getMinecraft().renderEngine, true);
 
             // Add runtime hook to listen for shutdown to save configs
             Runtime.getRuntime().addShutdownHook(new Thread("Harakiri Shutdown Hook") {
@@ -128,7 +152,7 @@ public final class Harakiri {
     }
 
     public void errorChat(String message) {
-        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("\2477[Harakiri]\247c " + message));
+        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("\2475[\2477\247lHarakiri\247r\2475]\247r\247c " + message));
     }
 
     public void errorfChat(String format, Object... objects) {
@@ -136,11 +160,11 @@ public final class Harakiri {
     }
 
     public void logChat(String message) {
-        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("\2477[Harakiri]\247f " + message));
+        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("\2475[\2477\247lHarakiri\247r\2475]\247r\247f " + message));
     }
 
     public void logcChat(ITextComponent textComponent) {
-        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("\2477[Harakiri]\247f ").appendSibling(textComponent));
+        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("\2475[\2477\247lHarakiri\247r\2475]\247r\247f ").appendSibling(textComponent));
     }
 
     public void logfChat(String format, Object... objects) {
@@ -152,11 +176,9 @@ public final class Harakiri {
         this.apiManager.unload();
         this.commandManager.unload();
         this.friendManager.unload();
-        this.waypointManager.unload();
         this.macroManager.unload();
         this.tickRateManager.unload();
         this.chatManager.unload();
-        this.ignoredManager.unload();
         this.joinLeaveManager.unload();
         this.hudManager.unload();
         this.animationManager.unload();
@@ -185,16 +207,22 @@ public final class Harakiri {
 
     //TODO fix multi event firing when reloading modules
     public void reload() {
-        this.waypointManager.getWaypointDataList().clear();
         this.friendManager.getFriendList().clear();
         this.macroManager.getMacroList().clear();
         this.worldManager.getWorldDataList().clear();
-        this.ignoredManager.getIgnoredList().clear();
 
         this.configManager.getConfigurableList().clear();
         this.configManager = new ConfigManager();
 
         this.getEventManager().dispatchEvent(new EventReload());
+    }
+
+    public String getUsername(){
+        return this.username;
+    }
+
+    public void setUsername(String u){
+        this.username = u;
     }
 
     /**
@@ -273,13 +301,6 @@ public final class Harakiri {
         return this.macroManager;
     }
 
-    public WaypointManager getWaypointManager() {
-        if (this.waypointManager == null) {
-            this.waypointManager = new WaypointManager();
-        }
-        return this.waypointManager;
-    }
-
     public TickRateManager getTickRateManager() {
         if (this.tickRateManager == null) {
             this.tickRateManager = new TickRateManager();
@@ -299,13 +320,6 @@ public final class Harakiri {
             this.worldManager = new WorldManager();
         }
         return this.worldManager;
-    }
-
-    public IgnoredManager getIgnoredManager() {
-        if (this.ignoredManager == null) {
-            this.ignoredManager = new IgnoredManager();
-        }
-        return this.ignoredManager;
     }
 
     public PositionManager getPositionManager() {
@@ -357,6 +371,41 @@ public final class Harakiri {
         return this.cameraManager;
     }
 
+    public DiscordManager getDiscordManager() {
+        if (this.discordManager == null) {
+            this.discordManager = new DiscordManager();
+        }
+        return this.discordManager;
+    }
+
+    public FontRendererExtd getFontRendererExtd(){
+        if(this.fontRendererExtd == null){
+            this.fontRendererExtd = new FontRendererExtd(Minecraft.getMinecraft().gameSettings, new ResourceLocation("harakirimod", "textures/ascii.png"), Minecraft.getMinecraft().renderEngine, true);
+        }
+        return this.fontRendererExtd;
+    }
+
+    public TTFFontUtil getTTFFontUtil(){
+        if(this.fontUtil == null){
+            this.fontUtil = new TTFFontUtil("gravity", 20);
+        }
+        return this.fontUtil;
+    }
+
+    public RenderItemAlpha getRenderItemAlpha(){
+        if(this.renderItemAlpha == null){
+            this.renderItemAlpha = new RenderItemAlpha(Minecraft.getMinecraft().getTextureManager(), Minecraft.getMinecraft().modelManager, Minecraft.getMinecraft().getItemColors());
+        }
+        return this.renderItemAlpha;
+    }
+
+    public boolean isTTF(){
+        CustomFontModule customFontModule = (CustomFontModule)Harakiri.INSTANCE.getModuleManager().find(CustomFontModule.class);
+        if(customFontModule == null)
+            return false;
+        return customFontModule.isEnabled();
+    }
+
     public PlexusEffect getPlexusEffect() {
         return this.plexusEffect;
     }
@@ -365,4 +414,7 @@ public final class Harakiri {
         this.plexusEffect = new PlexusEffect(plx);
     }
 
+
+    public static final ResourceLocation LIGHTNING_TEXTURE = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
+    public static final ResourceLocation ENCHANTED_ITEM_GLINT_RES = new ResourceLocation("textures/misc/enchanted_item_glint.png");
 }

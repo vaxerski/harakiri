@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.management;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.config.Configurable;
-import me.vaxry.harakiri.api.event.client.EventLoadConfig;
-import me.vaxry.harakiri.api.event.client.EventSaveConfig;
+import me.vaxry.harakiri.framework.config.Configurable;
+import me.vaxry.harakiri.framework.event.client.EventLoadConfig;
+import me.vaxry.harakiri.framework.event.client.EventSaveConfig;
 import me.vaxry.harakiri.impl.config.*;
 
 import java.io.File;
@@ -23,7 +23,7 @@ public final class ConfigManager {
 
     private List<Configurable> configurableList = new ArrayList<>();
 
-    public static final String CONFIG_PATH = "Harakiri/Config/";
+    public static final String CONFIG_PATH = "harakiri/config/";
 
     public ConfigManager() {
         this.generateDirectories();
@@ -35,35 +35,16 @@ public final class ConfigManager {
             this.setFirstLaunch(true);
             this.configDir.mkdirs();
         }
-
-        this.moduleConfigDir = new File(CONFIG_PATH + "Modules" + "/");
-        if (!this.moduleConfigDir.exists()) {
-            this.moduleConfigDir.mkdirs();
-        }
-
-        this.hudComponentConfigDir = new File(CONFIG_PATH + "HudComponents" + "/");
-        if (!this.hudComponentConfigDir.exists()) {
-            this.hudComponentConfigDir.mkdirs();
-        }
     }
 
     public void init() {
-        Harakiri.INSTANCE.getModuleManager().getModuleList().forEach(module -> {
-            this.configurableList.add(new ModuleConfig(this.moduleConfigDir, module));
-        });
-
-        Harakiri.INSTANCE.getHudManager().getComponentList().stream().forEach(hudComponent -> {
-            this.configurableList.add(new HudConfig(this.hudComponentConfigDir, hudComponent));
-        });
-
+        this.configurableList.add(new ModuleConfig(configDir));
+        this.configurableList.add(new HudConfig(configDir));
         this.configurableList.add(new FriendConfig(configDir));
         this.configurableList.add(new XrayConfig(configDir));
         this.configurableList.add(new SearchConfig(configDir));
         this.configurableList.add(new MacroConfig(configDir));
-        this.configurableList.add(new WaypointsConfig(configDir));
         this.configurableList.add(new WorldConfig(configDir));
-        this.configurableList.add(new IgnoreConfig(configDir));
-        this.configurableList.add(new AutoIgnoreConfig(configDir));
 
         if (this.firstLaunch) {
             this.saveAll();

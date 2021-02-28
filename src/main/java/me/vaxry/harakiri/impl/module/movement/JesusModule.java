@@ -1,11 +1,11 @@
 package me.vaxry.harakiri.impl.module.movement;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventSendPacket;
-import me.vaxry.harakiri.api.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.api.event.world.EventLiquidCollisionBB;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
+import me.vaxry.harakiri.framework.event.world.EventLiquidCollisionBB;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockLiquid;
@@ -23,16 +23,16 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class JesusModule extends Module {
 
-    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "The current Jesus/WaterWalk mode to use.", Mode.NCP);
+    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "The current Jesus mode to use.", Mode.NCP);
 
     private enum Mode {
         VANILLA, NCP, BOUNCE
     }
 
-    public final Value<Float> offset = new Value<Float>("Offset", new String[]{"Off", "O"}, "Amount to offset the player into the water's bounding box.", 0.05f, 0.0f, 0.9f, 0.01f);
+    public final Value<Float> offset = new Value<Float>("Offset", new String[]{"Off", "O"}, "Amount to offset the player.", 0.05f, 0.0f, 0.9f, 0.01f);
 
     public JesusModule() {
-        super("Jesus", new String[]{"LiquidWalk", "WaterWalk"}, "Allows you to walk on water", "NONE", -1, ModuleType.MOVEMENT);
+        super("Jesus", new String[]{"LiquidWalk", "WaterWalk"}, "Allows you to walk on water, just like Jesus.", "NONE", -1, ModuleType.MOVEMENT);
     }
 
     @Override

@@ -1,11 +1,11 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import me.vaxry.harakiri.api.event.render.EventRender3D;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.ColorUtil;
-import me.vaxry.harakiri.api.util.MathUtil;
-import me.vaxry.harakiri.api.util.RenderUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.ColorUtil;
+import me.vaxry.harakiri.framework.util.MathUtil;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -23,18 +23,18 @@ import java.awt.*;
  */
 public final class BlockHighlightModule extends Module {
 
-    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"M", "type", "t"}, "Select which mode to draw the highlight visual.", Mode.BOX);
-    public final Value<Color> color = new Value<Color>("Color", new String[]{"Col", "c"}, "Edit the block highlight color.", new Color(255, 255, 255));
-    public final Value<Integer> alpha = new Value<Integer>("Alpha", new String[]{"Alp", "Opacity", "a", "o"}, "Alpha value for the highlight visual.", 127, 1, 255, 1);
-    public final Value<Float> width = new Value<Float>("Width", new String[]{"W", "size", "s"}, "Width value of the highlight visual.", 1.5f, 0.1f, 5.0f, 0.1f);
-    public final Value<Boolean> breaking = new Value<Boolean>("Breaking", new String[]{"Break", "block", "brk"}, "Sizes the highlight visual based on the block breaking damage.", false);
+    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"M", "type", "t"}, "Select which mode to draw the HighlightX.", Mode.BOX);
+    public final Value<Color> color = new Value<Color>("Color", new String[]{"Col", "c"}, "Edit the HighlightX color.", new Color(255, 255, 255));
+    public final Value<Integer> alpha = new Value<Integer>("Alpha", new String[]{"Alp", "Opacity", "a", "o"}, "Alpha value for the HighlightX.", 127, 1, 255, 1);
+    public final Value<Float> width = new Value<Float>("Width", new String[]{"W", "size", "s"}, "Width value of the HighlightX.", 1.5f, 0.1f, 5.0f, 0.1f);
+    //public final Value<Boolean> breaking = new Value<Boolean>("Breaking", new String[]{"Break", "block", "brk"}, "Sizes the highlight visual based on the block breaking damage.", false);
 
     public enum Mode {
         BOX, OUTLINE, CROSS
     }
 
     public BlockHighlightModule() {
-        super("BlockHighlight", new String[]{"BHighlight", "BlockHigh"}, "Highlights the block at your cross-hair", "NONE", -1, ModuleType.RENDER);
+        super("HighlightX", new String[]{"BHighlight", "BlockHigh"}, "Highlights the block you are looking at.", "NONE", -1, ModuleType.RENDER);
     }
 
     @Listener
@@ -51,14 +51,6 @@ public final class BlockHighlightModule extends Module {
         final IBlockState iblockstate = mc.world.getBlockState(blockpos);
         if (iblockstate.getMaterial() != Material.AIR && mc.world.getWorldBorder().contains(blockpos)) {
             float currentDamage = 0.0f;
-
-            if (mc.player.isSwingInProgress) {
-                if (this.breaking.getValue()) {
-                    currentDamage = Math.abs(mc.playerController.curBlockDamageMP);
-                } else {
-                    currentDamage = 0.0f;
-                }
-            }
 
             RenderUtil.begin3D();
             final Vec3d interp = MathUtil.interpolateEntity(mc.player, mc.getRenderPartialTicks());

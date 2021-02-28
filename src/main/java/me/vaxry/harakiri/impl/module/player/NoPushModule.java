@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.module.player;
 
-import me.vaxry.harakiri.api.event.player.EventApplyCollision;
-import me.vaxry.harakiri.api.event.player.EventPushOutOfBlocks;
-import me.vaxry.harakiri.api.event.player.EventPushedByWater;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.player.EventApplyCollision;
+import me.vaxry.harakiri.framework.event.player.EventPushOutOfBlocks;
+import me.vaxry.harakiri.framework.event.player.EventPushedByWater;
+import me.vaxry.harakiri.framework.module.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 /**
@@ -13,7 +13,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class NoPushModule extends Module {
 
     public NoPushModule() {
-        super("NoPush", new String[]{"AntiPush"}, "Disable collision with entities, blocks and water", "NONE", -1, ModuleType.PLAYER);
+        super("NoPush", new String[]{"AntiPush"}, "Disable collision.", "NONE", -1, ModuleType.PLAYER);
     }
 
     @Listener

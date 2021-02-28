@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.module.player;
 
-import me.vaxry.harakiri.api.event.network.EventSendPacket;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
@@ -10,7 +10,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public class AntiHungerModule extends Module {
 
     public AntiHungerModule() {
-        super("AntiHunger", new String[]{"AntiHunger", "AH"}, "Makes you lose less hunger", "NONE", -1, ModuleType.PLAYER);
+        super("AntiHunger", new String[]{"AntiHunger", "AH"}, "Makes you lose less hunger.", "NONE", -1, ModuleType.PLAYER);
     }
 
     @Listener

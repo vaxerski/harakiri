@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.module.player;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
@@ -22,7 +22,7 @@ public final class AutoGappleModule extends Module {
     private int notchAppleSlot = -1;
 
     public AutoGappleModule() {
-        super("AutoGapple", new String[]{"Gapple", "AutoApple"}, "Automatically swaps & eats a (notch) apple when health is below the set threshold.", "NONE", -1, ModuleType.PLAYER);
+        super("AutoGapple", new String[]{"Gapple", "AutoApple"}, "Automatically eats a (god) apple when health is below the set threshold.", "NONE", -1, ModuleType.PLAYER);
     }
 
     @Override

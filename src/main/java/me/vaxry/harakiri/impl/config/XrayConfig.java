@@ -4,8 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.config.Configurable;
-import me.vaxry.harakiri.api.util.FileUtil;
+import me.vaxry.harakiri.framework.config.Configurable;
+import me.vaxry.harakiri.framework.util.FileUtil;
 import me.vaxry.harakiri.impl.module.render.XrayModule;
 
 import java.io.File;
@@ -19,7 +19,7 @@ public final class XrayConfig extends Configurable {
     private final XrayModule xrayModule;
 
     public XrayConfig(File dir) {
-        super(FileUtil.createJsonFile(dir, "XrayIds"));
+        super(FileUtil.createJsonFile(dir, "xray"));
         this.xrayModule = (XrayModule) Harakiri.INSTANCE.getModuleManager().find("Xray");
     }
 

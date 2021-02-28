@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.fml.core;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.patch.ClassPatch;
-import me.vaxry.harakiri.api.patch.MethodPatch;
-import me.vaxry.harakiri.api.util.ASMUtil;
+import me.vaxry.harakiri.framework.patch.ClassPatch;
+import me.vaxry.harakiri.framework.patch.MethodPatch;
+import me.vaxry.harakiri.framework.util.ASMUtil;
 import me.vaxry.harakiri.impl.management.PatchManager;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.tree.ClassNode;
@@ -19,6 +19,8 @@ import java.util.logging.Level;
  * Author Seth
  * 4/4/2019 @ 11:49 PM.
  */
+
+/*
 public final class HarakiriClassTransformer implements IClassTransformer {
     public static PatchManager PATCH_MANAGER = null;
 
@@ -29,7 +31,7 @@ public final class HarakiriClassTransformer implements IClassTransformer {
      * @param transformedName
      * @param basicClass
      * @return
-     */
+     *//*
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
 
@@ -154,3 +156,4 @@ public final class HarakiriClassTransformer implements IClassTransformer {
     }
 
 }
+*/

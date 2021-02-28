@@ -1,22 +1,26 @@
 package me.vaxry.harakiri.impl.management;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.render.EventRender2D;
-import me.vaxry.harakiri.api.gui.hud.component.HudComponent;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.ReflectionUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.texture.Texture;
+import me.vaxry.harakiri.framework.util.ReflectionUtil;
+import me.vaxry.harakiri.framework.util.Timer;
+import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.gui.hud.component.*;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
-import me.vaxry.harakiri.impl.module.misc.ReconnectModule;
+import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleSearchComponent;
+import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.common.MinecraftForge;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
+import java.awt.*;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -34,7 +38,10 @@ public final class HudManager {
     private List<HudComponent> componentList = new CopyOnWriteArrayList<>();
     private List<AnchorPoint> anchorPoints = new ArrayList<>();
 
-    private final FirstLaunchComponent firstLaunchComponent;
+    private Timer timer = new Timer();
+    float rainSpeed = 0.1f; // +0.1 default
+    public int rainbowColor = 0x00000000;
+    private float hue = 0;
 
     public HudManager() {
         final ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
@@ -77,13 +84,14 @@ public final class HudManager {
             moduleListXOffset += moduleList.getW() + 4 /* gap between each list */;
         }
 
+        final ModuleSearchComponent moduleSearchComponent = new ModuleSearchComponent();
+        add(moduleSearchComponent);
+
         RireworksFemovedComponent rfc = new RireworksFemovedComponent();
 
         add(new PlexusComponent());
         add(new WatermarkComponent());
-        add(new EnabledModsComponent(TOP_RIGHT)); // creates the enabled mods component & by default anchors in the top right (to aid new users)
         add(new TpsComponent());
-        add(new PotionEffectsComponent());
         add(new FpsComponent());
         add(new CoordsComponent());
         add(new NetherCoordsComponent());
@@ -94,37 +102,32 @@ public final class HudManager {
         add(new ArmorComponent());
         add(new PingComponent());
         add(new ServerBrandComponent());
-        add(new BiomeComponent());
         add(new DirectionComponent());
         add(new PacketTimeComponent());
         add(rfc);
         add(new TimeComponent());
-        add(new EnemyPotionsComponent());
         add(new HubComponent());
         add(new SwitchViewComponent());
         add(new InventoryComponent());
         add(new TotemCountComponent());
-        add(new TutorialComponent());
-        add(new HoleOverlayComponent());
         add(new PlayerCountComponent());
-        add(new OverViewComponent());
-        add(new RearViewComponent());
         add(new EntityListComponent());
+        add(new WarningsComponent());
 
         MinecraftForge.EVENT_BUS.register(rfc);
         //MinecraftForge.EVENT_BUS.register(new ThreatCamComponent());
 
+        ArrayListComponent arrayListComponent = new ArrayListComponent(TOP_RIGHT);
+        arrayListComponent.setAnchorPoint(TOP_RIGHT);
+        add(arrayListComponent);
         NotificationsComponent notificationsComponent = new NotificationsComponent();
-        notificationsComponent.setAnchorPoint(TOP_CENTER);
+        notificationsComponent.setAnchorPoint(TOP_LEFT);
         add(notificationsComponent);
 
-        this.loadExternalHudComponents();
+        //this.loadExternalHudComponents();
 
         // Organize alphabetically
         this.componentList = this.componentList.stream().sorted((obj1, obj2) -> obj1.getName().compareTo(obj2.getName())).collect(Collectors.toList());
-
-        // Create first launch component
-        this.firstLaunchComponent = new FirstLaunchComponent();
 
         Harakiri.INSTANCE.getEventManager().addEventListener(this);
     }
@@ -161,16 +164,6 @@ public final class HudManager {
     public void onRender(EventRender2D event) {
         final Minecraft mc = Minecraft.getMinecraft();
 
-        if (this.firstLaunchComponent != null && mc.world != null) {
-            if (Harakiri.INSTANCE.getConfigManager().isFirstLaunch()) {
-                if (mc.currentScreen instanceof GuiHudEditor) {
-                    firstLaunchComponent.onClose();
-                } else if (firstLaunchComponent.isVisible()) {
-                    firstLaunchComponent.render(0, 0, event.getPartialTicks());
-                }
-            }
-        }
-
         final int chatHeight = (mc.currentScreen instanceof GuiChat) ? 14 : 0;
 
         for (AnchorPoint point : this.anchorPoints) {
@@ -199,11 +192,25 @@ public final class HudManager {
                 point.setY(event.getScaledResolution().getScaledHeight() - 2);
             }
         }
+
+        HudEditorModule hudmodule = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
+        rainSpeed = hudmodule.rainspeed.getValue();
+
+        // Shift RGB
+
+        final float jitter = getJitter();
+
+        hue += jitter;
+        if(hue > 1)
+            hue -= 1;
+
+        Color rainbowColorC = Color.getHSBColor(hue, 1, 1);
+        rainbowColor = 0xFF000000 + rainbowColorC.getRed() * 0x10000 + rainbowColorC.getGreen() * 0x100 + rainbowColorC.getBlue();
     }
 
     public void loadExternalHudComponents() {
         try {
-            final File dir = new File("harakiri/Hud");
+            final File dir = new File("harakiri/hud");
 
             if (!dir.exists()) {
                 dir.mkdirs();
@@ -276,6 +283,15 @@ public final class HudManager {
 
     public List<HudComponent> getComponentList() {
         return this.componentList.stream().sorted((obj1, obj2) -> obj1.getName().compareTo(obj2.getName())).collect(Collectors.toList());
+    }
+
+    private float getJitter() {
+        final float seconds = ((System.currentTimeMillis() - this.timer.getTime()) / 1000.0f) % 60.0f;
+
+        final float desiredTimePerSecond = rainSpeed;
+
+        this.timer.reset();
+        return Math.min(desiredTimePerSecond * seconds, 1.0f);
     }
 
     public void setComponentList(List<HudComponent> componentList) {

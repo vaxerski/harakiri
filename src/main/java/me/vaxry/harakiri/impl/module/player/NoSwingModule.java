@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.module.player;
 
-import me.vaxry.harakiri.api.event.player.EventSwingArm;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.player.EventSwingArm;
+import me.vaxry.harakiri.framework.module.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 /**
@@ -11,7 +11,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class NoSwingModule extends Module {
 
     public NoSwingModule() {
-        super("NoSwing", new String[]{"AntiSwing"}, "Prevents swinging server-side", "NONE", -1, ModuleType.PLAYER);
+        super("NoSwing", new String[]{"AntiSwing"}, "Prevents swinging server-side.", "NONE", -1, ModuleType.PLAYER);
     }
 
     @Listener

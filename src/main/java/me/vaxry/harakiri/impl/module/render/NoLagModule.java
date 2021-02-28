@@ -1,29 +1,34 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.event.render.*;
-import me.vaxry.harakiri.api.event.render.*;
-import me.vaxry.harakiri.api.event.world.EventLightUpdate;
-import me.vaxry.harakiri.api.event.world.EventSpawnParticle;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import com.yworks.yguard.test.A;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.event.render.*;
+import me.vaxry.harakiri.framework.event.world.EventLightUpdate;
+import me.vaxry.harakiri.framework.event.world.EventSpawnParticle;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.block.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.projectile.EntityWitherSkull;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.network.play.server.SPacketSpawnMob;
 import net.minecraft.tileentity.*;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import org.spongepowered.asm.mixin.Mixin;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Author Seth
@@ -31,24 +36,30 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class NoLagModule extends Module {
 
-    public final Value<Boolean> light = new Value<Boolean>("Light", new String[]{"Lit", "l"}, "Choose to enable the lighting lag fix. Disables lighting updates.", true);
-    public final Value<Boolean> signs = new Value<Boolean>("Signs", new String[]{"Sign", "si"}, "Choose to enable the sign lag fix. Disables the rendering of sign text.", false);
-    public final Value<Boolean> sounds = new Value<Boolean>("Sounds", new String[]{"Sound", "s"}, "Choose to enable the sound lag fix. Disable entity swap-item/equip sound.", true);
-    public final Value<Boolean> pistons = new Value<Boolean>("Pistons", new String[]{"Piston", "p"}, "Choose to enable the piston lag fix. Disables pistons from rendering.", false);
-    public final Value<Boolean> slimes = new Value<Boolean>("Slimes", new String[]{"Slime", "sl"}, "Choose to enable the slime lag fix. Disables slimes from spawning.", false);
-    public final Value<Boolean> items = new Value<Boolean>("Items", new String[]{"Item", "i"}, "Disables the rendering of items.", false);
-    public final Value<Boolean> particles = new Value<Boolean>("Particles", new String[]{"Part", "par"}, "Disables the spawning of all particles.", false);
+    public final Value<Boolean> light = new Value<Boolean>("Light", new String[]{"Lit", "l"}, "Disables lighting updates.", true);
+    public final Value<Boolean> signs = new Value<Boolean>("Signs", new String[]{"Sign", "si"}, "Disables the rendering of sign text.", false);
+    //public final Value<Boolean> sounds = new Value<Boolean>("Sounds", new String[]{"Sound", "s"}, "Disable entity swap-item/equip sound.", true);
     public final Value<Boolean> sky = new Value<Boolean>("Sky", new String[]{"Skies", "ski"}, "Disables the rendering of the sky.", false);
-    public final Value<Boolean> names = new Value<Boolean>("Names", new String[]{"Name", "n"}, "Disables the rendering of vanilla name-tags.", false);
+    //public final Value<Boolean> pistons = new Value<Boolean>("Pistons", new String[]{"Piston", "p"}, "Choose to enable the piston lag fix. Disables pistons from rendering.", false);
+    public final Value<Boolean> names = new Value<Boolean>("Names", new String[]{"Name", "n"}, "Disables the rendering of vanilla nametags (not hara ones).", false);
+    public final Value<Boolean> slimes = new Value<Boolean>("Slimes", new String[]{"Slime", "sl"}, "Disables slimes from spawning.", false);
+    public final Value<Boolean> items = new Value<Boolean>("Items", new String[]{"Item", "i"}, "Disables the rendering of items.", false);
+    public final Value<Boolean> particles = new Value<Boolean>("Particles", new String[]{"Part", "par"}, "Disables the spawning of particles.", false);
     public final Value<Boolean> withers = new Value<Boolean>("Withers", new String[]{"Wither", "w"}, "Disables the rendering of withers.", false);
     public final Value<Boolean> witherSkulls = new Value<Boolean>("WitherSkulls", new String[]{"WitherSkull", "skulls", "skull", "ws"}, "Disables the rendering of flying wither skulls.", false);
     public final Value<Boolean> crystals = new Value<Boolean>("Crystals", new String[]{"Wither", "w"}, "Disables the rendering of crystals.", false);
-    public final Value<Boolean> tnt = new Value<Boolean>("TNT", new String[]{"Wither", "w"}, "Disables the rendering of (primed) TNT.", false);
+    public final Value<Boolean> tnt = new Value<Boolean>("TNT", new String[]{"Wither", "w"}, "Disables the rendering of TNT.", false);
+    //public final Value<Boolean> tiles = new Value<Boolean>("TileEntities", new String[]{"TileEntities", "t"}, "Remove Tile entities.", false);
+    //public final Value<Float> tileDist = new Value<Float>("TileDistance", new String[]{"TileDistance", "td"}, "Distance to remove the tile entities.", 50.f, 0.f, 100.f, 1.f);
     public final Value<Boolean> firework = new Value<Boolean>("Fireworks", new String[]{"Fir", "f"}, "Disables the rendering of fireworks.", false);
-    public final Value<Boolean> removeChunkBan = new Value<Boolean>("NoChunkBan", new String[]{"NoChunk", "nw"}, "Remove chunkbans", false);
+    public final Value<Boolean> removeChunkBan = new Value<Boolean>("NoChunkBan", new String[]{"NoChunk", "nw"}, "Remove certain chunkbans.", false);
+    public final Value<Boolean> hardRemove = new Value<Boolean>("HardRemove", new String[]{"HardRemove", "hr"}, "Hard removes certain entities (e.g. items)", false);
+
+
+    private final HashMap<TileEntity, String> signTexts = new HashMap<>();
 
     public NoLagModule() {
-        super("NoLag", new String[]{"AntiLag", "NoRender"}, "Fixes malicious lag exploits and bugs that cause lag.", "NONE", -1, ModuleType.RENDER);
+        super("NoLag", new String[]{"AntiLag", "NoRender"}, "Fixes malicious lag exploits and bugs.", "NONE", -1, ModuleType.RENDER);
     }
 
     @Listener
@@ -74,13 +85,13 @@ public final class NoLagModule extends Module {
 
     @Listener
     public void renderBlockModel(EventRenderBlockModel event) {
-        if (this.pistons.getValue()) {
+        /*if (this.pistons.getValue()) {
             final Block block = event.getBlockState().getBlock();
             if (block instanceof BlockPistonMoving || block instanceof BlockPistonExtension) {
                 event.setRenderable(false);
                 event.setCanceled(true);
             }
-        }
+        }*/
         if (this.removeChunkBan.getValue()) {
             final Block block = event.getBlockState().getBlock();
             if (block instanceof BlockBeacon || block instanceof BlockEnchantmentTable) {
@@ -97,7 +108,11 @@ public final class NoLagModule extends Module {
             for (TileEntity te : mc.world.loadedTileEntityList) {
                 if (te instanceof TileEntitySign && this.signs.getValue()) {
                     final TileEntitySign sign = (TileEntitySign) te;
-                    sign.signText = new ITextComponent[]{new TextComponentString(""), new TextComponentString(""), new TextComponentString(""), new TextComponentString("")};
+                    if(!sign.signText[0].toString().equalsIgnoreCase("") || !sign.signText[1].toString().equalsIgnoreCase("") ||
+                            !sign.signText[2].toString().equalsIgnoreCase("") || !sign.signText[3].toString().equalsIgnoreCase("")) {
+                        signTexts.put(sign, sign.signText[0].getFormattedText() + "<br>" + sign.signText[1].getFormattedText() + "<br>" + sign.signText[2].getFormattedText() + "<br>" + sign.signText[3].getFormattedText());
+                        sign.signText = new ITextComponent[]{new TextComponentString(""), new TextComponentString(""), new TextComponentString(""), new TextComponentString("")};
+                    }
                 }
                 else if (te instanceof TileEntityBeacon && this.removeChunkBan.getValue()) {
                     te.invalidate();
@@ -109,6 +124,19 @@ public final class NoLagModule extends Module {
                     te.invalidate();
                 }
             }
+        }
+
+        if(!this.signs.getValue() && !signTexts.isEmpty()){
+            // Restore signs
+            for(Map.Entry<TileEntity, String> entry : signTexts.entrySet()){
+                if(entry.getKey() == null)
+                    continue;
+
+                String[] str = entry.getValue().split("<br>");
+                ((TileEntitySign)entry.getKey()).signText = new ITextComponent[]{new TextComponentString(str[0]),new TextComponentString(str[1]),new TextComponentString(str[2]),new TextComponentString(str[3])};
+            }
+
+            signTexts.clear();
         }
     }
 
@@ -123,12 +151,12 @@ public final class NoLagModule extends Module {
     public void receivePacket(EventReceivePacket event) {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof SPacketSoundEffect) {
-                if (this.sounds.getValue()) {
+                /*if (this.sounds.getValue()) {
                     final SPacketSoundEffect packet = (SPacketSoundEffect) event.getPacket();
                     if (packet.getCategory() == SoundCategory.PLAYERS && packet.getSound() == SoundEvents.ITEM_ARMOR_EQUIP_GENERIC) {
                         event.setCanceled(true);
                     }
-                }
+                }*/
             }
         }
     }
@@ -180,5 +208,21 @@ public final class NoLagModule extends Module {
         if (this.names.getValue()) {
             event.setCanceled(true);
         }
+    }
+
+    @Override
+    public void onDisable() {
+        super.onDisable();
+
+        // Restore signs
+        for(Map.Entry<TileEntity, String> entry : signTexts.entrySet()){
+            if(entry.getKey() == null)
+                continue;
+
+            String[] str = entry.getValue().split("<br>");
+            ((TileEntitySign)entry.getKey()).signText = new ITextComponent[]{new TextComponentString(str[0]),new TextComponentString(str[1]),new TextComponentString(str[2]),new TextComponentString(str[3])};
+        }
+
+        signTexts.clear();
     }
 }

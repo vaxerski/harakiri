@@ -2,14 +2,15 @@ package me.vaxry.harakiri.impl.module.render;
 
 import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
-import me.vaxry.harakiri.api.event.player.EventPlayerJoin;
-import me.vaxry.harakiri.api.event.player.EventPlayerLeave;
-import me.vaxry.harakiri.api.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.api.event.render.EventRender2D;
-import me.vaxry.harakiri.api.event.render.EventRender3D;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.GLUProjection;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.event.player.EventPlayerJoin;
+import me.vaxry.harakiri.framework.event.player.EventPlayerLeave;
+import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
+import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.GLUProjection;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,13 +24,13 @@ import java.util.Map;
  */
 public final class LogoutSpotsModule extends Module {
 
-    public final Value<Integer> removeDistance = new Value<Integer>("RemoveDistance", new String[]{"RD", "RemoveRange"}, "Minimum distance in blocks the player must be away from the spot for it to be removed.", 200, 1, 2000, 1);
+    public final Value<Integer> removeDistance = new Value<Integer>("RemoveDistance", new String[]{"RD", "RemoveRange"}, "Minimum distance in blocks the player must be away from the spot for it to be deleted.", 200, 1, 2000, 1);
 
     private final Map<String, EntityPlayer> playerCache = Maps.newConcurrentMap();
     private final Map<String, PlayerData> logoutCache = Maps.newConcurrentMap();
 
     public LogoutSpotsModule() {
-        super("LogoutSpots", new String[]{"Logout", "Spots"}, "Draws the location of nearby player logouts.", "NONE", -1, ModuleType.RENDER);
+        super("LogoutSpots", new String[]{"Logout", "Spots"}, "Draws the location of player logouts.", "NONE", -1, ModuleType.RENDER);
     }
 
     @Override
@@ -75,7 +76,7 @@ public final class LogoutSpotsModule extends Module {
             GlStateManager.enableLighting();
             GlStateManager.enableBlend();
             GlStateManager.enableDepth();
-            GlStateManager.color(1, 1, 1, 1);
+            GlStateManager.color(1, 1, 1, 0.3f);
             mc.getRenderManager().renderEntity(data.ghost, data.position.x - mc.getRenderManager().renderPosX, data.position.y - mc.getRenderManager().renderPosY, data.position.z - mc.getRenderManager().renderPosZ, data.ghost.rotationYaw, mc.getRenderPartialTicks(), false);
             GlStateManager.disableLighting();
             GlStateManager.disableBlend();
@@ -100,8 +101,8 @@ public final class LogoutSpotsModule extends Module {
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(projection.getX(), projection.getY(), 0);
                 String text = data.profile.getName() + " logout";
-                float textWidth = mc.fontRenderer.getStringWidth(text);
-                mc.fontRenderer.drawStringWithShadow(text, -(textWidth / 2), 0, -1);
+                float textWidth = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(text);
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(text, -(textWidth / 2), 0, -1);
                 GlStateManager.translate(-projection.getX(), -projection.getY(), 0);
                 GlStateManager.popMatrix();
             }

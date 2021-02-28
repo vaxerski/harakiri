@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.module.world;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
@@ -13,10 +13,10 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class TimerModule extends Module {
 
-    public final Value<Float> speed = new Value<Float>("Speed", new String[]{"Spd"}, "Tick-rate multiplier. [(20tps/second) * (this value)]", 4.0f, 0.0f, 10.0f, 0.1f);
+    public final Value<Float> speed = new Value<Float>("Speed", new String[]{"Spd"}, "Tickrate multiplier.", 4.0f, 0.0f, 10.0f, 0.1f);
 
     public TimerModule() {
-        super("Timer", new String[]{"Time", "Tmr"}, "Speeds up the client tick rate", "NONE", -1, ModuleType.WORLD);
+        super("Timer", new String[]{"Time", "Tmr"}, "Speeds up the client's tick rate.", "NONE", -1, ModuleType.WORLD);
     }
 
     @Override

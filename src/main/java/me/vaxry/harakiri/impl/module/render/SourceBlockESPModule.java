@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import me.vaxry.harakiri.api.event.render.EventRender3D;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -13,7 +13,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-import me.vaxry.harakiri.api.util.RenderUtil;
+import me.vaxry.harakiri.framework.util.RenderUtil;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public final class SourceBlockESPModule extends Module {
@@ -23,7 +23,7 @@ public final class SourceBlockESPModule extends Module {
     private ICamera camera = new Frustum();
 
     public SourceBlockESPModule() {
-        super("Source Block ESP", new String[]{"SourceBlockESP", "SourceBlockESP", "SourceBlockESP"}, "Highlights Source Blocks", "NONE", -1, ModuleType.RENDER);
+        super("SourceBlockESP", new String[]{"SourceBlockESP", "SourceBlockESP", "SourceBlockESP"}, "Highlights Source Blocks", "NONE", -1, ModuleType.RENDER);
     }
 
     @Listener

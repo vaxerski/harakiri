@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.patch;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.player.*;
-import me.vaxry.harakiri.api.patch.ClassPatch;
-import me.vaxry.harakiri.api.patch.MethodPatch;
+import me.vaxry.harakiri.framework.event.player.*;
+import me.vaxry.harakiri.framework.patch.ClassPatch;
+import me.vaxry.harakiri.framework.patch.MethodPatch;
 import me.vaxry.harakiri.impl.management.PatchManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;

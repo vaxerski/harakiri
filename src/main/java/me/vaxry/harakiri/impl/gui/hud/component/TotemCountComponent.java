@@ -1,6 +1,7 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
@@ -12,7 +13,7 @@ public final class TotemCountComponent extends DraggableHudComponent {
 
     public TotemCountComponent() {
         super("TotemCount");
-        this.setH(mc.fontRenderer.FONT_HEIGHT);
+        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -21,11 +22,11 @@ public final class TotemCountComponent extends DraggableHudComponent {
 
         if (mc.player != null) {
             final String totemCount = "Totems: " + this.getTotemCount();
-            this.setW(mc.fontRenderer.getStringWidth(totemCount));
-            mc.fontRenderer.drawStringWithShadow(totemCount, this.getX(), this.getY(), -1);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(totemCount));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(totemCount, this.getX(), this.getY(), -1);
         } else {
-            this.setW(mc.fontRenderer.getStringWidth("(totem count)"));
-            mc.fontRenderer.drawStringWithShadow("(totem count)", this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("(totem count)"));
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(totem count)", this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 

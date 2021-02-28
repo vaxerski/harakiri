@@ -1,12 +1,10 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.gui.hud.component.HudComponent;
-import me.vaxry.harakiri.api.util.RenderUtil;
+import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
+import me.vaxry.harakiri.framework.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import scala.collection.parallel.ParIterableLike;
 
 public class SwitchViewComponent extends HudComponent {
 
@@ -37,21 +35,21 @@ public class SwitchViewComponent extends HudComponent {
         x = res.getScaledWidth() / 2.f;
         y = res.getScaledHeight();
 
-        if(didClick && isMouse(mouseX, mouseY, x - margin - mc.fontRenderer.getStringWidth(str)/2.f, y - mc.fontRenderer.FONT_HEIGHT - margin, mc.fontRenderer.getStringWidth(str) + 2 * margin, mc.fontRenderer.FONT_HEIGHT + 2 * margin))
-            y = 0 + mc.fontRenderer.FONT_HEIGHT + margin;
+        if(didClick && isMouse(mouseX, mouseY, x - margin - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(str)/2.f, y - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - margin, Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(str) + 2 * margin, Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 2 * margin))
+            y = 0 + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + margin;
 
-        RenderUtil.drawRect(x - mc.fontRenderer.getStringWidth(str)/2.f - margin,
-                y - mc.fontRenderer.FONT_HEIGHT - margin,
-                x + mc.fontRenderer.getStringWidth(str)/2.f + margin,
+        RenderUtil.drawRect(x - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(str)/2.f - margin,
+                y - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - margin,
+                x + Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(str)/2.f + margin,
                 y,
                 0x551D1D1D);
 
-        mc.fontRenderer.drawStringWithShadow(str, x - mc.fontRenderer.getStringWidth(str)/2.f, y - mc.fontRenderer.FONT_HEIGHT - margin, 0xFFFFFFFF);
+        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(str, x - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(str)/2.f, y - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - margin, 0xFFFFFFFF);
     }
 
     public void mouseClicked(int mouseX, int mouseY, int state){
         Minecraft mc = Minecraft.getMinecraft();
-        if(!isMouse(mouseX, mouseY, x - margin - mc.fontRenderer.getStringWidth(str)/2.f, y - mc.fontRenderer.FONT_HEIGHT - margin, mc.fontRenderer.getStringWidth(str) + 2 * margin, mc.fontRenderer.FONT_HEIGHT + 2 * margin))
+        if(!isMouse(mouseX, mouseY, x - margin - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(str)/2.f, y - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - margin, Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(str) + 2 * margin, Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 2 * margin))
         {
             didClick = true;
         }
@@ -59,7 +57,7 @@ public class SwitchViewComponent extends HudComponent {
 
     public void mouseReleased(int mouseX, int mouseY, int state) {
         Minecraft mc = Minecraft.getMinecraft();
-        if(isMouse(mouseX, mouseY, x - margin - mc.fontRenderer.getStringWidth(str)/2.f, y - mc.fontRenderer.FONT_HEIGHT - margin, mc.fontRenderer.getStringWidth(str) + 2 * margin, mc.fontRenderer.FONT_HEIGHT + 2 * margin))
+        if(isMouse(mouseX, mouseY, x - margin - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(str)/2.f, y - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - margin, Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(str) + 2 * margin, Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 2 * margin))
         {
             isModules = !isModules;
         }

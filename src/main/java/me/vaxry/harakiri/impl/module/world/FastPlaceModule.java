@@ -1,9 +1,9 @@
 package me.vaxry.harakiri.impl.module.world;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemExpBottle;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
@@ -14,10 +14,10 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class FastPlaceModule extends Module {
 
-    public final Value<Boolean> xp = new Value<Boolean>("XP", new String[]{"EXP"}, "Only activate while holding XP bottles.", false);
+    public final Value<Boolean> xp = new Value<Boolean>("OnlyXP", new String[]{"EXP"}, "Only activate while holding XP bottles.", false);
 
     public FastPlaceModule() {
-        super("FastPlace", new String[]{"Fp"}, "Removes place delay", "NONE", -1, ModuleType.WORLD);
+        super("FastPlace", new String[]{"Fp"}, "Removes place delay.", "NONE", -1, ModuleType.WORLD);
     }
 
     @Override

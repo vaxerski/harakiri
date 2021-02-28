@@ -1,7 +1,8 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
-import me.vaxry.harakiri.api.gui.hud.component.ResizableHudComponent;
-import me.vaxry.harakiri.api.texture.Texture;
+import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.gui.hud.component.ResizableHudComponent;
+import me.vaxry.harakiri.framework.texture.Texture;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -16,7 +17,7 @@ public final class WaifuComponent extends ResizableHudComponent {
 
     public WaifuComponent() {
         super("Waifu", 505 * 0.05f, 833 * 0.05f, 505 * 0.7f, 833 * 0.7f);
-        this.setW(Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT);
+        this.setW(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
         waifu = new Texture("waifu.png");
     }
 

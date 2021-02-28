@@ -1,13 +1,15 @@
 package me.vaxry.harakiri.impl.module.hidden;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.command.Command;
-import me.vaxry.harakiri.api.event.minecraft.EventKeyPress;
-import me.vaxry.harakiri.api.event.player.EventSendChatMessage;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.command.Command;
+import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
+import me.vaxry.harakiri.framework.event.minecraft.EventKeyPress;
+import me.vaxry.harakiri.framework.event.player.EventSendChatMessage;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiMainMenu;
 import org.lwjgl.input.Keyboard;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
@@ -17,12 +19,14 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class CommandsModule extends Module {
 
+    private boolean once = false;
     public final Value<String> prefix = new Value("Prefix", new String[]{"prefx", "pfx"}, "The command prefix.", ".");
 
     public CommandsModule() {
         super("Commands", new String[]{"cmds", "cmd"}, "Allows you to execute client commands", "NONE", -1, ModuleType.HIDDEN);
         this.setHidden(true);
-        this.toggle();
+        this.setEnabled(true);
+        this.onEnable();
     }
 
     @Listener
@@ -60,6 +64,17 @@ public final class CommandsModule extends Module {
             }
 
             event.setCanceled(true);
+        }
+    }
+
+    @Listener
+    public void displayScreen(EventDisplayGui event) {
+        if(!once){
+            if(Minecraft.getMinecraft().currentScreen instanceof GuiMainMenu){
+                // Send a MSG
+                Harakiri.INSTANCE.getApiManager().mex.writeFile("HaraMenu");
+                once = true;
+            }
         }
     }
 

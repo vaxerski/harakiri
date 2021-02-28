@@ -3,7 +3,7 @@
   "modid": "harakirimod",
   "name": "Harakiri",
   "description": "Harakiri is a hacked client built on forge.",
-  "version": "1.4.1",
+  "version": "1.5-dev",
   "mcversion": "1.12.2",
   "url": "",
   "updateUrl": "",

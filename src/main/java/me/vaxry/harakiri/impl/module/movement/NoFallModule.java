@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.movement;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventSendPacket;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketPlayer;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
@@ -14,7 +14,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class NoFallModule extends Module {
 
     public NoFallModule() {
-        super("NoFall", new String[]{"NoFallDamage"}, "Prevents fall damage", "NONE", -1, ModuleType.MOVEMENT);
+        super("NoFall", new String[]{"NoFallDamage"}, "Eliminates fall damage.", "NONE", -1, ModuleType.MOVEMENT);
     }
 
     @Listener

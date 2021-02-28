@@ -1,11 +1,11 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.gui.hud.component.ResizableHudComponent;
-import me.vaxry.harakiri.api.util.MathUtil;
-import me.vaxry.harakiri.api.util.RenderUtil;
-import me.vaxry.harakiri.api.util.Timer;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.gui.hud.component.ResizableHudComponent;
+import me.vaxry.harakiri.framework.util.MathUtil;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.util.Timer;
+import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import org.lwjgl.input.Keyboard;
 
@@ -90,18 +90,18 @@ public final class TpsGraphComponent extends ResizableHudComponent {
 
             if (this.isMouseInside(mouseX, mouseY)) { // mouse is inside
                 // draw delay
-                mc.fontRenderer.drawStringWithShadow(this.delay.getValue() + "ms", this.getX() + 2, this.getY() + this.getH() - mc.fontRenderer.FONT_HEIGHT - 1, 0xFFAAAAAA);
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.delay.getValue() + "ms", this.getX() + 2, this.getY() + this.getH() - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - 1, 0xFFAAAAAA);
             }
 
             // draw hovered data
             if (!hoveredData.equals("")) {
-                mc.fontRenderer.drawStringWithShadow(hoveredData, this.getX() + 2, this.getY() + this.getH() - mc.fontRenderer.FONT_HEIGHT * 2 - 1, 0xFFAAAAAA);
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(hoveredData, this.getX() + 2, this.getY() + this.getH() - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT * 2 - 1, 0xFFAAAAAA);
             }
 
             // border
             RenderUtil.drawBorderedRectBlurred(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 2.0f, 0x00000000, 0x90101010);
         } else {
-            mc.fontRenderer.drawStringWithShadow("(tps graph)", this.getX(), this.getY(), 0xFFAAAAAA);
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(tps graph)", this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 

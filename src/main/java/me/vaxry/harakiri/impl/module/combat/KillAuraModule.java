@@ -1,11 +1,11 @@
 package me.vaxry.harakiri.impl.module.combat;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.task.rotation.RotationTask;
-import me.vaxry.harakiri.api.util.MathUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.task.rotation.RotationTask;
+import me.vaxry.harakiri.framework.util.MathUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -30,6 +30,8 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  * 4/30/2019 @ 4:04 PM.
  */
 public final class KillAuraModule extends Module {
+
+    public boolean killAuraHit = false;
 
     public final Value<Boolean> players = new Value<>("Players", new String[]{"Player"}, "Choose to target players.", true);
     public final Value<Boolean> mobs = new Value<>("Mobs", new String[]{"Mob"}, "Choose to target mobs.", true);
@@ -79,6 +81,7 @@ public final class KillAuraModule extends Module {
                     final float ticks = 20.0f - Harakiri.INSTANCE.getTickRateManager().getTickRate();
                     final boolean canAttack = this.rotationTask.isOnline() && (!this.coolDown.getValue() || (mc.player.getCooledAttackStrength(this.sync.getValue() ? -ticks : 0.0f) >= 1));
                     if (canAttack) {
+                        killAuraHit = true;
                         final ItemStack stack = mc.player.getHeldItem(EnumHand.OFF_HAND);
                         if (!stack.isEmpty() && stack.getItem() == Items.SHIELD) {
                             mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, mc.player.getHorizontalFacing()));
@@ -87,6 +90,7 @@ public final class KillAuraModule extends Module {
                         mc.player.connection.sendPacket(new CPacketUseEntity(this.currentTarget));
                         mc.player.swingArm(EnumHand.MAIN_HAND);
                         mc.player.resetCooldown();
+                        killAuraHit = false;
                     }
                 } else {
                     Harakiri.INSTANCE.getRotationManager().finishTask(this.rotationTask);

@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.command;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.command.Command;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.command.Command;
+import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.impl.config.ModuleConfig;
 import org.lwjgl.input.Keyboard;
 
@@ -15,7 +15,7 @@ public final class BindCommand extends Command {
     private String[] clearAlias = new String[]{"Clear", "C"};
 
     public BindCommand() {
-        super("Bind", new String[]{"B"}, "Allows you to change keybinds for modules", "Bind <Module> <Key>\nBind Clear");
+        super("Bind", new String[]{"B"}, "Allows you to bind modules.", "Bind <module> <key>\nBind Clear");
     }
 
     @Override
@@ -76,7 +76,7 @@ public final class BindCommand extends Command {
                     }
                 }
             } else {
-                Harakiri.INSTANCE.errorChat("Unknown module " + "\247f\"" + split[1] + "\"");
+                Harakiri.INSTANCE.errorChat("Unknown module: " + "\247f\"" + split[1] + "\"");
                 final Module similar = Harakiri.INSTANCE.getModuleManager().findSimilar(split[1]);
                 if (similar != null) {
                     Harakiri.INSTANCE.logChat("Did you mean " + "\247c" + similar.getDisplayName() + "\247f?");

@@ -1,18 +1,18 @@
 package me.vaxry.harakiri.impl.module.player;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.gui.EventRenderHelmet;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.event.network.EventSendPacket;
-import me.vaxry.harakiri.api.event.player.*;
-import me.vaxry.harakiri.api.event.player.*;
-import me.vaxry.harakiri.api.event.render.EventRenderOverlay;
-import me.vaxry.harakiri.api.event.world.EventAddCollisionBox;
-import me.vaxry.harakiri.api.event.world.EventLiquidCollisionBB;
-import me.vaxry.harakiri.api.event.world.EventSetOpaqueCube;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.MathUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.gui.EventRenderHelmet;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
+import me.vaxry.harakiri.framework.event.player.*;
+import me.vaxry.harakiri.framework.event.render.EventRenderOverlay;
+import me.vaxry.harakiri.framework.event.world.EventAddCollisionBox;
+import me.vaxry.harakiri.framework.event.world.EventLiquidCollisionBB;
+import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
+import me.vaxry.harakiri.framework.event.world.EventSetOpaqueCube;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.MathUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
@@ -34,14 +34,17 @@ public final class FreeCamModule extends Module {
     private Vec3d position;
     private float yaw;
     private float pitch;
+    private int iThirdperson;
 
-    public final Value<Float> speed = new Value<Float>("Speed", new String[]{"Spd"}, "Speed of freecam flight, higher number equals quicker motion.", 1.0f, 0.0f, 2.0f, 0.1f);
+    public final Value<Float> speed = new Value<Float>("Speed", new String[]{"Spd"}, "Speed of freecam flight.", 1.0f, 0.0f, 2.0f, 0.1f);
     //public final Value<Boolean> view = new Value<Boolean>("3D", new String[]{"View"}, "The old Nodus client style free-cam, kind of like an elytra. (Hold forward key & move the mouse to turn)", false);
-    public final Value<Boolean> packet = new Value<Boolean>("Packet", new String[]{"Pack"}, "Disables any player position or rotation packets from being sent during free-cam if enabled.", true);
+    public final Value<Boolean> packet = new Value<Boolean>("Packet", new String[]{"Pack"}, "Disables any player position or rotation packets from being sent during freecam if enabled.", true);
     public final Value<Boolean> allowDismount = new Value<Boolean>("AllowDismount", new String[]{"Dismount", "Dis", "AllowDis"}, "Allow dismounting of the riding entity.", true);
 
     public FreeCamModule() {
-        super("FreeCam", new String[]{"FreeCamera"}, "Out of body experience", "NONE", -1, ModuleType.PLAYER);
+        super("FreeCam", new String[]{"FreeCamera"}, "Allows you to noclip.", "NONE", -1, ModuleType.PLAYER);
+        this.onDisable();
+        this.setEnabled(false);
     }
 
     @Override
@@ -49,6 +52,8 @@ public final class FreeCamModule extends Module {
         super.onEnable();
         final Minecraft mc = Minecraft.getMinecraft();
         if (mc.world != null) {
+            iThirdperson = mc.gameSettings.thirdPersonView;
+            mc.gameSettings.thirdPersonView = 0;
             this.entity = new EntityOtherPlayerMP(mc.world, mc.session.getProfile());
             this.entity.copyLocationAndAnglesFrom(mc.player);
             if (mc.player.getRidingEntity() != null) {
@@ -61,6 +66,10 @@ public final class FreeCamModule extends Module {
             this.entity.rotationYaw = mc.player.rotationYaw;
             this.entity.rotationYawHead = mc.player.rotationYawHead;
             this.entity.inventory.copyInventory(mc.player.inventory);
+            this.entity.setFlag(7, mc.player.isElytraFlying());
+            this.entity.rotateElytraX = mc.player.rotateElytraX;
+            this.entity.rotateElytraY = mc.player.rotateElytraY;
+            this.entity.rotateElytraZ = mc.player.rotateElytraZ;
             mc.world.addEntityToWorld(69420, this.entity);
             this.position = mc.player.getPositionVector();
             this.yaw = mc.player.rotationYaw;
@@ -89,6 +98,7 @@ public final class FreeCamModule extends Module {
             mc.player.motionX = 0;
             mc.player.motionY = 0;
             mc.player.motionZ = 0;
+            mc.gameSettings.thirdPersonView = iThirdperson;
         }
     }
 
@@ -154,6 +164,12 @@ public final class FreeCamModule extends Module {
                 }
             }
         }
+    }
+
+    @Listener
+    public void onLoadWorld(EventLoadWorld event) {
+        this.setEnabled(false);
+        this.onDisable();
     }
 
     @Listener

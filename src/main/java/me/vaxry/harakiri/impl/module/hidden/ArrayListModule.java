@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.module.hidden;
 
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 
 /**
  * Author Ice

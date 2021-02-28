@@ -1,11 +1,11 @@
 package me.vaxry.harakiri.impl.management;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.module.EventModuleLoad;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.ReflectionUtil;
-import me.vaxry.harakiri.api.util.StringUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.module.EventModuleLoad;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.ReflectionUtil;
+import me.vaxry.harakiri.framework.util.StringUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.module.combat.*;
 import me.vaxry.harakiri.impl.module.hidden.*;
 import me.vaxry.harakiri.impl.module.lua.ReloadLuasModule;
@@ -16,6 +16,7 @@ import me.vaxry.harakiri.impl.module.render.*;
 import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import me.vaxry.harakiri.impl.module.ui.WatermarkModule;
 import me.vaxry.harakiri.impl.module.world.*;
+import me.vaxry.harakiri.impl.module.world.ScaffoldModule;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.io.File;
@@ -35,12 +36,13 @@ public final class ModuleManager {
 
     public ModuleManager() {
 
-        ESPModule espmod = new ESPModule();
+        add(new CustomFontModule()); // Load first
 
         add(new KeybindsModule());
         add(new CommandsModule());
         add(new HudModule());
         add(new ArrayListModule());
+
         add(new ThreatCamModule());
         add(new PlexusModule());
         add(new NoOverlayModule());
@@ -65,31 +67,32 @@ public final class ModuleManager {
         add(new PortalGuiModule());
         add(new NoRotateModule());
         add(new TimerModule());
-        add(new ChatMutatorModule());
         add(new RespawnModule());
         add(new NoFallModule());
         add(new NoSwingModule());
+        ESPModule espmod = new ESPModule();
         add(espmod);
+        ChamsModule chammod = new ChamsModule();
+        add(chammod);
         add(new NametagsModule());
         add(new SneakModule());
         add(new MiddleClickFriendsModule());
         add(new FullbrightModule());
-        add(new ReconnectModule());
+        add(new HitmarkersModule());
+        ReconnectModule recmod = new ReconnectModule();
+        add(recmod);
         add(new AutoFishModule());
         add(new InteractModule());
         add(new TracersModule());
-        add(new ChamsModule());
         add(new FastPlaceModule());
         add(new SpeedMineModule());
         add(new AutoToolModule());
         add(new NoBreakAnimModule());
         add(new FreeCamModule());
         add(new EntityControlModule());
-        add(new GreeterModule());
         add(new SafeWalkModule());
         add(new PhaseModule());
         add(new FlightModule());
-        add(new NoHungerModule());
         add(new CrystalAuraModule());
         add(new AutoTotemModule());
         add(new FastBowModule());
@@ -100,19 +103,12 @@ public final class ModuleManager {
         add(new CriticalsModule());
         add(new RotationLock());
         add(new ElytraFlyModule());
-        add(new ItemSpoofModule());
         add(new AutoWalkModule());
-        add(new LaggerModule());
+        add(new AvoidModule());
         add(new MacroModule());
-        add(new BreedModule());
-        add(new ShearModule());
-        add(new DyeModule());
-        add(new WaypointsModule());
         add(new SpeedModule());
         add(new AntiHungerModule());
-        add(new NoVoidModule());
         add(new HorseJumpModule());
-        add(new TimeStampModule());
         add(new NewChunksModule());
         add(new NoCrystalModule());
         add(new StorageESPModule());
@@ -120,7 +116,6 @@ public final class ModuleManager {
         add(new BedrockFinder());
         add(new AutoDisconnectModule());
         add(new ChatFilterModule());
-        add(new NoChunkModule());
         add(new ProjectilesModule());
         add(new ScaffoldModule());
         add(new LiquidInteractModule());
@@ -128,65 +123,52 @@ public final class ModuleManager {
         add(new NoDesyncModule());
         add(new NukerModule());
         add(new SlimeChunksModule());
-        add(new AutoSignModule());
-        add(new IgnoreModule());
-        add(new AutoIgnoreModule());
         add(new StepModule());
-        add(new AutoCraftModule());
         add(new ViewClipModule());
         add(new NoGlobalSoundsModule());
         add(new NoBiomeColorModule());
-        add(new VanillaTabModule());
-        add(new PacketLoggerModule());
         add(new BuildHeightModule());
         add(new BlockHighlightModule());
         add(new NoWeatherModule());
         add(new ObsidianReplaceModule());
-        add(new ChatTimeStampsModule());
         add(new HudEditorModule());
         add(new WatermarkModule());
         add(new StorageAlertModule());
         add(new StrafeModule());
-        add(new MapBypassModule());
         add(new NoBossHealthModule());
-        add(new DiscordBypassModule());
+        add(new DiscordRPCModule());
+        add(new ExtraTabModule());
         add(new HolesModule());
         add(new SmallShieldModule());
         add(new PullDownModule());
-        add(new PortalFinderModule());
         add(new ShulkerPreviewModule());
         add(new LogoutSpotsModule());
         add(new ChatSuffixModule());
         add(new VisualRangeModule());
         add(new HotBarRefillModule());
-        add(new QuickCraftModule());
         add(new TotemNotifierModule());
         add(new MiddleClickPearlModule());
         add(new NameAlertModule());
-        add(new CrosshairModule());
-        add(new AutoMountModule());
         add(new EntityDesyncModule());
         add(new NoPacketModule());
-        add(new BridgeModule());
-        add(new AutoFarmModule());
         add(new NoEffectsModule());
         add(new NoEntityTraceModule());
         add(new MultitaskModule());
-        add(new InfEnderChestModule());
         add(new SearchModule());
         add(new ReloadLuasModule());
         add(new AutoGappleModule());
         add(new AutoEatModule());
         add(new NoFriendHurtModule());
-        add(new DonkeyAlertModule());
         add(new ReachModule());
-        add(new AutoWitherModule());
-        add(new NoteBotModule());
+        HitsoundModule hitsoundModule = new HitsoundModule();
+        add(hitsoundModule);
 
         MinecraftForge.EVENT_BUS.register(espmod);
-        MinecraftForge.EVENT_BUS.register(new ReconnectModule());
+        MinecraftForge.EVENT_BUS.register(recmod);
+        MinecraftForge.EVENT_BUS.register(hitsoundModule);
+        MinecraftForge.EVENT_BUS.register(chammod);
 
-        this.loadExternalModules();
+        //this.loadExternalModules();
 
         moduleList.sort(Comparator.comparing(Module::getDisplayName));
     }
@@ -199,7 +181,7 @@ public final class ModuleManager {
     public void loadExternalModules() {
         try {
             //create a directory at "harakiri/Modules"
-            final File dir = new File("harakiri/Modules");
+            final File dir = new File("harakiri/modules");
 
             //if it doesnt exist create it
             if (!dir.exists()) {

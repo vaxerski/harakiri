@@ -1,240 +1,144 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.render.EventRenderEntity;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.value.Value;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityBoat;
-import net.minecraft.entity.item.EntityEnderCrystal;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-import static org.lwjgl.opengl.GL11.*;
+public class ChamsModule extends Module {
 
-/**
- * Author Seth
- * 4/23/2019 @ 7:55 AM.
- */
-public final class ChamsModule extends Module {
+    private boolean selfBdown = false;
+    private boolean friendBdown = false;
+    private boolean enemyBdown = false;
 
-    float r = 0xFE;
-    float g = 0;
-    float b = 0;
-    int stage = 1;
 
-    final float rainSpeed = 1.5f;
+    public final Value<Boolean> self = new Value<Boolean>("LocalPlayer", new String[]{"Local", "l"}, "Local player master switch", false);
+    public final Value<Integer> selfR = new Value<Integer>("Local R", new String[]{"LocalR", "lr"}, "Local player R", 255, 0, 255, 1);
+    public final Value<Integer> selfG = new Value<Integer>("Local G", new String[]{"LocalG", "lg"}, "Local player G", 255, 0, 255, 1);
+    public final Value<Integer> selfB = new Value<Integer>("Local B", new String[]{"LocalB", "lb"}, "Local player B", 255, 0, 255, 1);
+    public final Value<Integer> selfA = new Value<Integer>("Local A", new String[]{"LocalA", "la"}, "Local player A", 255, 0, 255, 1);
+    public final Value<Boolean> selfBL = new Value<Boolean>("Local Blink", new String[]{"LocalB", "lb"}, "Local player Blink", false);
+    public final Value<Float> selfBS = new Value<Float>("Local Blink Speed", new String[]{"LocalBS", "lbs"}, "Local player Blink speed", 1.f, 0.1f, 10f, 0.2f);
+    public final Value<Boolean> selfNoAr = new Value<Boolean>("Local No Armor", new String[]{"LocalNA", "lna"}, "Local player no armor render", false);
+    public final Value<Boolean> selfFGl = new Value<Boolean>("Local Force Glint", new String[]{"LocalFG", "lfg"}, "Local player force glint", false);
+    public final Value<Boolean> selfLTH = new Value<Boolean>("Local Lightning", new String[]{"LocalLTH", "llth"}, "Local player force lightning", false);
+    public final Value<Boolean> selfANG = new Value<Boolean>("Local Angel", new String[]{"LocalANG", "lang"}, "Local player angel effect", false);
 
-    public final Value<Boolean> players = new Value<Boolean>("Players", new String[]{"Player"}, "Choose to enable on players.", true);
-    public final Value<Boolean> mobs = new Value<Boolean>("Mobs", new String[]{"Mob"}, "Choose to enable on mobs.", true);
-    public final Value<Boolean> animals = new Value<Boolean>("Animals", new String[]{"Animal"}, "Choose to enable on animals.", true);
-    public final Value<Boolean> vehicles = new Value<Boolean>("Vehicles", new String[]{"Vehic", "Vehicle"}, "Choose to enable on vehicles.", true);
-    public final Value<Boolean> crystals = new Value<Boolean>("Crystals", new String[]{"crystal", "crystals", "endcrystal", "endcrystals"}, "Choose to enable on end crystals.", true);
-    public final Value<Boolean> items = new Value<Boolean>("Items", new String[]{"Item", "i"}, "Choose to enable on items.", false);
 
-    public final Value<Boolean> rainbow = new Value<Boolean>("Rainbow", new String[]{"rainbow", "rb", "rainb", "rainbw"}, "Rainbow Mode", true);
+    public final Value<Boolean> friend = new Value<Boolean>("Friends", new String[]{"Friends", "f"}, "Friends master switch", false);
+    public final Value<Integer> friendR = new Value<Integer>("Friends R", new String[]{"FriendsR", "fr"}, "Friends R", 255, 0, 255, 1);
+    public final Value<Integer> friendG = new Value<Integer>("Friends G", new String[]{"FriendsG", "fg"}, "Friends G", 255, 0, 255, 1);
+    public final Value<Integer> friendB = new Value<Integer>("Friends B", new String[]{"FriendsB", "fb"}, "Friends B", 255, 0, 255, 1);
+    public final Value<Integer> friendA = new Value<Integer>("Friends A", new String[]{"FriendsA", "fa"}, "Friends A", 255, 0, 255, 1);
+    public final Value<Boolean> friendBL = new Value<Boolean>("Friends Blink", new String[]{"FriendsB", "fb"}, "Friends Blink", false);
+    public final Value<Float> friendBS = new Value<Float>("Friends Blink Speed", new String[]{"FriendsBS", "fbs"}, "Friends Blink speed", 1.f, 0.1f, 10f, 0.2f);
+    public final Value<Boolean> friendNoAr = new Value<Boolean>("Friends No Armor", new String[]{"FriendsNA", "fna"}, "Friends no armor render", false);
+    public final Value<Boolean> friendFGl = new Value<Boolean>("Friends Force Glint", new String[]{"FriendsFG", "ffg"}, "Friends force glint", false);
 
-    public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode"}, "The chams mode to use.", Mode.NORMAL);
 
-    private enum Mode {
-        NORMAL, TEXTURE, FLAT, WIREFRAME
-    }
+    public final Value<Boolean> enemy = new Value<Boolean>("Enemies", new String[]{"Enemies", "e"}, "Enemies master switch", false);
+    public final Value<Integer> enemyR = new Value<Integer>("Enemies R", new String[]{"EnemiesR", "er"}, "Enemies R", 255, 0, 255, 1);
+    public final Value<Integer> enemyG = new Value<Integer>("Enemies G", new String[]{"EnemiesG", "eg"}, "Enemies G", 255, 0, 255, 1);
+    public final Value<Integer> enemyB = new Value<Integer>("Enemies B", new String[]{"EnemiesB", "eb"}, "Enemies B", 255, 0, 255, 1);
+    public final Value<Integer> enemyA = new Value<Integer>("Enemies A", new String[]{"EnemiesA", "ea"}, "Enemies A", 255, 0, 255, 1);
+    public final Value<Boolean> enemyBL = new Value<Boolean>("Enemy Blink", new String[]{"EnemyB", "eb"}, "Enemy Blink", false);
+    public final Value<Float> enemyBS = new Value<Float>("Enemy Blink Speed", new String[]{"EnemyBS", "ebs"}, "Enemy Blink speed", 1.f, 0.1f, 10f, 0.2f);
+    public final Value<Boolean> enemyNoAr = new Value<Boolean>("Enemy No Armor", new String[]{"EnemyNA", "ena"}, "Enemy no armor render", false);
+    public final Value<Boolean> enemyFGl = new Value<Boolean>("Enemy Force Glint", new String[]{"EnemyFG", "efg"}, "Enemy force glint", false);
+
+
+    public EntityPlayer lastPlayer = null;
 
     public ChamsModule() {
-        super("Chams", new String[]{"Cham", "Chameleon"}, "Allows you to see entities through walls", "NONE", -1, ModuleType.RENDER);
-    }
-
-    @Override
-    public String getMetaData() {
-        return this.mode.getValue().name();
+        super("Chams", new String[]{"Chams"}, "Changes the renderer's behavior.", "NONE", -1, ModuleType.RENDER);
     }
 
     @Listener
-    public void renderEntity(EventRenderEntity event) {
+    public void onRender3D(EventRender3D event){
+        if(!this.isEnabled())
+            return;
 
-        // Shift RGB
-
-        switch (stage){
-            case 0:
-                r += 0.5 * rainSpeed;
-                b -= 0.5 * rainSpeed;
-                if(r >= 0xFE) {
-                    stage++;
-                    r = 0xFE;
-                    b = 0;
-                }
-                break;
-            case 1:
-                g += 0.5 * rainSpeed;
-                r -= 0.5 * rainSpeed;
-                if(g >= 0xFE) {
-                    stage++;
-                    g = 0xFE;
-                    r = 0;
-                }
-                break;
-            case 2:
-                b += 0.5 * rainSpeed;
-                g -= 0.5 * rainSpeed;
-                if(b >= 0xFE) {
-                    stage = 0;
-                    b = 0xFE;
-                    g = 0;
-                }
-                break;
+        // Self
+        if(this.selfBL.getValue()){
+            if(this.selfBdown){
+                this.selfA.setValue((int)(this.selfA.getValue() - this.selfBS.getValue()));
+                if(this.selfA.getValue() < 2)
+                    this.selfBdown = false;
+            }else{
+                this.selfA.setValue((int)(this.selfA.getValue() + this.selfBS.getValue() * 2.f));
+                if(this.selfA.getValue() > 253)
+                    this.selfBdown = true;
+            }
         }
 
-        // Normalize RGB
-        if(r < 0) r = 0;
-        if(g < 0) g = 0;
-        if(b < 0) b = 0;
-        if(r > 0xFF) r = 0xFF;
-        if(g > 0xFF) g = 0xFF;
-        if(b > 0xFF) b = 0xFF;
-        // ---------- //
-
-        if (event.getEntity() != null && checkFilter(event.getEntity())) {
-
-            boolean shadow = Minecraft.getMinecraft().getRenderManager().isRenderShadow();
-
-            if (event.getStage() == EventStageable.EventStage.PRE) {
-
-                Minecraft.getMinecraft().getRenderManager().setRenderShadow(false);
-                Minecraft.getMinecraft().getRenderManager().setRenderOutlines(false);
-
-                GlStateManager.pushMatrix();
-                switch (this.mode.getValue().name().toLowerCase()) {
-                    case "normal":
-                        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
-                        glEnable(GL11.GL_POLYGON_OFFSET_FILL);
-                        glPolygonOffset(1.0f, -1100000.0f);
-                        break;
-                    case "texture":
-                        glEnable(GL11.GL_POLYGON_OFFSET_FILL);
-                        glPolygonOffset(1.0f, -1100000.0f);
-                        glDisable(GL11.GL_TEXTURE_2D);
-                        GlStateManager.color(1, 1, 1);
-                        break;
-                    case "flat":
-                        glEnable(GL11.GL_POLYGON_OFFSET_FILL);
-                        glPolygonOffset(1.0f, -1100000.0f);
-                        glDisable(GL11.GL_TEXTURE_2D);
-                        glDisable(GL11.GL_LIGHTING);
-                        GlStateManager.color(1, 1, 1);
-                        break;
-                    case "wireframe":
-                        glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
-                        glEnable(GL11.GL_POLYGON_OFFSET_LINE);
-                        glPolygonOffset(1.0f, -1100000.0f);
-                        glDisable(GL11.GL_TEXTURE_2D);
-                        glDisable(GL11.GL_LIGHTING);
-                        glEnable(GL_LINE_SMOOTH);
-                        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-                        glLineWidth(1);
-                        if(this.rainbow.getValue())
-                            GlStateManager.color(r/255.f, g/255.f, b/255.f);
-                        else
-                            GlStateManager.color(1, 1, 1);
-                        GlStateManager.popMatrix();
-                        break;
-                }
-                GlStateManager.popMatrix();
+        // Friend
+        if(this.friendBL.getValue()){
+            if(this.friendBdown){
+                this.friendA.setValue((int)(this.friendA.getValue() - this.friendBS.getValue()));
+                if(this.friendA.getValue() < 2)
+                    this.friendBdown = false;
+            }else{
+                this.friendA.setValue((int)(this.friendA.getValue() + this.friendBS.getValue()));
+                if(this.friendA.getValue() > 253)
+                    this.friendBdown = true;
             }
-            if (event.getStage() == EventStageable.EventStage.POST) {
+        }
 
-                Minecraft.getMinecraft().getRenderManager().setRenderShadow(shadow);
-
-                GlStateManager.pushMatrix();
-                switch (this.mode.getValue().name().toLowerCase()) {
-                    case "normal":
-                        glDisable(GL11.GL_POLYGON_OFFSET_FILL);
-                        glPolygonOffset(1.0f, 1100000.0f);
-                        break;
-                    case "texture":
-                        glDisable(GL11.GL_POLYGON_OFFSET_FILL);
-                        glPolygonOffset(1.0f, 1100000.0f);
-                        glEnable(GL11.GL_TEXTURE_2D);
-                        break;
-                    case "flat":
-                        glDisable(GL11.GL_POLYGON_OFFSET_FILL);
-                        glPolygonOffset(1.0f, 1100000.0f);
-                        glEnable(GL11.GL_TEXTURE_2D);
-                        glEnable(GL11.GL_LIGHTING);
-                        break;
-                    case "wireframe":
-                        glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
-                        glDisable(GL11.GL_POLYGON_OFFSET_LINE);
-                        glPolygonOffset(1.0f, 1100000.0f);
-                        glEnable(GL11.GL_TEXTURE_2D);
-                        glEnable(GL11.GL_LIGHTING);
-                        glDisable(GL_LINE_SMOOTH);
-                        if(this.rainbow.getValue())
-                            GlStateManager.color(r/255.f, g/255.f, b/255.f);
-                        else
-                            GlStateManager.color(1, 1, 1);
-                        GlStateManager.popMatrix();
-                        break;
-                }
-                GlStateManager.popMatrix();
+        // Enemy
+        if(this.enemyBL.getValue()){
+            if(this.enemyBdown){
+                this.enemyA.setValue((int)(this.enemyA.getValue() - this.enemyBS.getValue()));
+                if(this.enemyA.getValue() < 2)
+                    this.enemyBdown = false;
+            }else{
+                this.enemyA.setValue((int)(this.enemyA.getValue() + this.enemyBS.getValue()));
+                if(this.enemyA.getValue() > 253)
+                    this.enemyBdown = true;
             }
         }
     }
 
-    private boolean checkFilter(Entity entity) {
-        boolean ret = false;
+    @SubscribeEvent
+    public void onRenderPlayerEvent(RenderPlayerEvent.Pre event){
+        if(!(event.getEntity() instanceof EntityPlayer))
+            return;
 
-        if (entity == Minecraft.getMinecraft().player) {
-            ret = false;
-        }
+        EntityPlayer e = (EntityPlayer)event.getEntity();
 
-        final Entity riding = Minecraft.getMinecraft().player.getRidingEntity();
+        ChamsModule chamsModule = (ChamsModule) Harakiri.INSTANCE.getModuleManager().find(ChamsModule.class);
 
-        if (riding != null && entity == riding) {
-            ret = false;
-        }
+        if(!chamsModule.isEnabled() || e == null)
+            return;
 
-        if (this.players.getValue() && entity instanceof EntityPlayer && entity != Minecraft.getMinecraft().player) {
-            ret = true;
-        }
+        if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null && chamsModule.friend.getValue() ||
+                Harakiri.INSTANCE.getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
+                Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName()) && chamsModule.self.getValue()){
 
-        if (this.animals.getValue() && entity instanceof IAnimals) {
-            ret = true;
-        }
+            GlStateManager.enableAlpha();
+            GlStateManager.enableBlend();
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            GlStateManager.depthMask(false);
 
-        if (this.mobs.getValue() && entity instanceof IMob) {
-            ret = true;
-        }
-
-        if (this.vehicles.getValue() && (entity instanceof EntityBoat || entity instanceof EntityMinecart)) {
-            ret = true;
-        }
-
-        if (this.crystals.getValue() && entity instanceof EntityEnderCrystal) {
-            ret = true;
-        }
-
-        if (this.items.getValue() && entity instanceof EntityItem) {
-            ret = true;
-        }
-
-        if (entity instanceof EntityLivingBase) {
-            final EntityLivingBase entityLiving = (EntityLivingBase) entity;
-
-            if (entityLiving.ticksExisted <= 0) {
-                ret = false;
+            if(Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName())){
+                GL11.glColor4f(chamsModule.selfR.getValue() / 255.f,chamsModule.selfG.getValue() / 255.f,chamsModule.selfB.getValue() / 255.f,chamsModule.selfA.getValue() / 255.f);
+            } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null){
+                //friend settings
+                GL11.glColor4f(chamsModule.friendR.getValue() / 255.f,chamsModule.friendG.getValue() / 255.f,chamsModule.friendB.getValue() / 255.f,chamsModule.friendA.getValue() / 255.f);
+            } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) == null){
+                //enemy settings
+                GL11.glColor4f(chamsModule.enemyR.getValue() / 255.f,chamsModule.enemyG.getValue() / 255.f,chamsModule.enemyB.getValue() / 255.f,chamsModule.enemyA.getValue() / 255.f);
             }
         }
-
-        return ret;
     }
 
 }

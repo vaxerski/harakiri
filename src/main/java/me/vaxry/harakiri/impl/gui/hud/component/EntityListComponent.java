@@ -3,11 +3,10 @@ package me.vaxry.harakiri.impl.gui.hud.component;
 import com.google.common.collect.Lists;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.friend.Friend;
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.api.gui.hud.component.HudComponent;
+import me.vaxry.harakiri.framework.friend.Friend;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
-import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockShulkerBox;
 import net.minecraft.client.gui.ScaledResolution;
@@ -94,7 +93,7 @@ public final class EntityListComponent extends DraggableHudComponent {
                 if (component != null) {
                     String name = component.getName();
 
-                    final float width = mc.fontRenderer.getStringWidth(name);
+                    final float width = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(name);
                     if (width >= maxWidth) {
                         maxWidth = width;
                     }
@@ -103,7 +102,7 @@ public final class EntityListComponent extends DraggableHudComponent {
                         switch (this.getAnchorPoint().getPoint()) {
                             case TOP_CENTER:
                             case BOTTOM_CENTER:
-                                xOffset = (this.getW() - mc.fontRenderer.getStringWidth(name)) / 2;
+                                xOffset = (this.getW() - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(name)) / 2;
                                 break;
                             case TOP_LEFT:
                             case BOTTOM_LEFT:
@@ -111,14 +110,14 @@ public final class EntityListComponent extends DraggableHudComponent {
                                 break;
                             case TOP_RIGHT:
                             case BOTTOM_RIGHT:
-                                xOffset = this.getW() - mc.fontRenderer.getStringWidth(name);
+                                xOffset = this.getW() - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(name);
                                 break;
                         }
                     }
 
                     // set the width and height to the string size
-                    component.setW(mc.fontRenderer.getStringWidth(name));
-                    component.setH(mc.fontRenderer.FONT_HEIGHT);
+                    component.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(name));
+                    component.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
 
                     if (this.getAnchorPoint() != null) {
                         switch (this.getAnchorPoint().getPoint()) {
@@ -128,22 +127,22 @@ public final class EntityListComponent extends DraggableHudComponent {
                                 component.setX(this.getX() + xOffset);
                                 component.setY(this.getY() + yOffset);
                                 component.render(mouseX, mouseY, partialTicks);
-                                yOffset += (mc.fontRenderer.FONT_HEIGHT);
+                                yOffset += (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
                                 break;
                             case BOTTOM_CENTER:
                             case BOTTOM_LEFT:
                             case BOTTOM_RIGHT:
                                 component.setX(this.getX() + xOffset);
-                                component.setY(this.getY() + (this.getH() - mc.fontRenderer.FONT_HEIGHT) + yOffset);
+                                component.setY(this.getY() + (this.getH() - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT) + yOffset);
                                 component.render(mouseX, mouseY, partialTicks);
-                                yOffset -= (mc.fontRenderer.FONT_HEIGHT);
+                                yOffset -= (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
                                 break;
                         }
                     } else {
                         component.setX(this.getX() + xOffset);
                         component.setY(this.getY() + yOffset);
                         component.render(mouseX, mouseY, partialTicks);
-                        yOffset += (mc.fontRenderer.FONT_HEIGHT);
+                        yOffset += (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
                     }
                 }
             }
@@ -151,9 +150,9 @@ public final class EntityListComponent extends DraggableHudComponent {
             if (isInHudEditor) {
                 // no entities nearby
                 final String arraylist = "(entity list)";
-                mc.fontRenderer.drawStringWithShadow(arraylist, this.getX(), this.getY(), 0xFFAAAAAA);
-                maxWidth = mc.fontRenderer.getStringWidth(arraylist) + 1 /* right side gap */;
-                yOffset = mc.fontRenderer.FONT_HEIGHT + 1;
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(arraylist, this.getX(), this.getY(), 0xFFAAAAAA);
+                maxWidth = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(arraylist) + 1 /* right side gap */;
+                yOffset = Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1;
             }
         }
 
@@ -269,7 +268,7 @@ public final class EntityListComponent extends DraggableHudComponent {
         @Override
         public void render(int mouseX, int mouseY, float partialTicks) {
             super.render(mouseX, mouseY, partialTicks);
-            mc.fontRenderer.drawStringWithShadow(this.getName(), (int) this.getX(), (int) this.getY(), 0xFFFFFFFF);
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.getName(), (int) this.getX(), (int) this.getY(), 0xFFFFFFFF);
         }
 
         @Override

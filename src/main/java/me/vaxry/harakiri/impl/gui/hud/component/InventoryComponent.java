@@ -1,7 +1,8 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
-import me.vaxry.harakiri.api.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.api.util.RenderUtil;
+import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -25,7 +26,7 @@ public final class InventoryComponent extends DraggableHudComponent {
 
         if (mc.player == null) {
             if (mc.currentScreen instanceof GuiHudEditor) {
-                mc.fontRenderer.drawStringWithShadow("(inventory)", this.getX(), this.getY(), 0xFFAAAAAA);
+                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(inventory)", this.getX(), this.getY(), 0xFFAAAAAA);
             }
             return;
         }
@@ -43,5 +44,14 @@ public final class InventoryComponent extends DraggableHudComponent {
         RenderHelper.disableStandardItemLighting();
         mc.getRenderItem().zLevel = 0.0F;
         GlStateManager.popMatrix();
+
+        //top
+        RenderUtil.drawLine(this.getX(), this.getY(), this.getX() + this.getW(), this.getY(), 0.7f, 0xAA000000);
+        //Right
+        RenderUtil.drawLine(this.getX() + this.getW(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0.7f, 0xAA000000);
+        //Bott
+        RenderUtil.drawLine(this.getX(), this.getY() + this.getH(), this.getX() + this.getW(), this.getY() + this.getH(), 0.7f, 0xAA000000);
+        //Left
+        RenderUtil.drawLine(this.getX(), this.getY(), this.getX(), this.getY() + this.getH(), 0.7f, 0xAA000000);
     }
 }

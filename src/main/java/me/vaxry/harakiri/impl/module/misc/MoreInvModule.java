@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.misc;
 
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventSendPacket;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketCloseWindow;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
@@ -14,7 +14,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class MoreInvModule extends Module {
 
     public MoreInvModule() {
-        super("MoreInv", new String[]{"XCarry", "MoreInventory"}, "Allows you to carry items in your crafting and dragging slot", "NONE", -1, ModuleType.MISC);
+        super("XCarry", new String[]{"XCarry", "MoreInventory"}, "Allows you to carry items in your crafting and dragging slots.", "NONE", -1, ModuleType.MISC);
     }
 
     @Override

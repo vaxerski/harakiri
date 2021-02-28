@@ -1,18 +1,17 @@
 package me.vaxry.harakiri.impl.module.movement;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.task.rotation.RotationTask;
-import me.vaxry.harakiri.api.util.MathUtil;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.task.rotation.RotationTask;
+import me.vaxry.harakiri.framework.util.MathUtil;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.ClickType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -30,8 +29,8 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
  */
 public final class ScaffoldModule extends Module {
 
-    public final Value<Boolean> refill = new Value<Boolean>("Refill", new String[]{"ref"}, "If the held item is empty or not a block, fill the slot with a block from the inventory when the scaffold is triggered to place.", true);
-    public final Value<Boolean> rotate = new Value<Boolean>("Rotate", new String[]{"rot"}, "Should we rotate the player's head according to the place position?", true);
+    //public final Value<Boolean> refill = new Value<Boolean>("Refill", new String[]{"ref"}, "If the held item is empty or not a block, fill the slot with a block from the inventory when the scaffold is triggered to place.", true);
+    public final Value<Boolean> rotate = new Value<Boolean>("Rotate", new String[]{"rot"}, "Rotate the head to the place position.", true);
     //public final Value<Boolean> destroy = new Value<Boolean>("Destroy", new String[]{"Dest"}, "When enabled, after placing the block, forces the player to swing/destroy at the same position.", false);
 
     private final int[] blackList = new int[]{145, 130, 12, 252, 54, 146, 122, 13, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 50};
@@ -95,7 +94,7 @@ public final class ScaffoldModule extends Module {
                         } else {
                             final Vec3d block = this.getFirstBlock(dir);
 
-                            if (this.refill.getValue() && block != null) {
+                            /*if (this.refill.getValue() && block != null) {
                                 final int slot = this.findStackHotbar();
                                 if (slot != -1) {
                                     mc.player.inventory.currentItem = slot;
@@ -109,7 +108,7 @@ public final class ScaffoldModule extends Module {
                                         mc.player.setVelocity(0, 0, 0);
                                     }
                                 }
-                            }
+                            }*/
                         }
                     }
                 }

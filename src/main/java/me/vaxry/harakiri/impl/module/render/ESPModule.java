@@ -1,71 +1,59 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import com.google.common.collect.Lists;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import ibxm.Player;
+import io.netty.util.internal.ReflectionUtil;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.EventStageable;
-import me.vaxry.harakiri.api.event.network.EventReceivePacket;
-import me.vaxry.harakiri.api.event.render.EventRender2D;
-import me.vaxry.harakiri.api.event.render.EventRender3D;
-import me.vaxry.harakiri.api.event.render.EventRenderName;
-import me.vaxry.harakiri.api.extd.ShaderGroupExt;
-import me.vaxry.harakiri.api.friend.Friend;
-import me.vaxry.harakiri.api.module.Module;
-import me.vaxry.harakiri.api.util.*;
-import me.vaxry.harakiri.api.util.*;
-import me.vaxry.harakiri.api.util.Timer;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
+import me.vaxry.harakiri.framework.event.render.EventRenderEntities;
+import me.vaxry.harakiri.framework.event.render.EventRenderEntity;
+import me.vaxry.harakiri.framework.extd.ShaderGroupExt;
+import me.vaxry.harakiri.framework.layeredit.LayerEnderman;
+import me.vaxry.harakiri.framework.layeredit.LayerSpider;
+import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.*;
+import me.vaxry.harakiri.framework.util.Timer;
+import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderEnderman;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
+import net.minecraft.client.renderer.entity.RenderSpider;
+import net.minecraft.client.renderer.entity.layers.LayerEndermanEyes;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.layers.LayerSpiderEyes;
 import net.minecraft.client.shader.ShaderGroup;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.*;
 import net.minecraft.entity.monster.*;
-import net.minecraft.entity.passive.AbstractHorse;
-import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.play.server.SPacketSoundEffect;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.Team;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.StringUtils;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import org.locationtech.jts.geom.Coordinate;
+import org.lwjgl.opengl.GL11;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import javax.swing.*;
-import java.awt.*;
-import java.lang.reflect.Method;
-import java.sql.Time;
-import java.text.DecimalFormat;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Author Seth
@@ -74,24 +62,44 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class ESPModule extends Module {
 
+    enum SHADER {
+        OUTLINE,
+        GLOW
+    }
+
+    public final Value<SHADER> shaderV = new Value<SHADER>("Style", new String[]{"Style", "s"}, "Select the shader to use.", SHADER.OUTLINE);
     public final Value<Boolean> items = new Value<Boolean>("Items", new String[]{"Items", "i"}, "Draw Items", false);
     public final Value<Boolean> hostile = new Value<Boolean>("Hostile", new String[]{"Hostile", "h"}, "Draw Hostile Entities", false);
     public final Value<Boolean> passive = new Value<Boolean>("Passive", new String[]{"Passive", "p"}, "Draw Hostile Entities", false);
+    public final Value<Boolean> crystals = new Value<Boolean>("Crystals", new String[]{"Crystals", "c"}, "Draw Crystals", false);
+    public final Value<Boolean> players = new Value<Boolean>("Players", new String[]{"Players", "pl"}, "Draw Players", false);
 
     private ResourceLocation shader;
-    private boolean toLoadShader = false;
+    private ResourceLocation shaderGlow;
+    private boolean toLoadShader = true;
     private ICamera cam = new Frustum();
+    private SHADER lastShader = SHADER.OUTLINE;
 
     private float ITEM_A = 0.35f;
     private HashMap<EntityItem, Float> opacity = new HashMap<>();
     private Timer timer = new Timer();
 
+    private ArrayList<EntityLivingBase> livingBases = new ArrayList<>();
+    private static List<LayerRenderer<EntityLivingBase>> renderLivingBaseLayerRenderersField;
+
     // scoreboard stuff //
     private Scoreboard board;
-    private ScorePlayerTeam green;
-    private ScorePlayerTeam red;
+    public ScorePlayerTeam green;
+    public ScorePlayerTeam red;
+    public ScorePlayerTeam purple;
+    public ScorePlayerTeam lblue;
+    public ScorePlayerTeam yellow;
+    public ScorePlayerTeam pink;
+    public ScorePlayerTeam gray;
 
-    private Class[] hostileMobs = {EntitySpider.class, EntityCaveSpider.class, EntityEnderman.class,EntityPigZombie.class,
+    private ArrayList<EntityPlayer> coloredPlayers = new ArrayList<>();
+
+    private Class[] hostileMobs = {EntityWither.class, EntityWitherSkeleton.class, EntitySpider.class, EntityCaveSpider.class, EntityEnderman.class,EntityPigZombie.class,
         EntityEvoker.class, EntityVindicator.class, EntityVex.class, EntityEndermite.class, EntityGuardian.class, EntityElderGuardian.class,
         EntityShulker.class, EntityHusk.class, EntityStray.class, EntityBlaze.class, EntityCreeper.class, EntityGhast.class, EntityMagmaCube.class,
         EntitySilverfish.class, EntitySkeleton.class, EntitySlime.class, EntityZombie.class, EntityZombieVillager.class, EntityDragon.class, EntityWitch.class};
@@ -100,7 +108,10 @@ public final class ESPModule extends Module {
     public ESPModule() {
         super("ESP", new String[]{"ESP"}, "Highlights entities", "NONE", -1, ModuleType.RENDER);
 
-        shader = new ResourceLocation("harakirimod", "shaders/shader.json");
+        Minecraft mc = Minecraft.getMinecraft();
+
+        shader = new ResourceLocation("shaders/post/esp.json");
+        shaderGlow = new ResourceLocation("shaders/post/espglow.json");
     }
 
     private float getJitter() {
@@ -165,6 +176,27 @@ public final class ESPModule extends Module {
 
             RenderUtil.end3D();
         }
+
+        // process storageesp
+        StorageESPModule storageESPModule = (StorageESPModule)Harakiri.INSTANCE.getModuleManager().find(StorageESPModule.class);
+
+       /* if(storageESPModule.isEnabled() && storageESPModule.modeValue.getValue() == StorageESPModule.MODE.SHADER){
+            for (TileEntity te : mc.world.loadedTileEntityList) {
+                switch (storageESPModule.getColorShader(te)){
+                    case 0:
+                        // Yellow
+                        board.addPlayerToTeam(te.toString(), yellow.getName());
+                        break;
+                    case 1:
+                        board.addPlayerToTeam(te.toString(), pink.getName());
+                        break;
+                    case 2:
+                        board.addPlayerToTeam(te.toString(), gray.getName());
+                        break;
+                }
+                //te.setGlowing
+            }
+        }*/
     }
 
     @SubscribeEvent
@@ -179,47 +211,230 @@ public final class ESPModule extends Module {
 
             // Create the shader
             try {
-                mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
+                this.board = mc.player.getWorldScoreboard();
+                this.green = board.createTeam("haraGreen");
+                this.red = board.createTeam("haraRed");
+                this.purple = board.createTeam("haraPurple");
+                this.lblue = board.createTeam("haraLBlue");
+                this.yellow = board.createTeam("haraYellow");
+                this.gray = board.createTeam("haraGray");
+                this.pink = board.createTeam("haraPink");
+
+                this.green.setPrefix(TextFormatting.GREEN.toString());
+                this.red.setPrefix(TextFormatting.RED.toString());
+                this.purple.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
+                this.lblue.setPrefix(TextFormatting.AQUA.toString());
+                this.yellow.setPrefix(TextFormatting.YELLOW.toString());
+                this.gray.setPrefix(TextFormatting.GRAY.toString());
+                this.pink.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
+
+                if(this.shaderV.getValue() == SHADER.OUTLINE)
+                    mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
+                else
+                   mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shaderGlow);
                 mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
                 mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
 
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-                this.board = mc.player.getWorldScoreboard();
-                this.green = board.createTeam("haraGreen");
-                this.red = board.createTeam("haraRed");
-                this.green.setPrefix(TextFormatting.GREEN.toString());
-                this.red.setPrefix(TextFormatting.RED.toString());
+                //this.lastShader = this.shaderV.getValue();
 
             }catch(Throwable t){
-                Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
-               // JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
+                //Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
+                //JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
             }
 
             toLoadShader = false;
         }
 
+        if(this.lastShader != this.shaderV.getValue()) {
+            try {
+                if (this.shaderV.getValue() == SHADER.OUTLINE)
+                    mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
+                else
+                    mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shaderGlow);
+                mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
+                mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
+
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+                this.lastShader = this.shaderV.getValue();
+            }catch(Throwable t){
+                Harakiri.INSTANCE.logChat("Shader failed 2: " + t.getMessage());
+                //JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+
+        if(!livingBases.contains(ent.getEntity())){
+            livingBases.add(ent.getEntity());
+            replaceLayers(ent.getEntity());
+        }
+
         if(this.isEnabled() &&
                 ((hostileMobsList.contains(ent.getEntity().getClass()) && hostile.getValue()) ||
-                        (!hostileMobsList.contains(ent.getEntity().getClass()) && passive.getValue())) ) {
-            ent.getEntity().setGlowing(true);
+                        (!hostileMobsList.contains(ent.getEntity().getClass()) && passive.getValue()))) {
+                ent.getEntity().setGlowing(true);
         } else
             ent.getEntity().setGlowing(false);
 
 
-        if(hostileMobsList.contains(ent.getEntity().getClass()))
+        if(hostileMobsList.contains(ent.getEntity().getClass())) {
             board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), red.getName());
-        else
+        }else{
             board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), green.getName());
+        }
+    }
+
+    @Listener
+    public void onRenderEntity(EventRenderEntity event) {
+        Minecraft mc = Minecraft.getMinecraft();
+        if(event.getStage() == EventStageable.EventStage.PRE) {
+            if (toLoadShader) {
+
+                // Create the shader
+                try {
+                    this.board = mc.player.getWorldScoreboard();
+                    this.green = board.createTeam("haraGreen");
+                    this.red = board.createTeam("haraRed");
+                    this.purple = board.createTeam("haraPurple");
+                    this.lblue = board.createTeam("haraLBlue");
+                    this.yellow = board.createTeam("haraYellow");
+                    this.gray = board.createTeam("haraGray");
+                    this.pink = board.createTeam("haraPink");
+
+                    this.green.setPrefix(TextFormatting.GREEN.toString());
+                    this.red.setPrefix(TextFormatting.RED.toString());
+                    this.purple.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
+                    this.lblue.setPrefix(TextFormatting.AQUA.toString());
+                    this.yellow.setPrefix(TextFormatting.YELLOW.toString());
+                    this.gray.setPrefix(TextFormatting.GRAY.toString());
+                    this.pink.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
+
+                    if(this.shaderV.getValue() == SHADER.OUTLINE)
+                        mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
+                    else
+                        mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shaderGlow);
+                    mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
+                    mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
+
+                    GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+                    //this.lastShader = this.shaderV.getValue();
+
+                } catch (Throwable t) {
+                    //Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
+                    //JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
+                }
+
+                toLoadShader = false;
+            }
+
+            if(this.lastShader != this.shaderV.getValue()) {
+                try {
+                    if (this.shaderV.getValue() == SHADER.OUTLINE)
+                        mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
+                    else
+                        mc.renderGlobal.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shaderGlow);
+                    mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
+                    mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
+
+                    GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+                    this.lastShader = this.shaderV.getValue();
+                }catch(Throwable t){
+                    Harakiri.INSTANCE.logChat("Shader failed 2: " + t.getMessage());
+                    //JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+
+            if (this.isEnabled() && event.getEntity() instanceof EntityEnderCrystal && this.crystals.getValue()) {
+                event.getEntity().setGlowing(true);
+                board.addPlayerToTeam(event.getEntity().getUniqueID().toString(), purple.getName());
+            } else if (event.getEntity() instanceof EntityEnderCrystal) {
+                event.getEntity().setGlowing(false);
+            }
+
+            if (event.getEntity() instanceof EntityPlayerMP || event.getEntity() instanceof EntityPlayer || event.getEntity() instanceof EntityOtherPlayerMP || event.getEntity() instanceof EntityPlayerSP) {
+                // player
+
+                if (this.isEnabled() && this.players.getValue())
+                    event.getEntity().setGlowing(true);
+                else
+                    event.getEntity().setGlowing(false);
+
+                if(!coloredPlayers.contains((EntityPlayer)event.getEntity())) coloredPlayers.add((EntityPlayer)event.getEntity());
+
+                if (Harakiri.INSTANCE.getFriendManager().isFriend(event.getEntity()) != null) {
+                    //friend
+                    board.addPlayerToTeam(event.getEntity().getName(), lblue.getName());
+                } else {
+                    // Not friend.
+                    board.addPlayerToTeam(event.getEntity().getName(), red.getName());
+                }
+            }
+        }
+    }
+
+    @Listener
+    public void onRenderEntities(EventRenderEntities event){
+        if(event.getStage() == EventStageable.EventStage.POST){
+
+            for(EntityPlayer e : coloredPlayers) {
+                board.removePlayerFromTeams(e.getName());
+                e.setGlowing(false);
+                board.removeEntity(e);
+            }
+
+            coloredPlayers.clear();
+        }
     }
 
     @SubscribeEvent
     public void onRenderLivingBasePost(RenderLivingEvent.Specials.Post<EntityLivingBase> ent){
 
-       // if(ent.getEntity() instanceof EntityPlayer)
-       //     board.removePlayerFromTeam(ent.getEntity().getUniqueID().toString(), red);
-       // else
-       //     board.removePlayerFromTeam(ent.getEntity().getUniqueID().toString(), green);
+        // if(ent.getEntity() instanceof EntityPlayer)
+        //     board.removePlayerFromTeam(ent.getEntity().getUniqueID().toString(), red);
+        // else
+        //     board.removePlayerFromTeam(ent.getEntity().getUniqueID().toString(), green);
 
+    }
+
+    private static void replaceLayers(EntityLivingBase livingBase)
+    {
+        Render render = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(livingBase);
+        renderLivingBaseLayerRenderersField = ReflectionHelper.getPrivateValue(RenderLivingBase.class, (RenderLivingBase)render, "field_177097_h", "layerRenderers");
+        try
+        {
+            List<LayerRenderer<EntityLivingBase>> list = renderLivingBaseLayerRenderersField;
+            for (LayerRenderer layer : list.toArray(new LayerRenderer[list.size()]))
+            {
+                if (layer instanceof LayerSpiderEyes)
+                {
+                    list.remove(layer);
+                    list.add(new LayerSpider((RenderSpider) render));
+                }
+                else if (layer instanceof LayerEndermanEyes)
+                {
+                    list.remove(layer);
+                    list.add(new LayerEnderman((RenderEnderman) render));
+                }
+            }
+        }
+        catch (Throwable t)
+        {
+            //oops
+        }
+    }
+
+    public ScorePlayerTeam getTeamFromStr(String s){
+        if(s.equalsIgnoreCase(red.toString()))
+            return red;
+        else if(s.equalsIgnoreCase(green.toString()))
+            return green;
+        else if(s.equalsIgnoreCase(purple.toString()))
+            return purple;
+        else if(s.equalsIgnoreCase(lblue.toString()))
+            return lblue;
+        return null;
     }
 }
