@@ -1,9 +1,9 @@
-package me.vaxry.harakiri.api.lua;
+package me.vaxry.harakiri.framework.lua;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.lua.api.ChatAPI;
-import me.vaxry.harakiri.api.lua.api.haralua;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.lua.api.ChatAPI;
+import me.vaxry.harakiri.framework.lua.api.haralua;
+import me.vaxry.harakiri.framework.module.Module;
 import net.minecraftforge.fml.common.Mod;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LoadState;

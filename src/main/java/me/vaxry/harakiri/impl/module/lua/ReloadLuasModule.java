@@ -2,10 +2,10 @@ package me.vaxry.harakiri.impl.module.lua;
 
 import com.yworks.yguard.test.A;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.event.render.EventRender2D;
-import me.vaxry.harakiri.api.event.render.EventRender3D;
-import me.vaxry.harakiri.api.lua.LUAAPI;
-import me.vaxry.harakiri.api.module.Module;
+import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
+import me.vaxry.harakiri.framework.lua.LUAAPI;
+import me.vaxry.harakiri.framework.module.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.io.File;

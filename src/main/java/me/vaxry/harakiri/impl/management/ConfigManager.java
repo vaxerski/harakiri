@@ -18,12 +18,14 @@ public final class ConfigManager {
     private File configDir;
     private File moduleConfigDir;
     private File hudComponentConfigDir;
+    private File luaDir;
 
     private boolean firstLaunch = false;
 
     private List<Configurable> configurableList = new ArrayList<>();
 
     public static final String CONFIG_PATH = "harakiri/config/";
+    public static final String LUA_PATH = "harakiri/Lua/";
 
     public ConfigManager() {
         this.generateDirectories();
@@ -34,6 +36,10 @@ public final class ConfigManager {
         if (!this.configDir.exists()) {
             this.setFirstLaunch(true);
             this.configDir.mkdirs();
+        }
+        this.luaDir = new File(LUA_PATH);
+        if (!this.luaDir.exists()) {
+            this.luaDir.mkdirs();
         }
     }
 

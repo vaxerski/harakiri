@@ -1,4 +1,4 @@
-package me.vaxry.harakiri.api.lua.api;
+package me.vaxry.harakiri.framework.lua.api;
 
 import me.vaxry.harakiri.Harakiri;
 import org.luaj.vm2.LuaTable;

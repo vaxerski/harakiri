@@ -2,12 +2,8 @@ package me.vaxry.harakiri.framework.module;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-<<<<<<< HEAD:src/main/java/me/vaxry/harakiri/api/module/Module.java
-import me.vaxry.harakiri.api.value.Value;
-import me.vaxry.harakiri.impl.module.lua.ReloadLuasModule;
-=======
 import me.vaxry.harakiri.framework.value.Value;
->>>>>>> main:src/main/java/me/vaxry/harakiri/framework/module/Module.java
+import me.vaxry.harakiri.impl.module.lua.ReloadLuasModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;

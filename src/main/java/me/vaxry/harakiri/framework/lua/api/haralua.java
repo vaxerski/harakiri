@@ -1,8 +1,8 @@
-package me.vaxry.harakiri.api.lua.api;
+package me.vaxry.harakiri.framework.lua.api;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.api.lua.LUAAPI;
-import me.vaxry.harakiri.api.value.Value;
+import me.vaxry.harakiri.framework.lua.LUAAPI;
+import me.vaxry.harakiri.framework.value.Value;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
