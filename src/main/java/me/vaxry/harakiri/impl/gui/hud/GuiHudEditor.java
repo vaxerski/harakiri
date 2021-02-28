@@ -11,6 +11,7 @@ import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.SwitchViewComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
+import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleSearchComponent;
 import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -136,10 +137,10 @@ public final class GuiHudEditor extends GuiScreen {
 
         for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
 
-            if(component instanceof ModuleListComponent && !swc.isModules)
+            if((component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && !swc.isModules)
                 continue;
 
-            if(!(component instanceof ModuleListComponent) && swc.isModules && component != swc)
+            if(!(component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && swc.isModules && component != swc)
                 continue;
 
             if (component.isVisible()) {
@@ -201,10 +202,10 @@ public final class GuiHudEditor extends GuiScreen {
 
         for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
 
-            if(component instanceof ModuleListComponent && !swc.isModules)
+            if((component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && !swc.isModules)
                 continue;
 
-            if(!(component instanceof ModuleListComponent) && swc.isModules && component != swc)
+            if(!(component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && swc.isModules && component != swc)
                 continue;
 
             if (component.isVisible()) {
@@ -225,10 +226,10 @@ public final class GuiHudEditor extends GuiScreen {
             Harakiri.INSTANCE.getPlexusEffect().onMouseClicked();
 
             for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
-                if(component instanceof ModuleListComponent && !swc.isModules)
+                if((component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && !swc.isModules)
                     continue;
 
-                if(!(component instanceof ModuleListComponent) && swc.isModules && component != swc)
+                if(!(component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && swc.isModules && component != swc)
                     continue;
 
                 if (component.isVisible()) {
@@ -249,10 +250,10 @@ public final class GuiHudEditor extends GuiScreen {
         SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);
 
         for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
-            if(component instanceof ModuleListComponent && !swc.isModules)
+            if((component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && !swc.isModules)
                 continue;
 
-            if(!(component instanceof ModuleListComponent) && swc.isModules && component != swc)
+            if(!(component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && swc.isModules && component != swc)
                 continue;
 
             if (component.isVisible()) {

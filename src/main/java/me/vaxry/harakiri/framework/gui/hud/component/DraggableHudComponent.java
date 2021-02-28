@@ -6,6 +6,7 @@ import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.gui.hud.component.HubComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
+import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleSearchComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -63,7 +64,7 @@ public class DraggableHudComponent extends HudComponent {
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
-        if(this instanceof ModuleListComponent || this instanceof HubComponent) {
+        if(this instanceof ModuleListComponent || this instanceof HubComponent || this instanceof ModuleSearchComponent) {
             mouseX /= SCALING;
             mouseY /= SCALING;
         }
@@ -75,7 +76,7 @@ public class DraggableHudComponent extends HudComponent {
             this.setY(mouseY - this.getDeltaY());
             this.clamp();
         } else if (this.isMouseInside(mouseX, mouseY)) {
-            if(this instanceof ModuleListComponent || this instanceof HubComponent) {
+            if(this instanceof ModuleListComponent || this instanceof HubComponent || this instanceof ModuleSearchComponent) {
                 GlStateManager.scale(SCALING, SCALING, SCALING);
                 RenderUtil.drawRoundedRect(this.getX(), this.getY(), this.getW(), this.getH(), 5, 0x11FFFFFF); //0x45
                 GlStateManager.scale(1.f/SCALING, 1.f/SCALING, 1.f/SCALING);
@@ -85,7 +86,7 @@ public class DraggableHudComponent extends HudComponent {
         }
 
         if (isHudEditor) {
-            if(this instanceof HubComponent || this instanceof ModuleListComponent) {
+            if(this instanceof HubComponent || this instanceof ModuleListComponent || this instanceof ModuleSearchComponent) {
                 GlStateManager.scale(SCALING, SCALING, SCALING);
                 RenderUtil.drawRoundedRect(this.getX(), this.getY(), this.getW(), this.getH(), 5, 0x75101010);
                 GlStateManager.scale(1.f / SCALING, 1.f / SCALING, 1.f / SCALING);

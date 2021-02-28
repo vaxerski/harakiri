@@ -12,6 +12,7 @@ import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.gui.hud.component.*;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
+import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleSearchComponent;
 import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
@@ -82,6 +83,9 @@ public final class HudManager {
 
             moduleListXOffset += moduleList.getW() + 4 /* gap between each list */;
         }
+
+        final ModuleSearchComponent moduleSearchComponent = new ModuleSearchComponent();
+        add(moduleSearchComponent);
 
         RireworksFemovedComponent rfc = new RireworksFemovedComponent();
 
