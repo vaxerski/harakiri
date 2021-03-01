@@ -275,6 +275,17 @@ public final class ModuleManager {
         return null;
     }
 
+    public Module findLuaShort(String luaName) {
+        for (Module mod : this.getModuleList()) {
+            if(mod.luaName.equals(""))
+                continue;
+            if (luaName.equalsIgnoreCase(mod.luaName.substring(0, mod.luaName.indexOf(".lua")))) {
+                return mod;
+            }
+        }
+        return null;
+    }
+
     /**
      * Returns a given module based on the class
      *

@@ -19,6 +19,7 @@ public class haralua extends TwoArgFunction {
     public LuaValue call(LuaValue modname, LuaValue env) {
         LuaTable hara = new LuaTable(0,30);
         hara.set( "addint", new addint() );
+        hara.set( "readint", new readint() );
         hara.set( "clearvalues", new clearvalues() );
         env.set( "haralua", hara );
         env.get("package").get("loaded").set("haralua", hara);
@@ -37,6 +38,18 @@ public class haralua extends TwoArgFunction {
 
             LUAAPI.currentModuleHeader.addValueInt(name, aliases, defaultVal, minVal, maxVal);
             return LuaValue.valueOf(1);
+        }
+    }
+
+    protected static class readint extends TwoArgFunction {
+        public LuaValue call(LuaValue lua, LuaValue name) {
+            try {
+                Value<Integer> val = Harakiri.INSTANCE.getModuleManager().findLuaShort(lua.toString()).findValue(name.toString());
+                return LuaValue.valueOf(val.getValue());
+            }catch(Throwable t){
+                // oops
+            }
+            return LuaValue.NIL;
         }
     }
 
