@@ -202,10 +202,10 @@ public final class ModuleSearchComponent extends ResizableHudComponent {
         RenderUtil.drawRect(this.getX() + BORDER + 1, this.getY() + offsetY + BORDER + 1, this.getX() + BORDER + this.getW() - 1, this.getY() + offsetY + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1, 0x55111111);
 
         // its border
-        RenderUtil.drawLine(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getX() + BORDER + this.getW() - SCROLL_WIDTH  - 1, this.getY() + offsetY + BORDER, 1.f, this.isTypingEnabled ? this.useRainbow ? rainbowCol : ACCENT_COLOR : 0x99444444);
+        RenderUtil.drawLine(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getX() + BORDER + this.getW() - SCROLL_WIDTH  - 3, this.getY() + offsetY + BORDER, 1.f, this.isTypingEnabled ? this.useRainbow ? rainbowCol : ACCENT_COLOR : 0x99444444);
         RenderUtil.drawLine(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getX() + BORDER, this.getY() + offsetY + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 2, 1.f, this.isTypingEnabled ? this.useRainbow ? rainbowCol : ACCENT_COLOR : 0x99444444);
-        RenderUtil.drawLine(this.getX() + BORDER, this.getY() + offsetY + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 2, this.getX() + BORDER + this.getW() - SCROLL_WIDTH  - 1, this.getY() + offsetY + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 2, 1.f, this.isTypingEnabled ? this.useRainbow ? rainbowCol : ACCENT_COLOR : 0x99444444);
-        RenderUtil.drawLine(this.getX() + BORDER + this.getW() - SCROLL_WIDTH - 1, this.getY() + offsetY + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 2, this.getX() + BORDER + this.getW() - SCROLL_WIDTH  - 1, this.getY() + offsetY + BORDER, 1.f, this.isTypingEnabled ? this.useRainbow ? rainbowCol : ACCENT_COLOR : 0x99444444);
+        RenderUtil.drawLine(this.getX() + BORDER, this.getY() + offsetY + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 2, this.getX() + BORDER + this.getW() - SCROLL_WIDTH  - 3, this.getY() + offsetY + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 2, 1.f, this.isTypingEnabled ? this.useRainbow ? rainbowCol : ACCENT_COLOR : 0x99444444);
+        RenderUtil.drawLine(this.getX() + BORDER + this.getW() - SCROLL_WIDTH - 3, this.getY() + offsetY + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 2, this.getX() + BORDER + this.getW() - SCROLL_WIDTH  - 3, this.getY() + offsetY + BORDER, 1.f, this.isTypingEnabled ? this.useRainbow ? rainbowCol : ACCENT_COLOR : 0x99444444);
 
         // Render the search text
         Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.searchText, this.getX() + BORDER + 1, this.getY() + offsetY + BORDER + 1, 0xFFAAAAB7);

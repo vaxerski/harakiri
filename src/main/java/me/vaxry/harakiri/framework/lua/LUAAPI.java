@@ -2,6 +2,7 @@ package me.vaxry.harakiri.framework.lua;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.lua.api.ChatAPI;
+import me.vaxry.harakiri.framework.lua.api.GlobalAPI;
 import me.vaxry.harakiri.framework.lua.api.haralua;
 import me.vaxry.harakiri.framework.module.Module;
 import net.minecraftforge.fml.common.Mod;
@@ -23,7 +24,11 @@ public final class LUAAPI {
     public static Module currentModuleHeader = null;
 
     private enum EVENTCODE {
-        EVENT_NONE, EVENT_HEADER, EVENT_2D, EVENT_3D
+        EVENT_NONE, EVENT_HEADER, EVENT_SCRIPT
+    }
+
+    private enum EVENTFUN {
+        EVENT_NONE, EVENT_RENDER2D, EVENT_RENDER3D
     }
 
     public static class LuaModule{
@@ -46,8 +51,7 @@ public final class LUAAPI {
         //-------------Event Data--------------//
         private String header = "";
 
-        private String rawDataEvent2D = "";
-        private String rawDataEvent3D = "";
+        private String rawDataScript = "";
 
         //-------------------------------------//
 
@@ -56,13 +60,32 @@ public final class LUAAPI {
         public void setErrors(boolean s){ hasErrors = s; }
     }
 
-    public static boolean runScript(String rawdata, EVENTCODE ec){
+    public static boolean runScript(String rawdata, EVENTCODE ec, EVENTFUN ef){
         try {
-            LuaValue chunk = JSEGlobals.load(rawdata);
 
-            chunk.call();
+            JSEGlobals.load(rawdata, "luascript").call();
+
+            if(ec != EVENTCODE.EVENT_NONE && ef != EVENTFUN.EVENT_NONE && ef != null) {
+                // running script
+                LuaValue fun = null;
+
+                switch(ef){
+                    case EVENT_NONE:
+                        return true;
+                    case EVENT_RENDER2D:
+                        fun = JSEGlobals.get("EventRender2D");
+                        break;
+                    case EVENT_RENDER3D:
+                        fun = JSEGlobals.get("EventRender3D");
+                        break;
+                }
+
+                if(fun != null && fun != LuaValue.NIL)
+                    fun.call();
+            }
+
         }catch(Throwable t) {
-            Harakiri.INSTANCE.logChat("Your script contains errors!\nStage: " + ec.name() + "\n" + t.toString());
+            Harakiri.INSTANCE.logChat("Your script contains errors!\nStage: " + ec.name() + "\n" + t.toString().substring(t.toString().contains("luaj") ? t.toString().indexOf(':') + 1 : 0));
             return false;
         }
         return true;
@@ -104,18 +127,9 @@ public final class LUAAPI {
         try {
             String line = null;
             while ((line = bufReader.readLine()) != null) {
-                if(line.indexOf("-- E") != -1){
+                if(line.indexOf("-- Script") != -1){
                     //This is an event
                     insideEvent = true;
-
-                    switch(line){
-                        case "-- ERender2D":
-                            writeToEvent = EVENTCODE.EVENT_2D;
-                            break;
-                        case "-- ERender3D":
-                            writeToEvent = EVENTCODE.EVENT_3D;
-                            break;
-                    }
                 }
                 if(line.contains("-- end")){
                     insideEvent = false;
@@ -123,14 +137,7 @@ public final class LUAAPI {
                 }
 
                 if(insideEvent){
-                    switch (writeToEvent){
-                        case EVENT_2D:
-                            luaModule.rawDataEvent2D += "\n" + line;
-                            break;
-                        case EVENT_3D:
-                            luaModule.rawDataEvent3D += "\n" + line;
-                            break;
-                    }
+                    luaModule.rawDataScript += "\n" + line;
                 }
             }
         }catch (Throwable t){
@@ -143,7 +150,7 @@ public final class LUAAPI {
     }
 
     public static void applyLUAHeader(LuaModule luaModule){
-        if(!runScript(luaModule.header, EVENTCODE.EVENT_HEADER))
+        if(!runScript(luaModule.header, EVENTCODE.EVENT_HEADER, EVENTFUN.EVENT_NONE))
             luaModule.setErrors(true);
     }
 
@@ -160,8 +167,9 @@ public final class LUAAPI {
         // header lib
         JSEGlobals.load(new haralua());
 
-        // other libs
+        // harakiri other libs
         JSEGlobals.load(new ChatAPI());
+        JSEGlobals.load(new GlobalAPI());
     }
 
     //----------------------------------------------------------------------------------
@@ -172,14 +180,14 @@ public final class LUAAPI {
 
     public static void onRender2D(ArrayList<LuaModule> enabledluas){
         for(LuaModule lua : enabledluas){
-            if(!runScript(lua.rawDataEvent2D, EVENTCODE.EVENT_2D))
+            if(!runScript(lua.rawDataScript, EVENTCODE.EVENT_SCRIPT, EVENTFUN.EVENT_RENDER2D))
                 lua.setErrors(true);
         }
     }
 
     public static void onRender3D(ArrayList<LuaModule> enabledluas){
         for(LuaModule lua : enabledluas){
-            if(!runScript(lua.rawDataEvent3D, EVENTCODE.EVENT_3D))
+            if(!runScript(lua.rawDataScript, EVENTCODE.EVENT_SCRIPT, EVENTFUN.EVENT_RENDER3D))
                 lua.setErrors(true);
         }
     }

@@ -3,6 +3,7 @@ package me.vaxry.harakiri.framework.lua.api;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.lua.LUAAPI;
 import me.vaxry.harakiri.framework.value.Value;
+import net.minecraft.client.Minecraft;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
