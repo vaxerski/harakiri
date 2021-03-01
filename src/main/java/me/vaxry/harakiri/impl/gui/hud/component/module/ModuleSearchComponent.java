@@ -544,6 +544,9 @@ public final class ModuleSearchComponent extends ResizableHudComponent {
         }
 
         if(this.isTypingEnabled){
+            // Clear the array lol
+            this.currentSettingsArr.clear();
+
             if(keyCode == KeyEvent.VK_ESCAPE)
                 this.searchText = "";
             else if(keyCode == KeyEvent.VK_BACK_SPACE || typedChar == '\b')
