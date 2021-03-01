@@ -266,6 +266,14 @@ public class Module {
         valueList.add(new Value<Integer>(n, a, n, def, min, max, 1));
     }
 
+    public void addValueFloat(String n, String[] a, float def, float min, float max){
+        valueList.add(new Value<Float>(n, a, n, def, min, max, 0.1f));
+    }
+
+    public void addValueBool(String n, String[] a, boolean def){
+        valueList.add(new Value<Boolean>(n, a, n, def));
+    }
+
     public void setValueList(List<Value> valueList) {
         this.valueList = valueList;
     }

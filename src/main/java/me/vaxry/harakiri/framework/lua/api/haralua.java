@@ -20,6 +20,10 @@ public class haralua extends TwoArgFunction {
         LuaTable hara = new LuaTable(0,30);
         hara.set( "addint", new addint() );
         hara.set( "readint", new readint() );
+        hara.set( "addbool", new addbool() );
+        hara.set( "readbool", new readbool() );
+        hara.set( "addfloat", new addfloat() );
+        hara.set( "readfloat", new readfloat() );
         hara.set( "clearvalues", new clearvalues() );
         env.set( "haralua", hara );
         env.get("package").get("loaded").set("haralua", hara);
@@ -45,6 +49,58 @@ public class haralua extends TwoArgFunction {
         public LuaValue call(LuaValue lua, LuaValue name) {
             try {
                 Value<Integer> val = Harakiri.INSTANCE.getModuleManager().findLuaShort(lua.toString()).findValue(name.toString());
+                return LuaValue.valueOf(val.getValue());
+            }catch(Throwable t){
+                // oops
+            }
+            return LuaValue.NIL;
+        }
+    }
+
+    protected static class addbool extends VarArgFunction {
+        public Varargs invoke(Varargs args) {
+            String name = args.arg(1).checkjstring();
+            boolean defaultVal = args.arg(2).checkboolean();
+
+            String[] aliases = new String[1];
+            aliases[0] = name;
+
+            LUAAPI.currentModuleHeader.addValueBool(name, aliases, defaultVal);
+            return LuaValue.valueOf(1);
+        }
+    }
+
+    protected static class readbool extends TwoArgFunction {
+        public LuaValue call(LuaValue lua, LuaValue name) {
+            try {
+                Value<Boolean> val = Harakiri.INSTANCE.getModuleManager().findLuaShort(lua.toString()).findValue(name.toString());
+                return LuaValue.valueOf(val.getValue());
+            }catch(Throwable t){
+                // oops
+            }
+            return LuaValue.NIL;
+        }
+    }
+
+    protected static class addfloat extends VarArgFunction {
+        public Varargs invoke(Varargs args) {
+            String name = args.arg(1).checkjstring();
+            double defaultVal = args.arg(2).checkdouble();
+            double minVal = args.arg(3).checkdouble();
+            double maxVal = args.arg(4).checkdouble();
+
+            String[] aliases = new String[1];
+            aliases[0] = name;
+
+            LUAAPI.currentModuleHeader.addValueFloat(name, aliases, (float)defaultVal, (float)minVal, (float)maxVal);
+            return LuaValue.valueOf(1);
+        }
+    }
+
+    protected static class readfloat extends TwoArgFunction {
+        public LuaValue call(LuaValue lua, LuaValue name) {
+            try {
+                Value<Float> val = Harakiri.INSTANCE.getModuleManager().findLuaShort(lua.toString()).findValue(name.toString());
                 return LuaValue.valueOf(val.getValue());
             }catch(Throwable t){
                 // oops

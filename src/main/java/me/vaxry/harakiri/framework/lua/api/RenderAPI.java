@@ -2,6 +2,7 @@ package me.vaxry.harakiri.framework.lua.api;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.util.RenderUtil;
+import net.minecraft.util.math.AxisAlignedBB;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
@@ -54,7 +55,7 @@ public class RenderAPI extends TwoArgFunction {
             int y = args.arg(2).checkint();
             int x1 = args.arg(3).checkint();
             int y1 = args.arg(4).checkint();
-            int col = args.arg(4).checkint();
+            int col = args.arg(5).checkint();
             RenderUtil.drawRect(x,y,x1, y1, col);
             return LuaValue.valueOf(1);
         }
@@ -66,9 +67,40 @@ public class RenderAPI extends TwoArgFunction {
             int y = args.arg(2).checkint();
             int x1 = args.arg(3).checkint();
             int y1 = args.arg(4).checkint();
-            double thick = args.arg(4).checkdouble();
-            int col = args.arg(4).checkint();
+            double thick = args.arg(5).checkdouble();
+            int col = args.arg(6).checkint();
             RenderUtil.drawLine(x,y,x1, y1, (float)thick, col);
+            return LuaValue.valueOf(1);
+        }
+    }
+
+    protected static class render3DBox extends VarArgFunction {
+        public Varargs invoke(Varargs args) {
+            int x = args.arg(1).checkint();
+            int y = args.arg(2).checkint();
+            int z = args.arg(3).checkint();
+            int x1 = args.arg(4).checkint();
+            int y1 = args.arg(5).checkint();
+            int z1 = args.arg(6).checkint();
+            double thick = args.arg(7).checkdouble();
+            int col = args.arg(8).checkint();
+            AxisAlignedBB bb = new AxisAlignedBB(x,y,z,x1,y1,z1);
+            RenderUtil.drawBoundingBox(bb, (float)thick, col);
+            return LuaValue.valueOf(1);
+        }
+    }
+
+    protected static class render3DLine extends VarArgFunction {
+        public Varargs invoke(Varargs args) {
+            int x = args.arg(1).checkint();
+            int y = args.arg(2).checkint();
+            int z = args.arg(3).checkint();
+            int x1 = args.arg(4).checkint();
+            int y1 = args.arg(5).checkint();
+            int z1 = args.arg(6).checkint();
+            double thick = args.arg(7).checkdouble();
+            int col = args.arg(8).checkint();
+            RenderUtil.drawLine3D(x,y,z,x1,y1,z1,(float)thick,col);
             return LuaValue.valueOf(1);
         }
     }
