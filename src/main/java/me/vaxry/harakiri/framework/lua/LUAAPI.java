@@ -112,8 +112,13 @@ public final class LUAAPI {
             return true;
         }
 
-        public void applyLUAHeader(){
-            if(!runScript(this.header, EVENTCODE.EVENT_HEADER, EVENTFUN.EVENT_NONE))
+        public void applyLUAHeader() {
+            // Add provided globals
+            String header = "thislua = \"" + this.luaname.substring(0, this.luaname.indexOf(".lua")) + "\"\n";
+
+            header += this.header;
+
+            if(!runScript(header, EVENTCODE.EVENT_HEADER, EVENTFUN.EVENT_NONE))
                 this.setErrors(true);
         }
 
