@@ -24,6 +24,7 @@ public class ModuleAPI extends TwoArgFunction {
         module.set( "toggle", new toggle() );
         module.set( "setEnabled", new setEnabled() );
         module.set( "setValue", new setValue() );
+        module.set( "getValue", new getValue() );
         env.set( "module", module );
         env.get("package").get("loaded").set("module", module);
         return module;

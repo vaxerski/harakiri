@@ -70,7 +70,7 @@ public final class NotificationsComponent extends DraggableHudComponent {
 
             GL11.glEnable(GL11.GL_SCISSOR_TEST);
             RenderUtil.glScissor(notification.getX() - 1, notification.getY(), notification.getX() + notification.getWidth() * notification.percFrac, notification.getY() + notification.getHeight(), sr);
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(notification.getText(), notification.getX(), notification.getY() + 4.0F, 0xFFDDDDDD);
+            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(notification.getText(), notification.getX(), notification.getY() + 2.9F, 0xFFDDDDDD);
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
             //RenderUtil.drawRect(notification.getTransitionX() - 1, notification.getY(), notification.getTransitionX() + notification.getWidth() + 1, notification.getY() + notification.getHeight(), (int)Math.min(alpha * 0x10000000, 0x65000000) + 0x101010);
