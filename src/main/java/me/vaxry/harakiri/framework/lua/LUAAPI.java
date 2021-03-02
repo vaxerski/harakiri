@@ -1,10 +1,7 @@
 package me.vaxry.harakiri.framework.lua;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.lua.api.ChatAPI;
-import me.vaxry.harakiri.framework.lua.api.GlobalAPI;
-import me.vaxry.harakiri.framework.lua.api.RenderAPI;
-import me.vaxry.harakiri.framework.lua.api.haralua;
+import me.vaxry.harakiri.framework.lua.api.*;
 import me.vaxry.harakiri.framework.module.Module;
 import net.minecraftforge.fml.common.Mod;
 import org.luaj.vm2.Globals;
@@ -172,6 +169,8 @@ public final class LUAAPI {
         JSEGlobals.load(new ChatAPI());
         JSEGlobals.load(new GlobalAPI());
         JSEGlobals.load(new RenderAPI());
+        JSEGlobals.load(new ModuleAPI());
+        JSEGlobals.load(new ComponentAPI());
     }
 
     //----------------------------------------------------------------------------------
