@@ -46,6 +46,7 @@ public final class ConfigManager {
     public void init() {
         this.configurableList.add(new ModuleConfig(configDir));
         this.configurableList.add(new HudConfig(configDir));
+        this.configurableList.add(new LuaConfig(configDir));
         this.configurableList.add(new FriendConfig(configDir));
         this.configurableList.add(new XrayConfig(configDir));
         this.configurableList.add(new SearchConfig(configDir));

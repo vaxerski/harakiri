@@ -628,6 +628,10 @@ public final class ModuleListComponent extends ResizableHudComponent {
         return currentSettingsArr;
     }
 
+    public void cleanCurrentSettings() {
+        currentSettingsArr.clear();
+    }
+
     public static class BackButtonComponent extends HudComponent {
         private final ModuleListComponent parentModuleList;
 

@@ -40,8 +40,6 @@ public final class LUAAPI {
             if(!parseLUAScript(luaName, this))
                 return;
             currentModuleHeader = Harakiri.INSTANCE.getModuleManager().findLua(luaName);
-            if(currentModuleHeader == null)
-                Harakiri.INSTANCE.logChat("CMH is null!!!!!!");
             applyLUAHeader(this);
             currentModuleHeader = null;
         }
@@ -83,7 +81,11 @@ public final class LUAAPI {
             }
 
         }catch(Throwable t) {
-            Harakiri.INSTANCE.logChat("Your script contains errors!\nStage: " + ec.name() + "\n" + t.toString().substring(t.toString().contains("luaj") ? t.toString().indexOf(':') + 1 : 0));
+            try {
+                Harakiri.INSTANCE.logChat("Your script contains errors!\nStage: " + ec.name() + "\n" + t.toString().substring(t.toString().contains("luaj") ? t.toString().indexOf(':') + 1 : 0));
+            }catch (Throwable t2){
+                // Throws when game loading
+            }
             return false;
         }
         return true;
@@ -102,7 +104,6 @@ public final class LUAAPI {
                 rawdata += "\n" + data;
             }
         }catch(Throwable t){
-            JOptionPane.showMessageDialog(null, t.toString(), "Error while parsing " + name, JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
 
@@ -139,7 +140,11 @@ public final class LUAAPI {
                 }
             }
         }catch (Throwable t){
-            Harakiri.INSTANCE.logChat("Error while parsing " + name + ": " + t.toString());
+            try {
+                Harakiri.INSTANCE.logChat("Error while parsing " + name + ": " + t.toString());
+            }catch(Throwable t2){
+                //Throws when game load
+            }
             return false;
         }
 

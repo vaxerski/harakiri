@@ -2,10 +2,15 @@ package me.vaxry.harakiri.impl.module.lua;
 
 import com.yworks.yguard.test.A;
 import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.config.Configurable;
+import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
+import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
 import me.vaxry.harakiri.framework.lua.LUAAPI;
 import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.impl.config.LuaConfig;
+import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.io.File;
@@ -13,8 +18,10 @@ import java.util.ArrayList;
 
 public class ReloadLuasModule extends Module {
 
-    ArrayList<LUAAPI.LuaModule> loadedLuas = new ArrayList<>();
-    ArrayList<LUAAPI.LuaModule> enabledLuas = new ArrayList<>();
+    boolean luaInit = true;
+
+    public ArrayList<LUAAPI.LuaModule> loadedLuas = new ArrayList<>();
+    public ArrayList<LUAAPI.LuaModule> enabledLuas = new ArrayList<>();
 
     public ReloadLuasModule() {
         super("Reload LUAs", new String[]{"ReloadLUAs", "ReloadLUA"}, "Reload the list of LUAs", "NONE", -1, ModuleType.LUA);
@@ -57,6 +64,14 @@ public class ReloadLuasModule extends Module {
         super.onEnable();
     }
 
+    // Used for init-ting luas when we first launch the game.
+    public void loadLuas() {
+        this.setEnabled(false);
+        LUAAPI.loadAPIFunctions();
+        reloadLuas();
+        super.onEnable();
+    }
+
     public void updateEnabledLuas(){
         for(Module mod : Harakiri.INSTANCE.getModuleManager().getModuleList(ModuleType.LUA)){
             if(mod instanceof ReloadLuasModule)
@@ -68,6 +83,14 @@ public class ReloadLuasModule extends Module {
                 enableLuaByName(mod.luaName);
             }
         }
+    }
+
+    public LUAAPI.LuaModule getLuaModuleByName(String name){
+        for(LUAAPI.LuaModule lm : loadedLuas) {
+            if (lm.getLuaName().equalsIgnoreCase(name))
+                return lm;
+        }
+        return null;
     }
 
     private boolean isLuaLoaded(String path){
@@ -117,6 +140,16 @@ public class ReloadLuasModule extends Module {
     private void reloadLuas(){
         String[] pathnames;
 
+        LuaConfig config = null;
+        for(Configurable c : Harakiri.INSTANCE.getConfigManager().getConfigurableList()){
+            if(c instanceof LuaConfig)
+                config = (LuaConfig)c;
+        }
+
+        // Save config
+        if(config != null)
+            config.onSave();
+
         File f = new File(System.getenv("APPDATA") + "\\.minecraft\\Harakiri\\Lua");
 
         pathnames = f.list();
@@ -124,14 +157,33 @@ public class ReloadLuasModule extends Module {
         for (LUAAPI.LuaModule lm : loadedLuas){
             deleteModuleForLua(lm.getLuaName());
         }
-        
+
         loadedLuas.clear();
 
         for (String pathname : pathnames) {
             createModuleForLua(pathname);
         }
 
-        Harakiri.INSTANCE.logChat("Reloaded " + pathnames.length + " luas.");
+        try {
+            Harakiri.INSTANCE.logChat("Reloaded " + pathnames.length + " luas.");
+        }catch (Throwable t){
+            // Throws when loading the game.
+        }
+
+        // Load config
+        if(config != null)
+            config.onLoad();
+
+        // Clean open settings
+        for(HudComponent hc : Harakiri.INSTANCE.getHudManager().getComponentList()){
+            if(!(hc instanceof ModuleListComponent))
+                continue;
+            if(((ModuleListComponent) hc).getType() != ModuleType.LUA)
+                continue;
+
+            ((ModuleListComponent) hc).cleanCurrentSettings();
+            break;
+        }
     }
 
     private void deleteModuleForLua(String path){
