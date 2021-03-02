@@ -1,5 +1,7 @@
 package me.vaxry.harakiri.framework.value;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 /**
  * Author Seth
  * 11/18/2019 @ 8:56 PM.

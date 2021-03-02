@@ -167,7 +167,7 @@ public class Module {
     }
 
     public void setDisplayName(String displayName) {
-        if (displayName.equals("true") || displayName.equals("false")) { // bug in earlier versions of harakiri <= 3.0.6
+        if (displayName.equals("true") || displayName.equals("false")) {
             this.displayName = this.getAlias()[0];
             return;
         }

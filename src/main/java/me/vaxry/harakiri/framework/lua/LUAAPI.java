@@ -171,6 +171,7 @@ public final class LUAAPI {
         JSEGlobals.load(new RenderAPI());
         JSEGlobals.load(new ModuleAPI());
         JSEGlobals.load(new ComponentAPI());
+        JSEGlobals.load(new EntityAPI());
     }
 
     //----------------------------------------------------------------------------------
