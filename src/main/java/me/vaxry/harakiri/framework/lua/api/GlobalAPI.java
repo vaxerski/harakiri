@@ -1,6 +1,7 @@
 package me.vaxry.harakiri.framework.lua.api;
 
 import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.notification.Notification;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import org.luaj.vm2.LuaTable;
@@ -20,6 +21,7 @@ public class GlobalAPI extends TwoArgFunction {
         global.set( "curtime", new curtime() );
         global.set( "scaledX", new scaledX() );
         global.set( "scaledY", new scaledY() );
+        global.set( "addNotification", new addNotification() );
         env.set( "global", global );
         env.get("package").get("loaded").set("global", global);
         return global;
@@ -42,6 +44,17 @@ public class GlobalAPI extends TwoArgFunction {
         public LuaValue call(){
             ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
             return LuaValue.valueOf(res.getScaledHeight());
+        }
+    }
+
+    protected static class addNotification extends TwoArgFunction {
+        public LuaValue call(LuaValue message, LuaValue duration){
+            String messag = message.checkjstring();
+            double dur = duration.checkdouble();
+
+            Harakiri.INSTANCE.getNotificationManager().addNotification(messag, messag, Notification.Type.INFO, (int)dur);
+
+            return LuaValue.valueOf(1);
         }
     }
 }
