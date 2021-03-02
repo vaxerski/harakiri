@@ -18,11 +18,10 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public final class LUAAPI {
-    private static Globals JSEGlobals;
     public static Module currentModuleHeader = null;
 
     private enum EVENTCODE {
-        EVENT_NONE, EVENT_HEADER, EVENT_SCRIPT
+        EVENT_NONE, EVENT_HEADER, EVENT_SCRIPT, EVENT_SCRIPT_PRELOAD
     }
 
     private enum EVENTFUN {
@@ -30,65 +29,103 @@ public final class LUAAPI {
     }
 
     public static class LuaModule{
-        // Basic Lua module.
+        // Lua module class.
+        // Handles execution -> Globals are split to avoid conflicts.
+
+        public Globals JSEGlobals;
 
         private String luaname;
         private boolean hasErrors = false;
 
         public LuaModule(String luaName){
             luaname = luaName;
+
+            loadAPIFunctions();
+
             if(!parseLUAScript(luaName, this))
                 return;
+
             currentModuleHeader = Harakiri.INSTANCE.getModuleManager().findLua(luaName);
-            applyLUAHeader(this);
+            applyLUAHeader();
+
+            // So we dont run the entire thing later on, just the func we are interested in.
+            this.runScript(this.rawDataScript, EVENTCODE.EVENT_SCRIPT_PRELOAD, EVENTFUN.EVENT_NONE);
+
             currentModuleHeader = null;
         }
 
-        //-------------Event Data--------------//
+        public void loadAPIFunctions(){
+            Globals newglobals = new Globals();
+            newglobals.load(new JseBaseLib());
+            newglobals.load(new PackageLib());
+            newglobals.load(new StringLib());
+            newglobals.load(new JseMathLib());
+            LoadState.install(newglobals);
+            LuaC.install(newglobals);
+            JSEGlobals = newglobals;
+
+            // header lib
+            JSEGlobals.load(new haralua());
+
+            // harakiri other libs
+            JSEGlobals.load(new ChatAPI());
+            JSEGlobals.load(new GlobalAPI());
+            JSEGlobals.load(new RenderAPI());
+            JSEGlobals.load(new ModuleAPI());
+            JSEGlobals.load(new ComponentAPI());
+            JSEGlobals.load(new EntityAPI());
+        }
+
+        public boolean runScript(String rawdata, EVENTCODE ec, EVENTFUN ef){
+            try {
+
+                if(ec == EVENTCODE.EVENT_HEADER || ec == EVENTCODE.EVENT_SCRIPT_PRELOAD)
+                    JSEGlobals.load(rawdata, "luascript").call();
+
+                if(ec != EVENTCODE.EVENT_NONE && ef != EVENTFUN.EVENT_NONE && ef != null) {
+                    // running script
+                    LuaValue fun = null;
+
+                    switch(ef){
+                        case EVENT_NONE:
+                            return true;
+                        case EVENT_RENDER2D:
+                            fun = JSEGlobals.get("EventRender2D");
+                            break;
+                        case EVENT_RENDER3D:
+                            fun = JSEGlobals.get("EventRender3D");
+                            break;
+                    }
+
+                    if(fun != null && fun != LuaValue.NIL)
+                        fun.call();
+                }
+
+            }catch(Throwable t) {
+                try {
+                    Harakiri.INSTANCE.logChat("Your script contains errors!\nStage: " + ec.name() + "\n" + t.toString().substring(t.toString().contains("luaj") ? t.toString().indexOf(':') + 1 : 0));
+                }catch (Throwable t2){
+                    // Throws when game loading
+                }
+                return false;
+            }
+            return true;
+        }
+
+        public void applyLUAHeader(){
+            if(!runScript(this.header, EVENTCODE.EVENT_HEADER, EVENTFUN.EVENT_NONE))
+                this.setErrors(true);
+        }
+
+        //--------------Code Data--------------//
         private String header = "";
 
         private String rawDataScript = "";
-
         //-------------------------------------//
 
         public String getLuaName(){ return luaname; }
         public boolean hasErrors(){ return hasErrors; }
         public void setErrors(boolean s){ hasErrors = s; }
-    }
-
-    public static boolean runScript(String rawdata, EVENTCODE ec, EVENTFUN ef){
-        try {
-
-            JSEGlobals.load(rawdata, "luascript").call();
-
-            if(ec != EVENTCODE.EVENT_NONE && ef != EVENTFUN.EVENT_NONE && ef != null) {
-                // running script
-                LuaValue fun = null;
-
-                switch(ef){
-                    case EVENT_NONE:
-                        return true;
-                    case EVENT_RENDER2D:
-                        fun = JSEGlobals.get("EventRender2D");
-                        break;
-                    case EVENT_RENDER3D:
-                        fun = JSEGlobals.get("EventRender3D");
-                        break;
-                }
-
-                if(fun != null && fun != LuaValue.NIL)
-                    fun.call();
-            }
-
-        }catch(Throwable t) {
-            try {
-                Harakiri.INSTANCE.logChat("Your script contains errors!\nStage: " + ec.name() + "\n" + t.toString().substring(t.toString().contains("luaj") ? t.toString().indexOf(':') + 1 : 0));
-            }catch (Throwable t2){
-                // Throws when game loading
-            }
-            return false;
-        }
-        return true;
     }
 
     public static boolean parseLUAScript(String name, LuaModule luaModule){
@@ -152,33 +189,6 @@ public final class LUAAPI {
         return true;
     }
 
-    public static void applyLUAHeader(LuaModule luaModule){
-        if(!runScript(luaModule.header, EVENTCODE.EVENT_HEADER, EVENTFUN.EVENT_NONE))
-            luaModule.setErrors(true);
-    }
-
-    public static void loadAPIFunctions(){
-        Globals newglobals = new Globals();
-        newglobals.load(new JseBaseLib());
-        newglobals.load(new PackageLib());
-        newglobals.load(new StringLib());
-        newglobals.load(new JseMathLib());
-        LoadState.install(newglobals);
-        LuaC.install(newglobals);
-        JSEGlobals = newglobals;
-
-        // header lib
-        JSEGlobals.load(new haralua());
-
-        // harakiri other libs
-        JSEGlobals.load(new ChatAPI());
-        JSEGlobals.load(new GlobalAPI());
-        JSEGlobals.load(new RenderAPI());
-        JSEGlobals.load(new ModuleAPI());
-        JSEGlobals.load(new ComponentAPI());
-        JSEGlobals.load(new EntityAPI());
-    }
-
     //----------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------
@@ -187,14 +197,14 @@ public final class LUAAPI {
 
     public static void onRender2D(ArrayList<LuaModule> enabledluas){
         for(LuaModule lua : enabledluas){
-            if(!runScript(lua.rawDataScript, EVENTCODE.EVENT_SCRIPT, EVENTFUN.EVENT_RENDER2D))
+            if(!lua.runScript(lua.rawDataScript, EVENTCODE.EVENT_SCRIPT, EVENTFUN.EVENT_RENDER2D))
                 lua.setErrors(true);
         }
     }
 
     public static void onRender3D(ArrayList<LuaModule> enabledluas){
         for(LuaModule lua : enabledluas){
-            if(!runScript(lua.rawDataScript, EVENTCODE.EVENT_SCRIPT, EVENTFUN.EVENT_RENDER3D))
+            if(!lua.runScript(lua.rawDataScript, EVENTCODE.EVENT_SCRIPT, EVENTFUN.EVENT_RENDER3D))
                 lua.setErrors(true);
         }
     }

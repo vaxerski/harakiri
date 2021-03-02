@@ -59,7 +59,6 @@ public class ReloadLuasModule extends Module {
     @Override
     public void onEnable() {
         this.setEnabled(false);
-        LUAAPI.loadAPIFunctions();
         reloadLuas();
         super.onEnable();
     }
@@ -67,7 +66,6 @@ public class ReloadLuasModule extends Module {
     // Used for init-ting luas when we first launch the game.
     public void loadLuas() {
         this.setEnabled(false);
-        LUAAPI.loadAPIFunctions();
         reloadLuas();
         super.onEnable();
     }
