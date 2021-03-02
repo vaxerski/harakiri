@@ -50,8 +50,9 @@ public final class LuaConfig extends Configurable {
                     Module thislua = Harakiri.INSTANCE.getModuleManager().findLua(luaModule.getLuaName());
 
                     if (valuename.equalsIgnoreCase("enabled")) {
-                        if (Boolean.valueOf(valueSett))
+                        if (Boolean.valueOf(valueSett) != thislua.isEnabled()) {
                             thislua.toggle();
+                        }
                     } else if (valuename.equalsIgnoreCase("hidden")) {
                         if (Boolean.valueOf(valueSett))
                             thislua.setHidden(true);

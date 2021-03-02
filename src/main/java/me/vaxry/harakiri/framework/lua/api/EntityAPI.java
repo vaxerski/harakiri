@@ -88,7 +88,7 @@ public class EntityAPI extends TwoArgFunction {
                     entities.add(CoerceJavaToLua.coerce(getLuaPlayerFromEntity((EntityPlayer)e)));
             }
 
-            LuaValue[] players = (LuaValue[])entities.toArray();
+            LuaValue players[] = entities.toArray(new LuaValue[entities.size()]);
 
             LuaTable table = new LuaTable(null, players, LuaValue.NIL);
 
