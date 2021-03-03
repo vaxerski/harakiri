@@ -78,9 +78,11 @@ public final class NametagsModule extends Module {
 
             EntityPlayer e = (EntityPlayer)ent;
             if(!isPlayerCached(e))
-                playersList.put(e, 0.f);
+                playersList.put(e, 0.01f);
 
             for(Map.Entry<EntityPlayer, Float> p : playersList.entrySet()){
+                if(p.getValue() < 0.01f)
+                    p.setValue(0.01f);
                 p.setValue(Math.min(p.getValue() + fadein.getValue() / 3.f, 255));
             }
 
