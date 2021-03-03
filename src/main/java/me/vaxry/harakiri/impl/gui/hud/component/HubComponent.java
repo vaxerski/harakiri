@@ -10,6 +10,7 @@ import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
+import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleSearchComponent;
 import me.vaxry.harakiri.impl.module.render.HudModule;
 import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.gui.ScaledResolution;
@@ -152,7 +153,7 @@ public final class HubComponent extends ResizableHudComponent {
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         RenderUtil.glScissor(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getX() + this.getW() - BORDER - SCROLL_WIDTH, this.getY() + this.getH() - BORDER, sr);
         for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
-            if (component != this && !(component instanceof ModuleListComponent) && !(component instanceof SwitchViewComponent)) {
+            if (component != this && !(component instanceof ModuleListComponent) && !(component instanceof SwitchViewComponent) && !(component instanceof ModuleSearchComponent)) {
                 if(useRainbow)
                     RenderUtil.drawGradientRectLeftRight(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - this.scroll, component.isVisible() ? rainbowColBG : 0x451F1C22, 0x00000000);
                 else
