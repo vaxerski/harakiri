@@ -222,6 +222,8 @@ public class Module {
                 return 0xFFB366FF;
             case MOVEMENT:
                 return 0xFF009933;
+            case LUA:
+                return 0xFF7777FF;
         }
         return 0xFF000000;
     }
