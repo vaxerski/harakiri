@@ -141,6 +141,10 @@ public class ModuleConfig extends Configurable {
         ArrayList<ModuleConfigJSON> moduleConfigJSONS = new ArrayList<>();
 
         for(Module mod : Harakiri.INSTANCE.getModuleManager().getModuleList()){
+
+            if(mod.getType() == Module.ModuleType.LUA)
+                continue; // We save luas separately
+
             ModuleConfigJSON config = new ModuleConfigJSON(mod.getDisplayName(), mod.isHidden(), mod.getKey(), mod.isEnabled());
 
             for(Value val : mod.getValueList()){
