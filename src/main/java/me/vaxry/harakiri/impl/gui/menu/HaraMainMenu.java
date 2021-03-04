@@ -91,6 +91,11 @@ public class HaraMainMenu extends GuiMainMenu {
                 res.getScaledWidth() - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("Logged in as " + Harakiri.INSTANCE.getUsername()) - 2,
                 0,
                 0xFFFFFFFF);
+
+        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("Account Manager",
+                0,
+                0,
+                0xFFFFFFFF);
     }
 
     @Override
@@ -104,6 +109,21 @@ public class HaraMainMenu extends GuiMainMenu {
                 this.mainMenuButtons.add(new HaraMainMenuButton(button.id, button.x, (int)(button.y + Y_OFFSET), button.width, button.height, button.displayString));
             }
         }
+    }
+
+    @Override
+    protected void mouseReleased(int mouseX, int mouseY, int state) {
+        super.mouseReleased(mouseX, mouseY, state);
+
+        if(mouseX > 0 &&
+            mouseX < Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("Account Manager") * 1.5f &&
+            mouseY > 0 &&
+            mouseY < Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT * 1.5f){
+            // Clicked the manager
+
+            mc.displayGuiScreen(new HaraAccountManager(this));
+        }
+
     }
 
     private boolean needsAnUpdate(){
