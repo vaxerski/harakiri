@@ -235,7 +235,7 @@ public final class ESPModule extends Module {
                 mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
                 mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
 
-                GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+                //GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
                 //this.lastShader = this.shaderV.getValue();
 
@@ -256,7 +256,7 @@ public final class ESPModule extends Module {
                 mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
                 mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
 
-                GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+                //GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
                 this.lastShader = this.shaderV.getValue();
             }catch(Throwable t){
@@ -267,7 +267,7 @@ public final class ESPModule extends Module {
 
         if(!livingBases.contains(ent.getEntity())){
             livingBases.add(ent.getEntity());
-            replaceLayers(ent.getEntity());
+            //replaceLayers(ent.getEntity());
         }
 
         if(this.isEnabled() &&
@@ -288,7 +288,12 @@ public final class ESPModule extends Module {
     @Listener
     public void onRenderEntity(EventRenderEntity event) {
         Minecraft mc = Minecraft.getMinecraft();
+
         if(event.getStage() == EventStageable.EventStage.PRE) {
+
+            //GlStateManager.enableOutlineMode(0xFFFFFFFF);
+            //mc.framebuffer.bindFramebuffer(false);
+
             if (toLoadShader) {
 
                 // Create the shader
@@ -317,17 +322,19 @@ public final class ESPModule extends Module {
                     mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
                     mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
 
-                    GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+                    //GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
                     //this.lastShader = this.shaderV.getValue();
 
                 } catch (Throwable t) {
-                    //Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
+                    Harakiri.INSTANCE.logChat("Shader failed: " + t.getMessage());
                     //JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
                 }
 
                 toLoadShader = false;
             }
+
+            //GlStateManager.enableOutlineMode(0xFFFFFF);
 
             if(this.lastShader != this.shaderV.getValue()) {
                 try {
@@ -338,7 +345,7 @@ public final class ESPModule extends Module {
                     mc.renderGlobal.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
                     mc.renderGlobal.entityOutlineFramebuffer = mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final");
 
-                    GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+                    //GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
                     this.lastShader = this.shaderV.getValue();
                 }catch(Throwable t){
@@ -372,6 +379,19 @@ public final class ESPModule extends Module {
                     board.addPlayerToTeam(event.getEntity().getName(), red.getName());
                 }
             }
+        }else if(event.getStage() == EventStageable.EventStage.POST){
+            //GlStateManager.enableOutlineMode(0xFFFFFF);
+            //mc.renderGlobal.entityOutlineShader.getFramebufferRaw("final").bindFramebuffer(false);
+            //mc.framebuffer.bindFramebuffer(false);
+            //mc.getRenderManager().renderEntityStatic(event.getEntity(), event.getPartialTicks(),false);
+
+            //GlStateManager.disableOutlineMode();
+        }else{
+            // MID
+            //mc.renderManager.getEntityRenderObject(event.getEntity()).doRender(event.getEntity(), event.getX(), event.getY(), event.getZ(), event.getYaw(), event.getPartialTicks());
+
+            //mc.framebuffer.bindFramebuffer(false);
+            //GlStateManager.disableOutlineMode();
         }
     }
 

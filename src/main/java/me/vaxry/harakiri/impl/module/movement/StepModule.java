@@ -112,8 +112,8 @@ public final class StepModule extends Module {
                             blockPos.getY() + 1,
                             blockPos.getZ() + 1);
                     if (!(block instanceof net.minecraft.block.BlockAir)) {
-                        if(!mc.world.getBlockState(blockPos).isFullBlock())
-                            continue;
+                        //if(!mc.world.getBlockState(blockPos).isFullBlock())
+                            //continue;
                         if(blockbb.intersects(extendedbb)) {
                             height = 2;
                             break;

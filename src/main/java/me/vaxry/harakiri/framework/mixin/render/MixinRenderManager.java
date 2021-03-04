@@ -35,6 +35,14 @@ public abstract class MixinRenderManager implements MixinRenderManagerInterface 
         if (event.isCanceled()) ci.cancel();
     }
 
+    @Inject(method = "renderEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/Render;doRender(Lnet/minecraft/entity/Entity;DDDFF)V", shift = At.Shift.AFTER))
+    public void renderEntityPeri(Entity entity, double x, double y, double z, float yaw, float partialTicks, boolean debug, CallbackInfo ci) {
+        if (entity == null) return;
+
+        final EventRenderEntity event = new EventRenderEntity(EventStageable.EventStage.MID, entity, x, y, z, yaw, partialTicks);
+        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+    }
+
     @Inject(method = "renderEntity", at = @At("RETURN"))
     private void onRenderEntity(Entity entityIn, double x, double y, double z, float yaw, float partialTicks, boolean p_188391_10_, CallbackInfo ci) {
         final EventRenderEntity event = new EventRenderEntity(EventStageable.EventStage.POST, entityIn, x, y, z, yaw, partialTicks);
