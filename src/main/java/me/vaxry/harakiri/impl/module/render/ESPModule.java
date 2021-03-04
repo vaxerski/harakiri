@@ -267,7 +267,7 @@ public final class ESPModule extends Module {
 
         if(!livingBases.contains(ent.getEntity())){
             livingBases.add(ent.getEntity());
-            //replaceLayers(ent.getEntity());
+            replaceLayers(ent.getEntity());
         }
 
         if(this.isEnabled() &&
