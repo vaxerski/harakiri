@@ -4,6 +4,7 @@ import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventMove;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
+import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.module.world.TimerModule;
@@ -112,8 +113,6 @@ public final class StepModule extends Module {
                             blockPos.getZ() + 1);
                     if (!(block instanceof net.minecraft.block.BlockAir)) {
                         if(!mc.world.getBlockState(blockPos).isFullBlock())
-                            continue;
-                        if(!mc.world.getBlockState(blockPos).isOpaqueCube())
                             continue;
                         if(blockbb.intersects(extendedbb)) {
                             height = 2;
