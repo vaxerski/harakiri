@@ -27,7 +27,7 @@
       ]
     },
     {
-      "name": "blur",
+      "name": "blura",
       "intarget": "swap",
       "outtarget": "previous",
       "uniforms": [
@@ -37,12 +37,12 @@
         },
         {
           "name": "Radius",
-          "values": [ 10.0 ]
+          "values": [ 1.0 ]
         }
       ]
     },
     {
-      "name": "blur",
+      "name": "blura",
       "intarget": "previous",
       "outtarget": "swap",
       "uniforms": [
@@ -52,7 +52,7 @@
         },
         {
           "name": "Radius",
-          "values": [ 10.0 ]
+          "values": [ 1.0 ]
         }
       ]
     },

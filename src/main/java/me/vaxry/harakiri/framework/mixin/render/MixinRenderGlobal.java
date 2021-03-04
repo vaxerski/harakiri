@@ -52,6 +52,13 @@ public class MixinRenderGlobal {
         if(eventRenderEntities.isCanceled()) ci.cancel();
     }
 
+    @Inject(method = "renderEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;disableFog()V", remap = false))
+    private void renderEntitiesMid(Entity renderViewEntity, ICamera camera, float partialTicks, CallbackInfo ci){
+        final EventRenderEntities eventRenderEntities = new EventRenderEntities(EventStageable.EventStage.MID, renderViewEntity, camera, partialTicks);
+        Harakiri.INSTANCE.getEventManager().dispatchEvent(eventRenderEntities);
+        if(eventRenderEntities.isCanceled()) ci.cancel();
+    }
+
     @Redirect(method = "renderEntityOutlineFramebuffer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;tryBlendFuncSeparate(IIII)V", remap = false))
     private void tryBlendFuncSeparate(int a, int b, int c, int d, CallbackInfo ci){
         GlStateManager.enableAlpha();

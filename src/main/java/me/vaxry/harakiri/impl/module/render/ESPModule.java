@@ -406,6 +406,13 @@ public final class ESPModule extends Module {
             }
 
             coloredPlayers.clear();
+        }else if(event.getStage() == EventStageable.EventStage.MID){
+            // enable alpha if glow
+            if(this.shaderV.getValue() == SHADER.GLOW){
+                GlStateManager.enableAlpha();
+                GlStateManager.enableBlend();
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.DST_ALPHA);
+            }
         }
     }
 
