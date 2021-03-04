@@ -25,9 +25,11 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.locationtech.jts.geom.*;
+import org.locationtech.jts.geom.util.AffineTransformation;
 import org.lwjgl.util.vector.Vector3f;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
+import java.awt.geom.AffineTransform;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
@@ -222,12 +224,23 @@ public final class StorageESPModule extends Module {
                             // Connect all visible sides into one polygon, add them to the union.
                             for (int i = 0; i < 6; ++i) {
                                 try {
-                                    if (is[i])
-                                        union = union.union(polys[i]);
+                                    if (is[i]) {
+                                        AffineTransformation atTemp = new AffineTransformation();
+                                        // We scale this to avoid those ghost blinking lines
+                                        atTemp.scale(1.001f, 1.001f);
+                                        Geometry temp = atTemp.transform(polys[i]);
+                                        union = union.union(temp);
+                                    }
                                 }catch(Throwable t){
                                     //happens on incorrect clipping. Recode this to use 3d in the future.
                                 }
                             }
+
+                            AffineTransformation at = new AffineTransformation();
+
+                            at.scale(1.001f, 1.001f);
+
+                            union = at.transform(union);
 
                             // push it
                             tileEntitiesPoly.add(new Pair<>(union, rainbow.getValue() ? (int)(alpha * 0x1000000) + 0xFFFFFF : ColorUtil.changeAlpha(getColor(te), (int)alpha)));

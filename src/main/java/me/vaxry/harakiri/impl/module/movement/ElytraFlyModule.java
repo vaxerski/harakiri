@@ -229,9 +229,9 @@ public final class ElytraFlyModule extends Module {
 
                 // Dock
                 if(this.autoDock.getValue() && mc.player.movementInput.sneak && !Harakiri.INSTANCE.getModuleManager().find(FreeCamModule.class).isEnabled()) {
-                    BlockPos underMe = new BlockPos(mc.player.getPosition().getX(), mc.player.getPosition().getY() - 1, mc.player.getPosition().getZ());
+                    BlockPos underMe = GetLocalPlayerPosFloored().down();
                     Block under = mc.world.getBlockState(underMe).getBlock();
-                    BlockPos underMe2 = new BlockPos(mc.player.getPosition().getX(), mc.player.getPosition().getY() - 2, mc.player.getPosition().getZ());
+                    BlockPos underMe2 = GetLocalPlayerPosFloored().down().down();
                     Block under2 = mc.world.getBlockState(underMe2).getBlock();
                     if(under == Blocks.AIR && (under2 != Blocks.AIR && under2 != Blocks.WATER && under2 != Blocks.FLOWING_WATER && under2 != Blocks.FLOWING_LAVA && under2 != Blocks.LAVA)){
                         if(mc.player.motionY < 0)
@@ -369,5 +369,10 @@ public final class ElytraFlyModule extends Module {
 
 
         return Math.toRadians(yaw);
+    }
+
+    public static BlockPos GetLocalPlayerPosFloored()
+    {
+        return new BlockPos(Math.floor(Minecraft.getMinecraft().player.posX), Math.floor(Minecraft.getMinecraft().player.posY), Math.floor(Minecraft.getMinecraft().player.posZ));
     }
 }

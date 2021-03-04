@@ -61,147 +61,151 @@ public final class StepModule extends Module {
     @Listener
     public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
         if (event.getStage() == EventStageable.EventStage.PRE) {
-            final Minecraft mc = Minecraft.getMinecraft();
-
-            final TimerModule timer = (TimerModule)Harakiri.INSTANCE.getModuleManager().find(TimerModule.class);
-            if(!timer.isEnabled())
-                Minecraft.getMinecraft().timer.tickLength = 50.0f;
-
-            if(ticksLast - 100 > mc.player.ticksExisted){
-                ticksLast = 0;
-                // Probably died or sumn reset.
-            }
-
-            if(ticksLast + this.ticks.getValue() > mc.player.ticksExisted){
-                return;
-            }
-
-
-            int height = 1;
-            if(!(mc.player.collidedHorizontally && mc.player.onGround) && !isStepping){
-                return;
-            }
-
-            stepX = Math.abs(mc.player.motionX) > Math.abs(mc.player.motionZ);
-
-            isStepping = true;
-
-            if(waitS < this.wiait.getValue()){
-                waitS++;
-                return;
-            }
-
-            AxisAlignedBB bb = mc.player.getEntityBoundingBox();
-            final AxisAlignedBB extendedbb = new AxisAlignedBB(bb.minX - 0.1f,
-                    bb.minY + 0.1f,
-                    bb.minZ - 0.1f,
-                    bb.maxX + 0.1f,
-                    bb.maxY - 0.1f,
-                    bb.maxZ + 0.1f);
-
-            // Check if the collision is 1 or 2
-            for (int x = MathHelper.floor(extendedbb.minX); x < MathHelper.floor(extendedbb.maxX + 1.0D); x++) {
-                for (int z = MathHelper.floor(extendedbb.minZ); z < MathHelper.floor(extendedbb.maxZ + 1.0D); z++) {
-                    BlockPos blockPos = new BlockPos(x, mc.player.getPosition().getY() + 1.0D, z);
-                    Block block = mc.world.getBlockState(blockPos).getBlock();
-                    final AxisAlignedBB blockbb = new AxisAlignedBB(
-                            blockPos.getX(),
-                            blockPos.getY(),
-                            blockPos.getZ(),
-                            blockPos.getX() + 1,
-                            blockPos.getY() + 1,
-                            blockPos.getZ() + 1);
-                    if (!(block instanceof net.minecraft.block.BlockAir)) {
-                        //if(!mc.world.getBlockState(blockPos).isFullBlock())
-                            //continue;
-                        if(blockbb.intersects(extendedbb)) {
-                            height = 2;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            // We have confirmed height, now check if its legal.
-
-            boolean legal = true;
-
-            final AxisAlignedBB afterStep = new AxisAlignedBB(bb.minX - 0.1f,
-                    bb.minY + height,
-                    bb.minZ - 0.1f,
-                    bb.maxX + 0.1f,
-                    bb.maxY + height,
-                    bb.maxZ + 0.1f);
-
-            for (int x = MathHelper.floor(afterStep.minX); x < MathHelper.floor(afterStep.maxX + 1.0D); x++) {
-                for (int z = MathHelper.floor(afterStep.minZ); z < MathHelper.floor(afterStep.maxZ + 1.0D); z++) {
-                    BlockPos blockPos = new BlockPos(x, mc.player.getPosition().getY() + 3.0D, z);
-                    Block block = mc.world.getBlockState(blockPos).getBlock();
-                    final AxisAlignedBB blockbb = new AxisAlignedBB(
-                            blockPos.getX(),
-                            blockPos.getY(),
-                            blockPos.getZ(),
-                            blockPos.getX() + 1,
-                            blockPos.getY() + 1,
-                            blockPos.getZ() + 1);
-                    if (!(block instanceof net.minecraft.block.BlockAir)) {
-                        if(block instanceof net.minecraft.block.BlockGrass || block instanceof net.minecraft.block.BlockFlower)
-                            continue;
-
-                        if(blockbb.intersects(afterStep)) {
-                            legal = false;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if(!legal) {
-                isStepping = false;
-                return;
-            }
-
-
-            switch (height) {
-                case 1:
-                    this.selectedPositions = this.oneblockPositions;
-                    break;
-                case 2:
-                    this.selectedPositions = this.twoblockPositions;
-                    break;
-            }
-
-
-            for (int x = MathHelper.floor(bb.minX); x < MathHelper.floor(bb.maxX + 1.0D); x++) {
-                for (int z = MathHelper.floor(bb.minZ); z < MathHelper.floor(bb.maxZ + 1.0D); z++) {
-                    Block block = mc.world.getBlockState(new BlockPos(x, bb.maxY + 1.0D, z)).getBlock();
-                    if (!(block instanceof net.minecraft.block.BlockAir)) {
-                        isStepping = false;
-                        return;
-                    }
-                }
-            }
-
-            if (mc.player.onGround && !mc.player.isInsideOfMaterial(Material.WATER) && !mc.player.isInsideOfMaterial(Material.LAVA) && mc.player.collidedVertically && mc.player.fallDistance == 0.0F && !mc.gameSettings.keyBindJump.pressed && mc.player.collidedHorizontally && !mc.player.isOnLadder() /*&& (this.packets > this.selectedPositions.length - 2 || (((Boolean)this.spoof.getValue()).booleanValue() && this.packets > ((Integer)this.ticks.getValue()).intValue()))*/) {
-                Minecraft.getMinecraft().timer.tickLength = 50.0f / this.timer.getValue();
-                for (double position : this.selectedPositions) {
-                    mc.player.connection.sendPacket((Packet) new CPacketPlayer.Position(mc.player.posX, mc.player.posY + position, mc.player.posZ, true));
-                }
-
-                if(sureStep.getValue()){
-                    double x = mc.player.posX + mc.player.motionX * this.sureStepAm.getValue();
-                    double z = mc.player.posZ + mc.player.motionZ * this.sureStepAm.getValue();
-
-                    mc.player.setPosition(x, mc.player.posY + this.selectedPositions[this.selectedPositions.length - 1], z);
-                }else{
-                    mc.player.setPosition(mc.player.posX, mc.player.posY + this.selectedPositions[this.selectedPositions.length - 1], mc.player.posZ);
-                }
-            }
-
-            ticksLast = mc.player.ticksExisted;
-            waitS = 0;
-            isStepping = false;
+            step();
         }
+    }
+
+    private void step(){
+        final Minecraft mc = Minecraft.getMinecraft();
+
+        final TimerModule timer = (TimerModule)Harakiri.INSTANCE.getModuleManager().find(TimerModule.class);
+        if(!timer.isEnabled())
+            Minecraft.getMinecraft().timer.tickLength = 50.0f;
+
+        if(ticksLast - 100 > mc.player.ticksExisted){
+            ticksLast = 0;
+            // Probably died or sumn reset.
+        }
+
+        if(ticksLast + this.ticks.getValue() > mc.player.ticksExisted){
+            return;
+        }
+
+
+        int height = 1;
+        if(!(mc.player.collidedHorizontally && mc.player.onGround) && !isStepping){
+            return;
+        }
+
+        stepX = Math.abs(mc.player.motionX) > Math.abs(mc.player.motionZ);
+
+        isStepping = true;
+
+        if(waitS < this.wiait.getValue()){
+            waitS++;
+            return;
+        }
+
+        AxisAlignedBB bb = mc.player.getEntityBoundingBox();
+        final AxisAlignedBB extendedbb = new AxisAlignedBB(bb.minX - 0.1f,
+                bb.minY + 0.1f,
+                bb.minZ - 0.1f,
+                bb.maxX + 0.1f,
+                bb.maxY - 0.1f,
+                bb.maxZ + 0.1f);
+
+        // Check if the collision is 1 or 2
+        for (int x = MathHelper.floor(extendedbb.minX); x < MathHelper.floor(extendedbb.maxX + 1.0D); x++) {
+            for (int z = MathHelper.floor(extendedbb.minZ); z < MathHelper.floor(extendedbb.maxZ + 1.0D); z++) {
+                BlockPos blockPos = new BlockPos(x, mc.player.getPosition().getY() + 1.0D, z);
+                Block block = mc.world.getBlockState(blockPos).getBlock();
+                final AxisAlignedBB blockbb = new AxisAlignedBB(
+                        blockPos.getX(),
+                        blockPos.getY(),
+                        blockPos.getZ(),
+                        blockPos.getX() + 1,
+                        blockPos.getY() + 1,
+                        blockPos.getZ() + 1);
+                if (!(block instanceof net.minecraft.block.BlockAir)) {
+                    //if(!mc.world.getBlockState(blockPos).isFullBlock())
+                    //continue;
+                    if(blockbb.intersects(extendedbb)) {
+                        height = 2;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // We have confirmed height, now check if its legal.
+
+        boolean legal = true;
+
+        final AxisAlignedBB afterStep = new AxisAlignedBB(bb.minX - 0.1f,
+                bb.minY + height,
+                bb.minZ - 0.1f,
+                bb.maxX + 0.1f,
+                bb.maxY + height,
+                bb.maxZ + 0.1f);
+
+        for (int x = MathHelper.floor(afterStep.minX); x < MathHelper.floor(afterStep.maxX + 1.0D); x++) {
+            for (int z = MathHelper.floor(afterStep.minZ); z < MathHelper.floor(afterStep.maxZ + 1.0D); z++) {
+                BlockPos blockPos = new BlockPos(x, mc.player.getPosition().getY() + 3.0D, z);
+                Block block = mc.world.getBlockState(blockPos).getBlock();
+                final AxisAlignedBB blockbb = new AxisAlignedBB(
+                        blockPos.getX(),
+                        blockPos.getY(),
+                        blockPos.getZ(),
+                        blockPos.getX() + 1,
+                        blockPos.getY() + 1,
+                        blockPos.getZ() + 1);
+                if (!(block instanceof net.minecraft.block.BlockAir)) {
+                    if(block instanceof net.minecraft.block.BlockGrass || block instanceof net.minecraft.block.BlockFlower)
+                        continue;
+
+                    if(blockbb.intersects(afterStep)) {
+                        legal = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if(!legal) {
+            isStepping = false;
+            return;
+        }
+
+
+        switch (height) {
+            case 1:
+                this.selectedPositions = this.oneblockPositions;
+                break;
+            case 2:
+                this.selectedPositions = this.twoblockPositions;
+                break;
+        }
+
+
+        for (int x = MathHelper.floor(bb.minX); x < MathHelper.floor(bb.maxX + 1.0D); x++) {
+            for (int z = MathHelper.floor(bb.minZ); z < MathHelper.floor(bb.maxZ + 1.0D); z++) {
+                Block block = mc.world.getBlockState(new BlockPos(x, bb.maxY + 1.0D, z)).getBlock();
+                if (!(block instanceof net.minecraft.block.BlockAir)) {
+                    isStepping = false;
+                    return;
+                }
+            }
+        }
+
+        if (mc.player.onGround && !mc.player.isInsideOfMaterial(Material.WATER) && !mc.player.isInsideOfMaterial(Material.LAVA) && mc.player.collidedVertically && mc.player.fallDistance == 0.0F && !mc.gameSettings.keyBindJump.pressed && mc.player.collidedHorizontally && !mc.player.isOnLadder() /*&& (this.packets > this.selectedPositions.length - 2 || (((Boolean)this.spoof.getValue()).booleanValue() && this.packets > ((Integer)this.ticks.getValue()).intValue()))*/) {
+            Minecraft.getMinecraft().timer.tickLength = 50.0f / this.timer.getValue();
+            for (double position : this.selectedPositions) {
+                mc.player.connection.sendPacket((Packet) new CPacketPlayer.Position(mc.player.posX, mc.player.posY + position, mc.player.posZ, true));
+            }
+
+            if(sureStep.getValue()){
+                double x = mc.player.posX + mc.player.motionX * this.sureStepAm.getValue();
+                double z = mc.player.posZ + mc.player.motionZ * this.sureStepAm.getValue();
+
+                mc.player.setPosition(x, mc.player.posY + this.selectedPositions[this.selectedPositions.length - 1], z);
+            }else{
+                mc.player.setPosition(mc.player.posX, mc.player.posY + this.selectedPositions[this.selectedPositions.length - 1], mc.player.posZ);
+            }
+        }
+
+        ticksLast = mc.player.ticksExisted;
+        waitS = 0;
+        isStepping = false;
     }
 
     @Listener
