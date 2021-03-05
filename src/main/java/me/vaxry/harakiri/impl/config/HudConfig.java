@@ -72,6 +72,9 @@ public final class HudConfig extends Configurable {
 
             HudComponent component = Harakiri.INSTANCE.getHudManager().findComponent(settings.name);
 
+            if(component == null)
+                continue;
+
             component.setX(settings.x);
             component.setY(settings.y);
             component.setW(settings.w);
