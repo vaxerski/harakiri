@@ -9,6 +9,7 @@ import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.module.world.TimerModule;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.Packet;
@@ -17,6 +18,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
+import java.util.List;
 
 /**
  * Author: noil
@@ -131,12 +134,12 @@ public final class StepModule extends Module {
 
         boolean legal = true;
 
-        final AxisAlignedBB afterStep = new AxisAlignedBB(bb.minX - 0.1f,
+        final AxisAlignedBB afterStep = new AxisAlignedBB(bb.minX,
                 bb.minY + height,
-                bb.minZ - 0.1f,
-                bb.maxX + 0.1f,
+                bb.minZ,
+                bb.maxX,
                 bb.maxY + height,
-                bb.maxZ + 0.1f);
+                bb.maxZ);
 
         for (int x = MathHelper.floor(afterStep.minX); x < MathHelper.floor(afterStep.maxX + 1.0D); x++) {
             for (int z = MathHelper.floor(afterStep.minZ); z < MathHelper.floor(afterStep.maxZ + 1.0D); z++) {
@@ -150,7 +153,7 @@ public final class StepModule extends Module {
                         blockPos.getY() + 1,
                         blockPos.getZ() + 1);
                 if (!(block instanceof net.minecraft.block.BlockAir)) {
-                    if(block instanceof net.minecraft.block.BlockGrass || block instanceof net.minecraft.block.BlockFlower)
+                    if(isBlockValidPass(block))
                         continue;
 
                     if(blockbb.intersects(afterStep)) {
@@ -160,6 +163,8 @@ public final class StepModule extends Module {
                 }
             }
         }
+
+        // Recode this someday pls
 
         if(!legal) {
             isStepping = false;
@@ -221,6 +226,15 @@ public final class StepModule extends Module {
             else
                 event.setZ(0);
         }
+    }
+
+    public boolean isBlockValidPass(Block block){
+        return block instanceof net.minecraft.block.BlockGrass || block instanceof net.minecraft.block.BlockFlower || block instanceof BlockTorch;
+    }
+
+    public BlockPos GetLocalPlayerPosFloored()
+    {
+        return new BlockPos(Math.floor(Minecraft.getMinecraft().player.posX), Math.floor(Minecraft.getMinecraft().player.posY), Math.floor(Minecraft.getMinecraft().player.posZ));
     }
 }
 
