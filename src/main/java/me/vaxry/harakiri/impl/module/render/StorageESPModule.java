@@ -4,6 +4,7 @@ import akka.japi.Pair;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.event.render.EventRenderEntities;
 import me.vaxry.harakiri.framework.event.render.EventRenderEntity;
 import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.util.ColorUtil;
@@ -12,8 +13,10 @@ import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
@@ -42,7 +45,7 @@ public final class StorageESPModule extends Module {
         SHADER
     }
 
-    //public final Value<MODE> modeValue = new Value<MODE>("Mode", new String[]{"Mode"}, "Changes the render mode. Shader is incompatible with rainbow, but might run faster with more storage.", MODE.CPU);
+    public final Value<MODE> modeValue = new Value<MODE>("Mode", new String[]{"Mode"}, "Changes the render mode. Shader is incompatible with rainbow, but might run faster with more storage.\nShader: Faster, connects between colors. Doesn't support Rainbow and thickness.\nCPU: Slower, occasional artifacts. Supports Rainbow and thickness.", MODE.CPU);
     public final Value<Float> thickness = new Value<Float>("Thickness", new String[]{"Thickness", "Thick", "t"}, "Thickness of the line", 1.f, 0.1f, 2.f, 0.1f);
     public final Value<Boolean> rainbow = new Value<Boolean>("Rainbow", new String[]{"Rainbow", "Rain", "r"}, "Rainbow mode for the ESP", false);
     public final Value<Integer> rainspeed = new Value<Integer>("RainbowSpeed", new String[]{"RainbowSpeed", "RainSpeed", "rs"}, "Rainbow mode speed", 5, 1, 20, 1);
@@ -70,10 +73,8 @@ public final class StorageESPModule extends Module {
     @Listener
     public void render2D(EventRender2D event) {
 
-        //if(this.modeValue.getValue() != MODE.CPU)
-            //return;
-
-        // Note: Shader mode is processed in ESPModule.
+        if(this.modeValue.getValue() != MODE.CPU)
+            return;
 
         this.CoordTracker3D.clear();
 
@@ -324,6 +325,30 @@ public final class StorageESPModule extends Module {
         Minecraft.getMinecraft().gameSettings.viewBobbing = bobbing;
     }
 
+    private float partialTicks = 0;
+
+    @Listener
+    public void onEventRenderEntities(EventRenderEntities event){
+        if(event.getStage() != EventStageable.EventStage.RENDER1) {
+            partialTicks = event.getPartialTicks();
+            return;
+        }
+
+        if(this.modeValue.getValue() != MODE.SHADER)
+            return;
+
+        // Draw TE's with cool stuff
+        for(TileEntity te : Minecraft.getMinecraft().world.loadedTileEntityList){
+            GlStateManager.enableColorMaterial();
+            GlStateManager.enableOutlineMode(this.getColorShader(te));
+
+            TileEntityRendererDispatcher.instance.render(te, partialTicks, -1);
+
+            GlStateManager.disableOutlineMode();
+            GlStateManager.disableColorMaterial();
+        }
+    }
+
     public boolean isTileStorage(TileEntity te) {
         if (te instanceof TileEntityChest) {
             return true;
@@ -443,30 +468,30 @@ public final class StorageESPModule extends Module {
 
     public int getColorShader(TileEntity te) {
         if (te instanceof TileEntityChest) {
-            return 0;
+            return 0xffffcc00;
         }
         if (te instanceof TileEntityDropper) {
-            return 2;
+            return 0xffcccccc;
         }
         if (te instanceof TileEntityDispenser) {
-            return 2;
+            return 0xffcccccc;
         }
         if (te instanceof TileEntityHopper) {
-            return 2;
+            return 0xffcccccc;
         }
         if (te instanceof TileEntityFurnace) {
-            return 2;
+            return 0xffcccccc;
         }
         if (te instanceof TileEntityBrewingStand) {
-            return 1;
+            return 0xff33ccff;
         }
         if (te instanceof TileEntityEnderChest) {
-            return 1;
+            return 0xffff00ff;
         }
         if (te instanceof TileEntityShulkerBox) {
             //final TileEntityShulkerBox shulkerBox = (TileEntityShulkerBox) te;
             //return (255 << 24) | shulkerBox.getColor().getColorValue();
-            return 1;
+            return 0xffff0066;
         }
         return 0;
     }

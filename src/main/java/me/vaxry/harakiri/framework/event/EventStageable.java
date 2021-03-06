@@ -25,7 +25,7 @@ public class EventStageable {
     }
 
     public enum EventStage {
-        PRE, POST, MID
+        PRE, POST, MID, RENDER1
     }
 
 }

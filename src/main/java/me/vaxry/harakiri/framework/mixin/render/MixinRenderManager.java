@@ -4,7 +4,9 @@ import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.render.EventRenderEntity;
 import me.vaxry.harakiri.framework.duck.MixinRenderManagerInterface;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +15,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import scala.collection.parallel.ParIterableLike;
 
 /**
  * @author cats
@@ -36,7 +39,7 @@ public abstract class MixinRenderManager implements MixinRenderManagerInterface 
     }
 
     @Inject(method = "renderEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/Render;doRender(Lnet/minecraft/entity/Entity;DDDFF)V", shift = At.Shift.AFTER))
-    public void renderEntityPeri(Entity entity, double x, double y, double z, float yaw, float partialTicks, boolean debug, CallbackInfo ci) {
+    public void renderEntityPeri1(Entity entity, double x, double y, double z, float yaw, float partialTicks, boolean debug, CallbackInfo ci) {
         if (entity == null) return;
 
         final EventRenderEntity event = new EventRenderEntity(EventStageable.EventStage.MID, entity, x, y, z, yaw, partialTicks);

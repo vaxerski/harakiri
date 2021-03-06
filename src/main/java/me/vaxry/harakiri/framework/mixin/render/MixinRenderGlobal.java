@@ -2,14 +2,9 @@ package me.vaxry.harakiri.framework.mixin.render;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
-import me.vaxry.harakiri.framework.event.render.EventRenderBlockDamage;
-import me.vaxry.harakiri.framework.event.render.EventRenderEntities;
-import me.vaxry.harakiri.framework.event.render.EventRenderEntityOutlines;
-import me.vaxry.harakiri.framework.event.render.EventRenderSky;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.Tessellator;
+import me.vaxry.harakiri.framework.event.render.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -57,6 +52,14 @@ public class MixinRenderGlobal {
         final EventRenderEntities eventRenderEntities = new EventRenderEntities(EventStageable.EventStage.MID, renderViewEntity, camera, partialTicks);
         Harakiri.INSTANCE.getEventManager().dispatchEvent(eventRenderEntities);
         if(eventRenderEntities.isCanceled()) ci.cancel();
+    }
+
+    @Inject(method = "renderEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderHelper;disableStandardItemLighting()V"))
+    public void renderEntityPeri(CallbackInfo ci) {
+        RenderHelper.disableStandardItemLighting();
+        Minecraft.getMinecraft().getRenderManager().setRenderOutlines(true);
+        final EventRenderEntities event = new EventRenderEntities(EventStageable.EventStage.RENDER1, null, null, 0);
+        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
     }
 
     @Redirect(method = "renderEntityOutlineFramebuffer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;tryBlendFuncSeparate(IIII)V", remap = false))
