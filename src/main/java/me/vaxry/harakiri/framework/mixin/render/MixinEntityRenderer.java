@@ -6,6 +6,7 @@ import me.vaxry.harakiri.framework.event.render.EventHurtCamEffect;
 import me.vaxry.harakiri.framework.event.render.EventOrientCamera;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
+import me.vaxry.harakiri.impl.module.render.ESPModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -21,10 +22,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = EntityRenderer.class, priority = 2147483647)
 public class MixinEntityRenderer {
-    //@Inject(method = "updateCameraAndRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;renderGameOverlay(F)V"))
-    //private void onRenderGameOverlay(float partialTicks, long nanoTime, CallbackInfo ci) {
-
-    //}
+    @Inject(method = "updateCameraAndRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderGlobal;renderEntityOutlineFramebuffer()V"))
+    private void onRenderGameOverlay(CallbackInfo ci) {
+        ((ESPModule)Harakiri.INSTANCE.getModuleManager().find(ESPModule.class)).renderFramebuffer();
+    }
 
 
     // This will call when the hand is rendered

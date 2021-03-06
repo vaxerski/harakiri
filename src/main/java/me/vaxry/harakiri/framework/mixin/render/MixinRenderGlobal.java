@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.framework.mixin.render;
 
+import com.google.common.collect.Lists;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.render.*;
@@ -13,6 +14,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
 
 @Mixin(value = RenderGlobal.class, priority = 2222)
 public class MixinRenderGlobal {
@@ -47,6 +50,13 @@ public class MixinRenderGlobal {
         if(eventRenderEntities.isCanceled()) ci.cancel();
     }
 
+    @Inject(method = "renderEntities", at = @At("HEAD"), cancellable = true)
+    private void renderEntitiesPre(Entity renderViewEntity, ICamera camera, float partialTicks, CallbackInfo ci){
+        final EventRenderEntities eventRenderEntities = new EventRenderEntities(EventStageable.EventStage.PRE, renderViewEntity, camera, partialTicks);
+        Harakiri.INSTANCE.getEventManager().dispatchEvent(eventRenderEntities);
+        if(eventRenderEntities.isCanceled()) ci.cancel();
+    }
+
     @Inject(method = "renderEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;disableFog()V", remap = false))
     private void renderEntitiesMid(Entity renderViewEntity, ICamera camera, float partialTicks, CallbackInfo ci){
         final EventRenderEntities eventRenderEntities = new EventRenderEntities(EventStageable.EventStage.MID, renderViewEntity, camera, partialTicks);
@@ -60,6 +70,15 @@ public class MixinRenderGlobal {
         Minecraft.getMinecraft().getRenderManager().setRenderOutlines(true);
         final EventRenderEntities event = new EventRenderEntities(EventStageable.EventStage.RENDER1, null, null, 0);
         Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+    }
+
+    @Inject(method = "renderEntities", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Lists;newArrayList()V"))
+    public void renderEntityPeri2(CallbackInfoReturnable<List<Entity>> ci) {
+        // Add an entity to toggle rendering of the ESP always on.
+        List<Entity> list1 = Lists.<Entity>newArrayList();
+        list1.add(Minecraft.getMinecraft().player);
+
+        ci.setReturnValue(list1);
     }
 
     @Redirect(method = "renderEntityOutlineFramebuffer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;tryBlendFuncSeparate(IIII)V", remap = false))

@@ -325,30 +325,6 @@ public final class StorageESPModule extends Module {
         Minecraft.getMinecraft().gameSettings.viewBobbing = bobbing;
     }
 
-    private float partialTicks = 0;
-
-    @Listener
-    public void onEventRenderEntities(EventRenderEntities event){
-        if(event.getStage() != EventStageable.EventStage.RENDER1) {
-            partialTicks = event.getPartialTicks();
-            return;
-        }
-
-        if(this.modeValue.getValue() != MODE.SHADER)
-            return;
-
-        // Draw TE's with cool stuff
-        for(TileEntity te : Minecraft.getMinecraft().world.loadedTileEntityList){
-            GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(this.getColorShader(te));
-
-            TileEntityRendererDispatcher.instance.render(te, partialTicks, -1);
-
-            GlStateManager.disableOutlineMode();
-            GlStateManager.disableColorMaterial();
-        }
-    }
-
     public boolean isTileStorage(TileEntity te) {
         if (te instanceof TileEntityChest) {
             return true;

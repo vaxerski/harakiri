@@ -46,6 +46,15 @@ public class ToolTipComponent extends HudComponent {
 
         framejitter = getJitter();
 
+        int newlcount = 0;
+        for (int i = 0; i < this.text.length(); i++) {
+            if (this.text.charAt(i) == '\n') {
+                newlcount++;
+            }
+        }
+
+        this.setY(this.getY() - newlcount * Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+
         if (this.alpha < 0xFF/*max alpha*/) {
             this.alpha += 8.f * 60.f * framejitter;
             if(this.alpha > 0xFF)
@@ -70,6 +79,9 @@ public class ToolTipComponent extends HudComponent {
             Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.text, this.getX() + 1, this.getY() + 1, ColorUtil.changeAlpha(0xFFAAAAB7, this.alpha)); //0xFFFFFFFF
             GlStateManager.disableBlend();
         }
+
+        // Restore Y
+        this.setY(this.getY() + newlcount * Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
     }
 
     private void clamp() {
