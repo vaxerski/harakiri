@@ -45,7 +45,7 @@ public final class StorageESPModule extends Module {
         SHADER
     }
 
-    public final Value<MODE> modeValue = new Value<MODE>("Mode", new String[]{"Mode"}, "Changes the render mode. Shader is incompatible with rainbow, but might run faster with more storage.\nShader: Faster, connects between colors. Doesn't support Rainbow and thickness.\nCPU: Slower, occasional artifacts. Supports Rainbow and thickness.", MODE.CPU);
+    public final Value<MODE> modeValue = new Value<MODE>("Mode", new String[]{"Mode"}, "Changes the render mode. Shader is incompatible with rainbow, but might run faster with more storage.\nShader: Faster, connects between colors. Doesn't support Rainbow and thickness.\nCPU: Slower, occasional artifacts. Supports Rainbow and thickness.", MODE.SHADER);
     public final Value<Float> thickness = new Value<Float>("Thickness", new String[]{"Thickness", "Thick", "t"}, "Thickness of the line", 1.f, 0.1f, 2.f, 0.1f);
     public final Value<Boolean> rainbow = new Value<Boolean>("Rainbow", new String[]{"Rainbow", "Rain", "r"}, "Rainbow mode for the ESP", false);
     public final Value<Integer> rainspeed = new Value<Integer>("RainbowSpeed", new String[]{"RainbowSpeed", "RainSpeed", "rs"}, "Rainbow mode speed", 5, 1, 20, 1);
