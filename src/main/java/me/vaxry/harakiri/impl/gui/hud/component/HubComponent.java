@@ -214,7 +214,7 @@ public final class HubComponent extends ResizableHudComponent {
             int offsetY = BORDER;
 
             for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
-                if (component != this && !(component instanceof ModuleListComponent) && !(component instanceof SwitchViewComponent)) {
+                if (component != this && !(component instanceof ModuleListComponent) && !(component instanceof SwitchViewComponent) && !(component instanceof ModuleSearchComponent)) {
                     final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1 + offsetY - this.scroll) && mouseY <= (this.getY() + BORDER + (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT * 2) + 1 + offsetY - this.scroll);
                     if (insideComponent) {
                         component.setVisible(!component.isVisible());
