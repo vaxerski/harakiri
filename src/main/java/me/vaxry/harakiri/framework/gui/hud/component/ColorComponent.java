@@ -1,37 +1,62 @@
 package me.vaxry.harakiri.framework.gui.hud.component;
 
 import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.texture.Texture;
 import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
-import net.minecraft.client.Minecraft;
+import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
+import net.minecraft.client.renderer.GlStateManager;
+import org.locationtech.jts.geom.Coordinate;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
 public class ColorComponent extends TextComponent {
 
     private Color currentColor;
+    private HudComponent parent;
 
     private static final int BORDER = 1;
     private static final int TEXT_BLOCK_PADDING = 1;
     private static final int COLOR_SIZE = 7;
 
+    private Texture HueCircleTex;
+
+    // Hue circle
+    private static final int XYDIM = 70;
+    private static final int BORDEROFF = 4;
+
     private String customDisplayValue;
+
+    private boolean dragging = false;
+
+    private float hue;
+    private float sat;
+    private float val;
 
     //private final Texture gearTexture;
     //private final Texture gearTextureEnabled;
 
-    public ColorComponent(String name, int defaultColor) {
+    public ColorComponent(String name, int defaultColor, HudComponent parent) {
         super(name, String.valueOf(defaultColor), false);
         this.currentColor = new Color(defaultColor);
-        this.displayValue = "#" + Integer.toHexString(this.currentColor.getRGB()).toLowerCase().substring(2);
-        //this.gearTexture = new Texture("gear_wheel.png");
-        //this.gearTextureEnabled = new Texture("gear_wheel-enabled.png");
+
+        float[] hsv = new float[3];
+        Color.RGBtoHSB(this.currentColor.getRed(), this.currentColor.getGreen(), this.currentColor.getBlue(), hsv);
+
+        hue = hsv[0];
+        sat = hsv[1];
+        val = hsv[2];
+
+        HueCircleTex = new Texture("huecircle.png");
+        this.parent = parent;
 
         this.setH(9);
     }
 
-    public ColorComponent(String name, int defaultColor, String customDisplayValue) {
-        this(name, defaultColor);
+    public ColorComponent(String name, int defaultColor, String customDisplayValue, HudComponent parent) {
+        this(name, defaultColor, parent);
         this.customDisplayValue = customDisplayValue;
     }
 
@@ -44,6 +69,12 @@ public class ColorComponent extends TextComponent {
             this.setH(9);
         }*/
 
+        if(Harakiri.INSTANCE.getHudEditor().forceCloseColorPicker || !Harakiri.INSTANCE.getHudEditor().colorPickerName.equalsIgnoreCase(this.getName())){
+            this.focused = false;
+            Harakiri.INSTANCE.getHudEditor().forceCloseColorPicker = false;
+            dragging = false;
+        }
+
         if (isMouseInside(mouseX, mouseY))
             RenderUtil.drawGradientRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x30909090, 0x30909090);
 
@@ -51,77 +82,208 @@ public class ColorComponent extends TextComponent {
         RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW() - (this.focused ? 20 : 10), this.getY() + this.getH(), 0x45303030);
 
         // draw color rect
-        RenderUtil.drawRect(this.getX() + BORDER, this.getY() + BORDER, this.getX() + BORDER + COLOR_SIZE, this.getY() + BORDER + COLOR_SIZE, ColorUtil.changeAlpha(this.currentColor.getRGB(), 0xFF));
+        RenderUtil.drawRect(this.getX() + this.getW() - BORDER - COLOR_SIZE, this.getY() + BORDER, this.getX() + this.getW() - BORDER, this.getY() + BORDER + COLOR_SIZE, ColorUtil.changeAlpha(this.currentColor.getRGB(), 0xFF));
 
-        // draw name / display value
-        String displayedName = this.getName();
-        if (this.focused) {
-            displayedName = this.displayValue;
-        } else if (customDisplayValue != null) {
-            displayedName = customDisplayValue;
+        Harakiri.INSTANCE.getTTFFontUtil().drawString(this.getName(), (int) this.getX() + BORDER, (int) this.getY() + BORDER, this.focused ? 0xFFFFFFFF : 0xFFAAAAAA);
+
+        if(this.focused){
+            GuiHudEditor guiHudEditor = Harakiri.INSTANCE.getHudEditor();
+            guiHudEditor.isColorPickerOpen = true;
+            guiHudEditor.colorPickerParent = this.parent;
+            guiHudEditor.colorPickerName = this.getName();
+
+            GL11.glDisable(GL11.GL_SCISSOR_TEST);
+            // Draw the hue picker circle
+
+            // Get the color as HSV
+            float[] hsv = new float[3];
+            hsv[0] = this.hue;
+            hsv[1] = this.sat;
+            hsv[2] = this.val;
+
+            final float beginX = this.getX() + this.getW();
+            final float beginY = this.getY() + this.getH() / 2.f - XYDIM / 2.f;
+            guiHudEditor.colorPickerX = beginX;
+            guiHudEditor.colorPickerY = beginY;
+
+            RenderUtil.drawRoundedRect(beginX, beginY, XYDIM, XYDIM, 3, 0xAA050505);
+
+            // Draw the hue circle
+            GlStateManager.enableAlpha();
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            GlStateManager.enableBlend();
+
+            GlStateManager.enableTexture2D();
+            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+
+            this.HueCircleTex.bind();
+            this.HueCircleTex.render(beginX + BORDEROFF,beginY + BORDEROFF, XYDIM - 2*BORDEROFF, XYDIM - 2*BORDEROFF);
+
+            GlStateManager.disableTexture2D();
+            GlStateManager.disableBlend();
+            GlStateManager.disableAlpha();
+
+            final float HUE_CIRCLE_THICK = 5;
+
+            // Draw the quad
+            int RGBFullCol = Color.HSBtoRGB(hsv[0], 1, 1);
+            float sizee = (XYDIM - 2*BORDEROFF - 2*HUE_CIRCLE_THICK) - 20;
+           // RenderUtil.drawHueQuad(beginX + XYDIM/2.f - sizee / 2F, beginY + XYDIM/2.f - sizee / 2F, sizee, RGBFullCol);
+            RenderUtil.drawHueQuad(beginX + XYDIM/2.f - sizee / 2F, beginY + XYDIM/2.f - sizee / 2F, beginX + XYDIM/2.f - sizee / 2F + sizee,beginY + XYDIM/2.f - sizee / 2F + sizee, RGBFullCol);
+
+            // Calculate and draw the dot 2
+            final float dotX = clamp(hsv[1], 0, 1) * sizee + beginX + XYDIM/2.f - sizee / 2F;
+            final float dotY = (1 - clamp(hsv[2], 0, 1)) * sizee + beginY + XYDIM/2.f - sizee / 2F;
+
+            // Draw the current
+            Coordinate curSel = new Coordinate(beginX + XYDIM/2.f, beginY + BORDEROFF + HUE_CIRCLE_THICK / 2.f);
+            Coordinate hueCircleMiddle = new Coordinate(beginX + XYDIM/2.f, beginY + XYDIM/2.f);
+
+            curSel = rotate_point(hueCircleMiddle, curSel, this.hue * 2 * (float)Math.PI);
+
+            final float CIRCLE_RADIUS = 2;
+            RenderUtil.drawCircle((float)curSel.getX(), (float)curSel.getY(), (int)CIRCLE_RADIUS, 0xFFFFFFFF);
+
+            RenderUtil.drawCircle(dotX, dotY, (int)CIRCLE_RADIUS, 0xFF000000);
+
+            GL11.glEnable(GL11.GL_SCISSOR_TEST);
         }
-        Harakiri.INSTANCE.getTTFFontUtil().drawString(displayedName, (int) this.getX() + BORDER + COLOR_SIZE + BORDER, (int) this.getY() + BORDER, this.focused ? 0xFFFFFFFF : 0xFFAAAAAA);
 
-        // draw bg rect behind right button
-        RenderUtil.drawRect(this.getX() + this.getW() - (this.focused ? 20 : 10), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x45202020);
-
-        if (this.focused) {
-            if (!this.selectedText.equals("")) {
-                RenderUtil.drawRect(this.getX() + BORDER + COLOR_SIZE + BORDER, this.getY(), this.getX() + BORDER + COLOR_SIZE + BORDER + Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(this.displayValue), this.getY() + this.getH(), 0x45FFFFFF);
-            }
-
-            float blockX = this.getX() + BORDER + Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(this.displayValue) + COLOR_SIZE + BORDER + TEXT_BLOCK_PADDING;
-            float blockY = this.getY() + TEXT_BLOCK_PADDING;
-            int blockWidth = 2;
-            int blockHeight = Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - 2;
-            RenderUtil.drawRect(blockX, blockY, blockX + blockWidth, blockY + blockHeight, 0xFFFFFFFF);
-
-            // draw gear
-            RenderUtil.drawRect(this.getX() + this.getW() - 10, this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0xFF101010);
-            //this.gearTextureEnabled.bind();
-            //this.gearTextureEnabled.render(this.getX() + this.getW() - 9, this.getY() + 0.5f, 8, 8);
-
-            // check
-            RenderUtil.drawRect(this.getX() + this.getW() - 20, this.getY(), this.getX() + this.getW() - 10, this.getY() + this.getH(), 0xFF101010);
-            this.checkTexture.bind();
-            this.checkTexture.render(this.getX() + this.getW() - 19, this.getY() + 0.5f, 8, 8);
-
-            // handle holding backspace
-            this.handleBackspacing();
-        } else {
-            // draw gear
-            //this.gearTexture.bind();
-            //this.gearTexture.render(this.getX() + this.getW() - 9, this.getY() + 0.5f, 8, 8);
-        }
+        if(this.dragging)
+            updateColorFromMouse(mouseX, mouseY);
     }
 
     @Override
     public void mouseRelease(int mouseX, int mouseY, int button) {
         super.mouseRelease(mouseX, mouseY, button);
 
+        if(Harakiri.INSTANCE.getHudEditor().specialColorClick && Harakiri.INSTANCE.getHudEditor().colorPickerName.equalsIgnoreCase(this.getName())){
+            this.focus();
+        }
+
         if (!this.focused) // must be focused
             return;
 
-        if (button == 0) {
-            // check for clicking check
-            if (mouseX >= this.getX() + this.getW() - 20 && mouseX <= this.getX() + this.getW() - 10 && mouseY >= this.getY() && mouseY <= this.getY() + this.getH()) {
-                this.enterPressed();
-            }
+        this.updateColorFromMouse(mouseX, mouseY);
+
+        this.dragging = false;
+
+        this.returnListener.onComponentEvent();
+    }
+
+    @Override
+    public void mouseClick(int mouseX, int mouseY, int button) {
+        super.mouseClick(mouseX, mouseY, button);
+        if(this.isMouseInside(mouseX, mouseY) || (Harakiri.INSTANCE.getHudEditor().specialColorClick  && Harakiri.INSTANCE.getHudEditor().colorPickerName.equalsIgnoreCase(this.getName()))) {
+            this.focus();
+            this.dragging = true;
+            Harakiri.INSTANCE.getHudEditor().colorPickerName = this.getName();
         }
     }
 
     @Override
-    protected void enterPressed() {
-        try {
-            int newColor = (int) Long.parseLong(this.displayValue.replaceAll("#", ""), 16);
-            this.currentColor = new Color(newColor);
-        } catch (NumberFormatException e) {
-            Harakiri.INSTANCE.logChat(this.getName() + ": Invalid color format. Correct format example: \"ff0000\" for red.");
-        } catch (Exception e) {
-            Harakiri.INSTANCE.logChat(this.getName() + ": Something went terribly wrong while setting the color. Please try again.");
-        }
+    public void mouseClickMove(int mouseX, int mouseY, int button) {
+        super.mouseClickMove(mouseX, mouseY, button);
 
-        super.enterPressed();
+        if (!this.focused) // must be focused
+            return;
+
+        this.updateColorFromMouse(mouseX, mouseY);
+    }
+
+    public void updateColorFromMouse(int mouseX, int mouseY){
+        final float beginX = this.getX() + this.getW();
+        final float beginY = this.getY() + this.getH() / 2.f - XYDIM / 2.f;
+
+        if(mouseX >= beginX && mouseX <= beginX + XYDIM && mouseY >= beginY && mouseY <= beginY + XYDIM) {
+            // Check which thing to do
+            final double d = Math.sqrt(Math.pow(mouseX - (beginX + XYDIM/2.f), 2) + Math.pow(mouseY - (beginY + XYDIM/2.f), 2));
+            if (d > XYDIM/2.f - BORDEROFF - 5){
+                // Outside the inner circle
+                final float xoff = mouseX - (beginX + XYDIM/2.f);
+                final float yoff = mouseY - (beginY + XYDIM/2.f);
+
+                double angleRad;
+
+                if(xoff > 0){
+                    // First or fourth quarter
+                    angleRad = Math.atan(xoff/yoff);
+                    angleRad = -angleRad + Math.PI / 2.f;
+                } else {
+                    // Second or third quarter
+                    angleRad = Math.atan(xoff/yoff);
+                    angleRad = -angleRad + Math.PI * 1.5F;
+                }
+
+                if(xoff > 0 && yoff > 0){
+                    angleRad -= Math.PI * 0.5F;
+                }else if(xoff < 0 && yoff > 0){
+                    angleRad += Math.PI * 0.5F;
+                }else if(xoff < 0 && yoff < 0){
+                    angleRad -= Math.PI * 0.5F;
+                }else if(xoff > 0 && yoff < 0){
+                    angleRad += Math.PI * 0.5F;
+                }else{
+                    if(yoff < 0){
+                        angleRad = 0;
+                    }else{
+                        angleRad = -Math.PI;
+                    }
+                }
+
+                angleRad += Math.PI;
+
+                if(angleRad == Math.PI)
+                    angleRad = 0;
+                else if(angleRad == 0)
+                    angleRad = Math.PI;
+
+                if(angleRad > 2 * Math.PI)
+                    angleRad -= 2 * Math.PI;
+
+                final float angleDeg = (float)Math.toDegrees(angleRad);
+
+                // Change the color
+                float[] hsv = new float[3];
+                hsv[0] = this.hue;
+                hsv[1] = this.sat;
+                hsv[2] = this.val;
+
+                this.hue = angleDeg / 360F;
+
+                int RGBCol = Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]);
+                this.currentColor = new Color(RGBCol);
+
+                //Harakiri.INSTANCE.logChat("AngleRad: " + angleRad / Math.PI + "pi, angleDeg: " + angleDeg + " hsv[0]: " + hsv[0]);
+            }else{
+                // Inside
+                final float HUE_CIRCLE_THICK = 5;
+                float sizee = (XYDIM - 2*BORDEROFF - 2 * HUE_CIRCLE_THICK) - 20;
+                if(!(mouseX >= beginX + XYDIM/2F - sizee/2F && mouseX <= beginX + XYDIM/2F + sizee/2F && mouseY >= beginY + XYDIM/2F - sizee/2F && mouseY <= beginY + XYDIM/2F + sizee/2F))
+                    return;
+
+                // Calc distances
+
+                final float x1 = beginX + XYDIM/2F + sizee/2F - mouseX;
+                final float y1 = beginY + XYDIM/2F + sizee/2F - mouseY;
+
+                float sat = (sizee - x1) / sizee;
+                float val = 1 - ((sizee - y1) / sizee);
+
+                // Apply to HSV
+
+                float[] hsv = new float[3];
+                hsv[0] = this.hue;
+                hsv[1] = this.sat;
+                hsv[2] = this.val;
+
+                this.sat = sat;
+                this.val = val;
+
+                int RGBCol = Color.HSBtoRGB(hsv[0], sat, val);
+                this.currentColor = new Color(RGBCol);
+            }
+        }
     }
 
     public Color getCurrentColor() {
@@ -138,5 +300,19 @@ public class ColorComponent extends TextComponent {
 
     public void setCustomDisplayValue(String customDisplayValue) {
         this.customDisplayValue = customDisplayValue;
+    }
+
+    private Coordinate rotate_point(Coordinate around, Coordinate point, float theta) {
+        double p1x = (Math.cos(theta) * (point.x - around.x) - Math.sin(theta) * (point.y - around.y) + around.x);
+        double p2x = (Math.sin(theta) * (point.x - around.x) + Math.cos(theta) * (point.y - around.y) + around.y);
+        return new Coordinate(p1x, p2x);
+    }
+
+    private float calc2DDistance(Coordinate A, Coordinate B){
+        return (float)(Math.sqrt(Math.pow(A.x - B.x, 2) + Math.pow(A.y - B.y, 2)));
+    }
+
+    private float clamp(float v, float min, float max){
+        return Math.max(0, Math.min(v, max));
     }
 }

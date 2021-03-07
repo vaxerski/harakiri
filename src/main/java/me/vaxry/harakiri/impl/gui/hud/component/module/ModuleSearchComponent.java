@@ -873,7 +873,7 @@ public final class ModuleSearchComponent extends ResizableHudComponent {
                     components.add(valueText);
                     this.addComponentToButtons(valueText);
                 } else if (value.getValue() instanceof Color) {
-                    ColorComponent valueColor = new ColorComponent(value.getName(), ((Color) value.getValue()).getRGB());
+                    ColorComponent valueColor = new ColorComponent(value.getName(), ((Color) value.getValue()).getRGB(), this);
                     valueColor.setTooltipText("Edit the color of: " + value.getName());
                     valueColor.returnListener = new ComponentListener() {
                         @Override

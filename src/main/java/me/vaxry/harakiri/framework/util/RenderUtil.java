@@ -125,6 +125,8 @@ public final class RenderUtil {
 
         GL11.glEnd();
 
+        glColor(0xFFFFFFFF);
+
         GlStateManager.disableBlend();
         GlStateManager.disableAlpha();
         GlStateManager.enableTexture2D();
@@ -294,9 +296,9 @@ public final class RenderUtil {
         GL11.glLineWidth(1);
         GL11.glBegin(GL11.GL_TRIANGLE_FAN);
 
-        GL11.glVertex2d(0, (1.0F * size));
-        GL11.glVertex2d((1 * size), -(1.0F * size));
-        GL11.glVertex2d(-(1 * size), -(1.0F * size));
+        GL11.glVertex2d(0, (1F * size));
+        GL11.glVertex2d((1 * size), -(1F * size));
+        GL11.glVertex2d(-(1 * size), -(1F * size));
 
         GL11.glEnd();
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
@@ -305,6 +307,30 @@ public final class RenderUtil {
         GL11.glRotatef(-180 - theta, 0F, 0F, 1.0F);
         GL11.glTranslated(-x, -y, 0);
         GL11.glColor4f(1,1,1,1);
+    }
+
+    public static void drawHueQuad(float left, float top, float right, float bottom, int color) {
+        float f = (float) (color >> 24 & 255) / 255.0F;
+        float f1 = (float) (color >> 16 & 255) / 255.0F;
+        float f2 = (float) (color >> 8 & 255) / 255.0F;
+        float f3 = (float) (color & 255) / 255.0F;
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.shadeModel(7425);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        bufferbuilder.pos(right, top, 0).color(f1, f2, f3, f).endVertex();
+        bufferbuilder.pos(left, top, 0).color(1F, 1F, 1F, 1F).endVertex();
+        bufferbuilder.pos(left, bottom, 0).color(0F,0F,0F,1F).endVertex();
+        bufferbuilder.pos(right, bottom, 0).color(0F,0F,0F,1F).endVertex();
+        tessellator.draw();
+        GlStateManager.shadeModel(7424);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableTexture2D();
     }
 
     public static void drawOutlineRect(float x, float y, float w, float h, float lineWidth, int c) {
@@ -827,6 +853,44 @@ public final class RenderUtil {
         }
         GL11.glEnd();
 
+        glColor(0xFFFFFFFF);
+
+        GlStateManager.disableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.enableTexture2D();
+    }
+
+    public static void drawEmptyCircle(float x, float y, int radius, float thickness, int color)
+    {
+        float red = (color >> 16 & 0xFF) / 255.0F;
+        float green = (color >> 8 & 0xFF) / 255.0F;
+        float blue = (color & 0xFF) / 255.0F;
+        float alpha = (color >> 24 & 0xFF) / 255.0F;
+
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        GlStateManager.shadeModel(GL_SMOOTH);
+        glLineWidth(thickness);
+        glEnable(GL_LINE_SMOOTH);
+        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+
+        final Tessellator tessellator = Tessellator.getInstance();
+        final BufferBuilder bufferbuilder = tessellator.getBuffer();
+
+        bufferbuilder.begin(GL_LINE_LOOP, DefaultVertexFormats.POSITION_COLOR);
+
+        int SIDES = 32; // 32 sides
+
+        for (int i = 0; i <= SIDES; i++) // 32 sides
+        {
+            bufferbuilder.pos(x + (Math.sin((i * (360.f / (float)SIDES) * 3.141526D / 180)) * radius), y + (Math.cos((i * (360.f / (float)SIDES) * 3.141526D / 180)) * radius), 0).color(red, green, blue, alpha);
+        }
+
+        tessellator.draw();
+        GlStateManager.shadeModel(GL_FLAT);
+        glDisable(GL_LINE_SMOOTH);
         GlStateManager.disableBlend();
         GlStateManager.disableAlpha();
         GlStateManager.enableTexture2D();

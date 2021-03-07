@@ -41,6 +41,16 @@ public final class GuiHudEditor extends GuiScreen {
 
     private ArrayList<HudComponent> hudComponentsSorted = new ArrayList<>();
 
+    // Color picker handle
+    public boolean isColorPickerOpen = false;
+    public float colorPickerX = 0;
+    public float colorPickerY = 0;
+    public final float colorPickerXY = 70;
+    public HudComponent colorPickerParent = null;
+    public String colorPickerName = "";
+    public boolean specialColorClick = false;
+    public boolean forceCloseColorPicker = false;
+
     public GuiHudEditor(){
         hudComponentsSorted.addAll(Harakiri.INSTANCE.getHudManager().getComponentList());
     }
@@ -144,6 +154,8 @@ public final class GuiHudEditor extends GuiScreen {
 
         for (int i = 0; i < this.hudComponentsSorted.size(); ++i) {
 
+            this.isColorPickerOpen = false;
+
             // Render from bottom.
             HudComponent component = this.hudComponentsSorted.get(i);
 
@@ -212,6 +224,17 @@ public final class GuiHudEditor extends GuiScreen {
 
         SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);
 
+        if(this.isColorPickerOpen){
+            if(mouseX >= colorPickerX && mouseX <= colorPickerX + colorPickerXY && mouseY >= colorPickerY && mouseY <= colorPickerY + colorPickerXY){
+                if(colorPickerParent != null){
+                    specialColorClick = true;
+                    colorPickerParent.mouseClickMove(mouseX, mouseY, clickedMouseButton);
+                    specialColorClick = false;
+                    return;
+                }
+            }
+        }
+
         for (int i = this.hudComponentsSorted.size() - 1; i >= 0; --i) {
 
             // From top!!
@@ -242,6 +265,17 @@ public final class GuiHudEditor extends GuiScreen {
             swc.mouseClicked(mouseX, mouseY, mouseButton);
             Harakiri.INSTANCE.getPlexusEffect().onMouseClicked();
 
+            if(this.isColorPickerOpen){
+                if(mouseX >= colorPickerX && mouseX <= colorPickerX + colorPickerXY && mouseY >= colorPickerY && mouseY <= colorPickerY + colorPickerXY){
+                    if(colorPickerParent != null){
+                        specialColorClick = true;
+                        colorPickerParent.mouseClick(mouseX,mouseY,mouseButton);
+                        specialColorClick = false;
+                        return;
+                    }
+                }
+            }
+
             for (int i = this.hudComponentsSorted.size() - 1; i >= 0; --i) {
 
                 // From top!!
@@ -270,6 +304,18 @@ public final class GuiHudEditor extends GuiScreen {
         super.mouseReleased(mouseX, mouseY, state);
 
         SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);
+
+        if(this.isColorPickerOpen){
+            if(mouseX >= colorPickerX && mouseX <= colorPickerX + colorPickerXY && mouseY >= colorPickerY && mouseY <= colorPickerY + colorPickerXY){
+                if(colorPickerParent != null){
+                    specialColorClick = true;
+                    colorPickerParent.mouseRelease(mouseX, mouseY, state);
+                    specialColorClick = false;
+                    return;
+                }
+            }
+        }
+
 
         for (int i = this.hudComponentsSorted.size() - 1; i >= 0; --i) {
 
@@ -338,5 +384,6 @@ public final class GuiHudEditor extends GuiScreen {
     private void bringComponentToTopOfScreen(HudComponent component){
         this.hudComponentsSorted.remove(component);
         this.hudComponentsSorted.add(component);
+        this.forceCloseColorPicker = true;
     }
 }
