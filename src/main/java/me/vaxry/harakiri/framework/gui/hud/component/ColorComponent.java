@@ -142,7 +142,7 @@ public class ColorComponent extends TextComponent {
             curSel = rotate_point(hueCircleMiddle, curSel, this.hue * 2 * (float)Math.PI);
 
             final float CIRCLE_RADIUS = 2;
-            RenderUtil.drawCircle((float)curSel.getX() - CIRCLE_RADIUS/4F, (float)curSel.getY() - CIRCLE_RADIUS/4F, (int)CIRCLE_RADIUS, 0xFFFFFFFF);
+            RenderUtil.drawCircle((float)curSel.getX(), (float)curSel.getY(), (int)CIRCLE_RADIUS, 0xFFFFFFFF);
 
             RenderUtil.drawCircle(dotX, dotY, (int)CIRCLE_RADIUS, 0xFFFFFFFF);
 
