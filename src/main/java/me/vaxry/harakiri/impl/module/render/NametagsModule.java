@@ -6,6 +6,8 @@ import com.yworks.yguard.test.A;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.event.render.EventRenderName;
+import me.vaxry.harakiri.framework.event.world.EventAddEntity;
+import me.vaxry.harakiri.framework.event.world.EventRemoveEntity;
 import me.vaxry.harakiri.framework.extd.RenderItemAlpha;
 import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.util.ColorUtil;
@@ -82,7 +84,7 @@ public final class NametagsModule extends Module {
 
             for(Map.Entry<EntityPlayer, Float> p : playersList.entrySet()){
                 if(p.getValue() < 0.01f)
-                    p.setValue(0.01f);
+                    p.setValue(0.02f);
                 p.setValue(Math.min(p.getValue() + fadein.getValue() / 3.f, 255));
             }
 
@@ -375,15 +377,12 @@ public final class NametagsModule extends Module {
             GlStateManager.scale(1/scale, 1/scale, 1/scale);
             GlStateManager.popMatrix();
         }
+    }
 
-        //Cleanup ent list
-        ArrayList<EntityPlayer> toRemove = new ArrayList<>();
-        for(Map.Entry<EntityPlayer, Float> p : playersList.entrySet()){
-            if(!mc.world.loadedEntityList.contains(p.getKey()))
-                toRemove.add(p.getKey());
-        }
-        for(EntityPlayer e : toRemove){
-            playersList.remove(e);
+    @Listener
+    public void onEntityRemove(EventRemoveEntity event) {
+        if(event.getEntity() instanceof EntityPlayer){
+            playersList.remove(event.getEntity());
         }
     }
 
