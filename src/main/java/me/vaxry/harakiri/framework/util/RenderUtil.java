@@ -860,6 +860,11 @@ public final class RenderUtil {
         GlStateManager.enableTexture2D();
     }
 
+    public static void drawCircleOutline(float x, float y, int radius, int thick, int color, int outlineColor){
+        drawCircle(x, y, radius, outlineColor);
+        drawCircle(x + thick, y + thick, radius - 2*thick, color);
+    }
+
     public static void drawEmptyCircle(float x, float y, int radius, float thickness, int color)
     {
         float red = (color >> 16 & 0xFF) / 255.0F;
