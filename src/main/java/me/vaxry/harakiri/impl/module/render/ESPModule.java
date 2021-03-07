@@ -346,7 +346,7 @@ public final class ESPModule extends Module {
     private void renderAllTileEntities(float partialTicks, boolean doColor){
         if(((StorageESPModule) Harakiri.INSTANCE.getModuleManager().find(StorageESPModule.class)).modeValue.getValue() == StorageESPModule.MODE.CPU)
             return;
-        
+
         for(TileEntity te : Minecraft.getMinecraft().world.loadedTileEntityList){
             if(doColor) {
                 GlStateManager.enableColorMaterial();

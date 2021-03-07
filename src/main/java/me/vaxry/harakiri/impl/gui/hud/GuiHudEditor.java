@@ -22,6 +22,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Author Seth
@@ -37,6 +38,12 @@ public final class GuiHudEditor extends GuiScreen {
     private float hue = 0;
 
     private Timer timer = new Timer();
+
+    private ArrayList<HudComponent> hudComponentsSorted = new ArrayList<>();
+
+    public GuiHudEditor(){
+        hudComponentsSorted.addAll(Harakiri.INSTANCE.getHudManager().getComponentList());
+    }
 
     @Override
     public void keyTyped(char typedChar, int keyCode) throws IOException {
@@ -135,7 +142,10 @@ public final class GuiHudEditor extends GuiScreen {
 
         SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);
 
-        for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+        for (int i = 0; i < this.hudComponentsSorted.size(); ++i) {
+
+            // Render from bottom.
+            HudComponent component = this.hudComponentsSorted.get(i);
 
             if((component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && !swc.isModules)
                 continue;
@@ -194,13 +204,18 @@ public final class GuiHudEditor extends GuiScreen {
         swc.render(mouseX, mouseY, partialTicks);
     }
 
+    HudComponent componentMoving = null;
+
     @Override
     public void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
         super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
 
         SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);
 
-        for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+        for (int i = this.hudComponentsSorted.size() - 1; i >= 0; --i) {
+
+            // From top!!
+            HudComponent component = this.hudComponentsSorted.get(i);
 
             if((component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && !swc.isModules)
                 continue;
@@ -208,10 +223,12 @@ public final class GuiHudEditor extends GuiScreen {
             if(!(component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && swc.isModules && component != swc)
                 continue;
 
-            if (component.isVisible()) {
+            if (component.isVisible() && component.isMouseInside(mouseX, mouseY)) {
                 component.mouseClickMove(mouseX, mouseY, clickedMouseButton);
-                if(component instanceof ModuleListComponent && component.isMouseInside(mouseX, mouseY))
-                    break;
+                // bring component to top
+                componentMoving = component;
+                this.bringComponentToTopOfScreen(component);
+                break;
             }
         }
     }
@@ -225,17 +242,22 @@ public final class GuiHudEditor extends GuiScreen {
             swc.mouseClicked(mouseX, mouseY, mouseButton);
             Harakiri.INSTANCE.getPlexusEffect().onMouseClicked();
 
-            for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+            for (int i = this.hudComponentsSorted.size() - 1; i >= 0; --i) {
+
+                // From top!!
+                HudComponent component = this.hudComponentsSorted.get(i);
+
                 if((component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && !swc.isModules)
                     continue;
 
                 if(!(component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && swc.isModules && component != swc)
                     continue;
 
-                if (component.isVisible()) {
+                if (component.isVisible() && component.isMouseInside(mouseX, mouseY)) {
                     component.mouseClick(mouseX, mouseY, mouseButton);
-                    if(component instanceof ModuleListComponent && component.isMouseInside(mouseX, mouseY))
-                        break;
+                    componentMoving = component;
+                    this.bringComponentToTopOfScreen(component);
+                    break;
                 }
             }
         } catch (Exception e) {
@@ -249,17 +271,23 @@ public final class GuiHudEditor extends GuiScreen {
 
         SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);
 
-        for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+        for (int i = this.hudComponentsSorted.size() - 1; i >= 0; --i) {
+
+            // From top!!
+            HudComponent component = this.hudComponentsSorted.get(i);
+
             if((component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && !swc.isModules)
                 continue;
 
             if(!(component instanceof ModuleListComponent || component instanceof ModuleSearchComponent) && swc.isModules && component != swc)
                 continue;
 
-            if (component.isVisible()) {
-                component.mouseRelease(mouseX, mouseY, state);
-                if(component instanceof ModuleListComponent && component.isMouseInside(mouseX, mouseY))
-                    break;
+            if (component.isVisible() && component.isMouseInside(mouseX, mouseY)) {
+                if(componentMoving != null && component != componentMoving)
+                    componentMoving.mouseRelease(mouseX, mouseY, state);
+                else
+                    component.mouseRelease(mouseX, mouseY, state);
+                break;
             }
         }
         try {
@@ -305,5 +333,10 @@ public final class GuiHudEditor extends GuiScreen {
 
     public void unload() {
         // empty
+    }
+
+    private void bringComponentToTopOfScreen(HudComponent component){
+        this.hudComponentsSorted.remove(component);
+        this.hudComponentsSorted.add(component);
     }
 }
