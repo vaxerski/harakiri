@@ -39,6 +39,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextFormatting;
@@ -348,6 +349,9 @@ public final class ESPModule extends Module {
             return;
 
         for(TileEntity te : Minecraft.getMinecraft().world.loadedTileEntityList){
+            if(te instanceof TileEntityBanner)
+                continue; // Cuz fuck banners lmao
+
             if(doColor) {
                 GlStateManager.enableColorMaterial();
                 GlStateManager.enableOutlineMode(((StorageESPModule) Harakiri.INSTANCE.getModuleManager().find(StorageESPModule.class)).getColorShader(te));
