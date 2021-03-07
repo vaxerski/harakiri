@@ -90,6 +90,9 @@ public final class StepModule extends Module {
             return;
         }
 
+        if(!mc.player.onGround)
+            return;
+
         stepX = Math.abs(mc.player.motionX) > Math.abs(mc.player.motionZ);
 
         isStepping = true;
