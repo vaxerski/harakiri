@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.entity.layers.LayerEndermanEyes;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerSpiderEyes;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.entity.Entity;
@@ -360,7 +361,11 @@ public final class ESPModule extends Module {
             }
 
             // This doesnt force lighting
-            TileEntityRendererDispatcher.instance.render(te, (double)te.getPos().getX() - TileEntityRendererDispatcher.instance.staticPlayerX, (double)te.getPos().getY() - TileEntityRendererDispatcher.instance.staticPlayerY, (double)te.getPos().getZ() - TileEntityRendererDispatcher.instance.staticPlayerZ, partialTicks, -1, 1.0F);
+            TileEntitySpecialRenderer<TileEntity> tileentityspecialrenderer = TileEntityRendererDispatcher.instance.getRenderer(te);
+            if(tileentityspecialrenderer != null) {
+                tileentityspecialrenderer.setLightmapDisabled(true);
+                tileentityspecialrenderer.render(te, (double) te.getPos().getX() - TileEntityRendererDispatcher.instance.staticPlayerX, (double) te.getPos().getY() - TileEntityRendererDispatcher.instance.staticPlayerY, (double) te.getPos().getZ() - TileEntityRendererDispatcher.instance.staticPlayerZ, partialTicks, -1, 1.0F);
+            }
             //TileEntityRendererDispatcher.instance.render(te, partialTicks, -1);
 
             if(doColor) {
