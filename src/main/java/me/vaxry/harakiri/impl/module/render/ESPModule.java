@@ -359,7 +359,9 @@ public final class ESPModule extends Module {
                 GlStateManager.enableOutlineMode(((StorageESPModule) Harakiri.INSTANCE.getModuleManager().find(StorageESPModule.class)).getColorShader(te));
             }
 
-            TileEntityRendererDispatcher.instance.render(te, partialTicks, -1);
+            // This doesnt force lighting
+            TileEntityRendererDispatcher.instance.render(te, (double)te.getPos().getX() - TileEntityRendererDispatcher.instance.staticPlayerX, (double)te.getPos().getY() - TileEntityRendererDispatcher.instance.staticPlayerY, (double)te.getPos().getZ() - TileEntityRendererDispatcher.instance.staticPlayerZ, partialTicks, -1, 1.0F);
+            //TileEntityRendererDispatcher.instance.render(te, partialTicks, -1);
 
             if(doColor) {
                 GlStateManager.disableOutlineMode();
@@ -438,11 +440,16 @@ public final class ESPModule extends Module {
         if(ForgeHooksClient.getWorldRenderPass() == 0) {
             this.entityOutlineFramebuffer.framebufferClear();
 
+            // So that we get bright stuff.
+            float gamma = mc.gameSettings.gammaSetting;
+            mc.gameSettings.gammaSetting = 200000F;
+
             GlStateManager.depthFunc(519);
             GlStateManager.disableFog();
             this.entityOutlineFramebuffer.bindFramebuffer(false);
             RenderHelper.disableStandardItemLighting();
             mc.getRenderManager().setRenderOutlines(true);
+            GlStateManager.disableLighting();
 
             renderAllEntities(partialTicks, true);
 
@@ -463,6 +470,8 @@ public final class ESPModule extends Module {
             GlStateManager.enableAlpha();
 
             mc.getFramebuffer().bindFramebuffer(false);
+
+            mc.gameSettings.gammaSetting = gamma;
         }
     }
 
