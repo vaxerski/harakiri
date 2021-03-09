@@ -97,7 +97,7 @@ public final class HudManager {
         add(new NetherCoordsComponent());
         add(new SpeedComponent());
         add(new ThreatComponent());
-        add(new ThreatCamComponent());
+        //add(new ThreatCamComponent());
         add(new WaifuComponent());
         add(new ArmorComponent());
         add(new PingComponent());

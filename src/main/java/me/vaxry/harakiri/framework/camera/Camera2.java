@@ -2,6 +2,7 @@ package me.vaxry.harakiri.framework.camera;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -52,6 +53,15 @@ public class Camera2 {
     }
 
     public void setOptimized(boolean b){
+        if(b != this.isOptimized){
+            if(b){
+                this.frameBuffer = new Framebuffer(WIDTH_RESOLUTION/4, HEIGHT_RESOLUTION/4, true);
+                this.frameBuffer.createFramebuffer(WIDTH_RESOLUTION/4, HEIGHT_RESOLUTION/4);
+            }else{
+                this.frameBuffer = new Framebuffer(WIDTH_RESOLUTION, HEIGHT_RESOLUTION, true);
+                this.frameBuffer.createFramebuffer(WIDTH_RESOLUTION, HEIGHT_RESOLUTION);
+            }
+        }
         this.isOptimized = b;
     }
 
@@ -73,13 +83,8 @@ public class Camera2 {
             addEntityToScene();
 
             boolean hideGUI = mc.gameSettings.hideGUI;
-            int clouds = mc.gameSettings.clouds;
             int thirdPersonView = mc.gameSettings.thirdPersonView;
-            float gamma = mc.gameSettings.gammaSetting;
-            int ambientOcclusion = mc.gameSettings.ambientOcclusion;
             boolean viewBobbing = mc.gameSettings.viewBobbing;
-            int particles = mc.gameSettings.particleSetting;
-            boolean shadows = mc.gameSettings.entityShadows;
             int displayWidth = mc.displayWidth;
             int displayHeight = mc.displayHeight;
 
@@ -90,13 +95,9 @@ public class Camera2 {
             boolean invis = mc.player.isInvisible();
 
             mc.gameSettings.hideGUI = true;
-            mc.gameSettings.clouds = 0;
             mc.gameSettings.thirdPersonView = 0;
-            mc.gameSettings.gammaSetting = 100;
-            mc.gameSettings.ambientOcclusion = 0;
             mc.gameSettings.viewBobbing = false;
-            mc.gameSettings.particleSetting = 0;
-            mc.gameSettings.entityShadows = false;
+
             if(this.isOptimized){
                 mc.displayWidth = WIDTH_RESOLUTION / 4;
                 mc.displayHeight = HEIGHT_RESOLUTION / 4;
@@ -105,11 +106,10 @@ public class Camera2 {
                 mc.displayHeight = HEIGHT_RESOLUTION;
             }
 
-            if(this.isOptimized)
-                mc.gameSettings.limitFramerate = 5;
-            else
-                mc.gameSettings.limitFramerate = 10;
-            mc.gameSettings.fovSetting = 110;
+            //if(this.isOptimized)
+            //    mc.gameSettings.limitFramerate = 5;
+            //else
+            //    mc.gameSettings.limitFramerate = 10;
 
             mc.player.setSprinting(false);
 
@@ -118,23 +118,23 @@ public class Camera2 {
             updateCamEntityStats();
 
             this.setRecording(true);
+            frameBuffer.framebufferClear();
             frameBuffer.bindFramebuffer(true);
 
-            mc.entityRenderer.renderWorld(mc.timer.renderPartialTicks, System.nanoTime());
-            //mc.getRenderManager().renderEntityStatic(mc.player, mc.timer.renderPartialTicks, false);
+            //net.minecraftforge.fml.common.FMLCommonHandler.instance().onRenderTickStart(mc.timer.renderPartialTicks);
+            //mc.entityRenderer.updateCameraAndRender(mc.isGamePaused ? mc.renderPartialTicksPaused : mc.timer.renderPartialTicks, System.nanoTime());
+            //mc.toastGui.drawToast(new ScaledResolution(mc));
+
+            mc.entityRenderer.renderWorld(0, System.nanoTime());
+            //net.minecraftforge.fml.common.FMLCommonHandler.instance().onRenderTickEnd(mc.timer.renderPartialTicks);
             mc.entityRenderer.setupOverlayRendering();
 
             frameBuffer.unbindFramebuffer();
             this.setRecording(false);
 
             mc.gameSettings.hideGUI = hideGUI;
-            mc.gameSettings.clouds = clouds;
             mc.gameSettings.thirdPersonView = thirdPersonView;
-            mc.gameSettings.gammaSetting = gamma;
-            mc.gameSettings.ambientOcclusion = ambientOcclusion;
             mc.gameSettings.viewBobbing = viewBobbing;
-            mc.gameSettings.particleSetting = particles;
-            mc.gameSettings.entityShadows = shadows;
             mc.displayWidth = displayWidth;
             mc.displayHeight = displayHeight;
             mc.gameSettings.limitFramerate = frameLimit;
