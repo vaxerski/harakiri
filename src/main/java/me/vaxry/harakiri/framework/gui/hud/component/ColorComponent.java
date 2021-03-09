@@ -203,43 +203,7 @@ public class ColorComponent extends TextComponent {
                 final float xoff = mouseX - (beginX + XYDIM/2.f);
                 final float yoff = mouseY - (beginY + XYDIM/2.f);
 
-                double angleRad;
-
-                if(xoff > 0){
-                    // First or fourth quarter
-                    angleRad = Math.atan(xoff/yoff);
-                    angleRad = -angleRad + Math.PI / 2.f;
-                } else {
-                    // Second or third quarter
-                    angleRad = Math.atan(xoff/yoff);
-                    angleRad = -angleRad + Math.PI * 1.5F;
-                }
-
-                if(xoff > 0 && yoff > 0){
-                    angleRad -= Math.PI * 0.5F;
-                }else if(xoff < 0 && yoff > 0){
-                    angleRad += Math.PI * 0.5F;
-                }else if(xoff < 0 && yoff < 0){
-                    angleRad -= Math.PI * 0.5F;
-                }else if(xoff > 0 && yoff < 0){
-                    angleRad += Math.PI * 0.5F;
-                }else{
-                    if(yoff < 0){
-                        angleRad = 0;
-                    }else{
-                        angleRad = -Math.PI;
-                    }
-                }
-
-                angleRad += Math.PI;
-
-                if(angleRad == Math.PI)
-                    angleRad = 0;
-                else if(angleRad == 0)
-                    angleRad = Math.PI;
-
-                if(angleRad > 2 * Math.PI)
-                    angleRad -= 2 * Math.PI;
+                final double angleRad = Math.atan2(mouseX - (beginX + XYDIM/2.f), (beginY + XYDIM/2.f) - mouseY);
 
                 final float angleDeg = (float)Math.toDegrees(angleRad);
 
