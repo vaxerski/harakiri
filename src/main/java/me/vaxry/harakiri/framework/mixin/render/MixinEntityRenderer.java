@@ -77,6 +77,11 @@ public class MixinEntityRenderer {
                     Minecraft.getMinecraft().player.getPosition().getX(),
                     257,
                     Minecraft.getMinecraft().player.getPosition().getZ()));
+        }else if(((NoOverlayModule)Harakiri.INSTANCE.getModuleManager().find(NoOverlayModule.class)).water.getValue()){
+            if(iBlockState.getMaterial() == Material.WATER) iBlockState = Minecraft.getMinecraft().world.getBlockState(new BlockPos(
+                    Minecraft.getMinecraft().player.getPosition().getX(),
+                    257,
+                    Minecraft.getMinecraft().player.getPosition().getZ()));
         }
         return iBlockState;
     }
