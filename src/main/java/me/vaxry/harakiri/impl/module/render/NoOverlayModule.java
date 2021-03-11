@@ -18,6 +18,7 @@ public final class NoOverlayModule extends Module {
     public final Value<Boolean> block = new Value<Boolean>("Block", new String[]{}, "Disables the block-side screen overlay.", true);
     public final Value<Boolean> water = new Value<Boolean>("Water", new String[]{}, "Disables the water overlay.", true);
     public final Value<Boolean> fire = new Value<Boolean>("Fire", new String[]{}, "Disables the fire overlay.", true);
+    public final Value<Boolean> lava = new Value<Boolean>("Lava", new String[]{}, "Disables the lava overlay.", true);
 
     public NoOverlayModule() {
         super("NoOverlay", new String[]{"AntiOverlay"}, "Removes some overlay effects.", "NONE", -1, ModuleType.RENDER);

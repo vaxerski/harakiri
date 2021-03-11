@@ -1,18 +1,26 @@
 package me.vaxry.harakiri.framework.mixin.render;
 
 import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.event.entity.EventSetupFog;
 import me.vaxry.harakiri.framework.event.player.EventFovModifier;
 import me.vaxry.harakiri.framework.event.render.EventHurtCamEffect;
 import me.vaxry.harakiri.framework.event.render.EventOrientCamera;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.impl.module.render.ESPModule;
+import me.vaxry.harakiri.impl.module.render.NoOverlayModule;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -57,6 +65,20 @@ public class MixinEntityRenderer {
             cir.setReturnValue(event.getFov());
             cir.cancel();
         }
+    }
+
+    @Redirect(method = "setupFog", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ActiveRenderInfo;getBlockStateAtEntityViewpoint(Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;F)Lnet/minecraft/block/state/IBlockState;"))
+    private IBlockState setupFog(World world, Entity start, float partialticks) {
+        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventSetupFog(world, start, partialticks));
+        IBlockState iBlockState = ActiveRenderInfo.getBlockStateAtEntityViewpoint(world, start, partialticks);
+
+        if(((NoOverlayModule)Harakiri.INSTANCE.getModuleManager().find(NoOverlayModule.class)).lava.getValue()){
+            if(iBlockState.getMaterial() == Material.LAVA) iBlockState = Minecraft.getMinecraft().world.getBlockState(new BlockPos(
+                    Minecraft.getMinecraft().player.getPosition().getX(),
+                    257,
+                    Minecraft.getMinecraft().player.getPosition().getZ()));
+        }
+        return iBlockState;
     }
 
     /*@Inject(at = @At("HEAD"), method = "setupFog", cancellable = true)
