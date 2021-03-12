@@ -259,6 +259,13 @@ public class TTFFontUtil
 
     public int drawStringCached(String text, float x, float y, int color)
     {
+        //
+        // This here is close to being functional.
+        // The text renders very small and pixelated,
+        // it seems that the fontrenderer takes the w and h to consider size??
+        //
+
+
         if (text == null)
             return 0;
 

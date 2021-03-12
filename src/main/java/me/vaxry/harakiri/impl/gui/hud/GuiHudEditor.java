@@ -10,6 +10,7 @@ import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.SwitchViewComponent;
+import me.vaxry.harakiri.impl.gui.hud.component.WarningsComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleSearchComponent;
 import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
@@ -338,6 +339,11 @@ public final class GuiHudEditor extends GuiScreen {
         }
         try {
             swc.mouseReleased(mouseX, mouseY, state);
+
+            // Fix when going through the half of the screen (when it flips)
+            if(((WarningsComponent)Harakiri.get().getHudManager().findComponent(WarningsComponent.class)).isDragging())
+                Harakiri.get().getHudManager().findComponent(WarningsComponent.class).mouseRelease(mouseX, mouseY, state);
+
         }catch(Throwable t){
         }
     }
