@@ -66,7 +66,7 @@ public final class EntityRendererPatch extends ClassPatch {
      */
     public static void updateCameraAndRenderHook(float partialTicks) {
         //dispatch our event so we can render stuff on our screen
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventRender2D(partialTicks, new ScaledResolution(Minecraft.getMinecraft())));
+        Harakiri.get().getEventManager().dispatchEvent(new EventRender2D(partialTicks, new ScaledResolution(Minecraft.getMinecraft())));
     }
 
     /**
@@ -105,11 +105,11 @@ public final class EntityRendererPatch extends ClassPatch {
      * @param partialTicks
      */
     public static void renderWorldPassHook(float partialTicks) {
-        if (Harakiri.INSTANCE.getCameraManager().isCameraRecording()) {
+        if (Harakiri.get().getCameraManager().isCameraRecording()) {
             return;
         }
         //dispatch our event and pass partial ticks in
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventRender3D(partialTicks));
+        Harakiri.get().getEventManager().dispatchEvent(new EventRender3D(partialTicks));
     }
 
     /**
@@ -149,7 +149,7 @@ public final class EntityRendererPatch extends ClassPatch {
     public static boolean hurtCameraEffectHook() {
         //dispatch our event
         final EventHurtCamEffect event = new EventHurtCamEffect();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -175,7 +175,7 @@ public final class EntityRendererPatch extends ClassPatch {
 
     public static boolean orientCameraHook() {
         final EventOrientCamera event = new EventOrientCamera();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         return event.isCanceled();
     }
 
@@ -230,7 +230,7 @@ public final class EntityRendererPatch extends ClassPatch {
 
     public static boolean getMouseOverHook() {
         final EventGetMouseOver event = new EventGetMouseOver();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         return event.isCanceled();
     }
 }

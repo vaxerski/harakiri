@@ -54,7 +54,7 @@ public final class ChunkPatch extends ClassPatch {
      *     INVOKESPECIAL me/vaxry/harakiri/framework/event/world/EventChunk.<init> (Lme/vaxry/harakiri/framework/event/world/EventChunk$ChunkType;Lnet/minecraft/world/chunk/Chunk;)V
      *     ASTORE 1
      *
-     *     GETSTATIC me/vaxry/harakiri/Harakiri.INSTANCE : Lme/vaxry/harakiri/Harakiri;
+     *     GETSTATIC me/vaxry/harakiri/Harakiri.get() : Lme/vaxry/harakiri/Harakiri;
      *     INVOKEVIRTUAL me/vaxry/harakiri/Harakiri.getEventManager ()Lteam/stiff/pomelo/EventManager;
      *     ALOAD 1
      *     INVOKEINTERFACE team/stiff/pomelo/EventManager.dispatchEvent (Ljava/lang/Object;)Ljava/lang/Object; (itf)

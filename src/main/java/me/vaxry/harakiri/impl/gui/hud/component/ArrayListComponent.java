@@ -46,7 +46,7 @@ public final class ArrayListComponent extends DraggableHudComponent {
         this.setAnchorPoint(null);
         this.setVisible(true);
 
-        Harakiri.INSTANCE.getEventManager().addEventListener(this); // subscribe to the event manager
+        Harakiri.get().getEventManager().addEventListener(this); // subscribe to the event manager
     }
 
     private float getJitter() {
@@ -71,14 +71,14 @@ public final class ArrayListComponent extends DraggableHudComponent {
         float maxWidth = 0;
         int hueDifference = 0;
 
-        final HudModule hm = (HudModule) Harakiri.INSTANCE.getModuleManager().find(HudModule.class);
+        final HudModule hm = (HudModule) Harakiri.get().getModuleManager().find(HudModule.class);
         boolean useRainbow;
         if(hm.rainbow.getValue())
             useRainbow = true;
         else
             useRainbow = false;
 
-        for (Module mod : Harakiri.INSTANCE.getModuleManager().getModuleList()) {
+        for (Module mod : Harakiri.get().getModuleManager().getModuleList()) {
             if (mod != null && mod.getType() != Module.ModuleType.HIDDEN && mod.isEnabled() && !mod.isHidden()) {
                 mods.add(mod);
             }
@@ -93,7 +93,7 @@ public final class ArrayListComponent extends DraggableHudComponent {
                         firstName = firstName.toLowerCase();
                         secondName = secondName.toLowerCase();
                     }
-                    final float dif = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(secondName) - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(firstName);
+                    final float dif = Harakiri.get().getTTFFontUtil().getStringWidth(secondName) - Harakiri.get().getTTFFontUtil().getStringWidth(firstName);
                     return dif != 0 ? (int) dif : secondName.compareTo(firstName);
                 };
                 mods.sort(lengthComparator);
@@ -119,7 +119,7 @@ public final class ArrayListComponent extends DraggableHudComponent {
                 curHue -= 10000;
 
             for (Module mod : mods) {
-                if (mod != null && mod.getType() != Module.ModuleType.HIDDEN && (mod.isEnabled() || Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(mod.getDisplayName()) > mod.activexOffset) && !mod.isHidden()) {
+                if (mod != null && mod.getType() != Module.ModuleType.HIDDEN && (mod.isEnabled() || Harakiri.get().getTTFFontUtil().getStringWidth(mod.getDisplayName()) > mod.activexOffset) && !mod.isHidden()) {
                     String name = mod.getDisplayName() + (SHOW_METADATA ? (mod.getMetaData() != null ? " " + ChatFormatting.GRAY + "[" + ChatFormatting.WHITE + mod.getMetaData().charAt(0) + mod.getMetaData().substring(1, mod.getMetaData().length()).toLowerCase() + ChatFormatting.GRAY + "]" : "") : "");
                     if(mod instanceof VelocityModule)
                         name = mod.getDisplayName() + (SHOW_METADATA ? (mod.getMetaData() != null ? " " + ChatFormatting.GRAY + "[" + ChatFormatting.WHITE + mod.getMetaData() + ChatFormatting.GRAY + "]" : "") : "");
@@ -127,7 +127,7 @@ public final class ArrayListComponent extends DraggableHudComponent {
                     if (LOWERCASE)
                         name = name.toLowerCase();
 
-                    final float width = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(name);
+                    final float width = Harakiri.get().getTTFFontUtil().getStringWidth(name);
 
                     int color;
                     if (useRainbow) {
@@ -141,8 +141,8 @@ public final class ArrayListComponent extends DraggableHudComponent {
                         maxWidth = width;
                     }
 
-                    if(mod.activexOffset > 0 || (!mod.isEnabled() && Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(mod.getDisplayName()) > mod.activexOffset)) {
-                        if((!mod.isEnabled() && Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(mod.getDisplayName()) > mod.activexOffset)) {
+                    if(mod.activexOffset > 0 || (!mod.isEnabled() && Harakiri.get().getTTFFontUtil().getStringWidth(mod.getDisplayName()) > mod.activexOffset)) {
+                        if((!mod.isEnabled() && Harakiri.get().getTTFFontUtil().getStringWidth(mod.getDisplayName()) > mod.activexOffset)) {
                             mod.activexOffset += 1.3f;
                         }else if(mod.isEnabled()) {
                             mod.activexOffset -= 1.3f;
@@ -156,7 +156,7 @@ public final class ArrayListComponent extends DraggableHudComponent {
                             switch (this.getAnchorPoint().getPoint()) {
                                 case TOP_CENTER:
                                 case BOTTOM_CENTER:
-                                    xOffset = (this.getW() - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(name)) / 2;
+                                    xOffset = (this.getW() - Harakiri.get().getTTFFontUtil().getStringWidth(name)) / 2;
                                     break;
                                 case TOP_LEFT:
                                 case BOTTOM_LEFT:
@@ -164,7 +164,7 @@ public final class ArrayListComponent extends DraggableHudComponent {
                                     break;
                                 case TOP_RIGHT:
                                 case BOTTOM_RIGHT:
-                                    xOffset = this.getW() - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(name);
+                                    xOffset = this.getW() - Harakiri.get().getTTFFontUtil().getStringWidth(name);
                                     break;
                             }
 
@@ -172,24 +172,24 @@ public final class ArrayListComponent extends DraggableHudComponent {
                                 case TOP_CENTER:
                                 case TOP_LEFT:
                                 case TOP_RIGHT:
-                                    Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(name, this.getX() + xOffset + mod.activexOffset, this.getY() + yOffset, color);
+                                    Harakiri.get().getTTFFontUtil().drawStringWithShadow(name, this.getX() + xOffset + mod.activexOffset, this.getY() + yOffset, color);
                                     if(mod.activexOffset != 0){
-                                        final float perc = mod.activexOffset / Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(mod.getDisplayName());
-                                        yOffset += (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1) * (1 - perc);
+                                        final float perc = mod.activexOffset / Harakiri.get().getTTFFontUtil().getStringWidth(mod.getDisplayName());
+                                        yOffset += (Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 1) * (1 - perc);
                                     }else
-                                        yOffset += (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1);
+                                        yOffset += (Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 1);
                                     break;
                                 case BOTTOM_CENTER:
                                 case BOTTOM_LEFT:
                                 case BOTTOM_RIGHT:
-                                    Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(name, this.getX() + xOffset + mod.activexOffset, this.getY() + (this.getH() - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT) + yOffset, color);
-                                    yOffset -= (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1);
+                                    Harakiri.get().getTTFFontUtil().drawStringWithShadow(name, this.getX() + xOffset + mod.activexOffset, this.getY() + (this.getH() - Harakiri.get().getTTFFontUtil().FONT_HEIGHT) + yOffset, color);
+                                    yOffset -= (Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 1);
                                     break;
                             }
                         }
                     } else {
-                        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(name, this.getX() + xOffset + mod.activexOffset, this.getY() + yOffset, color);
-                        yOffset += (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1);
+                        Harakiri.get().getTTFFontUtil().drawStringWithShadow(name, this.getX() + xOffset + mod.activexOffset, this.getY() + yOffset, color);
+                        yOffset += (Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 1);
                     }
 
                     hueDifference = (int) (hueDifference + RAINBOW_HUE_DIFFERENCE);
@@ -200,9 +200,9 @@ public final class ArrayListComponent extends DraggableHudComponent {
         if (isInHudEditor) {
             if (maxWidth == 0) { // no mods
                 final String arraylist = "(enabled modules)";
-                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(arraylist, this.getX(), this.getY(), 0xFFAAAAAA);
-                maxWidth = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(arraylist) + 1 /* right side gap */;
-                yOffset = Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1 /* right side gap */;
+                Harakiri.get().getTTFFontUtil().drawStringWithShadow(arraylist, this.getX(), this.getY(), 0xFFAAAAAA);
+                maxWidth = Harakiri.get().getTTFFontUtil().getStringWidth(arraylist) + 1 /* right side gap */;
+                yOffset = Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 1 /* right side gap */;
             }
         }
 
@@ -225,7 +225,7 @@ public final class ArrayListComponent extends DraggableHudComponent {
     }
 
     private void updateValues() {
-        final HudModule hudModule = (HudModule) Harakiri.INSTANCE.getModuleManager().find(HudModule.class);
+        final HudModule hudModule = (HudModule) Harakiri.get().getModuleManager().find(HudModule.class);
         if (hudModule != null && hudModule.isEnabled()) {
             this.RAINBOW = hudModule.rainbow.getValue();
             this.RAINBOW_HUE_DIFFERENCE = hudModule.rainbowHueDifference.getValue();
@@ -234,7 +234,7 @@ public final class ArrayListComponent extends DraggableHudComponent {
             this.RAINBOW_BRIGHTNESS = hudModule.rainbowBrightness.getValue();
         }
 
-        final ArrayListModule arrayListModule = (ArrayListModule) Harakiri.INSTANCE.getModuleManager().find(ArrayListModule.class);
+        final ArrayListModule arrayListModule = (ArrayListModule) Harakiri.get().getModuleManager().find(ArrayListModule.class);
         if (arrayListModule != null) {
             this.SORTING_MODE = arrayListModule.mode.getValue();
             this.LOWERCASE = arrayListModule.lowercase.getValue();

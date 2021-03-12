@@ -67,14 +67,14 @@ public final class ConfigManager {
             }
         }
 
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventSaveConfig());
+        Harakiri.get().getEventManager().dispatchEvent(new EventSaveConfig());
     }
 
     public void saveAll() {
         for (Configurable cfg : configurableList) {
             cfg.onSave();
         }
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventSaveConfig());
+        Harakiri.get().getEventManager().dispatchEvent(new EventSaveConfig());
     }
 
     public void load(Class configurableClassType) {
@@ -83,14 +83,14 @@ public final class ConfigManager {
                 cfg.onLoad();
             }
         }
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventLoadConfig());
+        Harakiri.get().getEventManager().dispatchEvent(new EventLoadConfig());
     }
 
     public void loadAll() {
         for (Configurable cfg : configurableList) {
             cfg.onLoad();
         }
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventLoadConfig());
+        Harakiri.get().getEventManager().dispatchEvent(new EventLoadConfig());
     }
 
     public File getConfigDir() {

@@ -319,7 +319,7 @@ public final class StorageESPModule extends Module {
         }catch(Throwable e){
             StringWriter errors = new StringWriter();
             e.printStackTrace(new PrintWriter(errors));
-            Harakiri.INSTANCE.logChat("StorageESP Threw an Error: " + e.getMessage());
+            Harakiri.get().logChat("StorageESP Threw an Error: " + e.getMessage());
         }
 
         Minecraft.getMinecraft().gameSettings.viewBobbing = bobbing;

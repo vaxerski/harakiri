@@ -26,7 +26,7 @@ public final class InventoryComponent extends DraggableHudComponent {
 
         if (mc.player == null) {
             if (mc.currentScreen instanceof GuiHudEditor) {
-                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(inventory)", this.getX(), this.getY(), 0xFFAAAAAA);
+                Harakiri.get().getTTFFontUtil().drawStringWithShadow("(inventory)", this.getX(), this.getY(), 0xFFAAAAAA);
             }
             return;
         }

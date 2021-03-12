@@ -16,7 +16,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class JoinLeaveManager {
 
     public JoinLeaveManager() {
-        Harakiri.INSTANCE.getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().addEventListener(this);
     }
 
     @Listener
@@ -30,9 +30,9 @@ public final class JoinLeaveManager {
                         for (SPacketPlayerListItem.AddPlayerData playerData : packet.getEntries()) {
                             if (playerData.getProfile().getId() != mc.session.getProfile().getId()) {
                                 new Thread(() -> {
-                                    final String name = Harakiri.INSTANCE.getApiManager().resolveName(playerData.getProfile().getId().toString());
+                                    final String name = Harakiri.get().getApiManager().resolveName(playerData.getProfile().getId().toString());
                                     if (name != null) {
-                                        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventPlayerJoin(name, playerData.getProfile().getId().toString()));
+                                        Harakiri.get().getEventManager().dispatchEvent(new EventPlayerJoin(name, playerData.getProfile().getId().toString()));
                                     }
                                 }).start();
                             }
@@ -42,9 +42,9 @@ public final class JoinLeaveManager {
                         for (SPacketPlayerListItem.AddPlayerData playerData : packet.getEntries()) {
                             if (playerData.getProfile().getId() != mc.session.getProfile().getId()) {
                                 new Thread(() -> {
-                                    final String name = Harakiri.INSTANCE.getApiManager().resolveName(playerData.getProfile().getId().toString());
+                                    final String name = Harakiri.get().getApiManager().resolveName(playerData.getProfile().getId().toString());
                                     if (name != null) {
-                                        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventPlayerLeave(name, playerData.getProfile().getId().toString()));
+                                        Harakiri.get().getEventManager().dispatchEvent(new EventPlayerLeave(name, playerData.getProfile().getId().toString()));
                                     }
                                 }).start();
                             }
@@ -56,6 +56,6 @@ public final class JoinLeaveManager {
     }
 
     public void unload() {
-        Harakiri.INSTANCE.getEventManager().removeEventListener(this);
+        Harakiri.get().getEventManager().removeEventListener(this);
     }
 }

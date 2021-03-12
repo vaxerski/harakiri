@@ -17,7 +17,7 @@ public final class DirectionComponent extends DraggableHudComponent {
 
     public DirectionComponent() {
         super("Direction");
-        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+        this.setH(Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -30,11 +30,11 @@ public final class DirectionComponent extends DraggableHudComponent {
                 this.directionTimer.reset();
             }
 
-            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(direction));
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(direction, this.getX(), this.getY(), -1);
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth(direction));
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(direction, this.getX(), this.getY(), -1);
         } else {
-            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("(direction)"));
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(direction)", this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth("(direction)"));
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow("(direction)", this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 

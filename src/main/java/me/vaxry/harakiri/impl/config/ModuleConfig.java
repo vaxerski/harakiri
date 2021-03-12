@@ -64,7 +64,7 @@ public class ModuleConfig extends Configurable {
             if(settings == null)
                 continue;
 
-            Module mod = Harakiri.INSTANCE.getModuleManager().find(settings.name);
+            Module mod = Harakiri.get().getModuleManager().find(settings.name);
 
             if(mod == null)
                 continue;
@@ -140,7 +140,7 @@ public class ModuleConfig extends Configurable {
 
         ArrayList<ModuleConfigJSON> moduleConfigJSONS = new ArrayList<>();
 
-        for(Module mod : Harakiri.INSTANCE.getModuleManager().getModuleList()){
+        for(Module mod : Harakiri.get().getModuleManager().getModuleList()){
 
             if(mod.getType() == Module.ModuleType.LUA)
                 continue; // We save luas separately

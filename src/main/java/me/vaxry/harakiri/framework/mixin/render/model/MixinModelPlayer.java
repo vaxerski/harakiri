@@ -42,7 +42,7 @@ public class MixinModelPlayer {
     @Inject(method = "renderCape", at = @At("HEAD"), cancellable = true)
     public void renderCape(float scale, CallbackInfo ci){
         // Overwrite with our color
-        ChamsModule chamsModule = (ChamsModule) Harakiri.INSTANCE.getModuleManager().find(ChamsModule.class);
+        ChamsModule chamsModule = (ChamsModule) Harakiri.get().getModuleManager().find(ChamsModule.class);
         EntityPlayer e = chamsModule.lastPlayer;
 
         if(!chamsModule.isEnabled() || e == null) {
@@ -50,8 +50,8 @@ public class MixinModelPlayer {
             return;
         }
 
-        if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null && chamsModule.friend.getValue() ||
-                Harakiri.INSTANCE.getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
+        if(Harakiri.get().getFriendManager().isFriend(e) != null && chamsModule.friend.getValue() ||
+                Harakiri.get().getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
                 Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName()) && chamsModule.self.getValue()){
 
             GlStateManager.enableAlpha();
@@ -60,10 +60,10 @@ public class MixinModelPlayer {
 
             if(Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName())){
                 GL11.glColor4f(chamsModule.selfR.getValue() / 255.f,chamsModule.selfG.getValue() / 255.f,chamsModule.selfB.getValue() / 255.f,chamsModule.selfA.getValue() / 255.f);
-            } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null){
+            } else if(Harakiri.get().getFriendManager().isFriend(e) != null){
                 //friend settings
                 GL11.glColor4f(chamsModule.friendR.getValue() / 255.f,chamsModule.friendG.getValue() / 255.f,chamsModule.friendB.getValue() / 255.f,chamsModule.friendA.getValue() / 255.f);
-            } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) == null){
+            } else if(Harakiri.get().getFriendManager().isFriend(e) == null){
                 //enemy settings
                 GL11.glColor4f(chamsModule.enemyR.getValue() / 255.f,chamsModule.enemyG.getValue() / 255.f,chamsModule.enemyB.getValue() / 255.f,chamsModule.enemyA.getValue() / 255.f);
             }

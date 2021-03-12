@@ -44,7 +44,7 @@ public final class BlockFluidRendererPatch extends ClassPatch {
         insnList.add(new MethodInsnNode(INVOKESPECIAL, Type.getInternalName(EventRenderFluid.class), "<init>", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/renderer/BufferBuilder;)V" : "(Lamy;Lawt;Let;Lbuk;)V", false));
         //store our event in the local vars
         insnList.add(new VarInsnNode(ASTORE, 60));
-        //harakiri.INSTANCE
+        //Harakiri.get()
         insnList.add(new FieldInsnNode(GETSTATIC, Type.getInternalName(Harakiri.class), "INSTANCE", "Lme/vaxry/harakiri/Harakiri;"));
         //getEventManager
         insnList.add(new MethodInsnNode(INVOKEVIRTUAL, Type.getInternalName(Harakiri.class), "getEventManager", "()Lteam/stiff/pomelo/EventManager;", false));

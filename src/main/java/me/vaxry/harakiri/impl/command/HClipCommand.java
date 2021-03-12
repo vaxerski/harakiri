@@ -37,10 +37,10 @@ public final class HClipCommand extends Command {
                 } else {
                     Minecraft.getMinecraft().player.setPosition(Minecraft.getMinecraft().player.posX + dir.x * num, Minecraft.getMinecraft().player.posY, Minecraft.getMinecraft().player.posZ + dir.z * num);
                 }
-                Harakiri.INSTANCE.logChat("HClipped you " + ((num > 0) ? "forward" : "backward") + " " + num);
+                Harakiri.get().logChat("HClipped you " + ((num > 0) ? "forward" : "backward") + " " + num);
             }
         } else {
-            Harakiri.INSTANCE.errorChat("Unknown number: " + "\247f\"" + split[1] + "\"");
+            Harakiri.get().errorChat("Unknown number: " + "\247f\"" + split[1] + "\"");
         }
     }
 }

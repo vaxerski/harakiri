@@ -25,14 +25,14 @@ public final class WorldConfig extends Configurable {
         this.getJsonObject().entrySet().forEach(entry -> {
             final String host = entry.getKey();
             final String seed = entry.getValue().getAsJsonArray().get(0).getAsString();
-            Harakiri.INSTANCE.getWorldManager().getWorldDataList().add(new WorldManager.WorldData(host, Long.parseLong(seed)));
+            Harakiri.get().getWorldManager().getWorldDataList().add(new WorldManager.WorldData(host, Long.parseLong(seed)));
         });
     }
 
     @Override
     public void onSave() {
         JsonObject worldListJsonObject = new JsonObject();
-        Harakiri.INSTANCE.getWorldManager().getWorldDataList().forEach(worldData -> {
+        Harakiri.get().getWorldManager().getWorldDataList().forEach(worldData -> {
             final JsonArray array = new JsonArray();
             array.add(worldData.getSeed());
             worldListJsonObject.add(worldData.getHost(), array);

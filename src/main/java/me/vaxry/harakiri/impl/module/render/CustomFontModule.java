@@ -17,12 +17,12 @@ public class CustomFontModule extends Module {
     @Override
     public void onEnable() {
         super.onEnable();
-        Harakiri.INSTANCE.getTTFFontUtil().isTTF = true;
+        Harakiri.get().getTTFFontUtil().isTTF = true;
     }
 
     @Override
     public void onDisable() {
         super.onDisable();
-        Harakiri.INSTANCE.getTTFFontUtil().isTTF = false;
+        Harakiri.get().getTTFFontUtil().isTTF = false;
     }
 }

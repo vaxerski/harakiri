@@ -56,7 +56,7 @@ public final class VisGraphPatch extends ClassPatch {
      */
     public static boolean setOpaqueCubeHook() {
         final EventSetOpaqueCube event = new EventSetOpaqueCube();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }

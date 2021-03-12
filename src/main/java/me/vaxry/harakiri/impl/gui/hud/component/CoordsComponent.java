@@ -15,7 +15,7 @@ public final class CoordsComponent extends DraggableHudComponent {
 
     public CoordsComponent() {
         super("Coords");
-        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+        this.setH(Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -28,7 +28,7 @@ public final class CoordsComponent extends DraggableHudComponent {
             String coordz = ChatFormatting.GRAY + "XYZ: " + ChatFormatting.RESET + df.format(Minecraft.getMinecraft().player.posX) + ChatFormatting.GRAY + ", " + ChatFormatting.RESET +
                     df.format(Minecraft.getMinecraft().player.posY) + ChatFormatting.GRAY + ", " + ChatFormatting.RESET + df.format(Minecraft.getMinecraft().player.posZ);
 
-            NetherCoordsComponent ncc = (NetherCoordsComponent)Harakiri.INSTANCE.getHudManager().findComponent(NetherCoordsComponent.class);
+            NetherCoordsComponent ncc = (NetherCoordsComponent)Harakiri.get().getHudManager().findComponent(NetherCoordsComponent.class);
             if(ncc.isVisible()) {
                 if (mc.player.dimension == 0) {
                     coordz += ChatFormatting.GRAY + " [" + ChatFormatting.RESET + df.format(Minecraft.getMinecraft().player.posX / 8.f) +
@@ -47,12 +47,12 @@ public final class CoordsComponent extends DraggableHudComponent {
                     // End
                 }
             }
-            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(coordz));
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth(coordz));
 
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(coordz, this.getX(), this.getY(), -1);
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(coordz, this.getX(), this.getY(), -1);
         } else {
-            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("(coordinates)"));
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(coordinates)", this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth("(coordinates)"));
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow("(coordinates)", this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 

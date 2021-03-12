@@ -58,7 +58,7 @@ public final class ScaffoldModule extends Module {
     @Override
     public void onDisable() {
         super.onDisable();
-        Harakiri.INSTANCE.getRotationManager().finishTask(this.rotationTask);
+        Harakiri.get().getRotationManager().finishTask(this.rotationTask);
         this.currentPlaceBlock = null;
     }
 
@@ -81,10 +81,10 @@ public final class ScaffoldModule extends Module {
                                 final BlockPos pos = new BlockPos(block.x, block.y, block.z);
 
                                 if (this.rotate.getValue()) {
-                                    Harakiri.INSTANCE.getRotationManager().startTask(this.rotationTask);
+                                    Harakiri.get().getRotationManager().startTask(this.rotationTask);
                                     if (this.rotationTask.isOnline()) {
                                         final float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f));
-                                        Harakiri.INSTANCE.getRotationManager().setPlayerRotations(angle[0], angle[1]);
+                                        Harakiri.get().getRotationManager().setPlayerRotations(angle[0], angle[1]);
                                         this.currentPlaceBlock = pos;
                                     }
                                 } else {
@@ -125,7 +125,7 @@ public final class ScaffoldModule extends Module {
                     this.currentPlaceBlock = null;
                 } else {
                     if (this.rotationTask.isOnline()) {
-                        Harakiri.INSTANCE.getRotationManager().finishTask(this.rotationTask);
+                        Harakiri.get().getRotationManager().finishTask(this.rotationTask);
                     }
                 }
                 break;

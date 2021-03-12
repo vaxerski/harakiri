@@ -33,7 +33,7 @@ public final class CarouselComponent extends HudComponent {
         RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x45303030);
 
         final String displayValueText = this.getName() + ": " + this.displayValue;
-        Harakiri.INSTANCE.getTTFFontUtil().drawString(displayValueText, (int) this.getX() + 1, (int) this.getY() + 1, this.focused ? 0xFFFFFFFF : 0xFFAAAAAA);
+        Harakiri.get().getTTFFontUtil().drawString(displayValueText, (int) this.getX() + 1, (int) this.getY() + 1, this.focused ? 0xFFFFFFFF : 0xFFAAAAAA);
 
         //RenderUtil.drawRect(this.getX() + this.getW() - 18, this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0xFF101010);
         //RenderUtil.drawTriangle(this.getX() + this.getW() - 14, this.getY() + 4, 3, -90, this.focused ? 0x75FFFFFF : 0x75909090);

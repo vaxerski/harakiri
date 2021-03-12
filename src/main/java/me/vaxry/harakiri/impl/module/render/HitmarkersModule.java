@@ -157,8 +157,8 @@ public class HitmarkersModule extends Module {
 
                 Coordinate hitCoord;
 
-                KillAuraModule killAuraModule = (KillAuraModule)Harakiri.INSTANCE.getModuleManager().find(KillAuraModule.class);
-                CrystalAuraModule crystalAuraModule = (CrystalAuraModule)Harakiri.INSTANCE.getModuleManager().find(CrystalAuraModule.class);
+                KillAuraModule killAuraModule = (KillAuraModule)Harakiri.get().getModuleManager().find(KillAuraModule.class);
+                CrystalAuraModule crystalAuraModule = (CrystalAuraModule)Harakiri.get().getModuleManager().find(CrystalAuraModule.class);
 
                 if(killAuraModule.killAuraHit || crystalAuraModule.crystalAuraHit){
                     // Kill aura (or ca), arbitrary hitmarker

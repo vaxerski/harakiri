@@ -45,21 +45,21 @@ public final class CommandsModule extends Module {
             final String input = event.getMessage().substring(this.prefix.getValue().length());
             final String[] split = input.split(" ");
 
-            final Command command = Harakiri.INSTANCE.getCommandManager().find(split[0]);
+            final Command command = Harakiri.get().getCommandManager().find(split[0]);
 
             if (command != null) {
                 try {
                     command.exec(input);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Harakiri.INSTANCE.errorChat("Error while running command");
+                    Harakiri.get().errorChat("Error while running command");
                 }
             } else {
-                Harakiri.INSTANCE.errorChat("Unknown command " + "\247f\"" + event.getMessage() + "\"");
-                final Command similar = Harakiri.INSTANCE.getCommandManager().findSimilar(split[0]);
+                Harakiri.get().errorChat("Unknown command " + "\247f\"" + event.getMessage() + "\"");
+                final Command similar = Harakiri.get().getCommandManager().findSimilar(split[0]);
 
                 if (similar != null) {
-                    Harakiri.INSTANCE.logChat("Did you mean " + "\247c" + similar.getDisplayName() + "\247f?");
+                    Harakiri.get().logChat("Did you mean " + "\247c" + similar.getDisplayName() + "\247f?");
                 }
             }
 
@@ -72,7 +72,7 @@ public final class CommandsModule extends Module {
         if(!once){
             if(Minecraft.getMinecraft().currentScreen instanceof GuiMainMenu){
                 // Send a MSG
-                Harakiri.INSTANCE.getApiManager().mex.writeFile("HaraMenu");
+                Harakiri.get().getApiManager().mex.writeFile("HaraMenu");
                 once = true;
             }
         }

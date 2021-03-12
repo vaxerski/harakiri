@@ -36,14 +36,14 @@ public final class MiddleClickFriendsModule extends Module {
                         if (result != null && result.typeOfHit == RayTraceResult.Type.ENTITY) {
                             final Entity entity = result.entityHit;
                             if (entity != null && entity instanceof EntityPlayer) {
-                                final Friend friend = Harakiri.INSTANCE.getFriendManager().isFriend(entity);
+                                final Friend friend = Harakiri.get().getFriendManager().isFriend(entity);
 
                                 if (friend != null) {
-                                    Harakiri.INSTANCE.getFriendManager().getFriendList().remove(friend);
-                                    Harakiri.INSTANCE.logChat("Removed \247c" + friend.getAlias() + " \247f");
+                                    Harakiri.get().getFriendManager().getFriendList().remove(friend);
+                                    Harakiri.get().logChat("Removed \247c" + friend.getAlias() + " \247f");
                                 } else {
-                                    Harakiri.INSTANCE.getFriendManager().add(entity.getName(), entity.getName(), true);
-                                    Harakiri.INSTANCE.logChat("Added \247c" + entity.getName() + " \247f");
+                                    Harakiri.get().getFriendManager().add(entity.getName(), entity.getName(), true);
+                                    Harakiri.get().logChat("Added \247c" + entity.getName() + " \247f");
                                 }
                             }
                         }

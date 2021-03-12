@@ -115,7 +115,7 @@ public abstract class MixinMinecraft implements MixinMinecraftInterface {
         }
 
         final EventDisplayGui eventEE = new EventDisplayGui(guiScreenIn);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(eventEE);
+        Harakiri.get().getEventManager().dispatchEvent(eventEE);
         if (event.isCanceled()) info.cancel();
 
         info.cancel();
@@ -123,30 +123,30 @@ public abstract class MixinMinecraft implements MixinMinecraftInterface {
 
     @Inject(method = "updateFramebufferSize", at = @At("HEAD"))
     private void onUpdateFramebufferSize(CallbackInfo ci) {
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventUpdateFramebufferSize());
+        Harakiri.get().getEventManager().dispatchEvent(new EventUpdateFramebufferSize());
     }
 
     @Inject(method = "runTick", at = @At("HEAD"))
     private void onRunTickPre(CallbackInfo ci) {
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventRunTick(EventStageable.EventStage.PRE));
+        Harakiri.get().getEventManager().dispatchEvent(new EventRunTick(EventStageable.EventStage.PRE));
     }
 
     @Inject(method = "runTick", at = @At("RETURN"))
     private void onRunTickPost(CallbackInfo ci) {
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventRunTick(EventStageable.EventStage.POST));
+        Harakiri.get().getEventManager().dispatchEvent(new EventRunTick(EventStageable.EventStage.POST));
     }
 
     @Inject(method = "runTickKeyboard", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;currentScreen:Lnet/minecraft/client/gui/GuiScreen;", ordinal = 0), locals = LocalCapture.CAPTURE_FAILSOFT)
     private void onRunTickKeyboard(CallbackInfo ci, int i) {
         if (Keyboard.getEventKeyState()) {
-            Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventKeyPress(i));
+            Harakiri.get().getEventManager().dispatchEvent(new EventKeyPress(i));
         }
     }
 
     @Inject(method = "loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V", cancellable = true, at = @At("HEAD"))
     private void onLoadWorld(WorldClient worldClientIn, String loadingMessage, CallbackInfo ci) {
         final EventLoadWorld event = new EventLoadWorld(worldClientIn);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) ci.cancel();
     }
 }

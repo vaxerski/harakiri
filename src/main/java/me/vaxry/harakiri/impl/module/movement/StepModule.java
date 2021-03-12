@@ -71,7 +71,7 @@ public final class StepModule extends Module {
     private void step(){
         final Minecraft mc = Minecraft.getMinecraft();
 
-        final TimerModule timer = (TimerModule)Harakiri.INSTANCE.getModuleManager().find(TimerModule.class);
+        final TimerModule timer = (TimerModule)Harakiri.get().getModuleManager().find(TimerModule.class);
         if(!timer.isEnabled())
             Minecraft.getMinecraft().timer.tickLength = 50.0f;
 

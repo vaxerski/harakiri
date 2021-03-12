@@ -79,7 +79,7 @@ public final class NetworkManagerPatch extends ClassPatch {
      */
     public static boolean sendPacketHook(Packet packet, EventStageable.EventStage stage) {
         final EventSendPacket event = new EventSendPacket(stage, packet);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -139,7 +139,7 @@ public final class NetworkManagerPatch extends ClassPatch {
     public static boolean channelRead0Hook(Packet packet, EventStageable.EventStage stage) {
         if (packet != null) {
             final EventReceivePacket event = new EventReceivePacket(stage, packet);
-            Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+            Harakiri.get().getEventManager().dispatchEvent(event);
 
             return event.isCanceled();
         }

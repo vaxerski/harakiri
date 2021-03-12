@@ -43,7 +43,7 @@ public final class GuiBossOverlayPatch extends ClassPatch {
 
     public static boolean renderBossHealthHook() {
         final EventRenderBossHealth event = new EventRenderBossHealth();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }

@@ -70,7 +70,7 @@ public final class HudConfig extends Configurable {
             if(settings == null)
                 continue;
 
-            HudComponent component = Harakiri.INSTANCE.getHudManager().findComponent(settings.name);
+            HudComponent component = Harakiri.get().getHudManager().findComponent(settings.name);
 
             if(component == null)
                 continue;
@@ -88,7 +88,7 @@ public final class HudConfig extends Configurable {
                 // Anchor
                 dhc.setAnchorPoint(null);
                 if (!settings.anch.equalsIgnoreCase("na")) {
-                    for (AnchorPoint anchorPoint : Harakiri.INSTANCE.getHudManager().getAnchorPoints()) {
+                    for (AnchorPoint anchorPoint : Harakiri.get().getHudManager().getAnchorPoints()) {
                         if (anchorPoint.getPoint().equals(AnchorPoint.Point.valueOf(settings.anch))) {
                             dhc.setAnchorPoint(anchorPoint);
                         }
@@ -98,7 +98,7 @@ public final class HudConfig extends Configurable {
                 // Stick
                 dhc.setGlued(null);
                 if (!settings.stick.equalsIgnoreCase("na")) {
-                    dhc.setGlued((DraggableHudComponent) Harakiri.INSTANCE.getHudManager().findComponent(settings.stick));
+                    dhc.setGlued((DraggableHudComponent) Harakiri.get().getHudManager().findComponent(settings.stick));
                 }
 
                 // StickSide
@@ -118,7 +118,7 @@ public final class HudConfig extends Configurable {
 
         ArrayList<HudConfigJSON> hudConfigJSONS = new ArrayList<>();
 
-        for(HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+        for(HudComponent component : Harakiri.get().getHudManager().getComponentList()) {
             if(component instanceof DraggableHudComponent) {
                 DraggableHudComponent draggableHudComponent = (DraggableHudComponent)component;
                 hudConfigJSONS.add(new HudConfigJSON(

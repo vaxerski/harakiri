@@ -110,7 +110,7 @@ public final class MovementGraphComponent extends ResizableHudComponent {
                 // draw text
                 if (i == this.movementNodes.size() - 1) {
                     final String textToDraw = decimalFormat.format(movementNode.speed) + "bps";
-                    Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(textToDraw, movementNode.mappedX - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(textToDraw), movementNode.mappedY + 3, 0xFFAAAAAA);
+                    Harakiri.get().getTTFFontUtil().drawStringWithShadow(textToDraw, movementNode.mappedX - Harakiri.get().getTTFFontUtil().getStringWidth(textToDraw), movementNode.mappedY + 3, 0xFFAAAAAA);
                 }
 
                 // draw hover
@@ -129,12 +129,12 @@ public final class MovementGraphComponent extends ResizableHudComponent {
 
             if (this.isMouseInside(mouseX, mouseY)) { // mouse is inside
                 // draw delay
-                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.delay.getValue() + "ms", this.getX() + 2, this.getY() + this.getH() - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - 1, 0xFFAAAAAA);
+                Harakiri.get().getTTFFontUtil().drawStringWithShadow(this.delay.getValue() + "ms", this.getX() + 2, this.getY() + this.getH() - Harakiri.get().getTTFFontUtil().FONT_HEIGHT - 1, 0xFFAAAAAA);
             }
 
             // draw hovered data
             if (!hoveredData.equals("")) {
-                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(hoveredData, this.getX() + 2, this.getY() + this.getH() - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT * 2 - 1, 0xFFAAAAAA);
+                Harakiri.get().getTTFFontUtil().drawStringWithShadow(hoveredData, this.getX() + 2, this.getY() + this.getH() - Harakiri.get().getTTFFontUtil().FONT_HEIGHT * 2 - 1, 0xFFAAAAAA);
             }
 
             // disable scissor
@@ -143,7 +143,7 @@ public final class MovementGraphComponent extends ResizableHudComponent {
             // border
             RenderUtil.drawBorderedRectBlurred(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 2.0f, 0x00000000, 0x90101010);
         } else {
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(movement)", this.getX(), this.getY(), 0xFFAAAAAA);
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow("(movement)", this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 

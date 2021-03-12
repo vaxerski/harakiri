@@ -32,7 +32,7 @@ public final class FriendManager {
         final Friend friend = new Friend(name, alias);
         this.friendList.add(friend);
 
-        //harakiri.INSTANCE.getConfigManager().save(FriendConfig.class);
+        //Harakiri.get().getConfigManager().save(FriendConfig.class);
 
         if (grabUUID) {
             try {
@@ -47,7 +47,7 @@ public final class FriendManager {
                         final JSONObject obj = (JSONObject) JSONValue.parseWithException(json);
                         final String uuid = obj.get("id").toString();
                         friend.setUuid(uuid);
-                        //harakiri.INSTANCE.getConfigManager().save(FriendConfig.class);
+                        //Harakiri.get().getConfigManager().save(FriendConfig.class);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     } catch (MalformedURLException e) {

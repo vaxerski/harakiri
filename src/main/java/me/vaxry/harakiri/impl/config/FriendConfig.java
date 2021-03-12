@@ -39,14 +39,14 @@ public final class FriendConfig extends Configurable {
                 }
             }
 
-            Harakiri.INSTANCE.getFriendManager().getFriendList().add(new Friend(name, uuid, alias));
+            Harakiri.get().getFriendManager().getFriendList().add(new Friend(name, uuid, alias));
         });
     }
 
     @Override
     public void onSave() {
         JsonObject friendsListJsonObject = new JsonObject();
-        Harakiri.INSTANCE.getFriendManager().getFriendList().forEach(friend -> {
+        Harakiri.get().getFriendManager().getFriendList().forEach(friend -> {
             JsonArray array = new JsonArray();
             array.add(friend.getAlias());
             array.add(friend.getUuid());

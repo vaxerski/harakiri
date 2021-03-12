@@ -89,7 +89,7 @@ public final class AutoWalkModule extends Module {
 
             if (this.autoDisable.getValue()) {
                 if (!Minecraft.getMinecraft().player.isEntityAlive()) { // player is dead, check auto disable
-                    Harakiri.INSTANCE.logChat(this.getDisplayName() + ": " + "Disabled automatically.");
+                    Harakiri.get().logChat(this.getDisplayName() + ": " + "Disabled automatically.");
                     this.toggle(); // toggle off
                 }
             }
@@ -112,7 +112,7 @@ public final class AutoWalkModule extends Module {
         if (this.baritoneCommand.getValue().length() > 0) {
             Minecraft.getMinecraft().player.sendChatMessage(this.baritoneCommand.getValue());
         } else {
-            Harakiri.INSTANCE.logChat(this.getDisplayName() + ": " + "Please enter a command to send to baritone.");
+            Harakiri.get().logChat(this.getDisplayName() + ": " + "Please enter a command to send to baritone.");
             this.toggle(); // toggle off
         }
     }
@@ -121,7 +121,7 @@ public final class AutoWalkModule extends Module {
         if (this.baritoneCancelCommand.getValue().length() > 0) {
             Minecraft.getMinecraft().player.sendChatMessage(this.baritoneCancelCommand.getValue());
         } else {
-            Harakiri.INSTANCE.logChat(this.getDisplayName() + ": " + "Please check your syntax for the \"" + this.baritoneCancelCommand.getName() + "\" value.");
+            Harakiri.get().logChat(this.getDisplayName() + ": " + "Please check your syntax for the \"" + this.baritoneCancelCommand.getName() + "\" value.");
         }
     }
 }

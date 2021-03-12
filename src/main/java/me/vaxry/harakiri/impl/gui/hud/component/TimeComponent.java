@@ -13,7 +13,7 @@ public final class TimeComponent extends DraggableHudComponent {
 
     public TimeComponent() {
         super("Time");
-        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+        this.setH(Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -22,7 +22,7 @@ public final class TimeComponent extends DraggableHudComponent {
 
         final String time = new SimpleDateFormat("h:mm a").format(new Date());
 
-        this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(time));
-        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(time, this.getX(), this.getY(), -1);
+        this.setW(Harakiri.get().getTTFFontUtil().getStringWidth(time));
+        Harakiri.get().getTTFFontUtil().drawStringWithShadow(time, this.getX(), this.getY(), -1);
     }
 }

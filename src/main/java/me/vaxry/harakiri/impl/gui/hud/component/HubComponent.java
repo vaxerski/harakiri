@@ -32,7 +32,7 @@ public final class HubComponent extends ResizableHudComponent {
     private final int BORDER = 2;
     private final int TEXT_GAP = 1;
     private final int TEXTURE_SIZE = 8;
-    private final int TITLE_BAR_HEIGHT = Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1;
+    private final int TITLE_BAR_HEIGHT = Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 1;
 
     private int ACCENT_COLOR = 0xFFCCFF66;
     private int ACCENT_COLOR_BG = 0x44CCFF66;
@@ -100,18 +100,18 @@ public final class HubComponent extends ResizableHudComponent {
             }
         }
 
-        final HudEditorModule hem = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
+        final HudEditorModule hem = (HudEditorModule) Harakiri.get().getModuleManager().find(HudEditorModule.class);
         ACCENT_COLOR = 0xFF000000 + hem.color.getValue().getRGB();
         ACCENT_COLOR_BG = 0x44000000 + hem.color.getValue().getRGB();
 
-        final HudModule hm = (HudModule) Harakiri.INSTANCE.getModuleManager().find(HudModule.class);
+        final HudModule hm = (HudModule) Harakiri.get().getModuleManager().find(HudModule.class);
         if(hm.rainbow.getValue())
             useRainbow = true;
         else
             useRainbow = false;
 
-        rainbowCol = Harakiri.INSTANCE.getHudEditor().rainbowColor;
-        rainbowColBG = 0x45000000 + Harakiri.INSTANCE.getHudEditor().rainbowColor - 0xFF000000;
+        rainbowCol = Harakiri.get().getHudEditor().rainbowColor;
+        rainbowColBG = 0x45000000 + Harakiri.get().getHudEditor().rainbowColor - 0xFF000000;
 
         // Background & title
         //RenderUtil.begin2D();
@@ -119,14 +119,14 @@ public final class HubComponent extends ResizableHudComponent {
         RenderUtil.drawRoundedRect(this.getX(), this.getY(), this.getW(), this.getH() + BORDER, 5, 0x22202020); //0xFF
 
         // Draw top area
-        RenderUtil.drawRoundedRectTop(this.getX(), this.getY(), this.getW(), Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + BORDER, 5, this.useRainbow ? ColorUtil.changeAlpha(rainbowCol, 0x77) : ColorUtil.changeAlpha(ACCENT_COLOR, 0x77));
+        RenderUtil.drawRoundedRectTop(this.getX(), this.getY(), this.getW(), Harakiri.get().getTTFFontUtil().FONT_HEIGHT + BORDER, 5, this.useRainbow ? ColorUtil.changeAlpha(rainbowCol, 0x77) : ColorUtil.changeAlpha(ACCENT_COLOR, 0x77));
 
         //GlStateManager.enableBlend();
         //texture.bind();
         //texture.render(this.getX() + BORDER, this.getY() + BORDER, TEXTURE_SIZE, TEXTURE_SIZE);
         //GlStateManager.disableBlend();
-        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.getName(), this.getX() - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(this.getName())/2.f + this.getW() / 2.f, this.getY() + BORDER, 0xFFDDDDDD);
-        offsetY += Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
+        Harakiri.get().getTTFFontUtil().drawStringWithShadow(this.getName(), this.getX() - Harakiri.get().getTTFFontUtil().getStringWidth(this.getName())/2.f + this.getW() / 2.f, this.getY() + BORDER, 0xFFDDDDDD);
+        offsetY += Harakiri.get().getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
 
         // Behind hub
         //RenderUtil.drawRoundedRect(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getW() - SCROLL_WIDTH - BORDER, this.getH() - BORDER, 5, 0x22101010); //0xff
@@ -152,14 +152,14 @@ public final class HubComponent extends ResizableHudComponent {
         // Begin scissoring and render the component "buttons"
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         RenderUtil.glScissor(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getX() + this.getW() - BORDER - SCROLL_WIDTH, this.getY() + this.getH() - BORDER, sr);
-        for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+        for (HudComponent component : Harakiri.get().getHudManager().getComponentList()) {
             if (component != this && !(component instanceof ModuleListComponent) && !(component instanceof SwitchViewComponent) && !(component instanceof ModuleSearchComponent)) {
                 if(useRainbow)
-                    RenderUtil.drawGradientRectLeftRight(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - this.scroll, component.isVisible() ? rainbowColBG : 0x451F1C22, 0x00000000);
+                    RenderUtil.drawGradientRectLeftRight(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.get().getTTFFontUtil().FONT_HEIGHT - this.scroll, component.isVisible() ? rainbowColBG : 0x451F1C22, 0x00000000);
                 else
-                    RenderUtil.drawGradientRectLeftRight(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - this.scroll, component.isVisible() ? ACCENT_COLOR_BG : 0x451F1C22, 0x00000000);
+                    RenderUtil.drawGradientRectLeftRight(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.get().getTTFFontUtil().FONT_HEIGHT - this.scroll, component.isVisible() ? ACCENT_COLOR_BG : 0x451F1C22, 0x00000000);
 
-                final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1 + offsetY - this.scroll - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1) && mouseY <= (this.getY() + BORDER + (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT) + 1 + offsetY - this.scroll);
+                final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 1 + offsetY - this.scroll - Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 1) && mouseY <= (this.getY() + BORDER + (Harakiri.get().getTTFFontUtil().FONT_HEIGHT) + 1 + offsetY - this.scroll);
                 if (insideComponent) {
                     if(component.highlightA < 48.f){
                         component.highlightA += Math.min(5.f * 60.f * framejitter, 10);
@@ -185,16 +185,16 @@ public final class HubComponent extends ResizableHudComponent {
                     }
                 }
 
-                RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - this.scroll, ((int)component.highlightA * 0x1000000) + 0x909090); //0x00101010
+                RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.get().getTTFFontUtil().FONT_HEIGHT - this.scroll, ((int)component.highlightA * 0x1000000) + 0x909090); //0x00101010
 
 
                 // draw button text
                 if(useRainbow)
-                    Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(component.getName(), this.getX() + BORDER + TEXT_GAP + 1 + component.xOffset, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, component.isVisible() ? rainbowCol : 0xFFAAAAB7);
+                    Harakiri.get().getTTFFontUtil().drawStringWithShadow(component.getName(), this.getX() + BORDER + TEXT_GAP + 1 + component.xOffset, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, component.isVisible() ? rainbowCol : 0xFFAAAAB7);
                 else
-                    Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(component.getName(), this.getX() + BORDER + TEXT_GAP + 1 + component.xOffset, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, component.isVisible() ? ACCENT_COLOR : 0xFFAAAAB7);
+                    Harakiri.get().getTTFFontUtil().drawStringWithShadow(component.getName(), this.getX() + BORDER + TEXT_GAP + 1 + component.xOffset, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, component.isVisible() ? ACCENT_COLOR : 0xFFAAAAB7);
 
-                offsetY += Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
+                offsetY += Harakiri.get().getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
             }
         }
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
@@ -213,14 +213,14 @@ public final class HubComponent extends ResizableHudComponent {
         if (inside && button == 0 && !insideTitlebar) {
             int offsetY = BORDER;
 
-            for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+            for (HudComponent component : Harakiri.get().getHudManager().getComponentList()) {
                 if (component != this && !(component instanceof ModuleListComponent) && !(component instanceof SwitchViewComponent) && !(component instanceof ModuleSearchComponent)) {
-                    final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1 + offsetY - this.scroll) && mouseY <= (this.getY() + BORDER + (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT * 2) + 1 + offsetY - this.scroll);
+                    final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 1 + offsetY - this.scroll) && mouseY <= (this.getY() + BORDER + (Harakiri.get().getTTFFontUtil().FONT_HEIGHT * 2) + 1 + offsetY - this.scroll);
                     if (insideComponent) {
                         component.setVisible(!component.isVisible());
-                        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventHubComponentClick(component.getName(), component.isVisible()));
+                        Harakiri.get().getEventManager().dispatchEvent(new EventHubComponentClick(component.getName(), component.isVisible()));
                     }
-                    offsetY += Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
+                    offsetY += Harakiri.get().getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
                 }
             }
 

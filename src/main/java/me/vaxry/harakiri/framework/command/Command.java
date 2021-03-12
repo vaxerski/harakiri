@@ -38,11 +38,11 @@ public abstract class Command {
     public boolean clamp(String input, int min, int max) {
         String[] split = input.split(" ");
         if (split.length > max) {
-            Harakiri.INSTANCE.errorChat("Syntax invalid: Too much input");
+            Harakiri.get().errorChat("Syntax invalid: Too much input");
             return false;
         }
         if (split.length < min) {
-            Harakiri.INSTANCE.errorChat("Syntax invalid: Not enough input");
+            Harakiri.get().errorChat("Syntax invalid: Not enough input");
             return false;
         }
         return true;
@@ -51,7 +51,7 @@ public abstract class Command {
     public boolean clamp(String input, int min) {
         String[] split = input.split(" ");
         if (split.length < min) {
-            Harakiri.INSTANCE.errorChat("Syntax invalid: Not enough input");
+            Harakiri.get().errorChat("Syntax invalid: Not enough input");
             return false;
         }
         return true;
@@ -68,13 +68,13 @@ public abstract class Command {
 
     public void printUsage() {
         final String[] usage = this.getUsage().split("\n");
-        Harakiri.INSTANCE.logChat("Showing usage for " + this.displayName);
+        Harakiri.get().logChat("Showing usage for " + this.displayName);
 
         if (this.textComponentUsage != null) {
-            this.getTextComponentUsage().getSiblings().forEach(Harakiri.INSTANCE::logcChat);
+            this.getTextComponentUsage().getSiblings().forEach(Harakiri.get()::logcChat);
         } else {
             for (String u : usage) {
-                Harakiri.INSTANCE.logChat(u);
+                Harakiri.get().logChat(u);
             }
         }
     }

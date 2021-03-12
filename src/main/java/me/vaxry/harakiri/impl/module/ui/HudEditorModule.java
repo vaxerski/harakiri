@@ -42,7 +42,7 @@ public final class HudEditorModule extends Module {
         this.color.setValue(new Color(colorR.getValue(), colorG.getValue(), colorB.getValue()));
 
         if (mc.world != null) {
-            mc.displayGuiScreen(Harakiri.INSTANCE.getHudEditor());
+            mc.displayGuiScreen(Harakiri.get().getHudEditor());
 
             if (this.blur.getValue()) {
                 if (OpenGlHelper.shadersSupported) {

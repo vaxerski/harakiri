@@ -30,22 +30,22 @@ public final class SeedCommand extends Command {
         if (StringUtil.isLong(split[1], 10)) {
             final ServerData serverData = Minecraft.getMinecraft().getCurrentServerData();
             if (serverData != null) {
-                final WorldManager.WorldData worldData = Harakiri.INSTANCE.getWorldManager().find(serverData.serverIP);
+                final WorldManager.WorldData worldData = Harakiri.get().getWorldManager().find(serverData.serverIP);
                 if (worldData != null) {
                     final long seed = Long.parseLong(split[1]);
                     worldData.setSeed(seed);
-                    Harakiri.INSTANCE.logChat("Set " + serverData.serverIP + "'s seed to " + seed);
+                    Harakiri.get().logChat("Set " + serverData.serverIP + "'s seed to " + seed);
                 } else {
                     final long seed = Long.parseLong(split[1]);
-                    Harakiri.INSTANCE.getWorldManager().getWorldDataList().add(new WorldManager.WorldData(serverData.serverIP, seed));
-                    Harakiri.INSTANCE.logChat("Set " + serverData.serverIP + "'s seed to " + seed);
+                    Harakiri.get().getWorldManager().getWorldDataList().add(new WorldManager.WorldData(serverData.serverIP, seed));
+                    Harakiri.get().logChat("Set " + serverData.serverIP + "'s seed to " + seed);
                 }
-                Harakiri.INSTANCE.getConfigManager().save(WorldConfig.class);
+                Harakiri.get().getConfigManager().save(WorldConfig.class);
             } else {
-                Harakiri.INSTANCE.errorChat("Cannot set seed for localhost");
+                Harakiri.get().errorChat("Cannot set seed for localhost");
             }
         } else {
-            Harakiri.INSTANCE.errorChat("Unknown number " + "\247f\"" + split[1] + "\"");
+            Harakiri.get().errorChat("Unknown number " + "\247f\"" + split[1] + "\"");
         }
     }
 }

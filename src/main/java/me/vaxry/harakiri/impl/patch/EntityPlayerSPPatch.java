@@ -74,11 +74,11 @@ public final class EntityPlayerSPPatch extends ClassPatch {
     public static boolean onUpdateHook(EventStageable.EventStage stage) {
         //dispatch our event and pass the stage in
         final EventPlayerUpdate event = new EventPlayerUpdate(stage);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         if (stage == EventStageable.EventStage.PRE) {
             //update all camera fbos after we render
-            Harakiri.INSTANCE.getCameraManager().update();
+            Harakiri.get().getCameraManager().update();
         }
 
         return event.isCanceled();
@@ -133,17 +133,17 @@ public final class EntityPlayerSPPatch extends ClassPatch {
      */
     public static boolean onUpdateWalkingPlayerHook(EventStageable.EventStage stage) {
         if (stage == EventStageable.EventStage.PRE) {
-            Harakiri.INSTANCE.getRotationManager().updateRotations();
-            Harakiri.INSTANCE.getPositionManager().updatePosition();
+            Harakiri.get().getRotationManager().updateRotations();
+            Harakiri.get().getPositionManager().updatePosition();
         }
 
         //dispatch our event and pass the stage in
         final EventUpdateWalkingPlayer event = new EventUpdateWalkingPlayer(stage);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         if (stage == EventStageable.EventStage.POST) {
-            Harakiri.INSTANCE.getRotationManager().restoreRotations();
-            Harakiri.INSTANCE.getPositionManager().restorePosition();
+            Harakiri.get().getRotationManager().restoreRotations();
+            Harakiri.get().getPositionManager().restorePosition();
         }
 
         return event.isCanceled();
@@ -188,7 +188,7 @@ public final class EntityPlayerSPPatch extends ClassPatch {
     public static boolean sendChatMessageHook(String message) {
         //dispatch our event and pass the message in
         final EventSendChatMessage event = new EventSendChatMessage(message);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -229,7 +229,7 @@ public final class EntityPlayerSPPatch extends ClassPatch {
     public static boolean swingArmHook(EnumHand hand) {
         //dispatch our event and pass the EnumHand in
         final EventSwingArm event = new EventSwingArm(hand);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -270,7 +270,7 @@ public final class EntityPlayerSPPatch extends ClassPatch {
     public static boolean closeScreenHook() {
         //dispatch our event
         final EventCloseScreen event = new EventCloseScreen();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -306,7 +306,7 @@ public final class EntityPlayerSPPatch extends ClassPatch {
     public static boolean pushOutOfBlocksHook() {
         //dispatch our event
         final EventPushOutOfBlocks event = new EventPushOutOfBlocks();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -336,7 +336,7 @@ public final class EntityPlayerSPPatch extends ClassPatch {
     public static void onLivingUpdateHook() {
         //dispatch our event
         final EventUpdateInput event = new EventUpdateInput();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
     }
 
     @MethodPatch(
@@ -412,7 +412,7 @@ public final class EntityPlayerSPPatch extends ClassPatch {
     public static boolean isHandActiveHook() {
         //dispatch our event
         final EventHandActive event = new EventHandActive();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         return event.isCanceled();
     }
 }

@@ -51,7 +51,7 @@ public final class BlockStairsPatch extends ClassPatch {
     public static boolean addCollisionBoxToListHook(BlockPos pos, Entity entity) {
         //dispatch our event and pass the block and entity in
         final EventAddCollisionBox event = new EventAddCollisionBox(pos, entity);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }

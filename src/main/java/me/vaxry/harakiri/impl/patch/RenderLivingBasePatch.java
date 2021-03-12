@@ -65,7 +65,7 @@ public final class RenderLivingBasePatch extends ClassPatch {
     public static boolean renderNameHook(EntityLivingBase entity) {
         //dispatch our event and pass the entity in
         final EventRenderName event = new EventRenderName(entity);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -121,7 +121,7 @@ public final class RenderLivingBasePatch extends ClassPatch {
      */
     public static boolean doRenderHook(EntityLivingBase entity, EventStageable.EventStage stage) {
         final EventRenderLivingEntity event = new EventRenderLivingEntity(stage, entity);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
 
         return event.isCanceled();

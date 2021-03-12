@@ -44,7 +44,7 @@ public final class EntityDesyncModule extends Module {
                     if (this.originalRidingEntity.equals(Minecraft.getMinecraft().world.getEntityByID(packetSetPassengers.getEntityId()))) {
                         OptionalInt isPlayerAPassenger = Arrays.stream(packetSetPassengers.getPassengerIds()).filter(value -> Minecraft.getMinecraft().world.getEntityByID(value) == Minecraft.getMinecraft().player).findAny();
                         if (!isPlayerAPassenger.isPresent()) { // local player is not a passenger
-                            Harakiri.INSTANCE.logChat("You've been dismounted."); // notify the player
+                            Harakiri.get().logChat("You've been dismounted."); // notify the player
                             this.toggle(); // toggle the module
                         }
                     }
@@ -55,7 +55,7 @@ public final class EntityDesyncModule extends Module {
                 SPacketDestroyEntities packetDestroyEntities = (SPacketDestroyEntities) event.getPacket();
                 boolean isEntityNull = Arrays.stream(packetDestroyEntities.getEntityIDs()).filter(value -> value == originalRidingEntity.getEntityId()).findAny().isPresent();
                 if (isEntityNull) { // found the entity in the packet
-                    Harakiri.INSTANCE.logChat("The current riding entity is now null (destroyed or deleted)."); // notify the player
+                    Harakiri.get().logChat("The current riding entity is now null (destroyed or deleted)."); // notify the player
                 }
             }
         }
@@ -114,16 +114,16 @@ public final class EntityDesyncModule extends Module {
                 // dismount
                 if (this.dismountEntity.getValue()) {
                     mc.player.dismountRidingEntity();
-                    Harakiri.INSTANCE.logChat("Dismounted entity.");
+                    Harakiri.get().logChat("Dismounted entity.");
                 }
 
                 // remove
                 if (this.removeEntity.getValue()) {
                     mc.world.removeEntity(this.originalRidingEntity);
-                    Harakiri.INSTANCE.logChat("Removed entity from world.");
+                    Harakiri.get().logChat("Removed entity from world.");
                 }
             } else {
-                Harakiri.INSTANCE.logChat("Please mount an entity before enabling this module.");
+                Harakiri.get().logChat("Please mount an entity before enabling this module.");
                 this.toggle(); // disable module
             }
         }
@@ -143,7 +143,7 @@ public final class EntityDesyncModule extends Module {
             if (!mc.player.isRiding()) {
                 mc.world.spawnEntity(this.originalRidingEntity); // spawn the entity back in
                 mc.player.startRiding(this.originalRidingEntity, true); // begin riding the entity (forced)
-                Harakiri.INSTANCE.logChat("Spawned & mounted original entity."); // notify the player we successfully remounted
+                Harakiri.get().logChat("Spawned & mounted original entity."); // notify the player we successfully remounted
             }
 
             // delete the old entity now

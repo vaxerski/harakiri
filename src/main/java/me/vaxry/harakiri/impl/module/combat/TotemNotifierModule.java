@@ -46,7 +46,7 @@ public class TotemNotifierModule extends Module {
                             }
                         } else if (offhandItem == Items.AIR) {
                             if (entitiesWithTotems.contains(entity.getEntityId())) {
-                                Harakiri.INSTANCE.getNotificationManager().addNotification("", entity.getName() + " just popped a totem.");
+                                Harakiri.get().getNotificationManager().addNotification("", entity.getName() + " just popped a totem.");
                                 entitiesWithTotems.removeIf(i -> i.equals(entity.getEntityId()));
                             }
                         }

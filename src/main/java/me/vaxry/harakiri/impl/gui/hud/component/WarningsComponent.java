@@ -33,7 +33,7 @@ public class WarningsComponent extends DraggableHudComponent {
         this.setX(200);
         this.setY(200);
 
-        Harakiri.INSTANCE.getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().addEventListener(this);
     }
 
     @Override
@@ -104,18 +104,18 @@ public class WarningsComponent extends DraggableHudComponent {
         }
 
         for(String warn : warns){
-            float w = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(warn);
+            float w = Harakiri.get().getTTFFontUtil().getStringWidth(warn);
             if(w > maxX)
                 maxX = w;
         }
 
         float maxY = 2;
         for(String warn : warns){
-            float h = Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT;
+            float h = Harakiri.get().getTTFFontUtil().FONT_HEIGHT;
             maxY += h + 1;
         }
 
-        float ICON_SIZE = Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT;
+        float ICON_SIZE = Harakiri.get().getTTFFontUtil().FONT_HEIGHT;
         final ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
 
         maxX += ICON_SIZE; // PNG Exclamation point
@@ -133,8 +133,8 @@ public class WarningsComponent extends DraggableHudComponent {
             RenderUtil.drawRect(this.getX() - this.SAFEZONE_X + this.getW(), this.getY() - this.SAFEZONE_Y, this.getX() /*No safezone cuz its ok*/, this.getY() + this.getH() + this.SAFEZONE_Y, 0x44000000);
             for (String warn : warns) {
                 // Draw text
-                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(warn, this.getX() -
-                        Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(warn) - ICON_SIZE - 2, this.getY() + offY, 0xFFFFFFFF);
+                Harakiri.get().getTTFFontUtil().drawStringWithShadow(warn, this.getX() -
+                        Harakiri.get().getTTFFontUtil().getStringWidth(warn) - ICON_SIZE - 2, this.getY() + offY, 0xFFFFFFFF);
 
                 GlStateManager.enableAlpha();
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -150,14 +150,14 @@ public class WarningsComponent extends DraggableHudComponent {
                 GlStateManager.disableBlend();
                 GlStateManager.disableAlpha();
 
-                offY += Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1;
+                offY += Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 1;
             }
         }else{
             RenderUtil.drawRect(this.getX() /*No safezone cuz its ok*/, this.getY() - this.SAFEZONE_Y, this.getX() + this.getW() + this.SAFEZONE_X, this.getY() + this.getH() + this.SAFEZONE_Y, 0x44000000);
 
             for (String warn : warns) {
                 // Draw text
-                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(warn, this.getX() + ICON_SIZE + 2, this.getY() + offY, 0xFFFFFFFF);
+                Harakiri.get().getTTFFontUtil().drawStringWithShadow(warn, this.getX() + ICON_SIZE + 2, this.getY() + offY, 0xFFFFFFFF);
 
                 GlStateManager.enableAlpha();
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -173,7 +173,7 @@ public class WarningsComponent extends DraggableHudComponent {
                 GlStateManager.disableBlend();
                 GlStateManager.disableAlpha();
 
-                offY += Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1;
+                offY += Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 1;
             }
         }
     }

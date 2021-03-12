@@ -41,7 +41,7 @@ public class ResizableHudComponent extends DraggableHudComponent {
                 this.setDragging(false);
                 this.setResizeDeltaX(mouseX - this.getW());
                 this.setResizeDeltaY(mouseY - this.getH());
-                Harakiri.INSTANCE.getHudManager().moveToTop(this);
+                Harakiri.get().getHudManager().moveToTop(this);
             }
         }
     }

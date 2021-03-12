@@ -23,7 +23,7 @@ public class HaraMainMenu extends GuiMainMenu {
     private final float Y_OFFSET = 0;
 
     public HaraMainMenu(){
-        Harakiri.INSTANCE.getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().addEventListener(this);
     }
 
     @Listener
@@ -77,22 +77,22 @@ public class HaraMainMenu extends GuiMainMenu {
         GlStateManager.disableAlpha();
         GlStateManager.disableBlend();
 
-        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("Do not distribute", 0, res.getScaledHeight() -
-                2*Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - 2, 0xFFFFFFFF);
-        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("Copyright Mojang AB", 0, res.getScaledHeight()
-                - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - 1, 0xFFFFFFFF);
+        Harakiri.get().getTTFFontUtil().drawStringWithShadow("Do not distribute", 0, res.getScaledHeight() -
+                2*Harakiri.get().getTTFFontUtil().FONT_HEIGHT - 2, 0xFFFFFFFF);
+        Harakiri.get().getTTFFontUtil().drawStringWithShadow("Copyright Mojang AB", 0, res.getScaledHeight()
+                - Harakiri.get().getTTFFontUtil().FONT_HEIGHT - 1, 0xFFFFFFFF);
 
-        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("Harakiri v" + harakiriMod.VERSION, res.getScaledWidth() -
-                Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("Harakiri v" + harakiriMod.VERSION) - 2,
-                res.getScaledHeight() - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - 1,
+        Harakiri.get().getTTFFontUtil().drawStringWithShadow("Harakiri v" + harakiriMod.VERSION, res.getScaledWidth() -
+                Harakiri.get().getTTFFontUtil().getStringWidth("Harakiri v" + harakiriMod.VERSION) - 2,
+                res.getScaledHeight() - Harakiri.get().getTTFFontUtil().FONT_HEIGHT - 1,
                 0xFFFFFFFF);
 
-        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("Logged in as " + Harakiri.INSTANCE.getUsername(),
-                res.getScaledWidth() - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("Logged in as " + Harakiri.INSTANCE.getUsername()) - 2,
+        Harakiri.get().getTTFFontUtil().drawStringWithShadow("Logged in as " + Harakiri.get().getUsername(),
+                res.getScaledWidth() - Harakiri.get().getTTFFontUtil().getStringWidth("Logged in as " + Harakiri.get().getUsername()) - 2,
                 0,
                 0xFFFFFFFF);
 
-        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("Account Manager",
+        Harakiri.get().getTTFFontUtil().drawStringWithShadow("Account Manager",
                 0,
                 0,
                 0xFFFFFFFF);
@@ -116,9 +116,9 @@ public class HaraMainMenu extends GuiMainMenu {
         super.mouseReleased(mouseX, mouseY, state);
 
         if(mouseX > 0 &&
-            mouseX < Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("Account Manager") * 1.5f &&
+            mouseX < Harakiri.get().getTTFFontUtil().getStringWidth("Account Manager") * 1.5f &&
             mouseY > 0 &&
-            mouseY < Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT * 1.5f){
+            mouseY < Harakiri.get().getTTFFontUtil().FONT_HEIGHT * 1.5f){
             // Clicked the manager
 
             mc.displayGuiScreen(new HaraAccountManager(this));

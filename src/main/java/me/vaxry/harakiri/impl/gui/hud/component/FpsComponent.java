@@ -13,7 +13,7 @@ public final class FpsComponent extends DraggableHudComponent {
 
     public FpsComponent() {
         super("Fps");
-        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+        this.setH(Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -22,11 +22,11 @@ public final class FpsComponent extends DraggableHudComponent {
 
         if (mc.world != null) {
             final String fps = ChatFormatting.GRAY + "FPS: " + ChatFormatting.RESET + Minecraft.getDebugFPS();
-            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(fps));
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(fps, this.getX(), this.getY(), -1);
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth(fps));
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(fps, this.getX(), this.getY(), -1);
         } else {
-            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("(fps)"));
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(fps)", this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth("(fps)"));
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow("(fps)", this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 }

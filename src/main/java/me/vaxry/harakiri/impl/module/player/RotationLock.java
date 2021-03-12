@@ -34,12 +34,12 @@ public final class RotationLock extends Module {
 
     @Listener
     public void onUpdate(EventPlayerUpdate event) {
-        Harakiri.INSTANCE.getRotationManager().updateRotations();
+        Harakiri.get().getRotationManager().updateRotations();
         if (this.yawLock.getValue()) {
-            Harakiri.INSTANCE.getRotationManager().setPlayerYaw(this.yaw);
+            Harakiri.get().getRotationManager().setPlayerYaw(this.yaw);
         }
         if (this.pitchLock.getValue()) {
-            Harakiri.INSTANCE.getRotationManager().setPlayerPitch(this.pitch);
+            Harakiri.get().getRotationManager().setPlayerPitch(this.pitch);
         }
     }
 

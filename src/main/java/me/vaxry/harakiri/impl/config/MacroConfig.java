@@ -25,14 +25,14 @@ public final class MacroConfig extends Configurable {
             final String name = entry.getKey();
             final String key = entry.getValue().getAsJsonArray().get(0).getAsString();
             final String macro = entry.getValue().getAsJsonArray().get(1).getAsString();
-            Harakiri.INSTANCE.getMacroManager().getMacroList().add(new Macro(name, key, macro));
+            Harakiri.get().getMacroManager().getMacroList().add(new Macro(name, key, macro));
         });
     }
 
     @Override
     public void onSave() {
         JsonObject macroListObject = new JsonObject();
-        Harakiri.INSTANCE.getMacroManager().getMacroList().forEach(macro -> {
+        Harakiri.get().getMacroManager().getMacroList().forEach(macro -> {
             JsonArray array = new JsonArray();
             array.add(macro.getKey());
             array.add(macro.getMacro());

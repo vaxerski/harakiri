@@ -30,14 +30,14 @@ public final class NotificationsComponent extends DraggableHudComponent {
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
 
-        WatermarkComponent watermarkComponent = (WatermarkComponent)Harakiri.INSTANCE.getHudManager().findComponent(WatermarkComponent.class);
+        WatermarkComponent watermarkComponent = (WatermarkComponent)Harakiri.get().getHudManager().findComponent(WatermarkComponent.class);
 
-        int offsetY = watermarkComponent.isVisible() ? Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 4 : 1;
+        int offsetY = watermarkComponent.isVisible() ? Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 4 : 1;
         float maxWidth = 0;
 
         final ScaledResolution sr = new ScaledResolution(mc);
 
-        for (Notification notification : Harakiri.INSTANCE.getNotificationManager().getNotifications()) {
+        for (Notification notification : Harakiri.get().getNotificationManager().getNotifications()) {
 
             float offsetX = 0;
 
@@ -45,7 +45,7 @@ public final class NotificationsComponent extends DraggableHudComponent {
                 switch (this.getAnchorPoint().getPoint()) {
                     case TOP_CENTER:
                     case BOTTOM_CENTER:
-                        offsetX = (this.getW() - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(notification.getText())) / 2;
+                        offsetX = (this.getW() - Harakiri.get().getTTFFontUtil().getStringWidth(notification.getText())) / 2;
                         break;
                     case TOP_LEFT:
                     case BOTTOM_LEFT:
@@ -53,15 +53,15 @@ public final class NotificationsComponent extends DraggableHudComponent {
                         break;
                     case TOP_RIGHT:
                     case BOTTOM_RIGHT:
-                        offsetX = this.getW() - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(notification.getText());
+                        offsetX = this.getW() - Harakiri.get().getTTFFontUtil().getStringWidth(notification.getText());
                         break;
                 }
             }
 
             notification.setX(this.getX() + offsetX);
             notification.setY(this.getY() + offsetY);
-            notification.setWidth(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(notification.getText()) + 1);
-            notification.setHeight(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 5);
+            notification.setWidth(Harakiri.get().getTTFFontUtil().getStringWidth(notification.getText()) + 1);
+            notification.setHeight(Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 5);
 
             float firstRectPerc = notification.percFracBack;
 
@@ -70,12 +70,12 @@ public final class NotificationsComponent extends DraggableHudComponent {
 
             GL11.glEnable(GL11.GL_SCISSOR_TEST);
             RenderUtil.glScissor(notification.getX() - 1, notification.getY(), notification.getX() + notification.getWidth() * notification.percFrac, notification.getY() + notification.getHeight(), sr);
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(notification.getText(), notification.getX(), notification.getY() + 2.9F, 0xFFDDDDDD);
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(notification.getText(), notification.getX(), notification.getY() + 2.9F, 0xFFDDDDDD);
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
             //RenderUtil.drawRect(notification.getTransitionX() - 1, notification.getY(), notification.getTransitionX() + notification.getWidth() + 1, notification.getY() + notification.getHeight(), (int)Math.min(alpha * 0x10000000, 0x65000000) + 0x101010);
             //RenderUtil.drawRect(notification.getTransitionX() - 1, notification.getY(), notification.getTransitionX() + notification.getWidth() + 1, (notification.getY() + 1), notification.getType().getColor() - 0xFF000000 + (int)(alpha * 0x10000000));
-            //Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(notification.getText(), notification.getTransitionX(), notification.getY() + 4.0F, (int)(alpha * 0x10000000) + 0xFFFFFF);
+            //Harakiri.get().getTTFFontUtil().drawStringWithShadow(notification.getText(), notification.getTransitionX(), notification.getY() + 4.0F, (int)(alpha * 0x10000000) + 0xFFFFFF);
 
             final float width = notification.getWidth();
             if (width >= maxWidth) {
@@ -85,16 +85,16 @@ public final class NotificationsComponent extends DraggableHudComponent {
             offsetY += notification.getHeight();
         }
 
-        if (Harakiri.INSTANCE.getNotificationManager().getNotifications().isEmpty()) {
+        if (Harakiri.get().getNotificationManager().getNotifications().isEmpty()) {
             if (mc.currentScreen instanceof GuiHudEditor) {
                 final String placeholder = "(notifications display)";
-                maxWidth = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(placeholder);
-                offsetY = Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT;
-                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(placeholder, this.getX(), this.getY(), 0xFFAAAAAA);
+                maxWidth = Harakiri.get().getTTFFontUtil().getStringWidth(placeholder);
+                offsetY = Harakiri.get().getTTFFontUtil().FONT_HEIGHT;
+                Harakiri.get().getTTFFontUtil().drawStringWithShadow(placeholder, this.getX(), this.getY(), 0xFFAAAAAA);
             } else {
                 maxWidth = 0;
                 offsetY = 0;
-                this.setEmptyH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+                this.setEmptyH(Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
             }
         }
 

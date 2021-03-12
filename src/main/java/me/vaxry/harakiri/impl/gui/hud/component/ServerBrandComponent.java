@@ -12,7 +12,7 @@ public final class ServerBrandComponent extends DraggableHudComponent {
 
     public ServerBrandComponent() {
         super("ServerBrand");
-        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+        this.setH(Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -22,8 +22,8 @@ public final class ServerBrandComponent extends DraggableHudComponent {
 
         final String brand = mc.getCurrentServerData() == null ? ChatFormatting.GRAY + "Vanilla" :ChatFormatting.GRAY + mc.getCurrentServerData().gameVersion;
 
-        this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(brand));
-        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(brand, this.getX(), this.getY(), -1);
+        this.setW(Harakiri.get().getTTFFontUtil().getStringWidth(brand));
+        Harakiri.get().getTTFFontUtil().drawStringWithShadow(brand, this.getX(), this.getY(), -1);
 
     }
 

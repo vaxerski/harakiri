@@ -26,11 +26,11 @@ public class ThreatCamComponent extends DraggableHudComponent {
 
     public ThreatCamComponent() {
         super("ThreatCam (alpha)");
-        Harakiri.INSTANCE.getCameraManager().addCamera2(threatCamera);
+        Harakiri.get().getCameraManager().addCamera2(threatCamera);
         this.setW(160);
         this.setH(90);
 
-        Harakiri.INSTANCE.getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().addEventListener(this);
     }
 
     // todo: fix Future ESP
@@ -41,11 +41,11 @@ public class ThreatCamComponent extends DraggableHudComponent {
         super.render(mouseX, mouseY, partialTicks);
 
         if(Minecraft.getMinecraft().currentScreen instanceof GuiHudEditor) {
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("ThreatCam (alpha)", this.getX() + this.getW() / 2 - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("ThreatCam (alpha)") / 2, this.getY() + this.getH() / 2 - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT / 2, 0x99FFFFFF);
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow("ThreatCam (alpha)", this.getX() + this.getW() / 2 - Harakiri.get().getTTFFontUtil().getStringWidth("ThreatCam (alpha)") / 2, this.getY() + this.getH() / 2 - Harakiri.get().getTTFFontUtil().FONT_HEIGHT / 2, 0x99FFFFFF);
             return;
         }
 
-        final ThreatCamModule threatcammodule = (ThreatCamModule) Harakiri.INSTANCE.getModuleManager().find(ThreatCamModule.class);
+        final ThreatCamModule threatcammodule = (ThreatCamModule) Harakiri.get().getModuleManager().find(ThreatCamModule.class);
         this.distance = threatcammodule.distance.getValue();
 
         if (mc.player == null || mc.world == null) return;
@@ -69,7 +69,7 @@ public class ThreatCamComponent extends DraggableHudComponent {
 
         RenderUtil.drawRect(this.getX() - 1, this.getY() - 1, this.getX() + this.getW() + 1, this.getY() + this.getH() + 1, 0x99101010);
         RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0xFF202020);
-        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.getName(), this.getX() + 2, this.getY() + 2, 0xFFFFFFFF);
+        Harakiri.get().getTTFFontUtil().drawStringWithShadow(this.getName(), this.getX() + 2, this.getY() + 2, 0xFFFFFFFF);
 
         this.threatCamera.setRendering(true);
 

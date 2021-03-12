@@ -59,7 +59,7 @@ public final class AbstractHorsePatch extends ClassPatch {
     public static boolean canBeSteeredHook() {
         //dispatch our event
         final EventSteerEntity event = new EventSteerEntity();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -103,7 +103,7 @@ public final class AbstractHorsePatch extends ClassPatch {
     public static boolean isHorseSaddledHook() {
         //dispatch our event
         final EventHorseSaddled event = new EventHorseSaddled();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }

@@ -13,7 +13,7 @@ public final class TotemCountComponent extends DraggableHudComponent {
 
     public TotemCountComponent() {
         super("TotemCount");
-        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+        this.setH(Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -22,11 +22,11 @@ public final class TotemCountComponent extends DraggableHudComponent {
 
         if (mc.player != null) {
             final String totemCount = "Totems: " + this.getTotemCount();
-            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(totemCount));
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(totemCount, this.getX(), this.getY(), -1);
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth(totemCount));
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(totemCount, this.getX(), this.getY(), -1);
         } else {
-            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("(totem count)"));
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(totem count)", this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth("(totem count)"));
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow("(totem count)", this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 

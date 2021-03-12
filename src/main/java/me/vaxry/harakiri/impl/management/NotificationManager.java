@@ -15,7 +15,7 @@ public final class NotificationManager implements Animation {
     private final List<Notification> notifications = new CopyOnWriteArrayList<>();
 
     public NotificationManager() {
-        Harakiri.INSTANCE.getAnimationManager().addAnimation(this);
+        Harakiri.get().getAnimationManager().addAnimation(this);
     }
 
     public void update() {

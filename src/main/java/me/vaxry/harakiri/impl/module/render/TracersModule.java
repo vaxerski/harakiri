@@ -146,7 +146,7 @@ public final class TracersModule extends Module {
         if (entity instanceof EntityPlayer) {
             ret = this.playersColor.getValue().getRGB();
 
-            if (Harakiri.INSTANCE.getFriendManager().isFriend(entity) != null) {
+            if (Harakiri.get().getFriendManager().isFriend(entity) != null) {
                 ret = this.friendsColor.getValue().getRGB();
             }
         }

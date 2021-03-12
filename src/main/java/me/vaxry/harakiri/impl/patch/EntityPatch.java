@@ -25,7 +25,7 @@ public final class EntityPatch extends ClassPatch {
 //    }
 //
 //    public static void moveHook() {
-//        harakiri.INSTANCE.getEventManager().dispatchEvent(new EventStep());
+//        Harakiri.get().getEventManager().dispatchEvent(new EventStep());
 //    }
 
 }

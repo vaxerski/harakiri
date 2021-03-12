@@ -56,7 +56,7 @@ public final class BlockSoulSandPatch extends ClassPatch {
      */
     public static boolean onEntityCollidedWithBlockHook() {
         final EventCollideSoulSand event = new EventCollideSoulSand();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }

@@ -26,7 +26,7 @@ public abstract class MixinEntityLivingBase extends Entity {
         EntityPlayerSP player = Minecraft.getMinecraft().player;
         if (player != null && player.equals(this)) {
             final EventElytraFlyCheck event = new EventElytraFlyCheck();
-            Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+            Harakiri.get().getEventManager().dispatchEvent(event);
             if (event.isCanceled()) {
                 cir.setReturnValue(false);
                 cir.cancel();

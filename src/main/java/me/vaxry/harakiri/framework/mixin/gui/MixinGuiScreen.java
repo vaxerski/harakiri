@@ -15,7 +15,7 @@ public abstract class MixinGuiScreen extends Gui {
     @Inject(method = "renderToolTip", at = @At("HEAD"), cancellable = true)
     private void onRenderTooltip(ItemStack stack, int x, int y, CallbackInfo ci) {
         final EventRenderTooltip event = new EventRenderTooltip(stack, x, y);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) ci.cancel();
     }
 }

@@ -40,7 +40,7 @@ public final class SearchCommand extends Command {
 
         final String[] split = input.split(" ");
 
-        final SearchModule searchModule = (SearchModule) Harakiri.INSTANCE.getModuleManager().find(SearchModule.class);
+        final SearchModule searchModule = (SearchModule) Harakiri.get().getModuleManager().find(SearchModule.class);
 
         if (searchModule != null) {
             if (equals(addAlias, split[1])) {
@@ -56,7 +56,7 @@ public final class SearchCommand extends Command {
                         final Block block = Block.getBlockById(id);
 
                         if (searchModule.contains(Block.getIdFromBlock(block))) {
-                            Harakiri.INSTANCE.logChat("Search already contains " + block.getLocalizedName());
+                            Harakiri.get().logChat("Search already contains " + block.getLocalizedName());
                         } else {
                             if(block == Blocks.BED){
                                 searchModule.add("bed");
@@ -66,21 +66,21 @@ public final class SearchCommand extends Command {
                                 searchModule.clearBlocks();
                                 searchModule.updateRenders();
                             }
-                            Harakiri.INSTANCE.getConfigManager().save(SearchConfig.class);
-                            Harakiri.INSTANCE.logChat("Added " + block.getLocalizedName() + " to search");
+                            Harakiri.get().getConfigManager().save(SearchConfig.class);
+                            Harakiri.get().logChat("Added " + block.getLocalizedName() + " to search");
                         }
                     } else {
-                        Harakiri.INSTANCE.errorChat("Cannot add Air to search");
+                        Harakiri.get().errorChat("Cannot add Air to search");
                     }
                 } else {
                     final Block block = Block.getBlockFromName(split[2].toLowerCase());
 
                     if (block != null) {
                         if (block == Blocks.AIR) {
-                            Harakiri.INSTANCE.errorChat("Cannot add Air to search");
+                            Harakiri.get().errorChat("Cannot add Air to search");
                         } else {
                             if (searchModule.contains(Block.getIdFromBlock(block))) {
-                                Harakiri.INSTANCE.logChat("Search already contains " + block.getLocalizedName());
+                                Harakiri.get().logChat("Search already contains " + block.getLocalizedName());
                             } else {
                                 if(block == Blocks.BED){
                                     searchModule.add("bed");
@@ -90,12 +90,12 @@ public final class SearchCommand extends Command {
                                     searchModule.clearBlocks();
                                     searchModule.updateRenders();
                                 }
-                                Harakiri.INSTANCE.getConfigManager().save(SearchConfig.class);
-                                Harakiri.INSTANCE.logChat("Added " + block.getLocalizedName() + " to search");
+                                Harakiri.get().getConfigManager().save(SearchConfig.class);
+                                Harakiri.get().logChat("Added " + block.getLocalizedName() + " to search");
                             }
                         }
                     } else {
-                        Harakiri.INSTANCE.logChat("\247c" + split[2] + "\247f is not a valid block");
+                        Harakiri.get().logChat("\247c" + split[2] + "\247f is not a valid block");
                     }
                 }
             } else if (equals(removeAlias, split[1])) {
@@ -119,20 +119,20 @@ public final class SearchCommand extends Command {
                                 searchModule.clearBlocks();
                                 searchModule.updateRenders();
                             }
-                            Harakiri.INSTANCE.getConfigManager().save(SearchConfig.class);
-                            Harakiri.INSTANCE.logChat("Removed " + block.getLocalizedName() + " from search");
+                            Harakiri.get().getConfigManager().save(SearchConfig.class);
+                            Harakiri.get().logChat("Removed " + block.getLocalizedName() + " from search");
                         } else {
-                            Harakiri.INSTANCE.logChat("Search doesn't contain " + block.getLocalizedName());
+                            Harakiri.get().logChat("Search doesn't contain " + block.getLocalizedName());
                         }
                     } else {
-                        Harakiri.INSTANCE.errorChat("Cannot remove Air from search");
+                        Harakiri.get().errorChat("Cannot remove Air from search");
                     }
                 } else {
                     final Block block = Block.getBlockFromName(split[2].toLowerCase());
 
                     if (block != null) {
                         if (block == Blocks.AIR) {
-                            Harakiri.INSTANCE.errorChat("Cannot remove Air from search");
+                            Harakiri.get().errorChat("Cannot remove Air from search");
                         } else {
                             if (searchModule.contains(Block.getIdFromBlock(block))) {
                                 if(block == Blocks.BED){
@@ -143,14 +143,14 @@ public final class SearchCommand extends Command {
                                     searchModule.clearBlocks();
                                     searchModule.updateRenders();
                                 }
-                                Harakiri.INSTANCE.getConfigManager().save(SearchConfig.class);
-                                Harakiri.INSTANCE.logChat("Removed " + block.getLocalizedName() + " from search");
+                                Harakiri.get().getConfigManager().save(SearchConfig.class);
+                                Harakiri.get().logChat("Removed " + block.getLocalizedName() + " from search");
                             } else {
-                                Harakiri.INSTANCE.logChat("Search doesn't contain " + block.getLocalizedName());
+                                Harakiri.get().logChat("Search doesn't contain " + block.getLocalizedName());
                             }
                         }
                     } else {
-                        Harakiri.INSTANCE.logChat("\247c" + split[2] + "\247f is not a valid block");
+                        Harakiri.get().logChat("\247c" + split[2] + "\247f is not a valid block");
                     }
                 }
             } else if (equals(listAlias, split[1])) {
@@ -168,9 +168,9 @@ public final class SearchCommand extends Command {
                                         .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(Block.getBlockById(i).getLocalizedName())))));
                     }
 
-                    Harakiri.INSTANCE.logcChat(msg);
+                    Harakiri.get().logcChat(msg);
                 } else {
-                    Harakiri.INSTANCE.logChat("You don't have any search ids");
+                    Harakiri.get().logChat("You don't have any search ids");
                 }
             } else if (equals(clearAlias, split[1])) {
                 if (!this.clamp(input, 2, 2)) {
@@ -182,14 +182,14 @@ public final class SearchCommand extends Command {
                     searchModule.clearBlocks();
                     searchModule.updateRenders();
                 }
-                Harakiri.INSTANCE.getConfigManager().save(SearchConfig.class);
-                Harakiri.INSTANCE.logChat("Cleared all blocks from search");
+                Harakiri.get().getConfigManager().save(SearchConfig.class);
+                Harakiri.get().logChat("Cleared all blocks from search");
             } else {
-                Harakiri.INSTANCE.errorChat("Unknown input " + "\247f\"" + input + "\"");
+                Harakiri.get().errorChat("Unknown input " + "\247f\"" + input + "\"");
                 this.printUsage();
             }
         } else {
-            Harakiri.INSTANCE.errorChat("Search not present");
+            Harakiri.get().errorChat("Search not present");
         }
     }
 }

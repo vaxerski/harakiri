@@ -24,7 +24,7 @@ public final class ChatManager {
     private World world;
 
     public ChatManager() {
-        Harakiri.INSTANCE.getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().addEventListener(this);
     }
 
     public void add(String s) {
@@ -33,7 +33,7 @@ public final class ChatManager {
 
     public void unload() {
         this.chatBuffer.clear();
-        Harakiri.INSTANCE.getEventManager().removeEventListener(this);
+        Harakiri.get().getEventManager().removeEventListener(this);
     }
 
     @Listener

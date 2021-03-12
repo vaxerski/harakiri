@@ -33,7 +33,7 @@ public class RenderAPI extends TwoArgFunction {
             int x = args.arg(2).checkint();
             int y = args.arg(3).checkint();
             int col = args.arg(4).checkint();
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(text, x, y, col);
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(text, x, y, col);
             return LuaValue.valueOf(1);
         }
     }
@@ -44,7 +44,7 @@ public class RenderAPI extends TwoArgFunction {
             int x = args.arg(2).checkint();
             int y = args.arg(3).checkint();
             int col = args.arg(4).checkint();
-            Harakiri.INSTANCE.getTTFFontUtil().drawString(text, x, y, col);
+            Harakiri.get().getTTFFontUtil().drawString(text, x, y, col);
             return LuaValue.valueOf(1);
         }
     }

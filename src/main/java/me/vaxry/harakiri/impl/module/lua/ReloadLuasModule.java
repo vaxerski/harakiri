@@ -26,7 +26,7 @@ public class ReloadLuasModule extends Module {
     public ReloadLuasModule() {
         super("Reload LUAs", new String[]{"ReloadLUAs", "ReloadLUA"}, "Reload the list of LUAs", "NONE", -1, ModuleType.LUA);
         //this.reloadLuas();
-        //Harakiri.INSTANCE.getEventManager().addEventListener(this);
+        //Harakiri.get().getEventManager().addEventListener(this);
     }
 
 
@@ -71,7 +71,7 @@ public class ReloadLuasModule extends Module {
     }
 
     public void updateEnabledLuas(){
-        for(Module mod : Harakiri.INSTANCE.getModuleManager().getModuleList(ModuleType.LUA)){
+        for(Module mod : Harakiri.get().getModuleManager().getModuleList(ModuleType.LUA)){
             if(mod instanceof ReloadLuasModule)
                 continue;
             if(!mod.isEnabled() && isLuaEnabled(mod.luaName)) {
@@ -139,7 +139,7 @@ public class ReloadLuasModule extends Module {
         String[] pathnames;
 
         LuaConfig config = null;
-        for(Configurable c : Harakiri.INSTANCE.getConfigManager().getConfigurableList()){
+        for(Configurable c : Harakiri.get().getConfigManager().getConfigurableList()){
             if(c instanceof LuaConfig)
                 config = (LuaConfig)c;
         }
@@ -163,7 +163,7 @@ public class ReloadLuasModule extends Module {
         }
 
         try {
-            Harakiri.INSTANCE.logChat("Reloaded " + pathnames.length + " luas.");
+            Harakiri.get().logChat("Reloaded " + pathnames.length + " luas.");
         }catch (Throwable t){
             // Throws when loading the game.
         }
@@ -173,7 +173,7 @@ public class ReloadLuasModule extends Module {
             config.onLoad();
 
         // Clean open settings
-        for(HudComponent hc : Harakiri.INSTANCE.getHudManager().getComponentList()){
+        for(HudComponent hc : Harakiri.get().getHudManager().getComponentList()){
             if(!(hc instanceof ModuleListComponent))
                 continue;
             if(((ModuleListComponent) hc).getType() != ModuleType.LUA)
@@ -185,17 +185,17 @@ public class ReloadLuasModule extends Module {
     }
 
     private void deleteModuleForLua(String path){
-        if(Harakiri.INSTANCE.getModuleManager().findLua(path) != null) {
-            Harakiri.INSTANCE.getModuleManager().removeLuaModule(path);
+        if(Harakiri.get().getModuleManager().findLua(path) != null) {
+            Harakiri.get().getModuleManager().removeLuaModule(path);
         }
     }
 
     private void createModuleForLua(String path){
         // Find if exists
-        if(Harakiri.INSTANCE.getModuleManager().findLua(path) != null)
+        if(Harakiri.get().getModuleManager().findLua(path) != null)
             return;
 
-        Harakiri.INSTANCE.getModuleManager().add(new Module(path, ModuleType.LUA));
+        Harakiri.get().getModuleManager().add(new Module(path, ModuleType.LUA));
         loadedLuas.add(new LUAAPI.LuaModule(path));
     }
 }

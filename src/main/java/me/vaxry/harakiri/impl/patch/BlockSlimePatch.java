@@ -58,7 +58,7 @@ public final class BlockSlimePatch extends ClassPatch {
      */
     public static boolean onEntityWalkHook() {
         final EventWalkOnSlime event = new EventWalkOnSlime();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -98,7 +98,7 @@ public final class BlockSlimePatch extends ClassPatch {
      */
     public static boolean onLanded() {
         final EventLandOnSlime event = new EventLandOnSlime();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }

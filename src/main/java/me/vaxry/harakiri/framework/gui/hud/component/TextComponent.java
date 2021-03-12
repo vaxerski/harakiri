@@ -48,17 +48,17 @@ public class TextComponent extends HudComponent {
         RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x45303030);
 
         final String displayValueText = this.getName() + ": " + this.displayValue;
-        Harakiri.INSTANCE.getTTFFontUtil().drawString(displayValueText, (int) this.getX() + 1, (int) this.getY() + 1, this.focused ? 0xFFFFFFFF : 0xFFAAAAAA);
+        Harakiri.get().getTTFFontUtil().drawString(displayValueText, (int) this.getX() + 1, (int) this.getY() + 1, this.focused ? 0xFFFFFFFF : 0xFFAAAAAA);
 
         if (this.focused) {
             if (!this.selectedText.equals("")) {
-                RenderUtil.drawRect(this.getX() + Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(this.getName() + ": "), this.getY(), this.getX() + Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(displayValueText), this.getY() + this.getH(), 0x45FFFFFF);
+                RenderUtil.drawRect(this.getX() + Harakiri.get().getTTFFontUtil().getStringWidth(this.getName() + ": "), this.getY(), this.getX() + Harakiri.get().getTTFFontUtil().getStringWidth(displayValueText), this.getY() + this.getH(), 0x45FFFFFF);
             }
 
-            float blockX = this.getX() + Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(this.getName() + ": " + this.displayValue) + 1;
+            float blockX = this.getX() + Harakiri.get().getTTFFontUtil().getStringWidth(this.getName() + ": " + this.displayValue) + 1;
             float blockY = this.getY() + 1;
             int blockWidth = 2;
-            int blockHeight = Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - 2;
+            int blockHeight = Harakiri.get().getTTFFontUtil().FONT_HEIGHT - 2;
             RenderUtil.drawRect(blockX, blockY, blockX + blockWidth, blockY + blockHeight, 0xFFFFFFFF);
 
             // check
@@ -222,7 +222,7 @@ public class TextComponent extends HudComponent {
         try {
             return (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
         } catch (Exception e) {
-            Harakiri.INSTANCE.getLogger().log(Level.WARNING, "Error getting clipboard while using " + this.getName());
+            Harakiri.get().getLogger().log(Level.WARNING, "Error getting clipboard while using " + this.getName());
         }
         return "";
     }

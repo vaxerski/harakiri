@@ -14,7 +14,7 @@ public abstract class MixinGuiBossOverlay extends Gui {
     @Inject(method = "renderBossHealth", at = @At("HEAD"), cancellable = true)
     private void onRenderBossHealth(CallbackInfo ci) {
         final EventRenderBossHealth event = new EventRenderBossHealth();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) ci.cancel();
     }
 }

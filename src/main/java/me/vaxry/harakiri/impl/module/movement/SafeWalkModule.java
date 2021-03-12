@@ -27,7 +27,7 @@ public final class SafeWalkModule extends Module {
         double y = event.getY();
         double z = event.getZ();
 
-        final FreeCamModule freeCam = (FreeCamModule) Harakiri.INSTANCE.getModuleManager().find(FreeCamModule.class);
+        final FreeCamModule freeCam = (FreeCamModule) Harakiri.get().getModuleManager().find(FreeCamModule.class);
 
         if (freeCam != null && freeCam.isEnabled()) {
             return;

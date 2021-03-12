@@ -28,16 +28,16 @@ public class DiscordRPCModule extends Module {
     @Override
     public void onEnable() {
         super.onEnable();
-        Harakiri.INSTANCE.getDiscordManager().enable();
+        Harakiri.get().getDiscordManager().enable();
     }
 
     @Override
     public void onDisable() {
         super.onDisable();
         try {
-            Harakiri.INSTANCE.getDiscordManager().disable();
+            Harakiri.get().getDiscordManager().disable();
         }catch(Throwable t){
-            Harakiri.INSTANCE.logChat("Couldn't disable discord RPC because of: " + t.toString());
+            Harakiri.get().logChat("Couldn't disable discord RPC because of: " + t.toString());
         }
     }
 
@@ -81,7 +81,7 @@ public class DiscordRPCModule extends Module {
             case SPEED:
                 ret += "Going at ";
                 final DecimalFormat df = new DecimalFormat("#.#");
-                SpeedComponent sc = (SpeedComponent)Harakiri.INSTANCE.getHudManager().findComponent(SpeedComponent.class);
+                SpeedComponent sc = (SpeedComponent)Harakiri.get().getHudManager().findComponent(SpeedComponent.class);
                 ret += df.format(sc.speed);
                 ret += "km/h";
                 return ret;

@@ -192,7 +192,7 @@ public final class ESPModule extends Module {
         }
 
         // process storageesp
-        StorageESPModule storageESPModule = (StorageESPModule)Harakiri.INSTANCE.getModuleManager().find(StorageESPModule.class);
+        StorageESPModule storageESPModule = (StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class);
     }
 
     @SubscribeEvent
@@ -237,7 +237,7 @@ public final class ESPModule extends Module {
                     if (!coloredPlayers.contains((EntityPlayer) event.getEntity()))
                         coloredPlayers.add((EntityPlayer) event.getEntity());
 
-                    if (Harakiri.INSTANCE.getFriendManager().isFriend(event.getEntity()) != null) {
+                    if (Harakiri.get().getFriendManager().isFriend(event.getEntity()) != null) {
                         //friend
                         board.addPlayerToTeam(event.getEntity().getName(), lblue.getName());
                     } else {
@@ -322,7 +322,7 @@ public final class ESPModule extends Module {
                 } else if (e instanceof EntityEnderCrystal) {
                     //GlStateManager.enableOutlineMode(0xFF9900CC);
                 } else if (e instanceof EntityPlayer) {
-                    /*if (Harakiri.INSTANCE.getFriendManager().isFriend(e) != null)
+                    /*if (Harakiri.get().getFriendManager().isFriend(e) != null)
                         GlStateManager.enableOutlineMode(0xFF00FFFF);
                     else
                         GlStateManager.enableOutlineMode(0xFFFF3300);*/
@@ -348,16 +348,16 @@ public final class ESPModule extends Module {
     }
 
     private void renderAllTileEntities(float partialTicks, boolean doColor){
-        if(((StorageESPModule) Harakiri.INSTANCE.getModuleManager().find(StorageESPModule.class)).modeValue.getValue() == StorageESPModule.MODE.CPU)
+        if(((StorageESPModule) Harakiri.get().getModuleManager().find(StorageESPModule.class)).modeValue.getValue() == StorageESPModule.MODE.CPU)
             return;
 
         for(TileEntity te : Minecraft.getMinecraft().world.loadedTileEntityList){
-            if(((StorageESPModule) Harakiri.INSTANCE.getModuleManager().find(StorageESPModule.class)).getColorShader(te) == 0)
+            if(((StorageESPModule) Harakiri.get().getModuleManager().find(StorageESPModule.class)).getColorShader(te) == 0)
                 continue; // Cuz fuck stuff we dont care bout
 
             if(doColor) {
                 GlStateManager.enableColorMaterial();
-                GlStateManager.enableOutlineMode(((StorageESPModule) Harakiri.INSTANCE.getModuleManager().find(StorageESPModule.class)).getColorShader(te));
+                GlStateManager.enableOutlineMode(((StorageESPModule) Harakiri.get().getModuleManager().find(StorageESPModule.class)).getColorShader(te));
             }
 
             // This doesnt force lighting
@@ -406,7 +406,7 @@ public final class ESPModule extends Module {
                     this.gray.setPrefix(TextFormatting.GRAY.toString());
                     this.pink.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
                 }catch(Throwable t){
-                    Harakiri.INSTANCE.logChat("Shader failed 2: " + t.getMessage());
+                    Harakiri.get().logChat("Shader failed 2: " + t.getMessage());
                     //JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
@@ -422,7 +422,7 @@ public final class ESPModule extends Module {
                 this.lastShader = this.shaderV.getValue();
                 toLoadShader = false;
             }catch(Throwable t){
-                Harakiri.INSTANCE.logChat("Shader failed 2: " + t.getMessage());
+                Harakiri.get().logChat("Shader failed 2: " + t.getMessage());
                 //JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
             }
         }
@@ -458,7 +458,7 @@ public final class ESPModule extends Module {
 
             renderAllEntities(partialTicks, true);
 
-            if(Harakiri.INSTANCE.getModuleManager().find(StorageESPModule.class).isEnabled())
+            if(Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled())
                 renderAllTileEntities(partialTicks, true);
 
             mc.getRenderManager().setRenderOutlines(false);

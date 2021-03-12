@@ -129,7 +129,7 @@ public final class HudManager {
         // Organize alphabetically
         this.componentList = this.componentList.stream().sorted((obj1, obj2) -> obj1.getName().compareTo(obj2.getName())).collect(Collectors.toList());
 
-        Harakiri.INSTANCE.getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().addEventListener(this);
     }
 
     /**
@@ -193,7 +193,7 @@ public final class HudManager {
             }
         }
 
-        HudEditorModule hudmodule = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
+        HudEditorModule hudmodule = (HudEditorModule) Harakiri.get().getModuleManager().find(HudEditorModule.class);
         rainSpeed = hudmodule.rainspeed.getValue();
 
         // Shift RGB
@@ -221,7 +221,7 @@ public final class HudManager {
                     if (HudComponent.class.isAssignableFrom(clazz)) {
                         final HudComponent component = (HudComponent) clazz.newInstance();
                         this.componentList.add(component);
-                        Harakiri.INSTANCE.getLogger().log(Level.INFO, "Found external hud component " + component.getName());
+                        Harakiri.get().getLogger().log(Level.INFO, "Found external hud component " + component.getName());
                     }
                 }
             }
@@ -243,7 +243,7 @@ public final class HudManager {
     public void unload() {
         this.anchorPoints.clear();
         this.componentList.clear();
-        Harakiri.INSTANCE.getEventManager().removeEventListener(this);
+        Harakiri.get().getEventManager().removeEventListener(this);
     }
 
     public AnchorPoint findPoint(AnchorPoint.Point point) {

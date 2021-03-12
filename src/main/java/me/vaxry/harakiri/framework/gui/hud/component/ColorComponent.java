@@ -69,9 +69,9 @@ public class ColorComponent extends TextComponent {
             this.setH(9);
         }*/
 
-        if(Harakiri.INSTANCE.getHudEditor().forceCloseColorPicker || !Harakiri.INSTANCE.getHudEditor().colorPickerName.equalsIgnoreCase(this.getName())){
+        if(Harakiri.get().getHudEditor().forceCloseColorPicker || !Harakiri.get().getHudEditor().colorPickerName.equalsIgnoreCase(this.getName())){
             this.focused = false;
-            Harakiri.INSTANCE.getHudEditor().forceCloseColorPicker = false;
+            Harakiri.get().getHudEditor().forceCloseColorPicker = false;
             dragging = false;
         }
 
@@ -84,10 +84,10 @@ public class ColorComponent extends TextComponent {
         // draw color rect
         RenderUtil.drawRect(this.getX() + this.getW() - BORDER - COLOR_SIZE, this.getY() + BORDER, this.getX() + this.getW() - BORDER, this.getY() + BORDER + COLOR_SIZE, ColorUtil.changeAlpha(this.currentColor.getRGB(), 0xFF));
 
-        Harakiri.INSTANCE.getTTFFontUtil().drawString(this.getName(), (int) this.getX() + BORDER, (int) this.getY() + BORDER, this.focused ? 0xFFFFFFFF : 0xFFAAAAAA);
+        Harakiri.get().getTTFFontUtil().drawString(this.getName(), (int) this.getX() + BORDER, (int) this.getY() + BORDER, this.focused ? 0xFFFFFFFF : 0xFFAAAAAA);
 
         if(this.focused){
-            GuiHudEditor guiHudEditor = Harakiri.INSTANCE.getHudEditor();
+            GuiHudEditor guiHudEditor = Harakiri.get().getHudEditor();
             guiHudEditor.isColorPickerOpen = true;
             guiHudEditor.colorPickerParent = this.parent;
             guiHudEditor.colorPickerName = this.getName();
@@ -157,7 +157,7 @@ public class ColorComponent extends TextComponent {
     public void mouseRelease(int mouseX, int mouseY, int button) {
         super.mouseRelease(mouseX, mouseY, button);
 
-        if(Harakiri.INSTANCE.getHudEditor().specialColorClick && Harakiri.INSTANCE.getHudEditor().colorPickerName.equalsIgnoreCase(this.getName())){
+        if(Harakiri.get().getHudEditor().specialColorClick && Harakiri.get().getHudEditor().colorPickerName.equalsIgnoreCase(this.getName())){
             this.focus();
         }
 
@@ -174,10 +174,10 @@ public class ColorComponent extends TextComponent {
     @Override
     public void mouseClick(int mouseX, int mouseY, int button) {
         super.mouseClick(mouseX, mouseY, button);
-        if(this.isMouseInside(mouseX, mouseY) || (Harakiri.INSTANCE.getHudEditor().specialColorClick  && Harakiri.INSTANCE.getHudEditor().colorPickerName.equalsIgnoreCase(this.getName()))) {
+        if(this.isMouseInside(mouseX, mouseY) || (Harakiri.get().getHudEditor().specialColorClick  && Harakiri.get().getHudEditor().colorPickerName.equalsIgnoreCase(this.getName()))) {
             this.focus();
             this.dragging = true;
-            Harakiri.INSTANCE.getHudEditor().colorPickerName = this.getName();
+            Harakiri.get().getHudEditor().colorPickerName = this.getName();
         }
     }
 
@@ -218,7 +218,7 @@ public class ColorComponent extends TextComponent {
                 int RGBCol = Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]);
                 this.currentColor = new Color(RGBCol);
 
-                //Harakiri.INSTANCE.logChat("AngleRad: " + angleRad / Math.PI + "pi, angleDeg: " + angleDeg + " hsv[0]: " + hsv[0]);
+                //Harakiri.get().logChat("AngleRad: " + angleRad / Math.PI + "pi, angleDeg: " + angleDeg + " hsv[0]: " + hsv[0]);
             }else{
                 // Inside
                 final float HUE_CIRCLE_THICK = 5;

@@ -109,7 +109,7 @@ public final class ObsidianReplaceModule extends Module {
     @Listener
     public void onLoadWorld(EventLoadWorld event) {
         if (event.getWorld() != null) {
-            freeCamModule = (FreeCamModule) Harakiri.INSTANCE.getModuleManager().find(FreeCamModule.class);
+            freeCamModule = (FreeCamModule) Harakiri.get().getModuleManager().find(FreeCamModule.class);
         }
     }
 

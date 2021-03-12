@@ -103,7 +103,7 @@ public final class RenderManagerPatch extends ClassPatch {
     public static boolean renderEntityHook(Entity entity, double x, double y, double z, float yaw, float partialTicks, EventStageable.EventStage stage) {
         //dispatch our event and pass the render information into it along with the event stage
         final EventRenderEntity event = new EventRenderEntity(stage, entity, x, y, z, yaw, partialTicks);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }

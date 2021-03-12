@@ -39,7 +39,7 @@ public final class ReachModule extends Module {
         if (event.getWorld() == null)
             return;
 
-        this.blockHighlightModule = (BlockHighlightModule) Harakiri.INSTANCE.getModuleManager().find(BlockHighlightModule.class);
+        this.blockHighlightModule = (BlockHighlightModule) Harakiri.get().getModuleManager().find(BlockHighlightModule.class);
     }
 
     @Listener

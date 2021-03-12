@@ -39,7 +39,7 @@ public final class Notification {
         this.duration = duration;
         this.maxDuration = duration;
 
-        final NotificationsComponent notificationsComponent = (NotificationsComponent) Harakiri.INSTANCE.getHudManager().findComponent(NotificationsComponent.class);
+        final NotificationsComponent notificationsComponent = (NotificationsComponent) Harakiri.get().getHudManager().findComponent(NotificationsComponent.class);
         if (notificationsComponent != null) {
             this.transitionX = 0;
             this.transitionY = 0;
@@ -90,7 +90,7 @@ public final class Notification {
         }
 
         if (this.timer.passed((this.duration))) {
-            Harakiri.INSTANCE.getNotificationManager().removeNotification(this);
+            Harakiri.get().getNotificationManager().removeNotification(this);
         }
     }
 

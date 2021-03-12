@@ -69,7 +69,7 @@ public final class SliderComponent extends HudComponent {
                 this.sliderBar.render(mouseX, mouseY, partialTicks);
             }
 
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.getName(), (int) this.getX() + 1, (int) this.getY(), 0xFFAAAAAA);
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(this.getName(), (int) this.getX() + 1, (int) this.getY(), 0xFFAAAAAA);
 
             String displayedValue = this.decimalFormat.format(this.value.getValue());
             if (this.sliding) {
@@ -78,7 +78,7 @@ public final class SliderComponent extends HudComponent {
                     displayedValue = draggedValue;
             }
 
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(displayedValue, (int) (this.getX() + this.getW()) - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(displayedValue) - 1, (int) this.getY(), 0xFFAAAAAA);
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(displayedValue, (int) (this.getX() + this.getW()) - Harakiri.get().getTTFFontUtil().getStringWidth(displayedValue) - 1, (int) this.getY(), 0xFFAAAAAA);
         } else {
             this.textComponent.setX(this.getX());
             this.textComponent.setY(this.getY());
@@ -171,9 +171,9 @@ public final class SliderComponent extends HudComponent {
                                 } else if (value.getValue() instanceof Byte) {
                                     value.setValue(Byte.parseByte(valueNumberText.displayValue));
                                 }
-                                Harakiri.INSTANCE.getConfigManager().save(ModuleConfig.class); // save module configs
+                                Harakiri.get().getConfigManager().save(ModuleConfig.class); // save module configs
                             } catch (NumberFormatException e) {
-                                Harakiri.INSTANCE.logfChat("%s - %s: Invalid number format.", getName(), value.getName());
+                                Harakiri.get().logfChat("%s - %s: Invalid number format.", getName(), value.getName());
                             }
                         }
                     };
@@ -230,16 +230,16 @@ public final class SliderComponent extends HudComponent {
         public void render(int mouseX, int mouseY, float partialTicks) {
             //super.render(mouseX, mouseY, partialTicks);
 
-            final HudModule hm = (HudModule) Harakiri.INSTANCE.getModuleManager().find(HudModule.class);
+            final HudModule hm = (HudModule) Harakiri.get().getModuleManager().find(HudModule.class);
             if(hm.rainbow.getValue())
                 useRainbow = true;
             else
                 useRainbow = false;
 
-            rainbowCol = Harakiri.INSTANCE.getHudEditor().rainbowColor;
-            rainbowColBG = 0x45000000 + Harakiri.INSTANCE.getHudEditor().rainbowColor - 0xFF000000;
+            rainbowCol = Harakiri.get().getHudEditor().rainbowColor;
+            rainbowColBG = 0x45000000 + Harakiri.get().getHudEditor().rainbowColor - 0xFF000000;
 
-            final HudEditorModule hem = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
+            final HudEditorModule hem = (HudEditorModule) Harakiri.get().getModuleManager().find(HudEditorModule.class);
             ACCENT_COLOR = 0xFF000000 + hem.color.getValue().getRGB();
             ACCENT_COLOR_BG = 0x44000000 + hem.color.getValue().getRGB();
 

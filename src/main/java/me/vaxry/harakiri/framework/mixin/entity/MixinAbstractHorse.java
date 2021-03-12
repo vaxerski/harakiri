@@ -23,7 +23,7 @@ public abstract class MixinAbstractHorse extends EntityAnimal {
     @Inject(at = @At("HEAD"), method = "canBeSteered", cancellable = true)
     public void onCanBeSteered(CallbackInfoReturnable<Boolean> cir) {
         final EventSteerEntity event = new EventSteerEntity();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) {
             cir.setReturnValue(true);
             cir.cancel();
@@ -34,7 +34,7 @@ public abstract class MixinAbstractHorse extends EntityAnimal {
     @Inject(at = @At("HEAD"), method = "isHorseSaddled", cancellable = true)
     public void onIsHorseSaddled(CallbackInfoReturnable<Boolean> cir) {
         final EventHorseSaddled event = new EventHorseSaddled();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) {
             cir.setReturnValue(true);
             cir.cancel();

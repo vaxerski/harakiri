@@ -52,7 +52,7 @@ public class GlobalAPI extends TwoArgFunction {
             String messag = message.checkjstring();
             double dur = duration.checkdouble();
 
-            Harakiri.INSTANCE.getNotificationManager().addNotification(messag, messag, Notification.Type.INFO, (int)dur);
+            Harakiri.get().getNotificationManager().addNotification(messag, messag, Notification.Type.INFO, (int)dur);
 
             return LuaValue.valueOf(1);
         }

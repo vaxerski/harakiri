@@ -39,7 +39,7 @@ public final class RenderGlobalPatch extends ClassPatch {
 
     public static boolean isRenderEntityOutlinesHook() {
         final EventRenderEntityOutlines event = new EventRenderEntityOutlines();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -61,7 +61,7 @@ public final class RenderGlobalPatch extends ClassPatch {
 
     public static boolean renderSkyHook() {
         final EventRenderSky event = new EventRenderSky();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -83,7 +83,7 @@ public final class RenderGlobalPatch extends ClassPatch {
 
     public static boolean drawBlockDamageTextureHook() {
         final EventRenderBlockDamage event = new EventRenderBlockDamage();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }

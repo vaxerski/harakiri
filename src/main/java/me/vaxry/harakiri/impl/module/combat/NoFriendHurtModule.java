@@ -29,7 +29,7 @@ public final class NoFriendHurtModule extends Module {
                 if (Minecraft.getMinecraft().objectMouseOver.entityHit == null)
                     return;
 
-                final Friend friend = Harakiri.INSTANCE.getFriendManager().isFriend(Minecraft.getMinecraft().objectMouseOver.entityHit);
+                final Friend friend = Harakiri.get().getFriendManager().isFriend(Minecraft.getMinecraft().objectMouseOver.entityHit);
                 if (packetUseEntity.getAction() == CPacketUseEntity.Action.ATTACK && friend != null) {
                     event.setCanceled(true);
                 }

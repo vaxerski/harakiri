@@ -94,7 +94,7 @@ public final class ElytraFlyModule extends Module {
                // if (this.stayAirborneDisable.getValue() && this.stayAirborne.getValue()) {
                //     if (mc.player.onGround) {
                //         this.stayAirborne.setValue(false);
-                //        Harakiri.INSTANCE.logChat("\247rToggled\2477 ElytraFly " + this.stayAirborne.getName() + " \247coff\247r, as you've touched the ground.");
+                //        Harakiri.get().logChat("\247rToggled\2477 ElytraFly " + this.stayAirborne.getName() + " \247coff\247r, as you've touched the ground.");
                 //    }
                 //}
 
@@ -228,7 +228,7 @@ public final class ElytraFlyModule extends Module {
                 }
 
                 // Dock
-                if(this.autoDock.getValue() && mc.player.movementInput.sneak && !Harakiri.INSTANCE.getModuleManager().find(FreeCamModule.class).isEnabled()) {
+                if(this.autoDock.getValue() && mc.player.movementInput.sneak && !Harakiri.get().getModuleManager().find(FreeCamModule.class).isEnabled()) {
                     BlockPos underMe = GetLocalPlayerPosFloored().down();
                     Block under = mc.world.getBlockState(underMe).getBlock();
                     BlockPos underMe2 = GetLocalPlayerPosFloored().down().down();
@@ -260,8 +260,8 @@ public final class ElytraFlyModule extends Module {
 
 
         // Fix movement if avoid
-        if(Harakiri.INSTANCE.getModuleManager().find(AvoidModule.class).isEnabled()){
-            AvoidModule avm = (AvoidModule)Harakiri.INSTANCE.getModuleManager().find(AvoidModule.class);
+        if(Harakiri.get().getModuleManager().find(AvoidModule.class).isEnabled()){
+            AvoidModule avm = (AvoidModule)Harakiri.get().getModuleManager().find(AvoidModule.class);
             avm.fixMovevemt(event);
         }
     }

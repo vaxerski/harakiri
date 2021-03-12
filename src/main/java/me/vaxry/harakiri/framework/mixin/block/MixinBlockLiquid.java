@@ -27,7 +27,7 @@ public abstract class MixinBlockLiquid extends Block {
     @Inject(at = @At("HEAD"), method = "getCollisionBoundingBox", cancellable = true)
     public void onGetCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, CallbackInfoReturnable<AxisAlignedBB> cir) {
         final EventLiquidCollisionBB event = new EventLiquidCollisionBB(pos);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) {
             cir.cancel();
             cir.setReturnValue(event.getBoundingBox());
@@ -37,7 +37,7 @@ public abstract class MixinBlockLiquid extends Block {
     @Inject(at = @At("HEAD"), method = "shouldSideBeRendered", cancellable = true)
     private void onShouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side, CallbackInfoReturnable<Boolean> cir) {
         final EventRenderBlockSide event = new EventRenderBlockSide(this);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) {
             cir.cancel();
             cir.setReturnValue(event.isRenderable());
@@ -47,7 +47,7 @@ public abstract class MixinBlockLiquid extends Block {
     @Inject(at = @At("HEAD"), method = "canCollideCheck", cancellable = true)
     private void onCanCollideCheck(IBlockState state, boolean hitIfLiquid, CallbackInfoReturnable<Boolean> cir) {
         final EventCanCollide event = new EventCanCollide();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) {
             cir.cancel();
             cir.setReturnValue(true);

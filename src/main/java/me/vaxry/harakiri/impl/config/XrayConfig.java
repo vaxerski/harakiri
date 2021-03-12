@@ -20,7 +20,7 @@ public final class XrayConfig extends Configurable {
 
     public XrayConfig(File dir) {
         super(FileUtil.createJsonFile(dir, "xray"));
-        this.xrayModule = (XrayModule) Harakiri.INSTANCE.getModuleManager().find("Xray");
+        this.xrayModule = (XrayModule) Harakiri.get().getModuleManager().find("Xray");
     }
 
     @Override
@@ -38,7 +38,7 @@ public final class XrayConfig extends Configurable {
 
         if (xrayIdsJsonArray != null) {
             for (JsonElement jsonElement : xrayIdsJsonArray) {
-                ((XrayModule) Objects.requireNonNull(Harakiri.INSTANCE.getModuleManager().find("Xray"))).add(jsonElement.getAsInt());
+                ((XrayModule) Objects.requireNonNull(Harakiri.get().getModuleManager().find("Xray"))).add(jsonElement.getAsInt());
             }
         }
     }

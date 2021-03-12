@@ -72,13 +72,13 @@ public class Module {
     }
 
     public void onEnable() {
-        Harakiri.INSTANCE.getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().addEventListener(this);
     }
 
     public void onDisable() {
         if(this instanceof ReloadLuasModule)
             return; // Never
-        Harakiri.INSTANCE.getEventManager().removeEventListener(this);
+        Harakiri.get().getEventManager().removeEventListener(this);
     }
 
     public void onToggle() {
@@ -89,7 +89,7 @@ public class Module {
         this.setEnabled(!this.isEnabled());
         if (this.isEnabled()) {
             this.onEnable();
-            this.activexOffset = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(this.getDisplayName());
+            this.activexOffset = Harakiri.get().getTTFFontUtil().getStringWidth(this.getDisplayName());
         } else {
             this.onDisable();
         }

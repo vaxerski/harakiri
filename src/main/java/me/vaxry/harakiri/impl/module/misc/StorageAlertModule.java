@@ -89,18 +89,18 @@ public final class StorageAlertModule extends Module {
                     final String message = foundStorage.size() + " " + id + " located";
                     if (this.mode.getValue() == Mode.CHAT || this.mode.getValue() == Mode.BOTH) {
                         if (this.commandsModule == null) {
-                            this.commandsModule = (CommandsModule) Harakiri.INSTANCE.getModuleManager().find(CommandsModule.class);
+                            this.commandsModule = (CommandsModule) Harakiri.get().getModuleManager().find(CommandsModule.class);
                         } else {
                             final TextComponentString textComponent = new TextComponentString(ChatFormatting.YELLOW + message);
                             textComponent.appendSibling(new TextComponentString("(*)")
                                     .setStyle(new Style()
                                             .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("\2476" + "Create a waypoint for this position" + "\n" + ChatFormatting.WHITE + "X: " + position.x + ", Z: " + position.y)))
                                             .setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, commandsModule.getPrefix().getValue() + "waypoint add " + String.format("x%s_z%s", position.x, position.y) + " " + position.x + " 120 " + position.y))));
-                            Harakiri.INSTANCE.logcChat(textComponent);
+                            Harakiri.get().logcChat(textComponent);
                         }
                     }
                     if (this.mode.getValue() == Mode.NOTIFICATION || this.mode.getValue() == Mode.BOTH) {
-                        Harakiri.INSTANCE.getNotificationManager().addNotification("", message);
+                        Harakiri.get().getNotificationManager().addNotification("", message);
                     }
                 }
             }

@@ -22,7 +22,7 @@ public final class CameraManager {
     private List<Camera2> camera2List = new ArrayList();
 
     public CameraManager() {
-        Harakiri.INSTANCE.getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().addEventListener(this);
     }
 
     public void update() {
@@ -108,7 +108,7 @@ public final class CameraManager {
 
     public void unload() {
         this.cameraList.clear();
-        Harakiri.INSTANCE.getEventManager().removeEventListener(this);
+        Harakiri.get().getEventManager().removeEventListener(this);
     }
 
     public boolean isCameraRecording() {

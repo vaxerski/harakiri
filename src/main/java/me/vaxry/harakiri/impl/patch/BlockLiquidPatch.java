@@ -46,7 +46,7 @@ public final class BlockLiquidPatch extends ClassPatch {
         insnList.add(new MethodInsnNode(INVOKESPECIAL, Type.getInternalName(EventLiquidCollisionBB.class), "<init>", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/util/math/BlockPos;)V" : "(Let;)V", false));
         //add ASTORE to store our event in the local vars
         insnList.add(new VarInsnNode(ASTORE, 4));
-        //harakiri.INSTANCE.getEventManager
+        //Harakiri.get().getEventManager
         insnList.add(new FieldInsnNode(GETSTATIC, Type.getInternalName(Harakiri.class), "INSTANCE", "Lme/vaxry/harakiri/Harakiri;"));
         insnList.add(new MethodInsnNode(INVOKEVIRTUAL, Type.getInternalName(Harakiri.class), "getEventManager", "()Lteam/stiff/pomelo/EventManager;", false));
         //add ALOAD to access our event from the local vars
@@ -92,7 +92,7 @@ public final class BlockLiquidPatch extends ClassPatch {
         insnList.add(new MethodInsnNode(INVOKESPECIAL, Type.getInternalName(EventRenderBlockSide.class), "<init>", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/block/Block;)V" : "(Laow;)V", false));
         //store our event in the local vars
         insnList.add(new VarInsnNode(ASTORE, 5));
-        //harakiri.INSTANCE
+        //Harakiri.get()
         insnList.add(new FieldInsnNode(GETSTATIC, Type.getInternalName(Harakiri.class), "INSTANCE", "Lme/vaxry/harakiri/Harakiri;"));
         //getEventManager
         insnList.add(new MethodInsnNode(INVOKEVIRTUAL, Type.getInternalName(Harakiri.class), "getEventManager", "()Lteam/stiff/pomelo/EventManager;", false));
@@ -140,7 +140,7 @@ public final class BlockLiquidPatch extends ClassPatch {
 
     public static boolean canCollideCheckHook() {
         final EventCanCollide event = new EventCanCollide();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         return event.isCanceled();
     }
 

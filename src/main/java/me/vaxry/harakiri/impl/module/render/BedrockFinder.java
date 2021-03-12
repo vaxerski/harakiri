@@ -43,7 +43,7 @@ public final class BedrockFinder extends Module {
             timer.reset();
 
             if(foundBedrockLastS != 0)
-                Harakiri.INSTANCE.getNotificationManager().addNotification(new Notification("BedrockFinder", "Found " + foundBedrockLastS + " illegal bedrock."));
+                Harakiri.get().getNotificationManager().addNotification(new Notification("BedrockFinder", "Found " + foundBedrockLastS + " illegal bedrock."));
             foundBedrockLastS = 0;
         }
 

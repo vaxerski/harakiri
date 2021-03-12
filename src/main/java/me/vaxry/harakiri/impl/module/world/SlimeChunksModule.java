@@ -65,7 +65,7 @@ public final class SlimeChunksModule extends Module {
 
                 final ServerData serverData = Minecraft.getMinecraft().getCurrentServerData();
                 if (serverData != null) {
-                    final WorldManager.WorldData worldData = Harakiri.INSTANCE.getWorldManager().find(serverData.serverIP);
+                    final WorldManager.WorldData worldData = Harakiri.get().getWorldManager().find(serverData.serverIP);
                     if (worldData != null) {
                         if (!this.slimeChunkList.contains(chunk) && this.isSlimeChunk(worldData.getSeed(), packet.getChunkX(), packet.getChunkZ())) {
                             this.slimeChunkList.add(chunk);

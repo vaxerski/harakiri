@@ -72,7 +72,7 @@ public final class NukerModule extends Module {
     @Override
     public void onDisable() {
         super.onDisable();
-        Harakiri.INSTANCE.getRotationManager().finishTask(this.rotationTask);
+        Harakiri.get().getRotationManager().finishTask(this.rotationTask);
     }
 
     @Override
@@ -83,7 +83,7 @@ public final class NukerModule extends Module {
     @Listener
     public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
         final Minecraft mc = Minecraft.getMinecraft();
-        if (mc.player == null || mc.world == null || Harakiri.INSTANCE.getModuleManager().find(FreeCamModule.class).isEnabled())
+        if (mc.player == null || mc.world == null || Harakiri.get().getModuleManager().find(FreeCamModule.class).isEnabled())
             return;
 
         switch (event.getStage()) {
@@ -101,10 +101,10 @@ public final class NukerModule extends Module {
 
 
                 if (this.currentPos != null) {
-                    Harakiri.INSTANCE.getRotationManager().startTask(this.rotationTask);
+                    Harakiri.get().getRotationManager().startTask(this.rotationTask);
                     if (this.rotationTask.isOnline()) {
                         final float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d(this.currentPos.getX() + 0.5f, this.currentPos.getY() + 0.5f, this.currentPos.getZ() + 0.5f));
-                        Harakiri.INSTANCE.getRotationManager().setPlayerRotations(angle[0], angle[1]);
+                        Harakiri.get().getRotationManager().setPlayerRotations(angle[0], angle[1]);
                     }
                 }
                 break;
@@ -141,7 +141,7 @@ public final class NukerModule extends Module {
 
                                     // face block
                                     final float[] rotations = EntityUtil.getRotations(hitVec.x, hitVec.y, hitVec.z);
-                                    Harakiri.INSTANCE.getRotationManager().setPlayerRotations(rotations[0], rotations[1]);
+                                    Harakiri.get().getRotationManager().setPlayerRotations(rotations[0], rotations[1]);
 
                                     // damage block
                                     if (mc.playerController.onPlayerDamageBlock(blockPos, side)) {
@@ -160,7 +160,7 @@ public final class NukerModule extends Module {
                             }
                         }
                     } else {
-                        Harakiri.INSTANCE.getRotationManager().finishTask(this.rotationTask);
+                        Harakiri.get().getRotationManager().finishTask(this.rotationTask);
                     }
                 }
                 break;
@@ -172,7 +172,7 @@ public final class NukerModule extends Module {
     @Listener
     public void render3D(EventRender3D event) {
 
-        if (!this.drawMining.getValue() || Harakiri.INSTANCE.getModuleManager().find(FreeCamModule.class).isEnabled()) return;
+        if (!this.drawMining.getValue() || Harakiri.get().getModuleManager().find(FreeCamModule.class).isEnabled()) return;
 
         switch (stage) {
             case 0:
@@ -304,7 +304,7 @@ public final class NukerModule extends Module {
             final Block block = Minecraft.getMinecraft().world.getBlockState(event.getPos()).getBlock();
             if (block != this.selected) {
                 this.selected = block;
-                Harakiri.INSTANCE.logChat("Nuker block set to " + block.getLocalizedName());
+                Harakiri.get().logChat("Nuker block set to " + block.getLocalizedName());
                 event.setCanceled(true);
             }
         }

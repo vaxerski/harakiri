@@ -59,7 +59,7 @@ public final class CoordLoggerModule extends Module {
 
                         yaw += MathHelper.wrapDegrees((Math.toDegrees(Math.atan2(difZ, difX)) - 90.0f) - yaw);
 
-                        Harakiri.INSTANCE.logChat("Lightning spawned X:" + Minecraft.getMinecraft().player.posX + " Z:" + Minecraft.getMinecraft().player.posZ + " Angle:" + yaw);
+                        Harakiri.get().logChat("Lightning spawned X:" + Minecraft.getMinecraft().player.posX + " Z:" + Minecraft.getMinecraft().player.posZ + " Angle:" + yaw);
                     }
                 }
             }
@@ -67,14 +67,14 @@ public final class CoordLoggerModule extends Module {
                 final SPacketEffect packet = (SPacketEffect) event.getPacket();
                 if (this.endPortal.getValue()) {
                     if (packet.getSoundType() == 1038) {
-                        Harakiri.INSTANCE.logChat("End Portal activated X:" + packet.getSoundPos().getX() + " Y:" + packet.getSoundPos().getY() + " Z:" + packet.getSoundPos().getZ());
+                        Harakiri.get().logChat("End Portal activated X:" + packet.getSoundPos().getX() + " Y:" + packet.getSoundPos().getY() + " Z:" + packet.getSoundPos().getZ());
                     }
                 }
                 if (this.wither.getValue()) {
                     if (packet.getSoundType() == 1023) {
                         switch (this.mode.getValue()) {
                             case VANILLA:
-                                Harakiri.INSTANCE.logChat("Wither spawned X:" + packet.getSoundPos().getX() + " Y:" + packet.getSoundPos().getY() + " Z:" + packet.getSoundPos().getZ());
+                                Harakiri.get().logChat("Wither spawned X:" + packet.getSoundPos().getX() + " Y:" + packet.getSoundPos().getY() + " Z:" + packet.getSoundPos().getZ());
                                 break;
                             case SPIGOT:
                                 float yaw = 0;
@@ -83,7 +83,7 @@ public final class CoordLoggerModule extends Module {
 
                                 yaw += MathHelper.wrapDegrees((Math.toDegrees(Math.atan2(difZ, difX)) - 90.0f) - yaw);
 
-                                Harakiri.INSTANCE.logChat("Wither spawned X:" + Minecraft.getMinecraft().player.posX + " Z:" + Minecraft.getMinecraft().player.posZ + " Angle:" + yaw);
+                                Harakiri.get().logChat("Wither spawned X:" + Minecraft.getMinecraft().player.posX + " Z:" + Minecraft.getMinecraft().player.posZ + " Angle:" + yaw);
                                 break;
                         }
                     }
@@ -96,7 +96,7 @@ public final class CoordLoggerModule extends Module {
 
                         yaw += MathHelper.wrapDegrees((Math.toDegrees(Math.atan2(difZ, difX)) - 90.0f) - yaw);
 
-                        Harakiri.INSTANCE.logChat("Ender Dragon killed X:" + Minecraft.getMinecraft().player.posX + " Z:" + Minecraft.getMinecraft().player.posZ + " Angle:" + yaw);
+                        Harakiri.get().logChat("Ender Dragon killed X:" + Minecraft.getMinecraft().player.posX + " Z:" + Minecraft.getMinecraft().player.posZ + " Angle:" + yaw);
                     }
                 }
             }

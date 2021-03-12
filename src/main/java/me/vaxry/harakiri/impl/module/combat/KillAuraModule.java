@@ -55,7 +55,7 @@ public final class KillAuraModule extends Module {
     @Override
     public void onDisable() {
         super.onDisable();
-        Harakiri.INSTANCE.getRotationManager().finishTask(this.rotationTask);
+        Harakiri.get().getRotationManager().finishTask(this.rotationTask);
     }
 
     @Listener
@@ -70,15 +70,15 @@ public final class KillAuraModule extends Module {
                 if (this.currentTarget != null) {
                     final float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), this.currentTarget.getPositionEyes(mc.getRenderPartialTicks()));
 
-                    Harakiri.INSTANCE.getRotationManager().startTask(this.rotationTask);
+                    Harakiri.get().getRotationManager().startTask(this.rotationTask);
                     if (this.rotationTask.isOnline()) {
-                        Harakiri.INSTANCE.getRotationManager().setPlayerRotations(angle[0], angle[1]);
+                        Harakiri.get().getRotationManager().setPlayerRotations(angle[0], angle[1]);
                     }
                 }
                 break;
             case POST:
                 if (this.currentTarget != null) {
-                    final float ticks = 20.0f - Harakiri.INSTANCE.getTickRateManager().getTickRate();
+                    final float ticks = 20.0f - Harakiri.get().getTickRateManager().getTickRate();
                     final boolean canAttack = this.rotationTask.isOnline() && (!this.coolDown.getValue() || (mc.player.getCooledAttackStrength(this.sync.getValue() ? -ticks : 0.0f) >= 1));
                     if (canAttack) {
                         killAuraHit = true;
@@ -93,7 +93,7 @@ public final class KillAuraModule extends Module {
                         killAuraHit = false;
                     }
                 } else {
-                    Harakiri.INSTANCE.getRotationManager().finishTask(this.rotationTask);
+                    Harakiri.get().getRotationManager().finishTask(this.rotationTask);
                 }
                 break;
         }
@@ -125,7 +125,7 @@ public final class KillAuraModule extends Module {
     private boolean checkFilter(Entity entity) {
         boolean ret = false;
 
-        if (this.players.getValue() && entity instanceof EntityPlayer && entity != Minecraft.getMinecraft().player && Harakiri.INSTANCE.getFriendManager().isFriend(entity) == null && !entity.getName().equals(Minecraft.getMinecraft().player.getName())) {
+        if (this.players.getValue() && entity instanceof EntityPlayer && entity != Minecraft.getMinecraft().player && Harakiri.get().getFriendManager().isFriend(entity) == null && !entity.getName().equals(Minecraft.getMinecraft().player.getName())) {
             ret = true;
         }
 

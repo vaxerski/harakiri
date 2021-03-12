@@ -14,7 +14,7 @@ public final class PingComponent extends DraggableHudComponent {
 
     public PingComponent() {
         super("Ping");
-        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+        this.setH(Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -22,8 +22,8 @@ public final class PingComponent extends DraggableHudComponent {
         super.render(mouseX, mouseY, partialTicks);
 
         if (mc.world == null || mc.player == null) {
-            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("(ping)"));
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(ping)", this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth("(ping)"));
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow("(ping)", this.getX(), this.getY(), 0xFFAAAAAA);
             return;
         }
 
@@ -35,8 +35,8 @@ public final class PingComponent extends DraggableHudComponent {
             final String ms = playerInfo.getResponseTime() != 0 ? playerInfo.getResponseTime() + "ms" : "?";
             final String ping = "Ping: " + ms;
 
-            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(ping));
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(ping, this.getX(), this.getY(), -1);
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth(ping));
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(ping, this.getX(), this.getY(), -1);
         }
     }
 }

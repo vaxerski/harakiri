@@ -43,7 +43,7 @@ public final class SearchModule extends Module {
     public SearchModule() {
         super("Search", new String[]{"srch", "find", "search"}, "Search for selected blocks.", "NONE", -1, ModuleType.RENDER);
 
-        if (Harakiri.INSTANCE.getConfigManager().isFirstLaunch()) {
+        if (Harakiri.get().getConfigManager().isFirstLaunch()) {
             this.add("furnace");
             this.add("crafting_table");
             this.add("enchanting_table");

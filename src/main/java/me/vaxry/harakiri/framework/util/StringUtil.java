@@ -15,7 +15,7 @@ public final class StringUtil {
             Integer.parseInt(s);
             return true;
         } catch (NumberFormatException e) {
-            Harakiri.INSTANCE.getLogger().log(Level.WARNING, "Number format exception thrown when parsing int.");
+            Harakiri.get().getLogger().log(Level.WARNING, "Number format exception thrown when parsing int.");
         }
         return false;
     }
@@ -25,7 +25,7 @@ public final class StringUtil {
             Float.parseFloat(s);
             return true;
         } catch (Exception e) {
-            Harakiri.INSTANCE.getLogger().log(Level.WARNING, "Number format exception thrown when parsing float.");
+            Harakiri.get().getLogger().log(Level.WARNING, "Number format exception thrown when parsing float.");
         }
         return false;
     }
@@ -35,7 +35,7 @@ public final class StringUtil {
             Double.parseDouble(s);
             return true;
         } catch (Exception e) {
-            Harakiri.INSTANCE.getLogger().log(Level.WARNING, "Number format exception thrown when parsing double.");
+            Harakiri.get().getLogger().log(Level.WARNING, "Number format exception thrown when parsing double.");
         }
         return false;
     }
@@ -44,7 +44,7 @@ public final class StringUtil {
         try {
             return Boolean.parseBoolean(s);
         } catch (Exception e) {
-            Harakiri.INSTANCE.getLogger().log(Level.WARNING, "Number format exception thrown when parsing boolean.");
+            Harakiri.get().getLogger().log(Level.WARNING, "Number format exception thrown when parsing boolean.");
         }
         return false;
     }
@@ -54,7 +54,7 @@ public final class StringUtil {
             Long.parseLong(s, radix);
             return true;
         } catch (Exception e) {
-            Harakiri.INSTANCE.getLogger().log(Level.WARNING, "Number format exception thrown when parsing long.");
+            Harakiri.get().getLogger().log(Level.WARNING, "Number format exception thrown when parsing long.");
         }
         return false;
     }

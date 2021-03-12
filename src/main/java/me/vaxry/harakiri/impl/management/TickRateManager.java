@@ -26,7 +26,7 @@ public final class TickRateManager {
             this.ticks[i] = 0.0f;
         }
 
-        Harakiri.INSTANCE.getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().addEventListener(this);
     }
 
     public float getLastTick() {
@@ -50,7 +50,7 @@ public final class TickRateManager {
     }
 
     public void unload() {
-        Harakiri.INSTANCE.getEventManager().removeEventListener(this);
+        Harakiri.get().getEventManager().removeEventListener(this);
     }
 
     @Listener

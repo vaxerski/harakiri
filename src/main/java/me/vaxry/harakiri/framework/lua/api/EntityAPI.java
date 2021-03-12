@@ -61,7 +61,7 @@ public class EntityAPI extends TwoArgFunction {
         le.absorptionAmount = e.getAbsorptionAmount();
 
         le.name = e.getName();
-        le.friend = Harakiri.INSTANCE.getFriendManager().isFriend(e) != null;
+        le.friend = Harakiri.get().getFriendManager().isFriend(e) != null;
 
         // Inventory
         for(int i = 0; i < 41; ++i){

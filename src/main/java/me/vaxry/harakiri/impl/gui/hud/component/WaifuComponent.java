@@ -17,7 +17,7 @@ public final class WaifuComponent extends ResizableHudComponent {
 
     public WaifuComponent() {
         super("Waifu", 505 * 0.05f, 833 * 0.05f, 505 * 0.7f, 833 * 0.7f);
-        this.setW(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+        this.setW(Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
         waifu = new Texture("waifu.png");
     }
 

@@ -41,7 +41,7 @@ public class MixinLayerArmorBase {
 
         EntityPlayer e = (EntityPlayer)entityLivingBaseIn;
 
-        ChamsModule chamsModule = (ChamsModule)Harakiri.INSTANCE.getModuleManager().find(ChamsModule.class);
+        ChamsModule chamsModule = (ChamsModule)Harakiri.get().getModuleManager().find(ChamsModule.class);
         chamsModule.lastPlayer = e;
 
         GlStateManager.enableAlpha();
@@ -57,8 +57,8 @@ public class MixinLayerArmorBase {
             return;
         }
 
-        if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null && chamsModule.friend.getValue() ||
-                Harakiri.INSTANCE.getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
+        if(Harakiri.get().getFriendManager().isFriend(e) != null && chamsModule.friend.getValue() ||
+                Harakiri.get().getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
                 Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName()) && chamsModule.self.getValue()){
 
             if(Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName())){
@@ -69,7 +69,7 @@ public class MixinLayerArmorBase {
                 this.colorR = chamsModule.selfR.getValue() / 255f;
                 this.colorG = chamsModule.selfG.getValue() / 255f;
                 this.colorB = chamsModule.selfB.getValue() / 255f;
-            } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null){
+            } else if(Harakiri.get().getFriendManager().isFriend(e) != null){
                 //friend settings
                 GL11.glColor4f(chamsModule.friendR.getValue() / 255.f,chamsModule.friendG.getValue() / 255.f,chamsModule.friendB.getValue() / 255.f,chamsModule.friendA.getValue() / 255.f);
                 this.alpha = chamsModule.friendA.getValue() > 250 ? 1.f : chamsModule.selfA.getValue() / 255.f;
@@ -78,7 +78,7 @@ public class MixinLayerArmorBase {
                 this.colorR = chamsModule.friendR.getValue() / 255f;
                 this.colorG = chamsModule.friendG.getValue() / 255f;
                 this.colorB = chamsModule.friendB.getValue() / 255f;
-            } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) == null){
+            } else if(Harakiri.get().getFriendManager().isFriend(e) == null){
                 //enemy settings
                 GL11.glColor4f(chamsModule.enemyR.getValue() / 255.f,chamsModule.enemyG.getValue() / 255.f,chamsModule.enemyB.getValue() / 255.f,chamsModule.enemyA.getValue() / 255.f);
                 this.alpha = chamsModule.enemyA.getValue() > 250 ? 1.f : chamsModule.selfA.getValue() / 255.f;
@@ -123,14 +123,14 @@ public class MixinLayerArmorBase {
 
         EntityPlayer e = (EntityPlayer)entityLivingBaseIn;
 
-        ChamsModule chamsModule = (ChamsModule)Harakiri.INSTANCE.getModuleManager().find(ChamsModule.class);
+        ChamsModule chamsModule = (ChamsModule)Harakiri.get().getModuleManager().find(ChamsModule.class);
         chamsModule.lastPlayer = e;
 
         if(!chamsModule.isEnabled() || e == null)
             return;
 
-        if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null && chamsModule.friend.getValue() ||
-            Harakiri.INSTANCE.getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
+        if(Harakiri.get().getFriendManager().isFriend(e) != null && chamsModule.friend.getValue() ||
+            Harakiri.get().getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
                 Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName()) && chamsModule.self.getValue()){
 
             GlStateManager.enableAlpha();
@@ -140,11 +140,11 @@ public class MixinLayerArmorBase {
             if(Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName())){
                 GL11.glColor4f(chamsModule.selfR.getValue() / 255.f,chamsModule.selfG.getValue() / 255.f,chamsModule.selfB.getValue() / 255.f,chamsModule.selfA.getValue() / 255.f);
                 this.alpha = chamsModule.selfA.getValue() / 255.f;
-            } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null){
+            } else if(Harakiri.get().getFriendManager().isFriend(e) != null){
                 //friend settings
                 GL11.glColor4f(chamsModule.friendR.getValue() / 255.f,chamsModule.friendG.getValue() / 255.f,chamsModule.friendB.getValue() / 255.f,chamsModule.friendA.getValue() / 255.f);
                 this.alpha = chamsModule.friendA.getValue() / 255.f;
-            } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) == null){
+            } else if(Harakiri.get().getFriendManager().isFriend(e) == null){
                 //enemy settings
                 GL11.glColor4f(chamsModule.enemyR.getValue() / 255.f,chamsModule.enemyG.getValue() / 255.f,chamsModule.enemyB.getValue() / 255.f,chamsModule.enemyA.getValue() / 255.f);
                 this.alpha = chamsModule.enemyA.getValue() / 255.f;
@@ -155,22 +155,22 @@ public class MixinLayerArmorBase {
     /*@Redirect(method = "renderArmorLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;color(FFFF)V", remap = false))
     public void color(float r, float g, float b, float a){
         // Overwrite with our color
-        ChamsModule chamsModule = (ChamsModule) Harakiri.INSTANCE.getModuleManager().find(ChamsModule.class);
+        ChamsModule chamsModule = (ChamsModule) Harakiri.get().getModuleManager().find(ChamsModule.class);
         EntityPlayer e = chamsModule.lastPlayer;
 
         if(!chamsModule.isEnabled() || e == null)
             return;
 
-        if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null && chamsModule.friend.getValue() ||
-                Harakiri.INSTANCE.getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
+        if(Harakiri.get().getFriendManager().isFriend(e) != null && chamsModule.friend.getValue() ||
+                Harakiri.get().getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
                 Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName()) && chamsModule.self.getValue()){
 
             if(Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName())){
                 GL11.glColor4f(chamsModule.selfR.getValue() / 255.f,chamsModule.selfG.getValue() / 255.f,chamsModule.selfB.getValue() / 255.f,chamsModule.selfA.getValue() / 255.f);
-            } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null){
+            } else if(Harakiri.get().getFriendManager().isFriend(e) != null){
                 //friend settings
                 GL11.glColor4f(chamsModule.friendR.getValue() / 255.f,chamsModule.friendG.getValue() / 255.f,chamsModule.friendB.getValue() / 255.f,chamsModule.friendA.getValue() / 255.f);
-            } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) == null){
+            } else if(Harakiri.get().getFriendManager().isFriend(e) == null){
                 //enemy settings
                 GL11.glColor4f(chamsModule.enemyR.getValue() / 255.f,chamsModule.enemyG.getValue() / 255.f,chamsModule.enemyB.getValue() / 255.f,chamsModule.enemyA.getValue() / 255.f);
             }
@@ -193,13 +193,13 @@ public class MixinLayerArmorBase {
 
         EntityPlayer e = (EntityPlayer)p_188364_1_;
 
-        ChamsModule chamsModule = (ChamsModule)Harakiri.INSTANCE.getModuleManager().find(ChamsModule.class);
+        ChamsModule chamsModule = (ChamsModule)Harakiri.get().getModuleManager().find(ChamsModule.class);
 
         if(!chamsModule.isEnabled() || e == null)
             return;
 
-        if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null && chamsModule.friend.getValue() ||
-                Harakiri.INSTANCE.getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
+        if(Harakiri.get().getFriendManager().isFriend(e) != null && chamsModule.friend.getValue() ||
+                Harakiri.get().getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
                 Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName()) && chamsModule.self.getValue()){
 
             GlStateManager.enableAlpha();
@@ -209,10 +209,10 @@ public class MixinLayerArmorBase {
 
             if(Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName())){
                 GL11.glColor4f(chamsModule.selfR.getValue() / 255.f,chamsModule.selfG.getValue() / 255.f,chamsModule.selfB.getValue() / 255.f,chamsModule.selfA.getValue() / 255.f);
-            } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null){
+            } else if(Harakiri.get().getFriendManager().isFriend(e) != null){
                 //friend settings
                 GL11.glColor4f(chamsModule.friendR.getValue() / 255.f,chamsModule.friendG.getValue() / 255.f,chamsModule.friendB.getValue() / 255.f,chamsModule.friendA.getValue() / 255.f);
-            } else if(Harakiri.INSTANCE.getFriendManager().isFriend(e) == null){
+            } else if(Harakiri.get().getFriendManager().isFriend(e) == null){
                 //enemy settings
                 GL11.glColor4f(chamsModule.enemyR.getValue() / 255.f,chamsModule.enemyG.getValue() / 255.f,chamsModule.enemyB.getValue() / 255.f,chamsModule.enemyA.getValue() / 255.f);
             }

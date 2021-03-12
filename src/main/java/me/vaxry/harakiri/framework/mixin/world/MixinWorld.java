@@ -23,7 +23,7 @@ public abstract class MixinWorld {
     @Inject(method = "checkLightFor", at = @At("HEAD"), cancellable = true)
     private void onCheckLightFor(EnumSkyBlock lightType, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         final EventLightUpdate event = new EventLightUpdate();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (!Minecraft.getMinecraft().isSingleplayer() && event.isCanceled()) {
             cir.setReturnValue(false);
             cir.cancel();
@@ -33,7 +33,7 @@ public abstract class MixinWorld {
     @Inject(method = "getRainStrength", at = @At("HEAD"), cancellable = true)
     private void onGetRainStrength(float delta, CallbackInfoReturnable<Float> cir) {
         final EventRainStrength event = new EventRainStrength();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) {
             cir.setReturnValue(0f);
             cir.cancel();
@@ -42,22 +42,22 @@ public abstract class MixinWorld {
 
     @Inject(method = "onEntityAdded", at = @At("HEAD"))
     private void onEntityAdded(Entity entityIn, CallbackInfo ci) {
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventAddEntity(entityIn));
+        Harakiri.get().getEventManager().dispatchEvent(new EventAddEntity(entityIn));
     }
 
     @Inject(method = "onEntityRemoved", at = @At("HEAD"))
     private void onEntityRemoved(Entity entityIn, CallbackInfo ci) {
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventRemoveEntity(entityIn));
+        Harakiri.get().getEventManager().dispatchEvent(new EventRemoveEntity(entityIn));
     }
 
     @Inject(method = "spawnEntity", at = @At("HEAD"))
     private void spawnEntity(Entity entityIn, CallbackInfoReturnable<Boolean> ci) {
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventSpawnEntity(entityIn));
-        if (entityIn instanceof EntityFireworkRocket && ((NoLagModule)Harakiri.INSTANCE.getModuleManager().find(NoLagModule.class)).firework.getValue()) {
+        Harakiri.get().getEventManager().dispatchEvent(new EventSpawnEntity(entityIn));
+        if (entityIn instanceof EntityFireworkRocket && ((NoLagModule)Harakiri.get().getModuleManager().find(NoLagModule.class)).firework.getValue()) {
             entityIn.setDead();
         }
 
-        NoLagModule noLagModule = (NoLagModule)Harakiri.INSTANCE.getModuleManager().find(NoLagModule.class);
+        NoLagModule noLagModule = (NoLagModule)Harakiri.get().getModuleManager().find(NoLagModule.class);
 
         if(noLagModule.hardRemove.getValue()) {
             if(entityIn instanceof EntityItem && noLagModule.items.getValue()){

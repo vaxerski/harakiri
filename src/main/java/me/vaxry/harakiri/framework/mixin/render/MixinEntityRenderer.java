@@ -32,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinEntityRenderer {
     @Inject(method = "updateCameraAndRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderGlobal;renderEntityOutlineFramebuffer()V"))
     private void onRenderGameOverlay(CallbackInfo ci) {
-        ((ESPModule)Harakiri.INSTANCE.getModuleManager().find(ESPModule.class)).renderFramebuffer();
+        ((ESPModule)Harakiri.get().getModuleManager().find(ESPModule.class)).renderFramebuffer();
     }
 
 
@@ -40,14 +40,14 @@ public class MixinEntityRenderer {
     // @Inject(method = "renderWorldPass", at = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V", args = {"ldc=hand"}))
     @Inject(method = "renderWorldPass", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/EntityRenderer;renderHand:Z"))
     private void onRenderHand(int pass, float partialTicks, long finishTimeNano, CallbackInfo ci) {
-        if (Harakiri.INSTANCE.getCameraManager().isCameraRecording()) return;
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventRender3D(partialTicks));
+        if (Harakiri.get().getCameraManager().isCameraRecording()) return;
+        Harakiri.get().getEventManager().dispatchEvent(new EventRender3D(partialTicks));
     }
 
     @Inject(method = "hurtCameraEffect", at = @At("HEAD"), cancellable = true)
     private void onHurtCameraEffect(float partialTicks, CallbackInfo ci) {
         final EventHurtCamEffect event = new EventHurtCamEffect();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) ci.cancel();
     }
 
@@ -60,7 +60,7 @@ public class MixinEntityRenderer {
     @Inject(method = "getFOVModifier", at = @At("HEAD"), cancellable = true)
     private void onGetFOVModifier(float partialTicks, boolean useFOVSetting, CallbackInfoReturnable<Float> cir) {
         final EventFovModifier event = new EventFovModifier();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) {
             cir.setReturnValue(event.getFov());
             cir.cancel();
@@ -69,15 +69,15 @@ public class MixinEntityRenderer {
 
     @Redirect(method = "setupFog", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ActiveRenderInfo;getBlockStateAtEntityViewpoint(Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;F)Lnet/minecraft/block/state/IBlockState;"))
     private IBlockState setupFog(World world, Entity start, float partialticks) {
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventSetupFog(world, start, partialticks));
+        Harakiri.get().getEventManager().dispatchEvent(new EventSetupFog(world, start, partialticks));
         IBlockState iBlockState = ActiveRenderInfo.getBlockStateAtEntityViewpoint(world, start, partialticks);
 
-        if(((NoOverlayModule)Harakiri.INSTANCE.getModuleManager().find(NoOverlayModule.class)).lava.getValue()){
+        if(((NoOverlayModule)Harakiri.get().getModuleManager().find(NoOverlayModule.class)).lava.getValue()){
             if(iBlockState.getMaterial() == Material.LAVA) iBlockState = Minecraft.getMinecraft().world.getBlockState(new BlockPos(
                     Minecraft.getMinecraft().player.getPosition().getX(),
                     257,
                     Minecraft.getMinecraft().player.getPosition().getZ()));
-        }else if(((NoOverlayModule)Harakiri.INSTANCE.getModuleManager().find(NoOverlayModule.class)).water.getValue()){
+        }else if(((NoOverlayModule)Harakiri.get().getModuleManager().find(NoOverlayModule.class)).water.getValue()){
             if(iBlockState.getMaterial() == Material.WATER) iBlockState = Minecraft.getMinecraft().world.getBlockState(new BlockPos(
                     Minecraft.getMinecraft().player.getPosition().getX(),
                     257,
@@ -89,7 +89,7 @@ public class MixinEntityRenderer {
     /*@Inject(at = @At("HEAD"), method = "setupFog", cancellable = true)
     private void renderFog(int startCoords, float partialTicks, CallbackInfo ci) {
         final EventSetupFog event = new EventSetupFog();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) ci.cancel();
     }*/
 

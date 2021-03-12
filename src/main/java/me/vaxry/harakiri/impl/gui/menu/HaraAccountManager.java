@@ -249,7 +249,7 @@ public class HaraAccountManager extends GuiScreen {
         this.drawDefaultBackground();
         this.altListSelector.drawScreen(mouseX, mouseY, partialTicks);
         this.drawCenteredString(this.fontRenderer, "Harakiri Account Manager", this.width / 2, 20, 16777215);
-        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.lastStatus, 0, 0, 0xFFFFFFFF);
+        Harakiri.get().getTTFFontUtil().drawStringWithShadow(this.lastStatus, 0, 0, 0xFFFFFFFF);
         super.drawScreen(mouseX, mouseY, partialTicks);
         if (this.hoveringText != null) {
             this.drawHoveringText(Lists.newArrayList(Splitter.on("\n").split(this.hoveringText)), mouseX, mouseY);

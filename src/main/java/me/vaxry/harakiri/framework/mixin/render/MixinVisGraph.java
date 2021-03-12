@@ -14,7 +14,7 @@ public class MixinVisGraph {
     @Inject(method = "setOpaqueCube", at = @At("HEAD"), cancellable = true)
     private void onSetOpaqueCube(BlockPos pos, CallbackInfo ci) {
         final EventSetOpaqueCube event = new EventSetOpaqueCube();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) ci.cancel();
     }
 }

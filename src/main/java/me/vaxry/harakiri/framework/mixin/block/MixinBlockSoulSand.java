@@ -26,7 +26,7 @@ public abstract class MixinBlockSoulSand extends Block {
     @Inject(at = @At("HEAD"), method = "onEntityCollision", cancellable = true)
     private void onEntityWalk(World worldIn, BlockPos pos, IBlockState state, Entity entityIn, CallbackInfo ci) {
         final EventCollideSoulSand event = new EventCollideSoulSand();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) ci.cancel();
     }
 }

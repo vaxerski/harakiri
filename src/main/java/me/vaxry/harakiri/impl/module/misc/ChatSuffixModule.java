@@ -21,7 +21,7 @@ public final class ChatSuffixModule extends Module {
 
     @Listener
     public void onSendChatMessage(EventSendChatMessage event) {
-        final CommandsModule cmds = (CommandsModule) Harakiri.INSTANCE.getModuleManager().find(CommandsModule.class);
+        final CommandsModule cmds = (CommandsModule) Harakiri.get().getModuleManager().find(CommandsModule.class);
         if (cmds == null)
             return;
 

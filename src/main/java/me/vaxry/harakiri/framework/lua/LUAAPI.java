@@ -45,7 +45,7 @@ public final class LUAAPI {
             if(!parseLUAScript(luaName, this))
                 return;
 
-            currentModuleHeader = Harakiri.INSTANCE.getModuleManager().findLua(luaName);
+            currentModuleHeader = Harakiri.get().getModuleManager().findLua(luaName);
             applyLUAHeader();
 
             // So we dont run the entire thing later on, just the func we are interested in.
@@ -103,7 +103,7 @@ public final class LUAAPI {
 
             }catch(Throwable t) {
                 try {
-                    Harakiri.INSTANCE.logChat("Your script contains errors!\nStage: " + ec.name() + "\n" + t.toString().substring(t.toString().contains("luaj") ? t.toString().indexOf(':') + 1 : 0));
+                    Harakiri.get().logChat("Your script contains errors!\nStage: " + ec.name() + "\n" + t.toString().substring(t.toString().contains("luaj") ? t.toString().indexOf(':') + 1 : 0));
                 }catch (Throwable t2){
                     // Throws when game loading
                 }
@@ -152,7 +152,7 @@ public final class LUAAPI {
         // Parse the header
 
         if(!rawdata.contains("-- LUAHEADER")){
-            Harakiri.INSTANCE.logChat(luaModule.luaname + ": Lua has no LUAHEADER. Please read the documentation on how to create one.");
+            Harakiri.get().logChat(luaModule.luaname + ": Lua has no LUAHEADER. Please read the documentation on how to create one.");
             return false;
         }
 
@@ -183,7 +183,7 @@ public final class LUAAPI {
             }
         }catch (Throwable t){
             try {
-                Harakiri.INSTANCE.logChat("Error while parsing " + name + ": " + t.toString());
+                Harakiri.get().logChat("Error while parsing " + name + ": " + t.toString());
             }catch(Throwable t2){
                 //Throws when game load
             }

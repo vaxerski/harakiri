@@ -33,9 +33,9 @@ public final class YawCommand extends Command {
                 Minecraft.getMinecraft().player.getRidingEntity().rotationYaw = num;
             }
 
-            Harakiri.INSTANCE.logChat("Set your yaw to " + num);
+            Harakiri.get().logChat("Set your yaw to " + num);
         } else {
-            Harakiri.INSTANCE.errorChat("Unknown number: " + "\247f\"" + split[1] + "\"");
+            Harakiri.get().errorChat("Unknown number: " + "\247f\"" + split[1] + "\"");
         }
     }
 }

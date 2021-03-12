@@ -29,7 +29,7 @@ public final class SignBookCommand extends Command {
         final Minecraft mc = Minecraft.getMinecraft();
 
         if (!mc.player.isCreative()) {
-            Harakiri.INSTANCE.errorChat("Creative mode is required to use this command.");
+            Harakiri.get().errorChat("Creative mode is required to use this command.");
             return;
         }
 
@@ -41,9 +41,9 @@ public final class SignBookCommand extends Command {
             final NBTTagCompound tagCompound = (itemStack.hasTagCompound()) ? itemStack.getTagCompound() : new NBTTagCompound();
             tagCompound.setTag("author", new NBTTagString(split[1]));
             mc.player.connection.sendPacket(new CPacketCreativeInventoryAction(36 + mc.player.inventory.currentItem, itemStack));
-            Harakiri.INSTANCE.logChat("Signed book with username " + split[1]);
+            Harakiri.get().logChat("Signed book with username " + split[1]);
         } else {
-            Harakiri.INSTANCE.errorChat("Please hold a signed book");
+            Harakiri.get().errorChat("Please hold a signed book");
         }
     }
 }

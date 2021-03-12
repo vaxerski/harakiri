@@ -53,7 +53,7 @@ public class DraggableHudComponent extends HudComponent {
                 this.setDragging(true);
                 this.setDeltaX(mouseX - this.getX());
                 this.setDeltaY(mouseY - this.getY());
-                Harakiri.INSTANCE.getHudManager().moveToTop(this);
+                Harakiri.get().getHudManager().moveToTop(this);
                 this.anchorPoint = null;
                 this.glued = null;
                 this.glueSide = null;
@@ -210,7 +210,7 @@ public class DraggableHudComponent extends HudComponent {
 
                 this.anchorPoint = this.findClosest(mouseX, mouseY);
 
-                for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+                for (HudComponent component : Harakiri.get().getHudManager().getComponentList()) {
                     if (component instanceof DraggableHudComponent) {
                         DraggableHudComponent draggable = (DraggableHudComponent) component;
                         if (draggable != this && draggable.isVisible() && draggable.isSnappable()) {
@@ -258,7 +258,7 @@ public class DraggableHudComponent extends HudComponent {
     public AnchorPoint findClosest(float x, float y) {
         AnchorPoint ret = null;
         double max = ANCHOR_THRESHOLD;
-        for (AnchorPoint point : Harakiri.INSTANCE.getHudManager().getAnchorPoints()) {
+        for (AnchorPoint point : Harakiri.get().getHudManager().getAnchorPoints()) {
             final double deltaX = x - point.getX();
             final double deltaY = y - point.getY();
 

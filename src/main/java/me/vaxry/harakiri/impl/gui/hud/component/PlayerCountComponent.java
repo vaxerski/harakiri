@@ -11,7 +11,7 @@ public final class PlayerCountComponent extends DraggableHudComponent {
 
     public PlayerCountComponent() {
         super("PlayerCount");
-        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+        this.setH(Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -20,11 +20,11 @@ public final class PlayerCountComponent extends DraggableHudComponent {
         if (mc.player != null) {
             final String playerCount = "Online: " + mc.player.connection.getPlayerInfoMap().size();
 
-            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(playerCount));
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(playerCount, this.getX(), this.getY(), -1);
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth(playerCount));
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(playerCount, this.getX(), this.getY(), -1);
         } else {
-            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("(player count)"));
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(player count)", this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth("(player count)"));
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow("(player count)", this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 

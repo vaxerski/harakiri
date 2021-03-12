@@ -22,7 +22,7 @@ public final class SpeedComponent extends DraggableHudComponent {
 
     public SpeedComponent() {
         super("Speed");
-        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+        this.setH(Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
     }
 
     private float getSpeed() {
@@ -59,12 +59,12 @@ public final class SpeedComponent extends DraggableHudComponent {
 
             final String speed = ChatFormatting.GRAY + "Speed: " + ChatFormatting.RESET + df.format(getSpeed()) + ChatFormatting.GRAY + "km/h";
 
-            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(speed));
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(speed, this.getX(), this.getY(), -1);
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth(speed));
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(speed, this.getX(), this.getY(), -1);
         } else {
             final String speed = ChatFormatting.GRAY + "Speed: " + ChatFormatting.RESET + "0" + ChatFormatting.GRAY + "km/h";
-            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(speed));
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(speed, this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth(speed));
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(speed, this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 

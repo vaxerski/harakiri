@@ -16,7 +16,7 @@ public class ReconnectButton extends GuiButton {
     {
         super(buttonId, x, y, buttonText);
 
-        reconnectModule = (ReconnectModule) Harakiri.INSTANCE.getModuleManager().find(ReconnectModule.class);
+        reconnectModule = (ReconnectModule) Harakiri.get().getModuleManager().find(ReconnectModule.class);
     }
 
     @Override

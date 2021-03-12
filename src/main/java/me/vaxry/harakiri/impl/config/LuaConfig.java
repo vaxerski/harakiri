@@ -22,7 +22,7 @@ public final class LuaConfig extends Configurable {
 
     public LuaConfig(File dir) {
         super(FileUtil.createJsonFile(dir, "lua"));
-        this.reloadLuasModule = (ReloadLuasModule) Harakiri.INSTANCE.getModuleManager().find(ReloadLuasModule.class);
+        this.reloadLuasModule = (ReloadLuasModule) Harakiri.get().getModuleManager().find(ReloadLuasModule.class);
         reloadLuasModule.loadLuas();
     }
 
@@ -47,7 +47,7 @@ public final class LuaConfig extends Configurable {
                     String valueSett = jsonElement.getAsString().substring(jsonElement.getAsString().indexOf('>') + 1);
 
                     LUAAPI.LuaModule luaModule = reloadLuasModule.getLuaModuleByName(luaname);
-                    Module thislua = Harakiri.INSTANCE.getModuleManager().findLua(luaModule.getLuaName());
+                    Module thislua = Harakiri.get().getModuleManager().findLua(luaModule.getLuaName());
 
                     if (valuename.equalsIgnoreCase("enabled")) {
                         if (Boolean.valueOf(valueSett) != thislua.isEnabled()) {
@@ -93,7 +93,7 @@ public final class LuaConfig extends Configurable {
 
         JsonArray luaSettingsArray = new JsonArray();
         for (LUAAPI.LuaModule lm : this.reloadLuasModule.loadedLuas) {
-            Module thislua = Harakiri.INSTANCE.getModuleManager().findLua(lm.getLuaName());
+            Module thislua = Harakiri.get().getModuleManager().findLua(lm.getLuaName());
 
             luaSettingsArray.add(lm.getLuaName() + ":" + "enabled" + ">" + thislua.isEnabled());
             luaSettingsArray.add(lm.getLuaName() + ":" + "hidden" + ">" + thislua.isHidden());

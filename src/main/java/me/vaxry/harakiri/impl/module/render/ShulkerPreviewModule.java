@@ -61,12 +61,12 @@ public final class ShulkerPreviewModule extends Module {
                     GlStateManager.disableLighting();
                     GlStateManager.disableDepth();
                     // background
-                    RenderUtil.drawRect(-3, -Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - 4, 9 * 16 + 3, 3 * 16 + 3, 0x11101010); //0x99
-                    RenderUtil.drawRect(-2, -Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - 3, 9 * 16 + 2, 3 * 16 + 2, 0x77202020); //0xFF
+                    RenderUtil.drawRect(-3, -Harakiri.get().getTTFFontUtil().FONT_HEIGHT - 4, 9 * 16 + 3, 3 * 16 + 3, 0x11101010); //0x99
+                    RenderUtil.drawRect(-2, -Harakiri.get().getTTFFontUtil().FONT_HEIGHT - 3, 9 * 16 + 2, 3 * 16 + 2, 0x77202020); //0xFF
                     RenderUtil.drawRect(0, 0, 9 * 16, 3 * 16, 0x66101010); //0xff
 
                     // text
-                    Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(shulker.getDisplayName(), 0, -Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT - 1, 0xFFFFFFFF);
+                    Harakiri.get().getTTFFontUtil().drawStringWithShadow(shulker.getDisplayName(), 0, -Harakiri.get().getTTFFontUtil().FONT_HEIGHT - 1, 0xFFFFFFFF);
 
                     GlStateManager.enableDepth();
                     mc.getRenderItem().zLevel = 150.0F;

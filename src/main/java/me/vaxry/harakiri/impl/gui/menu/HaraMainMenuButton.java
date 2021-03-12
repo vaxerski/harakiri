@@ -54,9 +54,9 @@ public class HaraMainMenuButton extends GuiButton {
         }
 
         RenderUtil.drawRect(this.x, this.y, this.x + this.width, this.y + this.height, 0x88FFFFFF + (int)(hoverPerc * 0x77) * 0x1000000);
-        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.displayString, this.x + this.width / 2.f -
-                        Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(this.displayString)/2.f,
-                this.y + this.height / 2.f - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT / 2.f,
+        Harakiri.get().getTTFFontUtil().drawStringWithShadow(this.displayString, this.x + this.width / 2.f -
+                        Harakiri.get().getTTFFontUtil().getStringWidth(this.displayString)/2.f,
+                this.y + this.height / 2.f - Harakiri.get().getTTFFontUtil().FONT_HEIGHT / 2.f,
                 0xFF00CCFF);
         RenderUtil.drawRect(this.x, this.y + this.height - this.BAR_HEIGHT, this.x + ((float)this.width * hoverPerc), this.height + this.y, 0xFF00CCFF);
 

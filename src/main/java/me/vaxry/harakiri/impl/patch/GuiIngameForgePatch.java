@@ -59,7 +59,7 @@ public final class GuiIngameForgePatch extends ClassPatch {
     public static boolean renderPortalHook() {
         //dispatch our event
         final EventRenderPortal event = new EventRenderPortal();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -101,7 +101,7 @@ public final class GuiIngameForgePatch extends ClassPatch {
     public static boolean renderPotionIconsHook() {
         //dispatch our event
         final EventRenderPotions event = new EventRenderPotions();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -142,7 +142,7 @@ public final class GuiIngameForgePatch extends ClassPatch {
     public static boolean renderHelmetHook() {
         //dispatch our event
         final EventRenderHelmet event = new EventRenderHelmet();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -182,7 +182,7 @@ public final class GuiIngameForgePatch extends ClassPatch {
     public static boolean renderCrosshairsHook() {
         //dispatch our event
         final EventRenderCrosshairs event = new EventRenderCrosshairs();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }

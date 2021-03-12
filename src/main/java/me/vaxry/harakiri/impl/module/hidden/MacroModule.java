@@ -23,7 +23,7 @@ public final class MacroModule extends Module {
 
     @Listener
     public void keyPress(EventKeyPress event) {
-        for (Macro macro : Harakiri.INSTANCE.getMacroManager().getMacroList()) {
+        for (Macro macro : Harakiri.get().getMacroManager().getMacroList()) {
             if (event.getKey() == Keyboard.getKeyIndex(macro.getKey()) && Keyboard.getKeyIndex(macro.getKey()) != Keyboard.KEY_NONE) {
                 final String[] split = macro.getMacro().split(";");
 

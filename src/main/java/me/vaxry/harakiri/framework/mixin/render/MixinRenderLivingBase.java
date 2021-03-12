@@ -34,7 +34,7 @@ public abstract class MixinRenderLivingBase extends Render {
     @Inject(method = "renderName", at = @At("HEAD"), cancellable = true)
     private void onRenderName(EntityLivingBase entity, double x, double y, double z, CallbackInfo ci) {
         final EventRenderName event = new EventRenderName(entity);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) ci.cancel();
     }
 
@@ -44,7 +44,7 @@ public abstract class MixinRenderLivingBase extends Render {
         if(!(entitylivingbaseIn instanceof EntityPlayer))
             return; // DONT PARSE ANIMALS AND SHIT!!!!!!!!!!
 
-        ChamsModule chamsModule = (ChamsModule)Harakiri.INSTANCE.getModuleManager().find(ChamsModule.class);
+        ChamsModule chamsModule = (ChamsModule)Harakiri.get().getModuleManager().find(ChamsModule.class);
 
         EntityPlayer e = (EntityPlayer)entitylivingbaseIn;
 
@@ -108,8 +108,8 @@ public abstract class MixinRenderLivingBase extends Render {
             GlStateManager.disableBlend();
             GlStateManager.depthMask(flag);
         }
-        if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null && chamsModule.friendFGl.getValue() ||
-                Harakiri.INSTANCE.getFriendManager().isFriend(e) == null && chamsModule.enemyFGl.getValue() ||
+        if(Harakiri.get().getFriendManager().isFriend(e) != null && chamsModule.friendFGl.getValue() ||
+                Harakiri.get().getFriendManager().isFriend(e) == null && chamsModule.enemyFGl.getValue() ||
                 Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName()) && chamsModule.selfFGl.getValue()){
 
             // force glow

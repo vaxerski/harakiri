@@ -48,12 +48,12 @@ public final class HarakiriClassTransformer implements IClassTransformer {
                 if (classNode != null) {
 
                     if (patch.isDebug()) {
-                        Harakiri.INSTANCE.getLogger().log(Level.INFO, "Methods for class " + classNode.name);
+                        Harakiri.get().getLogger().log(Level.INFO, "Methods for class " + classNode.name);
                         for (FieldNode fieldNode : classNode.fields) {
-                            Harakiri.INSTANCE.getLogger().log(Level.INFO, "Field " + fieldNode.access + " " + fieldNode.name + " " + fieldNode.desc);
+                            Harakiri.get().getLogger().log(Level.INFO, "Field " + fieldNode.access + " " + fieldNode.name + " " + fieldNode.desc);
                         }
                         for (MethodNode method : classNode.methods) {
-                            Harakiri.INSTANCE.getLogger().log(Level.INFO, "Method " + method.access + " " + method.name + " " + method.desc);
+                            Harakiri.get().getLogger().log(Level.INFO, "Method " + method.access + " " + method.name + " " + method.desc);
                         }
                     }
 
@@ -62,7 +62,7 @@ public final class HarakiriClassTransformer implements IClassTransformer {
                         final InputStream stream = this.getClass().getResourceAsStream("/" + patch.getAccessPatch().getFile());
 
                         if (stream != null) {
-                            Harakiri.INSTANCE.getLogger().log(Level.INFO, "Access transformer found " + patch.getAccessPatch().getFile());
+                            Harakiri.get().getLogger().log(Level.INFO, "Access transformer found " + patch.getAccessPatch().getFile());
 
                             String line = "";
                             final BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
@@ -75,7 +75,7 @@ public final class HarakiriClassTransformer implements IClassTransformer {
                                         field.access = 1;
 
                                         if (patch.isDebug()) {
-                                            Harakiri.INSTANCE.getLogger().log(Level.INFO, "Changed access modifier for field " + field.name);
+                                            Harakiri.get().getLogger().log(Level.INFO, "Changed access modifier for field " + field.name);
                                         }
                                     }
                                 }
@@ -86,7 +86,7 @@ public final class HarakiriClassTransformer implements IClassTransformer {
                                             method.access = 1;
 
                                             if (patch.isDebug()) {
-                                                Harakiri.INSTANCE.getLogger().log(Level.INFO, "Changed access modifier for method " + method.name + " " + method.desc);
+                                                Harakiri.get().getLogger().log(Level.INFO, "Changed access modifier for method " + method.name + " " + method.desc);
                                             }
                                         }
                                     }
@@ -135,7 +135,7 @@ public final class HarakiriClassTransformer implements IClassTransformer {
                                     method.invoke(patch, methodNode, PATCH_MANAGER.getEnv());
 
                                     if (PATCH_MANAGER.getEnv() == PatchManager.Environment.IDE) {
-                                        Harakiri.INSTANCE.getLogger().log(Level.INFO, "Patched " + patch.getMcpName().replace(".", "/") + "." + methodPatch.mcpName());
+                                        Harakiri.get().getLogger().log(Level.INFO, "Patched " + patch.getMcpName().replace(".", "/") + "." + methodPatch.mcpName());
                                     }
                                 }
                             }
@@ -149,7 +149,7 @@ public final class HarakiriClassTransformer implements IClassTransformer {
         } catch (Throwable e) {
             StringWriter errors = new StringWriter();
             e.printStackTrace(new PrintWriter(errors));
-            //Harakiri.INSTANCE.logChat("StorageESP Threw an Error: " + errors.toString());
+            //Harakiri.get().logChat("StorageESP Threw an Error: " + errors.toString());
             JOptionPane.showMessageDialog(null, errors.toString(), "Error in init()!", JOptionPane.INFORMATION_MESSAGE);
         }
         return basicClass;

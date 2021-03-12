@@ -21,7 +21,7 @@ public final class KeybindsModule extends Module {
 
     @Listener
     public void keyPress(EventKeyPress event) {
-        for (Module mod : Harakiri.INSTANCE.getModuleManager().getModuleList()) {
+        for (Module mod : Harakiri.get().getModuleManager().getModuleList()) {
             if (mod != null) {
                 if (mod.getType() != ModuleType.HIDDEN && event.getKey() == Keyboard.getKeyIndex(mod.getKey()) && Keyboard.getKeyIndex(mod.getKey()) != Keyboard.KEY_NONE) {
                     mod.toggle();

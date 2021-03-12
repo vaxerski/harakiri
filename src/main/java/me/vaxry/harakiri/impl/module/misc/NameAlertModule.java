@@ -46,7 +46,7 @@ public final class NameAlertModule extends Module {
 
                 if ((text.contains(":") && text.toLowerCase().contains(ChatFormatting.LIGHT_PURPLE + "from")) ||
                         (text.toLowerCase().contains(ChatFormatting.GRAY + "") && StringUtils.stripControlCodes(text).contains("whispers to you"))) {
-                    Harakiri.INSTANCE.getNotificationManager().addNotification("Whisper", "Someone whispered to you.");
+                    Harakiri.get().getNotificationManager().addNotification("Whisper", "Someone whispered to you.");
                     return;
                 }
 
@@ -59,7 +59,7 @@ public final class NameAlertModule extends Module {
                     if (chatUsernameMatcher.find()) {
                         String username = chatUsernameMatcher.group(1).replaceAll(">", "");
                         if (!username.equals(localUsername)) {
-                            Harakiri.INSTANCE.getNotificationManager().addNotification("Public Chat", String.format("Someone mentioned you in chat. <%s>", username));
+                            Harakiri.get().getNotificationManager().addNotification("Public Chat", String.format("Someone mentioned you in chat. <%s>", username));
                         }
                     }
                 }

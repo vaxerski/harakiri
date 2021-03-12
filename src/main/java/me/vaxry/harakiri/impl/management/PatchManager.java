@@ -96,7 +96,7 @@ public final class PatchManager {
                         if (patch != null) {
                             //add the class to our list of patches
                             this.patchList.add(patch);
-                            Harakiri.INSTANCE.getLogger().log(Level.INFO, "Found external patch " + patch.getMcpName().replace(".", "/"));
+                            Harakiri.get().getLogger().log(Level.INFO, "Found external patch " + patch.getMcpName().replace(".", "/"));
                         }
                     }
                 }

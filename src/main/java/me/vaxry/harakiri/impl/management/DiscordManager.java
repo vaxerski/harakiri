@@ -17,7 +17,7 @@ public class DiscordManager {
 
     public DiscordManager(){
         startTime = (int)Instant.now().getEpochSecond();
-        rpcModule = (DiscordRPCModule)Harakiri.INSTANCE.getModuleManager().find(DiscordRPCModule.class);
+        rpcModule = (DiscordRPCModule)Harakiri.get().getModuleManager().find(DiscordRPCModule.class);
         if(rpcModule.isEnabled())
             enable();
     }

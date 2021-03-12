@@ -23,7 +23,7 @@ public class FileUtil {
             try {
                 return new FileReader(file);
             } catch (FileNotFoundException e) {
-                Harakiri.INSTANCE.getLogger().log(Level.WARNING, "Error creating reader: File not found exception");
+                Harakiri.get().getLogger().log(Level.WARNING, "Error creating reader: File not found exception");
             }
         }
         return null;
@@ -36,7 +36,7 @@ public class FileUtil {
         try {
             reader.close();
         } catch (IOException e) {
-            Harakiri.INSTANCE.getLogger().log(Level.WARNING, "Error closing reader: IO exception");
+            Harakiri.get().getLogger().log(Level.WARNING, "Error closing reader: IO exception");
         }
     }
 
@@ -44,7 +44,7 @@ public class FileUtil {
      * Creates a directory in the client's folder
      */
     public static File createDirectory(String dir) {
-        File folder = new File(Harakiri.INSTANCE.getConfigManager().getConfigDir(), dir);
+        File folder = new File(Harakiri.get().getConfigManager().getConfigDir(), dir);
         if (!folder.exists())
             folder.mkdir();
         return folder;

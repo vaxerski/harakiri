@@ -322,7 +322,7 @@ public final class ScaffoldModule extends Module {
 
                 if (side == EnumFacing.UP && Minecraft.getMinecraft().world.getBlockState(blockPos).getBlock() == Blocks.WATER)
                 {
-                    if (Minecraft.getMinecraft().world.getBlockState(blockPos.up()).getBlock() == Blocks.AIR && Harakiri.INSTANCE.getModuleManager().find(LiquidInteractModule.class).isEnabled())
+                    if (Minecraft.getMinecraft().world.getBlockState(blockPos.up()).getBlock() == Blocks.AIR && Harakiri.get().getModuleManager().find(LiquidInteractModule.class).isEnabled())
                         return true;
                 }
             }
@@ -378,7 +378,7 @@ public final class ScaffoldModule extends Module {
             boolean l_IsWater = mc.world.getBlockState(neighbor).getBlock() == Blocks.WATER;
 
             if (mc.world.getBlockState(neighbor).getBlock().canCollideCheck(mc.world.getBlockState(neighbor), false)
-                    || (l_IsWater && Harakiri.INSTANCE.getModuleManager().find(LiquidInteractModule.class).isEnabled()))
+                    || (l_IsWater && Harakiri.get().getModuleManager().find(LiquidInteractModule.class).isEnabled()))
             {
                 final Vec3d hitVec = new Vec3d((Vec3i) neighbor).add(0.5, 0.5, 0.5).add(new Vec3d(side2.getDirectionVec()).scale(0.5));
                 if (eyesPos.distanceTo(hitVec) <= p_Distance)
@@ -525,7 +525,7 @@ public final class ScaffoldModule extends Module {
             return ValidResult.NoEntityCollision;
 
         if (mc.world.getBlockState(pos.down()).getBlock() == Blocks.WATER)
-            if (Harakiri.INSTANCE.getModuleManager().find(LiquidInteractModule.class).isEnabled())
+            if (Harakiri.get().getModuleManager().find(LiquidInteractModule.class).isEnabled())
                 return ValidResult.Ok;
 
         if (!checkForNeighbours(pos))
@@ -552,7 +552,7 @@ public final class ScaffoldModule extends Module {
                     boolean l_IsWater = mc.world.getBlockState(neighbor).getBlock() == Blocks.WATER;
 
                     if (mc.world.getBlockState(neighbor).getBlock().canCollideCheck(mc.world.getBlockState(neighbor), false)
-                            || (l_IsWater && Harakiri.INSTANCE.getModuleManager().find(LiquidInteractModule.class).isEnabled()))
+                            || (l_IsWater && Harakiri.get().getModuleManager().find(LiquidInteractModule.class).isEnabled()))
                     {
                         return ValidResult.Ok;
                     }

@@ -41,11 +41,11 @@ public final class StrafeModule extends Module {
                 return;
         }
 
-        if(Harakiri.INSTANCE.getModuleManager().find(FreeCamModule.class).isEnabled())
+        if(Harakiri.get().getModuleManager().find(FreeCamModule.class).isEnabled())
             return; // dont run when freecam, bugs out.
 
         // check for flight, could be an option maybe but it bugs out  packet fly
-        final FlightModule flightModule = (FlightModule) Harakiri.INSTANCE.getModuleManager().find(FlightModule.class);
+        final FlightModule flightModule = (FlightModule) Harakiri.get().getModuleManager().find(FlightModule.class);
         if (flightModule != null && flightModule.isEnabled()) {
             return;
         }
@@ -86,7 +86,7 @@ public final class StrafeModule extends Module {
         }
 
         // we need to ensure we don't interfere with safewalk's limitations, so we run it's checks again on the same event
-        final SafeWalkModule safeWalkModule = (SafeWalkModule) Harakiri.INSTANCE.getModuleManager().find(SafeWalkModule.class);
+        final SafeWalkModule safeWalkModule = (SafeWalkModule) Harakiri.get().getModuleManager().find(SafeWalkModule.class);
         if (safeWalkModule != null && safeWalkModule.isEnabled()) {
             safeWalkModule.onMove(event);
         }

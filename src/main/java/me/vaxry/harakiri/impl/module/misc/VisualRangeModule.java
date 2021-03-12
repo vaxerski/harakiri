@@ -35,16 +35,16 @@ public final class VisualRangeModule extends Module {
             return;
 
         if (!Minecraft.getMinecraft().player.isDead && event.getEntity() instanceof EntityPlayer && !event.getEntity().getName().equalsIgnoreCase(Minecraft.getMinecraft().player.getName())) {
-            final Friend friend = Harakiri.INSTANCE.getFriendManager().isFriend(event.getEntity());
+            final Friend friend = Harakiri.get().getFriendManager().isFriend(event.getEntity());
 
             final String msg = (friend != null ? ChatFormatting.DARK_PURPLE : ChatFormatting.RED) + (friend != null ? friend.getAlias() : event.getEntity().getName()) + ChatFormatting.WHITE + " has entered your visual range.";
 
             if (this.mode.getValue() == Mode.NOTIFICATION || this.mode.getValue() == Mode.BOTH) {
-                Harakiri.INSTANCE.getNotificationManager().addNotification("", msg);
+                Harakiri.get().getNotificationManager().addNotification("", msg);
             }
 
             if (this.mode.getValue() == Mode.CHAT || this.mode.getValue() == Mode.BOTH) {
-                Harakiri.INSTANCE.logChat(msg);
+                Harakiri.get().logChat(msg);
             }
 
             if (event.getEntity().getEntityId() == this.prevPlayer) {
@@ -61,15 +61,15 @@ public final class VisualRangeModule extends Module {
         if (!Minecraft.getMinecraft().player.isDead && event.getEntity() instanceof EntityPlayer && !event.getEntity().getName().equalsIgnoreCase(Minecraft.getMinecraft().player.getName())) {
             if (this.prevPlayer != event.getEntity().getEntityId()) {
                 this.prevPlayer = event.getEntity().getEntityId();
-                final Friend friend = Harakiri.INSTANCE.getFriendManager().isFriend(event.getEntity());
+                final Friend friend = Harakiri.get().getFriendManager().isFriend(event.getEntity());
                 final String msg = (friend != null ? ChatFormatting.DARK_PURPLE : ChatFormatting.RED) + (friend != null ? friend.getAlias() : event.getEntity().getName()) + ChatFormatting.WHITE + " has left your visual range.";
 
                 if (this.mode.getValue() == Mode.NOTIFICATION || this.mode.getValue() == Mode.BOTH) {
-                    Harakiri.INSTANCE.getNotificationManager().addNotification("", msg);
+                    Harakiri.get().getNotificationManager().addNotification("", msg);
                 }
 
                 if (this.mode.getValue() == Mode.CHAT || this.mode.getValue() == Mode.BOTH) {
-                    Harakiri.INSTANCE.logChat(msg);
+                    Harakiri.get().logChat(msg);
                 }
 
             }

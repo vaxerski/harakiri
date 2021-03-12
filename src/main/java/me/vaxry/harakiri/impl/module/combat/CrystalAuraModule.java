@@ -78,8 +78,8 @@ public final class CrystalAuraModule extends Module {
     @Override
     public void onDisable() {
         super.onDisable();
-        Harakiri.INSTANCE.getRotationManager().finishTask(this.placeRotationTask);
-        Harakiri.INSTANCE.getRotationManager().finishTask(this.attackRotationTask);
+        Harakiri.get().getRotationManager().finishTask(this.placeRotationTask);
+        Harakiri.get().getRotationManager().finishTask(this.attackRotationTask);
     }
 
     @Listener
@@ -112,7 +112,7 @@ public final class CrystalAuraModule extends Module {
                                             for (Entity entity : mc.world.loadedEntityList) {
                                                 if (entity instanceof EntityPlayer) {
                                                     final EntityPlayer player = (EntityPlayer) entity;
-                                                    if (player != mc.player && !player.getName().equals(mc.player.getName()) && player.getHealth() > 0 && Harakiri.INSTANCE.getFriendManager().isFriend(player) == null) {
+                                                    if (player != mc.player && !player.getName().equals(mc.player.getName()) && player.getHealth() > 0 && Harakiri.get().getFriendManager().isFriend(player) == null) {
                                                         final double distToBlock = entity.getDistance(blockPos.getX() + 0.5f, blockPos.getY() + 1, blockPos.getZ() + 0.5f);
                                                         final double distToLocal = entity.getDistance(mc.player.posX, mc.player.posY, mc.player.posZ);
                                                         if (distToBlock <= this.placeMaxDistance.getValue() && distToLocal <= maxDistanceToLocal) {
@@ -145,9 +145,9 @@ public final class CrystalAuraModule extends Module {
                             if (this.currentPlacePosition != null && damage > 0) {
                                 final float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d(this.currentPlacePosition.getX() + 0.5f, this.currentPlacePosition.getY() + 0.5f, this.currentPlacePosition.getZ() + 0.5f));
 
-                                Harakiri.INSTANCE.getRotationManager().startTask(this.placeRotationTask);
+                                Harakiri.get().getRotationManager().startTask(this.placeRotationTask);
                                 if (this.placeRotationTask.isOnline()) {
-                                    Harakiri.INSTANCE.getRotationManager().setPlayerRotations(angle[0], angle[1]);
+                                    Harakiri.get().getRotationManager().setPlayerRotations(angle[0], angle[1]);
                                 }
                             }
 
@@ -172,9 +172,9 @@ public final class CrystalAuraModule extends Module {
                                             if (localDamage <= currentDamage && currentDamage >= this.minDamage.getValue()) {
                                                 final float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), entity.getPositionVector());
 
-                                                Harakiri.INSTANCE.getRotationManager().startTask(this.attackRotationTask);
+                                                Harakiri.get().getRotationManager().startTask(this.attackRotationTask);
                                                 if (this.attackRotationTask.isOnline()) {
-                                                    Harakiri.INSTANCE.getRotationManager().setPlayerRotations(angle[0], angle[1]);
+                                                    Harakiri.get().getRotationManager().setPlayerRotations(angle[0], angle[1]);
                                                     this.currentAttackEntity = entity;
                                                 }
                                             }
@@ -193,7 +193,7 @@ public final class CrystalAuraModule extends Module {
                         this.placeLocations.add(new PlaceLocation(this.currentPlacePosition.getX(), this.currentPlacePosition.getY(), this.currentPlacePosition.getZ()));
                     }
                 } else {
-                    Harakiri.INSTANCE.getRotationManager().finishTask(this.placeRotationTask);
+                    Harakiri.get().getRotationManager().finishTask(this.placeRotationTask);
                 }
 
                 if (this.currentAttackEntity != null) {
@@ -204,7 +204,7 @@ public final class CrystalAuraModule extends Module {
                         this.attackTimer.reset();
                     }
                 } else {
-                    Harakiri.INSTANCE.getRotationManager().finishTask(this.attackRotationTask);
+                    Harakiri.get().getRotationManager().finishTask(this.attackRotationTask);
                 }
 
                 this.crystalAuraHit = false;
@@ -263,8 +263,8 @@ public final class CrystalAuraModule extends Module {
                     if (damage != -1) {
                         final String damageText = (Math.floor(damage) == damage ? (int) damage : String.format("%.1f", damage)) + "";
                         //GlStateManager.disableDepth();
-                        GlStateManager.translate(-(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(damageText) / 2.0d), 0, 0);
-                        Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(damageText, 0, 0, 0xFFAAAAAA);
+                        GlStateManager.translate(-(Harakiri.get().getTTFFontUtil().getStringWidth(damageText) / 2.0d), 0, 0);
+                        Harakiri.get().getTTFFontUtil().drawStringWithShadow(damageText, 0, 0, 0xFFAAAAAA);
                     }
                     GlStateManager.popMatrix();
                 }
@@ -279,7 +279,7 @@ public final class CrystalAuraModule extends Module {
         if (mc.player.capabilities.isCreativeMode)
             return true;
 
-        final GodModeModule mod = (GodModeModule) Harakiri.INSTANCE.getModuleManager().find(GodModeModule.class);
+        final GodModeModule mod = (GodModeModule) Harakiri.get().getModuleManager().find(GodModeModule.class);
         if (mod != null && mod.isEnabled())
             return true;
 

@@ -45,7 +45,7 @@ public final class HudModule extends Module {
 
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
-        for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+        for (HudComponent component : Harakiri.get().getHudManager().getComponentList()) {
             if (component.isVisible()) {
                 //dont render components with the TOP_CENTER anchor if we are looking at the tab list
                 if (component instanceof DraggableHudComponent) {

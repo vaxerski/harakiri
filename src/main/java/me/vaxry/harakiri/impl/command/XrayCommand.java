@@ -41,7 +41,7 @@ public final class XrayCommand extends Command {
 
         final String[] split = input.split(" ");
 
-        final XrayModule xray = (XrayModule) Harakiri.INSTANCE.getModuleManager().find(XrayModule.class);
+        final XrayModule xray = (XrayModule) Harakiri.get().getModuleManager().find(XrayModule.class);
 
         if (xray != null) {
             if (equals(addAlias, split[1])) {
@@ -58,41 +58,41 @@ public final class XrayCommand extends Command {
 
                         if (block != null) {
                             if (xray.contains(Block.getIdFromBlock(block))) {
-                                Harakiri.INSTANCE.logChat("Xray already contains " + block.getLocalizedName());
+                                Harakiri.get().logChat("Xray already contains " + block.getLocalizedName());
                             } else {
                                 xray.add(Block.getIdFromBlock(block));
                                 if (xray.isEnabled()) {
                                     xray.updateRenders();
                                 }
-                                Harakiri.INSTANCE.getConfigManager().save(XrayConfig.class);
-                                Harakiri.INSTANCE.logChat("Added " + block.getLocalizedName() + " to xray");
+                                Harakiri.get().getConfigManager().save(XrayConfig.class);
+                                Harakiri.get().logChat("Added " + block.getLocalizedName() + " to xray");
                             }
                         } else {
-                            Harakiri.INSTANCE.logChat("\247c" + split[2] + "\247f is not a valid block");
+                            Harakiri.get().logChat("\247c" + split[2] + "\247f is not a valid block");
                         }
                     } else {
-                        Harakiri.INSTANCE.errorChat("Cannot add Air to xray");
+                        Harakiri.get().errorChat("Cannot add Air to xray");
                     }
                 } else {
                     final Block block = Block.getBlockFromName(split[2].toLowerCase());
 
                     if (block != null) {
                         if (block == Blocks.AIR) {
-                            Harakiri.INSTANCE.errorChat("Cannot add Air to xray");
+                            Harakiri.get().errorChat("Cannot add Air to xray");
                         } else {
                             if (xray.contains(Block.getIdFromBlock(block))) {
-                                Harakiri.INSTANCE.logChat("Xray already contains " + block.getLocalizedName());
+                                Harakiri.get().logChat("Xray already contains " + block.getLocalizedName());
                             } else {
                                 xray.add(Block.getIdFromBlock(block));
                                 if (xray.isEnabled()) {
                                     xray.updateRenders();
                                 }
-                                Harakiri.INSTANCE.getConfigManager().save(XrayConfig.class);
-                                Harakiri.INSTANCE.logChat("Added " + block.getLocalizedName() + " to xray");
+                                Harakiri.get().getConfigManager().save(XrayConfig.class);
+                                Harakiri.get().logChat("Added " + block.getLocalizedName() + " to xray");
                             }
                         }
                     } else {
-                        Harakiri.INSTANCE.logChat("\247c" + split[2] + "\247f is not a valid block");
+                        Harakiri.get().logChat("\247c" + split[2] + "\247f is not a valid block");
                     }
                 }
             } else if (equals(removeAlias, split[1])) {
@@ -113,37 +113,37 @@ public final class XrayCommand extends Command {
                                 if (xray.isEnabled()) {
                                     xray.updateRenders();
                                 }
-                                Harakiri.INSTANCE.getConfigManager().save(XrayConfig.class);
-                                Harakiri.INSTANCE.logChat("Removed " + block.getLocalizedName() + " from xray");
+                                Harakiri.get().getConfigManager().save(XrayConfig.class);
+                                Harakiri.get().logChat("Removed " + block.getLocalizedName() + " from xray");
                             } else {
-                                Harakiri.INSTANCE.logChat("Xray doesn't contain " + block.getLocalizedName());
+                                Harakiri.get().logChat("Xray doesn't contain " + block.getLocalizedName());
                             }
                         } else {
-                            Harakiri.INSTANCE.logChat("\247c" + split[2] + "\247f is not a valid block");
+                            Harakiri.get().logChat("\247c" + split[2] + "\247f is not a valid block");
                         }
                     } else {
-                        Harakiri.INSTANCE.errorChat("Cannot remove Air from xray");
+                        Harakiri.get().errorChat("Cannot remove Air from xray");
                     }
                 } else {
                     final Block block = Block.getBlockFromName(split[2].toLowerCase());
 
                     if (block != null) {
                         if (block == Blocks.AIR) {
-                            Harakiri.INSTANCE.errorChat("Cannot remove Air from xray");
+                            Harakiri.get().errorChat("Cannot remove Air from xray");
                         } else {
                             if (xray.contains(Block.getIdFromBlock(block))) {
                                 xray.remove(Block.getIdFromBlock(block));
                                 if (xray.isEnabled()) {
                                     xray.updateRenders();
                                 }
-                                Harakiri.INSTANCE.getConfigManager().save(XrayConfig.class);
-                                Harakiri.INSTANCE.logChat("Removed " + block.getLocalizedName() + " from xray");
+                                Harakiri.get().getConfigManager().save(XrayConfig.class);
+                                Harakiri.get().logChat("Removed " + block.getLocalizedName() + " from xray");
                             } else {
-                                Harakiri.INSTANCE.logChat("Xray doesn't contain " + block.getLocalizedName());
+                                Harakiri.get().logChat("Xray doesn't contain " + block.getLocalizedName());
                             }
                         }
                     } else {
-                        Harakiri.INSTANCE.logChat("\247c" + split[2] + "\247f is not a valid block");
+                        Harakiri.get().logChat("\247c" + split[2] + "\247f is not a valid block");
                     }
                 }
             } else if (equals(listAlias, split[1])) {
@@ -161,9 +161,9 @@ public final class XrayCommand extends Command {
                                         .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(Block.getBlockById(i).getLocalizedName())))));
                     }
 
-                    Harakiri.INSTANCE.logcChat(msg);
+                    Harakiri.get().logcChat(msg);
                 } else {
-                    Harakiri.INSTANCE.logChat("You don't have any xray ids");
+                    Harakiri.get().logChat("You don't have any xray ids");
                 }
             } else if (equals(clearAlias, split[1])) {
                 if (!this.clamp(input, 2, 2)) {
@@ -174,14 +174,14 @@ public final class XrayCommand extends Command {
                 if (xray.isEnabled()) {
                     xray.updateRenders();
                 }
-                Harakiri.INSTANCE.getConfigManager().save(XrayConfig.class);
-                Harakiri.INSTANCE.logChat("Cleared all blocks from xray");
+                Harakiri.get().getConfigManager().save(XrayConfig.class);
+                Harakiri.get().logChat("Cleared all blocks from xray");
             } else {
-                Harakiri.INSTANCE.errorChat("Unknown input " + "\247f\"" + input + "\"");
+                Harakiri.get().errorChat("Unknown input " + "\247f\"" + input + "\"");
                 this.printUsage();
             }
         } else {
-            Harakiri.INSTANCE.errorChat("Xray not present");
+            Harakiri.get().errorChat("Xray not present");
         }
     }
 }

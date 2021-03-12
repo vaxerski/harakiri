@@ -56,7 +56,7 @@ public class HitsoundModule extends Module {
             gainControl.setValue(20f * (float) Math.log10(volume.getValue()));
             clip.start();
         }catch(Throwable t){
-            Harakiri.INSTANCE.logChat("The sound file was not found or is incorrectly exported. In the 99% of cases where this is your mistake, please refer to the FAQ about hitsounds. In the case of that 1%, please contact vaxry.");
+            Harakiri.get().logChat("The sound file was not found or is incorrectly exported. In the 99% of cases where this is your mistake, please refer to the FAQ about hitsounds. In the case of that 1%, please contact vaxry.");
         }
     }
 }

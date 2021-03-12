@@ -24,7 +24,7 @@ public abstract class MixinEntityPlayer extends EntityLivingBase {
     @Inject(at = @At("HEAD"), method = "isPushedByWater", cancellable = true)
     private void onIsPushedByWater(CallbackInfoReturnable<Boolean> cir) {
         final EventPushedByWater event = new EventPushedByWater();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) {
             cir.setReturnValue(false);
             cir.cancel();

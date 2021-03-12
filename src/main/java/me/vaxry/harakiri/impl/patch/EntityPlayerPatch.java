@@ -61,7 +61,7 @@ public final class EntityPlayerPatch extends ClassPatch {
     public static boolean isPushedByWaterHook() {
         //dispatch our event
         final EventPushedByWater event = new EventPushedByWater();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -104,7 +104,7 @@ public final class EntityPlayerPatch extends ClassPatch {
     public static boolean applyEntityCollisionHook() {
         //dispatch our event
         final EventApplyCollision event = new EventApplyCollision();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }

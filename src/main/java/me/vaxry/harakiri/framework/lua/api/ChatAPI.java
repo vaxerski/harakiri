@@ -22,7 +22,7 @@ public class ChatAPI extends TwoArgFunction {
 
     protected static class logchat extends OneArgFunction {
         public LuaValue call(LuaValue message){
-            Harakiri.INSTANCE.logChat(message.toString());
+            Harakiri.get().logChat(message.toString());
             return LuaValue.valueOf(1);
         }
     }

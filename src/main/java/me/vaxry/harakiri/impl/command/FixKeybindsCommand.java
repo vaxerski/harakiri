@@ -14,10 +14,10 @@ public final class FixKeybindsCommand extends Command {
 
     @Override
     public void exec(String input) {
-        KeybindsModule keybindsModule = (KeybindsModule) Harakiri.INSTANCE.getModuleManager().find(KeybindsModule.class);
-        Harakiri.INSTANCE.getEventManager().removeEventListener(keybindsModule);
-        Harakiri.INSTANCE.getEventManager().removeEventListener(keybindsModule);
-        Harakiri.INSTANCE.getEventManager().addEventListener(keybindsModule);
+        KeybindsModule keybindsModule = (KeybindsModule) Harakiri.get().getModuleManager().find(KeybindsModule.class);
+        Harakiri.get().getEventManager().removeEventListener(keybindsModule);
+        Harakiri.get().getEventManager().removeEventListener(keybindsModule);
+        Harakiri.get().getEventManager().addEventListener(keybindsModule);
         keybindsModule.setEnabled(true);
     }
 }

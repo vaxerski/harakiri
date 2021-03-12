@@ -26,7 +26,7 @@ public class MixinBlock {
     @Inject(at = @At("HEAD"), method = "shouldSideBeRendered", cancellable = true)
     private void onShouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side, CallbackInfoReturnable<Boolean> cir) {
         final EventRenderBlockSide event = new EventRenderBlockSide((Block) (Object) this);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) {
             cir.cancel();
             cir.setReturnValue(event.isRenderable());
@@ -36,7 +36,7 @@ public class MixinBlock {
     @Inject(at = @At("HEAD"), method = "getRenderLayer", cancellable = true)
     private void onGetRenderLayer(CallbackInfoReturnable<BlockRenderLayer> cir) {
         final EventGetBlockLayer event = new EventGetBlockLayer((Block) (Object) this);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) {
             cir.cancel();
         }
@@ -46,7 +46,7 @@ public class MixinBlock {
     @Inject(at = @At("HEAD"), method = "addCollisionBoxToList(Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/AxisAlignedBB;Ljava/util/List;Lnet/minecraft/entity/Entity;Z)V", cancellable = true)
     public void onAddCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState, CallbackInfo ci) {
         final EventAddCollisionBox event = new EventAddCollisionBox(pos, entityIn);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) {
             ci.cancel();
         }

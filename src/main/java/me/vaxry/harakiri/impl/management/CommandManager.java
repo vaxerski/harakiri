@@ -79,8 +79,8 @@ public final class CommandManager {
 
                         //add the class to our list of modules
                         this.commandList.add(command);
-                        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventCommandLoad(command));
-                        Harakiri.INSTANCE.getLogger().log(Level.INFO, "Found external command " + command.getDisplayName());
+                        Harakiri.get().getEventManager().dispatchEvent(new EventCommandLoad(command));
+                        Harakiri.get().getLogger().log(Level.INFO, "Found external command " + command.getDisplayName());
                     }
                 }
             }
@@ -90,7 +90,7 @@ public final class CommandManager {
     }
 
     public void loadValueCommands() {
-        for (final Module module : Harakiri.INSTANCE.getModuleManager().getModuleList()) {
+        for (final Module module : Harakiri.get().getModuleManager().getModuleList()) {
             if (module.getValueList().size() > 0) {
                 this.commandList.add(new Command(module.getDisplayName(), module.getAlias(), module.getDesc() != null ? module.getDesc() : "There is no description for this command", module.toUsageTextComponent()) {
 
@@ -116,24 +116,24 @@ public final class CommandManager {
                                     if (split[2].equalsIgnoreCase("true") || split[2].equalsIgnoreCase("false") || split[2].equalsIgnoreCase("1") || split[2].equalsIgnoreCase("0")) {
                                         if (split[2].equalsIgnoreCase("1")) {
                                             v.setValue(true);
-                                            Harakiri.INSTANCE.logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to \247atrue");
-                                            Harakiri.INSTANCE.getConfigManager().save(ModuleConfig.class);
+                                            Harakiri.get().logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to \247atrue");
+                                            Harakiri.get().getConfigManager().save(ModuleConfig.class);
                                         } else if (split[2].equalsIgnoreCase("0")) {
                                             v.setValue(false);
-                                            Harakiri.INSTANCE.logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to \247cfalse");
-                                            Harakiri.INSTANCE.getConfigManager().save(ModuleConfig.class);
+                                            Harakiri.get().logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to \247cfalse");
+                                            Harakiri.get().getConfigManager().save(ModuleConfig.class);
                                         } else {
                                             v.setValue(Boolean.parseBoolean(split[2]));
-                                            Harakiri.INSTANCE.logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to " + ((Boolean) v.getValue() ? "\247a" : "\247c") + v.getValue());
-                                            Harakiri.INSTANCE.getConfigManager().save(ModuleConfig.class);
+                                            Harakiri.get().logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to " + ((Boolean) v.getValue() ? "\247a" : "\247c") + v.getValue());
+                                            Harakiri.get().getConfigManager().save(ModuleConfig.class);
                                         }
                                     } else {
-                                        Harakiri.INSTANCE.errorChat("Invalid input " + "\"" + split[2] + "\" expected true/false");
+                                        Harakiri.get().errorChat("Invalid input " + "\"" + split[2] + "\" expected true/false");
                                     }
                                 } else {
                                     v.setValue(!((Boolean) v.getValue()));
-                                    Harakiri.INSTANCE.logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to " + ((Boolean) v.getValue() ? "\247a" : "\247c") + v.getValue());
-                                    Harakiri.INSTANCE.getConfigManager().save(ModuleConfig.class);
+                                    Harakiri.get().logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to " + ((Boolean) v.getValue() ? "\247a" : "\247c") + v.getValue());
+                                    Harakiri.get().getConfigManager().save(ModuleConfig.class);
                                 }
                             }
 
@@ -143,8 +143,8 @@ public final class CommandManager {
                                     return;
                                 }
                                 v.setValue(split[2]);
-                                Harakiri.INSTANCE.logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to " + split[2]);
-                                Harakiri.INSTANCE.getConfigManager().save(ModuleConfig.class);
+                                Harakiri.get().logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to " + split[2]);
+                                Harakiri.get().getConfigManager().save(ModuleConfig.class);
                             }
 
                             if (v.getValue() instanceof Number && !(v.getValue() instanceof Enum)) {
@@ -155,28 +155,28 @@ public final class CommandManager {
                                 if (v.getValue().getClass() == Float.class) {
                                     if (StringUtil.isFloat(split[2])) {
                                         v.setValue(Float.parseFloat(split[2]));
-                                        Harakiri.INSTANCE.logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to \247b" + Float.parseFloat(split[2]));
-                                        Harakiri.INSTANCE.getConfigManager().save(ModuleConfig.class);
+                                        Harakiri.get().logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to \247b" + Float.parseFloat(split[2]));
+                                        Harakiri.get().getConfigManager().save(ModuleConfig.class);
                                     } else {
-                                        Harakiri.INSTANCE.errorChat("Invalid input " + "\"" + split[2] + "\" expected a number");
+                                        Harakiri.get().errorChat("Invalid input " + "\"" + split[2] + "\" expected a number");
                                     }
                                 }
                                 if (v.getValue().getClass() == Double.class) {
                                     if (StringUtil.isDouble(split[2])) {
                                         v.setValue(Double.parseDouble(split[2]));
-                                        Harakiri.INSTANCE.logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to \247b" + Double.parseDouble(split[2]));
-                                        Harakiri.INSTANCE.getConfigManager().save(ModuleConfig.class);
+                                        Harakiri.get().logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to \247b" + Double.parseDouble(split[2]));
+                                        Harakiri.get().getConfigManager().save(ModuleConfig.class);
                                     } else {
-                                        Harakiri.INSTANCE.errorChat("Invalid input " + "\"" + split[2] + "\" expected a number");
+                                        Harakiri.get().errorChat("Invalid input " + "\"" + split[2] + "\" expected a number");
                                     }
                                 }
                                 if (v.getValue().getClass() == Integer.class) {
                                     if (StringUtil.isInt(split[2])) {
                                         v.setValue(Integer.parseInt(split[2]));
-                                        Harakiri.INSTANCE.logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to \247b" + Integer.parseInt(split[2]));
-                                        Harakiri.INSTANCE.getConfigManager().save(ModuleConfig.class);
+                                        Harakiri.get().logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to \247b" + Integer.parseInt(split[2]));
+                                        Harakiri.get().getConfigManager().save(ModuleConfig.class);
                                     } else {
-                                        Harakiri.INSTANCE.errorChat("Invalid input " + "\"" + split[2] + "\" expected a number");
+                                        Harakiri.get().errorChat("Invalid input " + "\"" + split[2] + "\" expected a number");
                                     }
                                 }
                             }
@@ -191,14 +191,14 @@ public final class CommandManager {
 
                                 if (op != -1) {
                                     v.setEnumValue(split[2]);
-                                    Harakiri.INSTANCE.logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to \247e" + ((Enum) v.getValue()).name().toLowerCase());
-                                    Harakiri.INSTANCE.getConfigManager().save(ModuleConfig.class);
+                                    Harakiri.get().logChat(module.getDisplayName() + " \2477" + v.getName() + "\247f set to \247e" + ((Enum) v.getValue()).name().toLowerCase());
+                                    Harakiri.get().getConfigManager().save(ModuleConfig.class);
                                 } else {
-                                    Harakiri.INSTANCE.errorChat("Invalid input " + "\"" + split[2] + "\" expected a string");
+                                    Harakiri.get().errorChat("Invalid input " + "\"" + split[2] + "\" expected a string");
                                 }
                             }
                         } else {
-                            Harakiri.INSTANCE.errorChat("Invalid input " + "\"" + split[1] + "\"");
+                            Harakiri.get().errorChat("Invalid input " + "\"" + split[1] + "\"");
                             this.printUsage();
                         }
                     }
@@ -248,7 +248,7 @@ public final class CommandManager {
 
     public void unload() {
         for (Command cmd : this.commandList) {
-            Harakiri.INSTANCE.getEventManager().removeEventListener(cmd);
+            Harakiri.get().getEventManager().removeEventListener(cmd);
         }
         this.commandList.clear();
     }

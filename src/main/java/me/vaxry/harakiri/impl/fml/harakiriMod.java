@@ -22,6 +22,6 @@ public final class harakiriMod {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         //initialize the client
-        Harakiri.INSTANCE.init();
+        Harakiri.get().init();
     }
 }

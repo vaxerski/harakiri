@@ -52,14 +52,14 @@ public final class GuiHudEditor extends GuiScreen {
     public boolean forceCloseColorPicker = false;
 
     public GuiHudEditor(){
-        hudComponentsSorted.addAll(Harakiri.INSTANCE.getHudManager().getComponentList());
+        hudComponentsSorted.addAll(Harakiri.get().getHudManager().getComponentList());
     }
 
     @Override
     public void keyTyped(char typedChar, int keyCode) throws IOException {
         super.keyTyped(typedChar, keyCode);
 
-        final HudEditorModule mod = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
+        final HudEditorModule mod = (HudEditorModule) Harakiri.get().getModuleManager().find(HudEditorModule.class);
 
         if (mod != null) {
             if (keyCode == Keyboard.getKeyIndex(mod.getKey())) {
@@ -71,7 +71,7 @@ public final class GuiHudEditor extends GuiScreen {
             }
         }
 
-        for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+        for (HudComponent component : Harakiri.get().getHudManager().getComponentList()) {
             if (component.isVisible()) {
                 component.keyTyped(typedChar, keyCode);
             }
@@ -83,7 +83,7 @@ public final class GuiHudEditor extends GuiScreen {
         super.onResize(mcIn, w, h);
 
         final ScaledResolution sr = new ScaledResolution(mcIn);
-        for (AnchorPoint anchorPoint : Harakiri.INSTANCE.getHudManager().getAnchorPoints()) {
+        for (AnchorPoint anchorPoint : Harakiri.get().getHudManager().getAnchorPoints()) {
             anchorPoint.updatePosition(sr);
         }
     }
@@ -101,10 +101,10 @@ public final class GuiHudEditor extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
         // Init plexus
-        if(Harakiri.INSTANCE.getPlexusEffect() == null)
-            Harakiri.INSTANCE.initPlexusEffect((PlexusComponent) Harakiri.INSTANCE.getHudManager().findComponent(PlexusComponent.class));
+        if(Harakiri.get().getPlexusEffect() == null)
+            Harakiri.get().initPlexusEffect((PlexusComponent) Harakiri.get().getHudManager().findComponent(PlexusComponent.class));
 
-        rainbowColor = Harakiri.INSTANCE.getHudManager().rainbowColor;
+        rainbowColor = Harakiri.get().getHudManager().rainbowColor;
 
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.drawDefaultBackground();
@@ -131,7 +131,7 @@ public final class GuiHudEditor extends GuiScreen {
         GlStateManager.disableAlpha();
 
         // Plexus
-        Harakiri.INSTANCE.getPlexusEffect().render(mouseX, mouseY);
+        Harakiri.get().getPlexusEffect().render(mouseX, mouseY);
 
         final float halfWidth = res.getScaledWidth() / 2.0f;
         final float halfHeight = res.getScaledHeight() / 2.0f;
@@ -145,12 +145,12 @@ public final class GuiHudEditor extends GuiScreen {
         RenderUtil.drawLine(0, res.getScaledHeight() - 1, res.getScaledWidth(), res.getScaledHeight() - 1, 1, rainbowColor); // Bottom
         RenderUtil.drawLine(res.getScaledWidth(), res.getScaledHeight(),res.getScaledWidth(), 0, 2, rainbowColor); // Right
 
-        for (AnchorPoint point : Harakiri.INSTANCE.getHudManager().getAnchorPoints()) {
+        for (AnchorPoint point : Harakiri.get().getHudManager().getAnchorPoints()) {
             //RenderUtil.drawRect(point.getX() - 1, point.getY() - 1, point.getX() + 1, point.getY() + 1, 0x75909090);
             //dont :)
         }
 
-        SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);
+        SwitchViewComponent swc = (SwitchViewComponent)Harakiri.get().getHudManager().findComponent(SwitchViewComponent.class);
 
         for (int i = 0; i < this.hudComponentsSorted.size(); ++i) {
 
@@ -179,7 +179,7 @@ public final class GuiHudEditor extends GuiScreen {
 
                         boolean colliding = false;
 
-                        for (HudComponent other : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+                        for (HudComponent other : Harakiri.get().getHudManager().getComponentList()) {
                             if (other instanceof DraggableHudComponent) {
                                 DraggableHudComponent otherDraggable = (DraggableHudComponent) other;
                                 if (other != draggable && draggable.collidesWith(otherDraggable) && otherDraggable.isVisible() && draggable.isSnappable() && otherDraggable.isSnappable()) {
@@ -222,7 +222,7 @@ public final class GuiHudEditor extends GuiScreen {
     public void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
         super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
 
-        SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);
+        SwitchViewComponent swc = (SwitchViewComponent)Harakiri.get().getHudManager().findComponent(SwitchViewComponent.class);
 
         if(this.isColorPickerOpen){
             if(mouseX >= colorPickerX && mouseX <= colorPickerX + colorPickerXY && mouseY >= colorPickerY && mouseY <= colorPickerY + colorPickerXY){
@@ -261,9 +261,9 @@ public final class GuiHudEditor extends GuiScreen {
         try {
             super.mouseClicked(mouseX, mouseY, mouseButton);
 
-            SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);
+            SwitchViewComponent swc = (SwitchViewComponent)Harakiri.get().getHudManager().findComponent(SwitchViewComponent.class);
             swc.mouseClicked(mouseX, mouseY, mouseButton);
-            Harakiri.INSTANCE.getPlexusEffect().onMouseClicked();
+            Harakiri.get().getPlexusEffect().onMouseClicked();
 
             if(this.isColorPickerOpen){
                 if(mouseX >= colorPickerX && mouseX <= colorPickerX + colorPickerXY && mouseY >= colorPickerY && mouseY <= colorPickerY + colorPickerXY){
@@ -303,7 +303,7 @@ public final class GuiHudEditor extends GuiScreen {
     public void mouseReleased(int mouseX, int mouseY, int state) {
         super.mouseReleased(mouseX, mouseY, state);
 
-        SwitchViewComponent swc = (SwitchViewComponent)Harakiri.INSTANCE.getHudManager().findComponent(SwitchViewComponent.class);
+        SwitchViewComponent swc = (SwitchViewComponent)Harakiri.get().getHudManager().findComponent(SwitchViewComponent.class);
 
         if(this.isColorPickerOpen){
             if(mouseX >= colorPickerX && mouseX <= colorPickerX + colorPickerXY && mouseY >= colorPickerY && mouseY <= colorPickerY + colorPickerXY){
@@ -349,9 +349,9 @@ public final class GuiHudEditor extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
-        //harakiri.INSTANCE.getConfigManager().saveAll();
+        //Harakiri.get().getConfigManager().saveAll();
 
-        final HudEditorModule hudEditorModule = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
+        final HudEditorModule hudEditorModule = (HudEditorModule) Harakiri.get().getModuleManager().find(HudEditorModule.class);
         if (hudEditorModule != null) {
             if (hudEditorModule.blur.getValue()) {
                 if (OpenGlHelper.shadersSupported) {
@@ -360,7 +360,7 @@ public final class GuiHudEditor extends GuiScreen {
             }
         }
 
-        for (HudComponent component : Harakiri.INSTANCE.getHudManager().getComponentList()) {
+        for (HudComponent component : Harakiri.get().getHudManager().getComponentList()) {
             if (component instanceof DraggableHudComponent) {
                 if (component.isVisible()) {
                     final DraggableHudComponent draggable = (DraggableHudComponent) component;

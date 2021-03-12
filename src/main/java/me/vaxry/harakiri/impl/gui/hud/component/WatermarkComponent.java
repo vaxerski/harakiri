@@ -52,7 +52,7 @@ public final class WatermarkComponent extends HudComponent {
         if(Minecraft.getMinecraft().world == null)
             return;
 
-        WatermarkModule watermarkModule = (WatermarkModule) Harakiri.INSTANCE.getModuleManager().find(WatermarkModule.class);
+        WatermarkModule watermarkModule = (WatermarkModule) Harakiri.get().getModuleManager().find(WatermarkModule.class);
         watermarkModule.setWMOnState(this.isVisible());
 
         final NetworkPlayerInfo playerInfo = Minecraft.getMinecraft().player.connection.getPlayerInfo(Minecraft.getMinecraft().player.getUniqueID());
@@ -62,10 +62,10 @@ public final class WatermarkComponent extends HudComponent {
             ping = ms;
         }
 
-        final HudModule hudModule = (HudModule)Harakiri.INSTANCE.getModuleManager().find(HudModule.class);
+        final HudModule hudModule = (HudModule)Harakiri.get().getModuleManager().find(HudModule.class);
         final boolean useRainbow = hudModule.rainbow.getValue();
 
-        final HudEditorModule hem = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
+        final HudEditorModule hem = (HudEditorModule) Harakiri.get().getModuleManager().find(HudEditorModule.class);
 
         final String time = new SimpleDateFormat("h:mm a").format(new Date());
 
@@ -73,7 +73,7 @@ public final class WatermarkComponent extends HudComponent {
 
         final String watermarkText = "HARAKIRI v" + harakiriMod.VERSION + " | "
                 + Minecraft.getMinecraft().player.getGameProfile().getName()
-                + " (" + Harakiri.INSTANCE.getUsername() + ") | "
+                + " (" + Harakiri.get().getUsername() + ") | "
                 + (Minecraft.getMinecraft().isSingleplayer() ? "singleplayer" : Minecraft.getMinecraft().getCurrentServerData().serverIP) + " | "
                 + "ping: " + ping + " | "
                 + time;
@@ -83,13 +83,13 @@ public final class WatermarkComponent extends HudComponent {
         GlStateManager.scale(SCALE, SCALE, SCALE);
 
         // Back
-        RenderUtil.drawRoundedRect(OFFSET_X, OFFSET_Y, Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(watermarkText) + 5, Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 4, 2, 0xFF444444);
+        RenderUtil.drawRoundedRect(OFFSET_X, OFFSET_Y, Harakiri.get().getTTFFontUtil().getStringWidth(watermarkText) + 5, Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 4, 2, 0xFF444444);
         // Top Box
-        RenderUtil.drawRoundedRect(OFFSET_X, OFFSET_Y, Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(watermarkText) + 5, 1, 0.4f, useRainbow ? Harakiri.INSTANCE.getHudManager().rainbowColor : 0xFF000000 + hem.color.getValue().getRGB());
+        RenderUtil.drawRoundedRect(OFFSET_X, OFFSET_Y, Harakiri.get().getTTFFontUtil().getStringWidth(watermarkText) + 5, 1, 0.4f, useRainbow ? Harakiri.get().getHudManager().rainbowColor : 0xFF000000 + hem.color.getValue().getRGB());
         GlStateManager.scale(1f/SCALE, 1f/SCALE, 1f/SCALE);
 
         // Text
-        Harakiri.INSTANCE.getTTFFontUtil().drawStringScaled(watermarkText, (int)((OFFSET_X + 2) * SCALE), (int)((OFFSET_Y + 2) * SCALE), 0xFFDDDDDD, SCALE);
+        Harakiri.get().getTTFFontUtil().drawStringScaled(watermarkText, (int)((OFFSET_X + 2) * SCALE), (int)((OFFSET_Y + 2) * SCALE), 0xFFDDDDDD, SCALE);
 
 
     }

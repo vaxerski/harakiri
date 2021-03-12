@@ -50,7 +50,7 @@ public final class BlockModelRendererPatch extends ClassPatch {
         insnList.add(new MethodInsnNode(INVOKESPECIAL, Type.getInternalName(EventRenderBlockModel.class), "<init>", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/renderer/block/model/IBakedModel;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/renderer/BufferBuilder;ZJ)V" : "(Lamy;Lcfy;Lawt;Let;Lbuk;ZJ)V", false));
         //store our event in the local vars
         insnList.add(new VarInsnNode(ASTORE, 13));
-        //harakiri.INSTANCE
+        //Harakiri.get()
         insnList.add(new FieldInsnNode(GETSTATIC, Type.getInternalName(Harakiri.class), "INSTANCE", "Lme/vaxry/harakiri/Harakiri;"));
         //getEventManager
         insnList.add(new MethodInsnNode(INVOKEVIRTUAL, Type.getInternalName(Harakiri.class), "getEventManager", "()Lteam/stiff/pomelo/EventManager;", false));

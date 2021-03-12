@@ -46,10 +46,10 @@ public final class MacroCommand extends Command {
             final String name = split[2];
             final String key = split[3];
 
-            final Macro macro = Harakiri.INSTANCE.getMacroManager().find(name);
+            final Macro macro = Harakiri.get().getMacroManager().find(name);
 
             if (macro != null) {
-                Harakiri.INSTANCE.logChat("\247c\"" + name + "\"\247f is already a macro");
+                Harakiri.get().logChat("\247c\"" + name + "\"\247f is already a macro");
             } else {
                 if (Keyboard.getKeyIndex(key.toUpperCase()) != Keyboard.KEY_NONE) {
                     final StringBuilder sb = new StringBuilder();
@@ -61,11 +61,11 @@ public final class MacroCommand extends Command {
                         sb.append(arg).append((i == size - 1) ? "" : " ");
                     }
 
-                    Harakiri.INSTANCE.logChat("Added macro \247c" + name + "\247f bound to " + key.toUpperCase());
-                    Harakiri.INSTANCE.getMacroManager().getMacroList().add(new Macro(name, key.toUpperCase(), sb.toString()));
-                    Harakiri.INSTANCE.getConfigManager().save(MacroConfig.class);
+                    Harakiri.get().logChat("Added macro \247c" + name + "\247f bound to " + key.toUpperCase());
+                    Harakiri.get().getMacroManager().getMacroList().add(new Macro(name, key.toUpperCase(), sb.toString()));
+                    Harakiri.get().getConfigManager().save(MacroConfig.class);
                 } else {
-                    Harakiri.INSTANCE.logChat("\247c" + key + "\247f is not a valid key");
+                    Harakiri.get().logChat("\247c" + key + "\247f is not a valid key");
                 }
             }
         } else if (equals(removeAlias, split[1])) {
@@ -76,15 +76,15 @@ public final class MacroCommand extends Command {
 
             final String name = split[2];
 
-            final Macro macro = Harakiri.INSTANCE.getMacroManager().find(name);
+            final Macro macro = Harakiri.get().getMacroManager().find(name);
 
             if (macro != null) {
-                Harakiri.INSTANCE.logChat("Removed macro \247c" + macro.getName() + " \247f");
-                Harakiri.INSTANCE.getMacroManager().getMacroList().remove(macro);
-                Harakiri.INSTANCE.getConfigManager().save(MacroConfig.class);
+                Harakiri.get().logChat("Removed macro \247c" + macro.getName() + " \247f");
+                Harakiri.get().getMacroManager().getMacroList().remove(macro);
+                Harakiri.get().getConfigManager().save(MacroConfig.class);
             } else {
                 //TODO similar
-                Harakiri.INSTANCE.errorChat("Unknown macro " + "\247f\"" + name + "\"");
+                Harakiri.get().errorChat("Unknown macro " + "\247f\"" + name + "\"");
             }
         } else if (equals(listAlias, split[1])) {
             if (!this.clamp(input, 2, 2)) {
@@ -92,13 +92,13 @@ public final class MacroCommand extends Command {
                 return;
             }
 
-            final int size = Harakiri.INSTANCE.getMacroManager().getMacroList().size();
+            final int size = Harakiri.get().getMacroManager().getMacroList().size();
 
             if (size > 0) {
                 final TextComponentString msg = new TextComponentString("\2477Macros [" + size + "]\247f ");
 
                 for (int i = 0; i < size; i++) {
-                    final Macro macro = Harakiri.INSTANCE.getMacroManager().getMacroList().get(i);
+                    final Macro macro = Harakiri.get().getMacroManager().getMacroList().get(i);
                     if (macro != null) {
                         msg.appendSibling(new TextComponentString("\247a" + macro.getName() + "\2477" + ((i == size - 1) ? "" : ", "))
                                 .setStyle(new Style()
@@ -108,7 +108,7 @@ public final class MacroCommand extends Command {
 
                 Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(msg);
             } else {
-                Harakiri.INSTANCE.logChat("You don't have any macros");
+                Harakiri.get().logChat("You don't have any macros");
             }
         } else if (equals(clearAlias, split[1])) {
             if (!this.clamp(input, 2, 2)) {
@@ -116,17 +116,17 @@ public final class MacroCommand extends Command {
                 return;
             }
 
-            final int macros = Harakiri.INSTANCE.getMacroManager().getMacroList().size();
+            final int macros = Harakiri.get().getMacroManager().getMacroList().size();
 
             if (macros > 0) {
-                Harakiri.INSTANCE.logChat("Removed \247c" + macros + "\247f macro" + (macros > 1 ? "s" : ""));
-                Harakiri.INSTANCE.getMacroManager().getMacroList().clear();
-                Harakiri.INSTANCE.getConfigManager().save(MacroConfig.class);
+                Harakiri.get().logChat("Removed \247c" + macros + "\247f macro" + (macros > 1 ? "s" : ""));
+                Harakiri.get().getMacroManager().getMacroList().clear();
+                Harakiri.get().getConfigManager().save(MacroConfig.class);
             } else {
-                Harakiri.INSTANCE.logChat("You don't have any macros");
+                Harakiri.get().logChat("You don't have any macros");
             }
         } else {
-            Harakiri.INSTANCE.errorChat("Unknown input " + "\247f\"" + input + "\"");
+            Harakiri.get().errorChat("Unknown input " + "\247f\"" + input + "\"");
             this.printUsage();
         }
 

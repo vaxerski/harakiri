@@ -57,7 +57,7 @@ public final class WorldPatch extends ClassPatch {
 
     public static boolean checkLightForHook() {
         final EventLightUpdate event = new EventLightUpdate();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         if (Minecraft.getMinecraft().isSingleplayer()) {
             return false;
@@ -84,7 +84,7 @@ public final class WorldPatch extends ClassPatch {
 
     public static boolean getRainStrengthHook() {
         final EventRainStrength event = new EventRainStrength();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         return event.isCanceled();
     }
 
@@ -101,7 +101,7 @@ public final class WorldPatch extends ClassPatch {
     }
 
     public static void onEntityAddedHook(Entity entity) {
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventAddEntity(entity));
+        Harakiri.get().getEventManager().dispatchEvent(new EventAddEntity(entity));
     }
 
     @MethodPatch(
@@ -117,7 +117,7 @@ public final class WorldPatch extends ClassPatch {
     }
 
     public static void onEntityRemovedHook(Entity entity) {
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventRemoveEntity(entity));
+        Harakiri.get().getEventManager().dispatchEvent(new EventRemoveEntity(entity));
     }
 
     @MethodPatch(
@@ -137,7 +137,7 @@ public final class WorldPatch extends ClassPatch {
 
     public static boolean spawnParticleHook() {
         final EventSpawnParticle event = new EventSpawnParticle();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         return event.isCanceled();
     }
 
@@ -154,7 +154,7 @@ public final class WorldPatch extends ClassPatch {
     }
 
     public static void spawnEntityHook(Entity entity) {
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventSpawnEntity(entity));
+        Harakiri.get().getEventManager().dispatchEvent(new EventSpawnEntity(entity));
         if (entity instanceof EntityFireworkRocket) {
             entity.setDead();
             return;

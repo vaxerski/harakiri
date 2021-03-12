@@ -32,9 +32,9 @@ public final class VClipCommand extends Command {
             } else {
                 Minecraft.getMinecraft().player.setPosition(Minecraft.getMinecraft().player.posX, Minecraft.getMinecraft().player.posY + num, Minecraft.getMinecraft().player.posZ);
             }
-            Harakiri.INSTANCE.logChat("VClipped you " + ((num > 0) ? "up" : "down") + " " + num);
+            Harakiri.get().logChat("VClipped you " + ((num > 0) ? "up" : "down") + " " + num);
         } else {
-            Harakiri.INSTANCE.errorChat("Unknown number: " + "\247f\"" + split[1] + "\"");
+            Harakiri.get().errorChat("Unknown number: " + "\247f\"" + split[1] + "\"");
         }
     }
 }

@@ -48,7 +48,7 @@ public class haralua extends TwoArgFunction {
     protected static class readint extends TwoArgFunction {
         public LuaValue call(LuaValue lua, LuaValue name) {
             try {
-                Value<Integer> val = Harakiri.INSTANCE.getModuleManager().findLuaShort(lua.toString()).findValue(name.toString());
+                Value<Integer> val = Harakiri.get().getModuleManager().findLuaShort(lua.toString()).findValue(name.toString());
                 return LuaValue.valueOf(val.getValue());
             }catch(Throwable t){
                 // oops
@@ -73,7 +73,7 @@ public class haralua extends TwoArgFunction {
     protected static class readbool extends TwoArgFunction {
         public LuaValue call(LuaValue lua, LuaValue name) {
             try {
-                Value<Boolean> val = Harakiri.INSTANCE.getModuleManager().findLuaShort(lua.toString()).findValue(name.toString());
+                Value<Boolean> val = Harakiri.get().getModuleManager().findLuaShort(lua.toString()).findValue(name.toString());
                 return LuaValue.valueOf(val.getValue());
             }catch(Throwable t){
                 // oops
@@ -100,7 +100,7 @@ public class haralua extends TwoArgFunction {
     protected static class readfloat extends TwoArgFunction {
         public LuaValue call(LuaValue lua, LuaValue name) {
             try {
-                Value<Float> val = Harakiri.INSTANCE.getModuleManager().findLuaShort(lua.toString()).findValue(name.toString());
+                Value<Float> val = Harakiri.get().getModuleManager().findLuaShort(lua.toString()).findValue(name.toString());
                 return LuaValue.valueOf(val.getValue());
             }catch(Throwable t){
                 // oops

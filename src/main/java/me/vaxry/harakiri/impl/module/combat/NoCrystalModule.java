@@ -63,7 +63,7 @@ public final class NoCrystalModule extends Module {
     @Override
     public void onDisable() {
         super.onDisable();
-        Harakiri.INSTANCE.getRotationManager().finishTask(this.rotationTask);
+        Harakiri.get().getRotationManager().finishTask(this.rotationTask);
     }
 
     @Listener
@@ -119,18 +119,18 @@ public final class NoCrystalModule extends Module {
             final HandSwapContext handSwapContext = new HandSwapContext(
                     mc.player.inventory.currentItem, this.findObsidianInHotbar(mc.player));
             if (handSwapContext.getNewSlot() == -1) {
-                Harakiri.INSTANCE.getRotationManager().finishTask(this.rotationTask);
+                Harakiri.get().getRotationManager().finishTask(this.rotationTask);
                 return;
             }
 
             if (!mc.player.isSneaking() && this.sneak.getValue()) {
                 if (this.rotationTask.isOnline()) {
-                    Harakiri.INSTANCE.getRotationManager().finishTask(this.rotationTask);
+                    Harakiri.get().getRotationManager().finishTask(this.rotationTask);
                 }
                 return;
             }
 
-            Harakiri.INSTANCE.getRotationManager().startTask(this.rotationTask);
+            Harakiri.get().getRotationManager().startTask(this.rotationTask);
             if (this.rotationTask.isOnline()) {
                 // swap to obby
                 handSwapContext.handleHandSwap(false, mc);
@@ -162,7 +162,7 @@ public final class NoCrystalModule extends Module {
                 handSwapContext.handleHandSwap(true, mc);
             }
         } else {
-            Harakiri.INSTANCE.getRotationManager().finishTask(this.rotationTask);
+            Harakiri.get().getRotationManager().finishTask(this.rotationTask);
         }
 
         if (this.disable.getValue()) {
@@ -174,7 +174,7 @@ public final class NoCrystalModule extends Module {
     @Listener
     public void onLoadWorld(EventLoadWorld event) {
         if (event.getWorld() != null) {
-            freeCamModule = (FreeCamModule) Harakiri.INSTANCE.getModuleManager().find(FreeCamModule.class);
+            freeCamModule = (FreeCamModule) Harakiri.get().getModuleManager().find(FreeCamModule.class);
         }
     }
 
@@ -224,7 +224,7 @@ public final class NoCrystalModule extends Module {
 
         if (rotate.getValue()) {
             final float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f));
-            Harakiri.INSTANCE.getRotationManager().setPlayerRotations(angle[0], angle[1]);
+            Harakiri.get().getRotationManager().setPlayerRotations(angle[0], angle[1]);
         }
 
         if (!visible.getValue()) {

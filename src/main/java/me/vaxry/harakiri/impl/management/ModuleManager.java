@@ -200,8 +200,8 @@ public final class ModuleManager {
                         //add the class to our list of modules
                         add(module);
 
-                        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventModuleLoad(module));
-                        Harakiri.INSTANCE.getLogger().log(Level.INFO, "Found external module " + module.getDisplayName());
+                        Harakiri.get().getEventManager().dispatchEvent(new EventModuleLoad(module));
+                        Harakiri.get().getLogger().log(Level.INFO, "Found external module " + module.getDisplayName());
                     }
                 }
             }

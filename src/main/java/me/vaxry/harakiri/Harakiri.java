@@ -37,7 +37,7 @@ import java.util.logging.Logger;
 public final class Harakiri {
 
     private boolean isTTF = true;
-    public static final Harakiri INSTANCE = new Harakiri();
+    private static final Harakiri INSTANCE = new Harakiri();
     private String username = "";
 
     private Logger logger;
@@ -146,7 +146,7 @@ public final class Harakiri {
         }catch(Throwable t){
             StringWriter errors = new StringWriter();
             t.printStackTrace(new PrintWriter(errors));
-            //Harakiri.INSTANCE.logChat("StorageESP Threw an Error: " + errors.toString());
+            //Harakiri.get().logChat("StorageESP Threw an Error: " + errors.toString());
             JOptionPane.showMessageDialog(null, errors.toString(), "Error in init()!", JOptionPane.INFORMATION_MESSAGE);
         }
     }
@@ -400,7 +400,7 @@ public final class Harakiri {
     }
 
     public boolean isTTF(){
-        CustomFontModule customFontModule = (CustomFontModule)Harakiri.INSTANCE.getModuleManager().find(CustomFontModule.class);
+        CustomFontModule customFontModule = (CustomFontModule)Harakiri.get().getModuleManager().find(CustomFontModule.class);
         if(customFontModule == null)
             return false;
         return customFontModule.isEnabled();
@@ -412,6 +412,10 @@ public final class Harakiri {
 
     public void initPlexusEffect(PlexusComponent plx) {
         this.plexusEffect = new PlexusEffect(plx);
+    }
+
+    public static Harakiri get(){
+        return INSTANCE;
     }
 
 

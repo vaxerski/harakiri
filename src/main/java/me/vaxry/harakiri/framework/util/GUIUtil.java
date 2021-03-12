@@ -20,6 +20,6 @@ public class GUIUtil extends GuiIngameForge {
     {
         super.renderGameOverlay(partialTicks);
 
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventRender2D(partialTicks, new ScaledResolution(Minecraft.getMinecraft())));
+        Harakiri.get().getEventManager().dispatchEvent(new EventRender2D(partialTicks, new ScaledResolution(Minecraft.getMinecraft())));
     }
 }

@@ -33,7 +33,7 @@ public class ModuleAPI extends TwoArgFunction {
     protected static class toggle extends OneArgFunction {
         public LuaValue call(LuaValue modulename){
             try {
-                Harakiri.INSTANCE.getModuleManager().find(modulename.toString()).toggle();
+                Harakiri.get().getModuleManager().find(modulename.toString()).toggle();
             }catch(Throwable t){
                 return LuaValue.valueOf(0);
             }
@@ -44,7 +44,7 @@ public class ModuleAPI extends TwoArgFunction {
     protected static class setEnabled extends TwoArgFunction {
         public LuaValue call(LuaValue modulename, LuaValue enabled){
             try {
-                Module mod = Harakiri.INSTANCE.getModuleManager().find(modulename.toString());
+                Module mod = Harakiri.get().getModuleManager().find(modulename.toString());
                 if(mod.isEnabled() == enabled.checkboolean()) return LuaValue.valueOf(1);
 
                 mod.toggle();
@@ -62,7 +62,7 @@ public class ModuleAPI extends TwoArgFunction {
             String value = args.arg(2).checkjstring();
 
             try {
-                Value realVal = Harakiri.INSTANCE.getModuleManager().find(module).findValue(value);
+                Value realVal = Harakiri.get().getModuleManager().find(module).findValue(value);
                 if(realVal.getValue() instanceof Boolean){
                     realVal.setValue(args.arg(3).checkboolean());
                 }else if(realVal.getValue() instanceof Integer){
@@ -75,7 +75,7 @@ public class ModuleAPI extends TwoArgFunction {
                     LuaValue.valueOf(0);
                 }
             }catch(Throwable t){
-                Harakiri.INSTANCE.logChat(t.toString());
+                Harakiri.get().logChat(t.toString());
                 return LuaValue.valueOf(0);
             }
             return LuaValue.valueOf(1);
@@ -85,7 +85,7 @@ public class ModuleAPI extends TwoArgFunction {
     protected static class getValue extends TwoArgFunction {
         public LuaValue call(LuaValue modulename, LuaValue value){
             try {
-                Value realVal = Harakiri.INSTANCE.getModuleManager().find(modulename.toString()).findValue(value.toString());
+                Value realVal = Harakiri.get().getModuleManager().find(modulename.toString()).findValue(value.toString());
                 if(realVal.getValue() instanceof Boolean){
                     return LuaValue.valueOf(Boolean.valueOf((Boolean)realVal.getValue()));
                 }else if(realVal.getValue() instanceof Integer){

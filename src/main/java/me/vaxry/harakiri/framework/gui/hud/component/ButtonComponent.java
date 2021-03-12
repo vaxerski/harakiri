@@ -34,18 +34,18 @@ public class ButtonComponent extends HudComponent {
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
 
-        final HudModule hm = (HudModule) Harakiri.INSTANCE.getModuleManager().find(HudModule.class);
+        final HudModule hm = (HudModule) Harakiri.get().getModuleManager().find(HudModule.class);
         if(hm.rainbow.getValue())
             useRainbow = true;
         else
             useRainbow = false;
 
-        final HudEditorModule hem = (HudEditorModule) Harakiri.INSTANCE.getModuleManager().find(HudEditorModule.class);
+        final HudEditorModule hem = (HudEditorModule) Harakiri.get().getModuleManager().find(HudEditorModule.class);
         ACCENT_COLOR = 0xFF000000 + hem.color.getValue().getRGB();
         ACCENT_COLOR_BG = 0x44000000 + hem.color.getValue().getRGB();
 
-        rainbowCol = Harakiri.INSTANCE.getHudEditor().rainbowColor;
-        rainbowColBG = 0x45000000 + Harakiri.INSTANCE.getHudEditor().rainbowColor - 0xFF000000;
+        rainbowCol = Harakiri.get().getHudEditor().rainbowColor;
+        rainbowColBG = 0x45000000 + Harakiri.get().getHudEditor().rainbowColor - 0xFF000000;
 
         if (isMouseInside(mouseX, mouseY))
             RenderUtil.drawGradientRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x30909090, 0x30909090);
@@ -75,7 +75,7 @@ public class ButtonComponent extends HudComponent {
         }
 
         // draw text
-        Harakiri.INSTANCE.getTTFFontUtil().drawString(this.getName(), (int) this.getX() + 1, (int) this.getY() + 1, this.enabled ? this.useRainbow ? rainbowCol : ACCENT_COLOR : 0xFFAAAAB7);
+        Harakiri.get().getTTFFontUtil().drawString(this.getName(), (int) this.getX() + 1, (int) this.getY() + 1, this.enabled ? this.useRainbow ? rainbowCol : ACCENT_COLOR : 0xFFAAAAB7);
     }
 
     @Override

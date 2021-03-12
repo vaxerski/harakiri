@@ -41,7 +41,7 @@ public final class NetHandlerPlayClientPatch extends ClassPatch {
     public static void handleChunkDataHook(SPacketChunkData chunkData) {
         if (chunkData != null) {
             final EventChunk event = new EventChunk(EventChunk.ChunkType.LOAD, Minecraft.getMinecraft().world.getChunk(chunkData.getChunkX(), chunkData.getChunkZ()));
-            Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+            Harakiri.get().getEventManager().dispatchEvent(event);
         }
     }
 }

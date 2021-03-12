@@ -55,7 +55,7 @@ public final class GuiScreenBookPatch extends ClassPatch {
     public static String pageInsertIntoCurrentHook(String page) {
         //dispatch our event and pass in the page
         final EventBookPage event = new EventBookPage(page);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.getPage();
     }
@@ -98,7 +98,7 @@ public final class GuiScreenBookPatch extends ClassPatch {
     public static String keyTypedInTitleHook(String title) {
         //dispatch our event and pass in the title which can be null
         final EventBookTitle event = new EventBookTitle(title);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.getTitle();
     }

@@ -23,8 +23,8 @@ public class ToolTipComponent extends HudComponent {
         this.text = text;
         this.alpha = 0;
 
-        final int tooltipWidth = (int)Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(text);
-        final int tooltipHeight = Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT;
+        final int tooltipWidth = (int)Harakiri.get().getTTFFontUtil().getStringWidth(text);
+        final int tooltipHeight = Harakiri.get().getTTFFontUtil().FONT_HEIGHT;
         this.setW(tooltipWidth);
         this.setH(tooltipHeight);
     }
@@ -53,7 +53,7 @@ public class ToolTipComponent extends HudComponent {
             }
         }
 
-        this.setY(this.getY() - newlcount * Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+        this.setY(this.getY() - newlcount * Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
 
         if (this.alpha < 0xFF/*max alpha*/) {
             this.alpha += 8.f * 60.f * framejitter;
@@ -76,12 +76,12 @@ public class ToolTipComponent extends HudComponent {
             //RenderUtil.drawRect(this.getX() - 1, this.getY() - 1, this.getX() + this.getW() + 1, this.getY() + this.getH() + 1, ColorUtil.changeAlpha(0xAD111111, this.alpha / 4));
             // text
             GlStateManager.enableBlend();
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.text, this.getX() + 1, this.getY() + 1, ColorUtil.changeAlpha(0xFFAAAAB7, this.alpha)); //0xFFFFFFFF
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(this.text, this.getX() + 1, this.getY() + 1, ColorUtil.changeAlpha(0xFFAAAAB7, this.alpha)); //0xFFFFFFFF
             GlStateManager.disableBlend();
         }
 
         // Restore Y
-        this.setY(this.getY() + newlcount * Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+        this.setY(this.getY() + newlcount * Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
     }
 
     private void clamp() {

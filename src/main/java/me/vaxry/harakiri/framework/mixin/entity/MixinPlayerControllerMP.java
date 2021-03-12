@@ -14,6 +14,6 @@ public class MixinPlayerControllerMP {
     /*@Inject(method = "attackEntity", at = @At("HEAD"), cancellable = true)
     public void attackEntity(EntityPlayer playerIn, Entity targetEntity, CallbackInfo callbackInfo) {
         EventPreAttack preEvent = new EventPreAttack(playerIn, targetEntity);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(preEvent);
+        Harakiri.get().getEventManager().dispatchEvent(preEvent);
     }*/
 }

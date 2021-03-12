@@ -101,8 +101,8 @@ public final class LogoutSpotsModule extends Module {
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(projection.getX(), projection.getY(), 0);
                 String text = data.profile.getName() + " logout";
-                float textWidth = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(text);
-                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(text, -(textWidth / 2), 0, -1);
+                float textWidth = Harakiri.get().getTTFFontUtil().getStringWidth(text);
+                Harakiri.get().getTTFFontUtil().drawStringWithShadow(text, -(textWidth / 2), 0, -1);
                 GlStateManager.translate(-projection.getX(), -projection.getY(), 0);
                 GlStateManager.popMatrix();
             }

@@ -119,7 +119,7 @@ public class OffscreenModule extends Module {
 
             int colourToUse = alphaColor;
 
-            if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null)
+            if(Harakiri.get().getFriendManager().isFriend(e) != null)
                 colourToUse += 0x00B3FF;
             else
                 colourToUse += rainbow.getValue() ? + rainbowColorC.getRed() * 0x10000 + rainbowColorC.getGreen() * 0x100 + rainbowColorC.getBlue() :

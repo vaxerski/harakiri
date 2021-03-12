@@ -93,7 +93,7 @@ public final class EntityListComponent extends DraggableHudComponent {
                 if (component != null) {
                     String name = component.getName();
 
-                    final float width = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(name);
+                    final float width = Harakiri.get().getTTFFontUtil().getStringWidth(name);
                     if (width >= maxWidth) {
                         maxWidth = width;
                     }
@@ -102,7 +102,7 @@ public final class EntityListComponent extends DraggableHudComponent {
                         switch (this.getAnchorPoint().getPoint()) {
                             case TOP_CENTER:
                             case BOTTOM_CENTER:
-                                xOffset = (this.getW() - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(name)) / 2;
+                                xOffset = (this.getW() - Harakiri.get().getTTFFontUtil().getStringWidth(name)) / 2;
                                 break;
                             case TOP_LEFT:
                             case BOTTOM_LEFT:
@@ -110,14 +110,14 @@ public final class EntityListComponent extends DraggableHudComponent {
                                 break;
                             case TOP_RIGHT:
                             case BOTTOM_RIGHT:
-                                xOffset = this.getW() - Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(name);
+                                xOffset = this.getW() - Harakiri.get().getTTFFontUtil().getStringWidth(name);
                                 break;
                         }
                     }
 
                     // set the width and height to the string size
-                    component.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(name));
-                    component.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+                    component.setW(Harakiri.get().getTTFFontUtil().getStringWidth(name));
+                    component.setH(Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
 
                     if (this.getAnchorPoint() != null) {
                         switch (this.getAnchorPoint().getPoint()) {
@@ -127,22 +127,22 @@ public final class EntityListComponent extends DraggableHudComponent {
                                 component.setX(this.getX() + xOffset);
                                 component.setY(this.getY() + yOffset);
                                 component.render(mouseX, mouseY, partialTicks);
-                                yOffset += (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+                                yOffset += (Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
                                 break;
                             case BOTTOM_CENTER:
                             case BOTTOM_LEFT:
                             case BOTTOM_RIGHT:
                                 component.setX(this.getX() + xOffset);
-                                component.setY(this.getY() + (this.getH() - Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT) + yOffset);
+                                component.setY(this.getY() + (this.getH() - Harakiri.get().getTTFFontUtil().FONT_HEIGHT) + yOffset);
                                 component.render(mouseX, mouseY, partialTicks);
-                                yOffset -= (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+                                yOffset -= (Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
                                 break;
                         }
                     } else {
                         component.setX(this.getX() + xOffset);
                         component.setY(this.getY() + yOffset);
                         component.render(mouseX, mouseY, partialTicks);
-                        yOffset += (Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+                        yOffset += (Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
                     }
                 }
             }
@@ -150,9 +150,9 @@ public final class EntityListComponent extends DraggableHudComponent {
             if (isInHudEditor) {
                 // no entities nearby
                 final String arraylist = "(entity list)";
-                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(arraylist, this.getX(), this.getY(), 0xFFAAAAAA);
-                maxWidth = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(arraylist) + 1 /* right side gap */;
-                yOffset = Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 1;
+                Harakiri.get().getTTFFontUtil().drawStringWithShadow(arraylist, this.getX(), this.getY(), 0xFFAAAAAA);
+                maxWidth = Harakiri.get().getTTFFontUtil().getStringWidth(arraylist) + 1 /* right side gap */;
+                yOffset = Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 1;
             }
         }
 
@@ -198,7 +198,7 @@ public final class EntityListComponent extends DraggableHudComponent {
             if (entity.getName().equalsIgnoreCase(mc.getSession().getUsername())) {
                 return null;
             }
-            final Friend friend = Harakiri.INSTANCE.getFriendManager().isFriend(entity);
+            final Friend friend = Harakiri.get().getFriendManager().isFriend(entity);
             if (friend != null) {
                 return ChatFormatting.DARK_PURPLE + entity.getName() + ChatFormatting.RESET + " (" + (int) mc.player.getDistance(entity) + "m)";
             }
@@ -268,7 +268,7 @@ public final class EntityListComponent extends DraggableHudComponent {
         @Override
         public void render(int mouseX, int mouseY, float partialTicks) {
             super.render(mouseX, mouseY, partialTicks);
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(this.getName(), (int) this.getX(), (int) this.getY(), 0xFFFFFFFF);
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(this.getName(), (int) this.getX(), (int) this.getY(), 0xFFFFFFFF);
         }
 
         @Override
@@ -279,11 +279,11 @@ public final class EntityListComponent extends DraggableHudComponent {
                     return;
 
                 if (entity instanceof EntityPlayer) {
-                    final Friend friend = Harakiri.INSTANCE.getFriendManager().isFriend(entity);
+                    final Friend friend = Harakiri.get().getFriendManager().isFriend(entity);
                     if (friend != null) {
-                        Harakiri.INSTANCE.getFriendManager().getFriendList().remove(friend);
+                        Harakiri.get().getFriendManager().getFriendList().remove(friend);
                     } else {
-                        Harakiri.INSTANCE.getFriendManager().add(entity.getName(), entity.getName(), false);
+                        Harakiri.get().getFriendManager().add(entity.getName(), entity.getName(), false);
                     }
                 } else if (entity instanceof EntityItem) {
                     final EntityItem entityItem = (EntityItem) entity;
@@ -298,7 +298,7 @@ public final class EntityListComponent extends DraggableHudComponent {
                                 tileEntityShulkerBox.readFromNBT(entityTag);
                                 mc.displayGuiScreen(new GuiShulkerBox(mc.player.inventory, tileEntityShulkerBox));
                             } else {
-                                Harakiri.INSTANCE.errorChat("This shulker box is empty");
+                                Harakiri.get().errorChat("This shulker box is empty");
                             }
                         } else if (itemStack.isItemEnchanted()) {
                             final StringBuilder enchantStringBuilder = new StringBuilder("");
@@ -321,10 +321,10 @@ public final class EntityListComponent extends DraggableHudComponent {
                             }
 
                             final String info = String.format("\n%s\n- Key: %s\n- Enchantments: %s\n- Durability: %s", ChatFormatting.AQUA + itemStack.getDisplayName() + ChatFormatting.RESET, itemStack.getTranslationKey(), enchantStringBuilder.toString(), itemStack.getMaxDamage() - itemStack.getItemDamage());
-                            Harakiri.INSTANCE.logChat(info);
+                            Harakiri.get().logChat(info);
                         } else {
                             final String info = String.format("\n%s\n- Key: %s\n- Count: %s\n- Metadata: %s\n- Damage: %s\n- Max Damage: %s\n- Durability: %s", ChatFormatting.GRAY + itemStack.getDisplayName(), itemStack.getTranslationKey(), itemStack.getCount(), itemStack.getMetadata(), itemStack.getItemDamage(), itemStack.getMaxDamage(), itemStack.getMaxDamage() - itemStack.getItemDamage());
-                            Harakiri.INSTANCE.logChat(info);
+                            Harakiri.get().logChat(info);
                             NBTTagCompound tagCompound = itemStack.getTagCompound();
                             if (tagCompound != null && !tagCompound.isEmpty()) {
                                 StringBuilder compoundData = new StringBuilder("\n- Compound:");
@@ -332,7 +332,7 @@ public final class EntityListComponent extends DraggableHudComponent {
                                     compoundData.append("\n-- ").append(s).append(": ");
                                     compoundData.append(tagCompound.getTag(s));
                                 }
-                                Harakiri.INSTANCE.logChat(compoundData.toString());
+                                Harakiri.get().logChat(compoundData.toString());
                             }
                         }
                     }

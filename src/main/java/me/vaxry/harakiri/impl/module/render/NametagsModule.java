@@ -125,7 +125,7 @@ public final class NametagsModule extends Module {
 
             nametagstr += "\247f ";
 
-            if(Harakiri.INSTANCE.getFriendManager().isFriend(e) != null) {
+            if(Harakiri.get().getFriendManager().isFriend(e) != null) {
                 nametagstr += "\2473" + e.getName();
                 toDraw.add(new Pair<>(e.getName() + " ", 0xFF80FFFF));
             }
@@ -192,12 +192,12 @@ public final class NametagsModule extends Module {
                 nametagMiddleNew.x = nametagX;
                 nametagMiddleNew.y = nametagY;
 
-                textLength = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(nametagstr);
+                textLength = Harakiri.get().getTTFFontUtil().getStringWidth(nametagstr);
                 nametagX -= textLength / 2.f;
             }else{
                 // draw with 3D scaling
 
-                float strwidth = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(nametagstr) / 43.f; // real units
+                float strwidth = Harakiri.get().getTTFFontUtil().getStringWidth(nametagstr) / 43.f; // real units
 
                 float playerYaw = (float)Math.toRadians(mc.player.rotationYaw);
 
@@ -234,13 +234,13 @@ public final class NametagsModule extends Module {
                     scaledwidth = (float)Math.abs(right.x - left.x);
                 }
 
-                scale = scaledwidth / Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(nametagstr);
+                scale = scaledwidth / Harakiri.get().getTTFFontUtil().getStringWidth(nametagstr);
                 scale *= additionalScale.getValue();
 
                 GlStateManager.pushMatrix();
                 GlStateManager.scale(scale, scale, scale);
 
-                textLength = Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(nametagstr);
+                textLength = Harakiri.get().getTTFFontUtil().getStringWidth(nametagstr);
 
                 right.x /= scale;
                 right.y /= scale;
@@ -263,16 +263,16 @@ public final class NametagsModule extends Module {
 
             // Draw basic nametag
 
-            RenderUtil.drawRect(nametagX - NAMETAG_SAFEAREA + xoffset, nametagY, nametagX + textLength + xoffset + NAMETAG_SAFEAREA, nametagY + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 2 * NAMETAG_SAFEAREA, ColorUtil.changeAlpha(0x551D1D1D, (int)(alphaPerc * 85)));
+            RenderUtil.drawRect(nametagX - NAMETAG_SAFEAREA + xoffset, nametagY, nametagX + textLength + xoffset + NAMETAG_SAFEAREA, nametagY + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 2 * NAMETAG_SAFEAREA, ColorUtil.changeAlpha(0x551D1D1D, (int)(alphaPerc * 85)));
 
-            //Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(nametagstr, nametagX + xoffset, nametagY + NAMETAG_SAFEAREA, (int)(0xFF * alphaPerc) * 0x1000000 + 0xDDDDDD);
+            //Harakiri.get().getTTFFontUtil().drawStringWithShadow(nametagstr, nametagX + xoffset, nametagY + NAMETAG_SAFEAREA, (int)(0xFF * alphaPerc) * 0x1000000 + 0xDDDDDD);
 
             // New rendering
             float xoff = 0;
             GlStateManager.enableBlend();
             for(int iter = 0; iter < toDraw.size(); iter++){
                 Pair<String, Integer> entry = toDraw.get(iter);
-                xoff += Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(entry.first(), nametagX + xoffset + xoff, nametagY + NAMETAG_SAFEAREA, (int)(0xFF * alphaPerc) * 0x1000000 + entry.second());
+                xoff += Harakiri.get().getTTFFontUtil().drawStringWithShadow(entry.first(), nametagX + xoffset + xoff, nametagY + NAMETAG_SAFEAREA, (int)(0xFF * alphaPerc) * 0x1000000 + entry.second());
             }
             GlStateManager.disableBlend();
 
@@ -315,12 +315,12 @@ public final class NametagsModule extends Module {
 
             GlStateManager.scale(armorscale.getValue(), armorscale.getValue(), armorscale.getValue());
 
-            nametagMiddleNew.y -= NAMETAG_SAFEAREA * 5 + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 16;
+            nametagMiddleNew.y -= NAMETAG_SAFEAREA * 5 + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 16;
 
             float rectWidth = NAMETAG_SAFEAREA*2 + stacks.size() * 16 + NAMETAG_SAFEAREA * Math.max(stacks.size() - 1, 0);
             if(stacks.size() == 0)
                 rectWidth = 0;
-            RenderUtil.drawRect((float)nametagMiddleNew.x - rectWidth/2.f, (float)nametagMiddleNew.y + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 2 * NAMETAG_SAFEAREA, (float)nametagMiddleNew.x + rectWidth/2.f, (float)nametagMiddleNew.y + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 16 + 4 * NAMETAG_SAFEAREA, ColorUtil.changeAlpha(0x551D1D1D, (int)(alphaPerc * 85)));
+            RenderUtil.drawRect((float)nametagMiddleNew.x - rectWidth/2.f, (float)nametagMiddleNew.y + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 2 * NAMETAG_SAFEAREA, (float)nametagMiddleNew.x + rectWidth/2.f, (float)nametagMiddleNew.y + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 16 + 4 * NAMETAG_SAFEAREA, ColorUtil.changeAlpha(0x551D1D1D, (int)(alphaPerc * 85)));
             // BG drawn.
 
             float currentX = 0;
@@ -333,11 +333,11 @@ public final class NametagsModule extends Module {
                         GlStateManager.enableBlend();
                         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
                         RenderHelper.enableGUIStandardItemLighting();
-                        GlStateManager.translate(nametagMiddleNew.x - rectWidth/2.f + NAMETAG_SAFEAREA + currentX, nametagMiddleNew.y + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + 3 * NAMETAG_SAFEAREA, 0);
+                        GlStateManager.translate(nametagMiddleNew.x - rectWidth/2.f + NAMETAG_SAFEAREA + currentX, nametagMiddleNew.y + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 3 * NAMETAG_SAFEAREA, 0);
 
-                        Harakiri.INSTANCE.getRenderItemAlpha().alpha = alphaPerc;
-                        Harakiri.INSTANCE.getRenderItemAlpha().renderItemAndEffectIntoGUI(mc.player, stack, 0, 0);
-                        Harakiri.INSTANCE.getRenderItemAlpha().renderItemOverlayIntoGUI(mc.fontRenderer, stack, 0, 0, (String)null);
+                        Harakiri.get().getRenderItemAlpha().alpha = alphaPerc;
+                        Harakiri.get().getRenderItemAlpha().renderItemAndEffectIntoGUI(mc.player, stack, 0, 0);
+                        Harakiri.get().getRenderItemAlpha().renderItemOverlayIntoGUI(mc.fontRenderer, stack, 0, 0, (String)null);
 
                         RenderHelper.disableStandardItemLighting();
                         GlStateManager.disableBlend();
@@ -362,14 +362,14 @@ public final class NametagsModule extends Module {
 
             if(mainHandItem.getItem() == Items.AIR) itemName = "";
 
-            nametagMiddleNew.y -= Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT / 2.f;
-            float nameRectWidth = NAMETAG_SAFEAREA*2 + Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(itemName);
+            nametagMiddleNew.y -= Harakiri.get().getTTFFontUtil().FONT_HEIGHT / 2.f;
+            float nameRectWidth = NAMETAG_SAFEAREA*2 + Harakiri.get().getTTFFontUtil().getStringWidth(itemName);
 
-            //RenderUtil.drawRect((float)nametagMiddleNew.x - nameRectWidth / 2.f, (float)nametagMiddleNew.y + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT + NAMETAG_SAFEAREA, (float)nametagMiddleNew.x + nameRectWidth / 2.f, (float)nametagMiddleNew.y - NAMETAG_SAFEAREA, 0x551d1d1d);
+            //RenderUtil.drawRect((float)nametagMiddleNew.x - nameRectWidth / 2.f, (float)nametagMiddleNew.y + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + NAMETAG_SAFEAREA, (float)nametagMiddleNew.x + nameRectWidth / 2.f, (float)nametagMiddleNew.y - NAMETAG_SAFEAREA, 0x551d1d1d);
 
             // New rendering
             GlStateManager.enableBlend();
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(itemName, (float)nametagMiddleNew.x - nameRectWidth / 2.f + NAMETAG_SAFEAREA, (float)nametagMiddleNew.y + Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT, (int)(0xFF * alphaPerc) * 0x1000000 + 0xDDDDDD);
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(itemName, (float)nametagMiddleNew.x - nameRectWidth / 2.f + NAMETAG_SAFEAREA, (float)nametagMiddleNew.y + Harakiri.get().getTTFFontUtil().FONT_HEIGHT, (int)(0xFF * alphaPerc) * 0x1000000 + 0xDDDDDD);
             GlStateManager.disableBlend();
 
             GlStateManager.scale(1/nameScale, 1/nameScale, 1/nameScale);

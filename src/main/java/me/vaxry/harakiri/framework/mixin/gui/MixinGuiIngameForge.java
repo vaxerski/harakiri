@@ -22,21 +22,21 @@ public abstract class MixinGuiIngameForge extends GuiIngame {
     @Inject(method = "renderPortal", cancellable = true, at = @At("HEAD"))
     private void onRenderPortal(ScaledResolution res, float partialTicks, CallbackInfo ci) {
         final EventRenderPortal event = new EventRenderPortal();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) ci.cancel();
     }
 
     @Inject(method = "renderPotionIcons", cancellable = true, at = @At("HEAD"))
     private void onRenderPotionIcons(ScaledResolution resolution, CallbackInfo ci) {
         final EventRenderPotions event = new EventRenderPotions();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) ci.cancel();
     }
 
     @Inject(method = "renderHelmet", cancellable = true, at = @At("HEAD"))
     private void onRenderHelmet(ScaledResolution res, float partialTicks, CallbackInfo ci) {
         final EventRenderHelmet event = new EventRenderHelmet();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) ci.cancel();
     }
 

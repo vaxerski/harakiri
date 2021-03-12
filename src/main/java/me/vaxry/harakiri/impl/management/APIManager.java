@@ -63,7 +63,7 @@ public final class APIManager {
             }else{
                 String[] strings = new String[3];
                 strings = read.split(" ");
-                Harakiri.INSTANCE.setUsername(strings[2].substring(0, Integer.valueOf(strings[1])));
+                Harakiri.get().setUsername(strings[2].substring(0, Integer.valueOf(strings[1])));
             }
         }catch(Throwable t){
             killThisThing();
@@ -95,7 +95,7 @@ public final class APIManager {
             }
         } catch (IOException | ParseException e) {
             //e.printStackTrace();
-            Harakiri.INSTANCE.getLogger().log(Level.INFO, "Couldn't connect to api.mojang.com for the uuid resolver.");
+            Harakiri.get().getLogger().log(Level.INFO, "Couldn't connect to api.mojang.com for the uuid resolver.");
         }
 
         return null;

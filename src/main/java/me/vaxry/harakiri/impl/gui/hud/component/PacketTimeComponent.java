@@ -21,9 +21,9 @@ public final class PacketTimeComponent extends DraggableHudComponent {
 
     public PacketTimeComponent() {
         super("PacketTime");
-        this.setH(Harakiri.INSTANCE.getTTFFontUtil().FONT_HEIGHT);
+        this.setH(Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
 
-        Harakiri.INSTANCE.getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().addEventListener(this);
     }
 
     @Listener
@@ -43,12 +43,12 @@ public final class PacketTimeComponent extends DraggableHudComponent {
             final float seconds = ((System.currentTimeMillis() - this.timer.getTime()) / 1000.0f) % 60.0f;
             final String delay = Minecraft.getMinecraft().currentScreen instanceof GuiHudEditor ? "\247f[ Server Lag ]" : "\247fServer Lag: " + "\2474" + new DecimalFormat("#.#").format(seconds) + "\247cs";
 
-            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth(delay));
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth(delay));
             if(seconds >= 1.0f || Minecraft.getMinecraft().currentScreen instanceof GuiHudEditor)
-                Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow(delay, this.getX(), this.getY(), -1);
+                Harakiri.get().getTTFFontUtil().drawStringWithShadow(delay, this.getX(), this.getY(), -1);
         } else {
-            this.setW(Harakiri.INSTANCE.getTTFFontUtil().getStringWidth("(packet delay)"));
-            Harakiri.INSTANCE.getTTFFontUtil().drawStringWithShadow("(packet delay)", this.getX(), this.getY(), 0xFFAAAAAA);
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth("(packet delay)"));
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow("(packet delay)", this.getX(), this.getY(), 0xFFAAAAAA);
         }
     }
 }

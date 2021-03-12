@@ -18,7 +18,7 @@ public class MixinBlockModelRenderer {
     @Inject(at = @At("HEAD"), method = "renderModel(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/renderer/block/model/IBakedModel;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/renderer/BufferBuilder;ZJ)Z", cancellable = true)
     private void onRenderModel(IBlockAccess blockAccessIn, IBakedModel modelIn, IBlockState blockStateIn, BlockPos blockPosIn, BufferBuilder buffer, boolean checkSides, long rand, CallbackInfoReturnable<Boolean> cir) {
         final EventRenderBlockModel event = new EventRenderBlockModel(blockAccessIn, modelIn, blockStateIn, blockPosIn, buffer, checkSides, rand);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) {
             cir.cancel();
             cir.setReturnValue(event.isRenderable());

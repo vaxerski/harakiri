@@ -17,7 +17,7 @@ public class MixinBiomeColorHelper {
     @Inject(at = @At("HEAD"), method = "getGrassColorAtPos", cancellable = true)
     private static void onGetGrassColorAtPos(IBlockAccess blockAccess, BlockPos pos, CallbackInfoReturnable<Integer> cir) {
         final EventGrassColor event = new EventGrassColor();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) {
             cir.cancel();
             cir.setReturnValue(event.getColor());
@@ -27,7 +27,7 @@ public class MixinBiomeColorHelper {
     @Inject(at = @At("HEAD"), method = "getFoliageColorAtPos", cancellable = true)
     private static void onGetFoliageColorAtPos(IBlockAccess blockAccess, BlockPos pos, CallbackInfoReturnable<Integer> cir) {
         final EventFoliageColor event = new EventFoliageColor();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) {
             cir.cancel();
             cir.setReturnValue(event.getColor());
@@ -37,7 +37,7 @@ public class MixinBiomeColorHelper {
     @Inject(at = @At("HEAD"), method = "getWaterColorAtPos", cancellable = true)
     private static void onGetWaterColorAtPos(IBlockAccess blockAccess, BlockPos pos, CallbackInfoReturnable<Integer> cir) {
         final EventWaterColor event = new EventWaterColor();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) {
             cir.cancel();
             cir.setReturnValue(event.getColor());

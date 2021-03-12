@@ -65,7 +65,7 @@ public final class PlayerControllerMPPatch extends ClassPatch {
     public static boolean onPlayerDestroyBlockHook(BlockPos pos) {
         //dispatch our event and pass the BlockPos
         final EventDestroyBlock event = new EventDestroyBlock(pos);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -115,7 +115,7 @@ public final class PlayerControllerMPPatch extends ClassPatch {
     public static boolean clickBlockHook(BlockPos pos, EnumFacing face) {
         //dispatch our event and pass the BlockPos and EnumFacing
         final EventClickBlock event = new EventClickBlock(pos, face);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -156,7 +156,7 @@ public final class PlayerControllerMPPatch extends ClassPatch {
     public static boolean resetBlockRemovingHook() {
         //dispatch the event
         final EventResetBlockRemoving event = new EventResetBlockRemoving();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -207,7 +207,7 @@ public final class PlayerControllerMPPatch extends ClassPatch {
     public static boolean onPlayerDamageBlockHook(BlockPos pos, EnumFacing face) {
         //dispatch the event
         final EventPlayerDamageBlock event = new EventPlayerDamageBlock(pos, face);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -353,7 +353,7 @@ public final class PlayerControllerMPPatch extends ClassPatch {
 
     public static boolean isHittingPositionHook(BlockPos pos) {
         final EventHittingPosition event = new EventHittingPosition(pos);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -389,7 +389,7 @@ public final class PlayerControllerMPPatch extends ClassPatch {
     public static boolean getIsHittingBlockHook() {
         //dispatch our event
         final EventHittingBlock event = new EventHittingBlock();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         return event.isCanceled();
     }
 }

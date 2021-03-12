@@ -28,7 +28,7 @@ public final class NoAfkModule extends Module {
     @Override
     public void onDisable() {
         super.onDisable();
-        Harakiri.INSTANCE.getRotationManager().finishTask(this.rotationTask);
+        Harakiri.get().getRotationManager().finishTask(this.rotationTask);
     }
 
     @Listener
@@ -43,14 +43,14 @@ public final class NoAfkModule extends Module {
                 float pitch = mc.player.rotationPitch;
                 yaw += (this.yawOffset.getValue() * Math.sin(mc.player.ticksExisted / Math.PI));
 
-                Harakiri.INSTANCE.getRotationManager().startTask(this.rotationTask);
+                Harakiri.get().getRotationManager().startTask(this.rotationTask);
                 if (this.rotationTask.isOnline()) {
-                    Harakiri.INSTANCE.getRotationManager().setPlayerRotations(yaw, pitch);
+                    Harakiri.get().getRotationManager().setPlayerRotations(yaw, pitch);
                 }
                 break;
             case POST:
                 if (this.rotationTask.isOnline())
-                    Harakiri.INSTANCE.getRotationManager().finishTask(this.rotationTask);
+                    Harakiri.get().getRotationManager().finishTask(this.rotationTask);
                 break;
         }
     }

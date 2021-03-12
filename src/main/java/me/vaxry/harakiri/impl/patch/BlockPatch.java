@@ -49,7 +49,7 @@ public final class BlockPatch extends ClassPatch {
         insnList.add(new MethodInsnNode(INVOKESPECIAL, Type.getInternalName(EventRenderBlockSide.class), "<init>", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/block/Block;)V" : "(Laow;)V", false));
         //store our event in the local vars
         insnList.add(new VarInsnNode(ASTORE, 6));
-        //harakiri.INSTANCE
+        //Harakiri.get()
         insnList.add(new FieldInsnNode(GETSTATIC, Type.getInternalName(Harakiri.class), "INSTANCE", "Lme/vaxry/harakiri/Harakiri;"));
         //getEventManager
         insnList.add(new MethodInsnNode(INVOKEVIRTUAL, Type.getInternalName(Harakiri.class), "getEventManager", "()Lteam/stiff/pomelo/EventManager;", false));
@@ -96,7 +96,7 @@ public final class BlockPatch extends ClassPatch {
         insnList.add(new MethodInsnNode(INVOKESPECIAL, Type.getInternalName(EventGetBlockLayer.class), "<init>", env == PatchManager.Environment.IDE ? "(Lnet/minecraft/block/Block;)V" : "(Laow;)V", false));
         //store our event in the local vars
         insnList.add(new VarInsnNode(ASTORE, 1));
-        //harakiri.INSTANCE
+        //Harakiri.get()
         insnList.add(new FieldInsnNode(GETSTATIC, Type.getInternalName(Harakiri.class), "INSTANCE", "Lme/vaxry/harakiri/Harakiri;"));
         //getEventManager
         insnList.add(new MethodInsnNode(INVOKEVIRTUAL, Type.getInternalName(Harakiri.class), "getEventManager", "()Lteam/stiff/pomelo/EventManager;", false));
@@ -167,7 +167,7 @@ public final class BlockPatch extends ClassPatch {
     public static boolean addCollisionBoxToListHook(BlockPos pos, Entity entity) {
         //dispatch our event and pass the block and entity in
         final EventAddCollisionBox event = new EventAddCollisionBox(pos, entity);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }

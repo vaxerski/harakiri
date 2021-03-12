@@ -22,7 +22,7 @@ public class MixinGuiPlayerTabOverlay {
 
     @Redirect(method = "renderPlayerlist", at = @At(value = "INVOKE", target = "Ljava/util/List;subList(II)Ljava/util/List;", remap = false))
     public <E> List<E> subList(List<E> list, int fromIndex, int toIndex) {
-        ExtraTabModule extraTabModule = (ExtraTabModule)Harakiri.INSTANCE.getModuleManager().find(ExtraTabModule.class);
+        ExtraTabModule extraTabModule = (ExtraTabModule)Harakiri.get().getModuleManager().find(ExtraTabModule.class);
         if(extraTabModule.isEnabled())
             return list.subList(0, Math.min(list.size(), 275));
         else
@@ -33,7 +33,7 @@ public class MixinGuiPlayerTabOverlay {
     public void getPlayerName(NetworkPlayerInfo networkPlayerInfoIn, CallbackInfoReturnable<String> cir) {
         try {
             String name = "";
-            ExtraTabModule extraTabModule = (ExtraTabModule) Harakiri.INSTANCE.getModuleManager().find(ExtraTabModule.class);
+            ExtraTabModule extraTabModule = (ExtraTabModule) Harakiri.get().getModuleManager().find(ExtraTabModule.class);
 
             name = networkPlayerInfoIn.getDisplayName() != null ? networkPlayerInfoIn.getDisplayName().getUnformattedText() : ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.getPlayerTeam(), networkPlayerInfoIn.getGameProfile().getName());
 
@@ -45,7 +45,7 @@ public class MixinGuiPlayerTabOverlay {
                 if (networkPlayerInfoIn.getGameProfile().getName().equalsIgnoreCase(Minecraft.getMinecraft().player.getGameProfile().getName())) {
                     // us
                     name = TextFormatting.GOLD.toString() + networkPlayerInfoIn.getGameProfile().getName();
-                } else if (Harakiri.INSTANCE.getFriendManager().find(networkPlayerInfoIn.getGameProfile().getName()) != null) {
+                } else if (Harakiri.get().getFriendManager().find(networkPlayerInfoIn.getGameProfile().getName()) != null) {
                     //friend
                     name = TextFormatting.AQUA.toString() + networkPlayerInfoIn.getGameProfile().getName();
                 }

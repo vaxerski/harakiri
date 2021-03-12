@@ -34,7 +34,7 @@ public class ComponentAPI extends TwoArgFunction {
     protected static class setEnabled extends TwoArgFunction {
         public LuaValue call(LuaValue modulename, LuaValue enabled){
             try {
-                Harakiri.INSTANCE.getHudManager().findComponent(modulename.toString()).setVisible(enabled.checkboolean());
+                Harakiri.get().getHudManager().findComponent(modulename.toString()).setVisible(enabled.checkboolean());
             }catch(Throwable t){
                 return LuaValue.valueOf(0);
             }
@@ -45,7 +45,7 @@ public class ComponentAPI extends TwoArgFunction {
     protected static class isEnabled extends OneArgFunction {
         public LuaValue call(LuaValue modulename){
             try {
-                return LuaValue.valueOf(Harakiri.INSTANCE.getHudManager().findComponent(modulename.toString()).isVisible());
+                return LuaValue.valueOf(Harakiri.get().getHudManager().findComponent(modulename.toString()).isVisible());
             }catch(Throwable t){
                 return LuaValue.NIL;
             }
@@ -55,7 +55,7 @@ public class ComponentAPI extends TwoArgFunction {
     protected static class setX extends TwoArgFunction {
         public LuaValue call(LuaValue modulename, LuaValue x){
             try {
-                Harakiri.INSTANCE.getHudManager().findComponent(modulename.toString()).setX((float)x.checkdouble());
+                Harakiri.get().getHudManager().findComponent(modulename.toString()).setX((float)x.checkdouble());
             }catch(Throwable t){
                 return LuaValue.valueOf(0);
             }
@@ -66,7 +66,7 @@ public class ComponentAPI extends TwoArgFunction {
     protected static class setY extends TwoArgFunction {
         public LuaValue call(LuaValue modulename, LuaValue x){
             try {
-                Harakiri.INSTANCE.getHudManager().findComponent(modulename.toString()).setY((float)x.checkdouble());
+                Harakiri.get().getHudManager().findComponent(modulename.toString()).setY((float)x.checkdouble());
             }catch(Throwable t){
                 return LuaValue.valueOf(0);
             }
@@ -77,7 +77,7 @@ public class ComponentAPI extends TwoArgFunction {
     protected static class setW extends TwoArgFunction {
         public LuaValue call(LuaValue modulename, LuaValue x){
             try {
-                Harakiri.INSTANCE.getHudManager().findComponent(modulename.toString()).setW((float)x.checkdouble());
+                Harakiri.get().getHudManager().findComponent(modulename.toString()).setW((float)x.checkdouble());
             }catch(Throwable t){
                 return LuaValue.valueOf(0);
             }
@@ -88,7 +88,7 @@ public class ComponentAPI extends TwoArgFunction {
     protected static class setH extends TwoArgFunction {
         public LuaValue call(LuaValue modulename, LuaValue x){
             try {
-                Harakiri.INSTANCE.getHudManager().findComponent(modulename.toString()).setH((float)x.checkdouble());
+                Harakiri.get().getHudManager().findComponent(modulename.toString()).setH((float)x.checkdouble());
             }catch(Throwable t){
                 return LuaValue.valueOf(0);
             }
@@ -99,7 +99,7 @@ public class ComponentAPI extends TwoArgFunction {
     protected static class getX extends OneArgFunction {
         public LuaValue call(LuaValue modulename){
             try {
-                return LuaValue.valueOf(Harakiri.INSTANCE.getHudManager().findComponent(modulename.toString()).getX());
+                return LuaValue.valueOf(Harakiri.get().getHudManager().findComponent(modulename.toString()).getX());
             }catch(Throwable t){
                 return LuaValue.NIL;
             }
@@ -109,7 +109,7 @@ public class ComponentAPI extends TwoArgFunction {
     protected static class getY extends OneArgFunction {
         public LuaValue call(LuaValue modulename){
             try {
-                return LuaValue.valueOf(Harakiri.INSTANCE.getHudManager().findComponent(modulename.toString()).getY());
+                return LuaValue.valueOf(Harakiri.get().getHudManager().findComponent(modulename.toString()).getY());
             }catch(Throwable t){
                 return LuaValue.NIL;
             }
@@ -119,7 +119,7 @@ public class ComponentAPI extends TwoArgFunction {
     protected static class getW extends OneArgFunction {
         public LuaValue call(LuaValue modulename){
             try {
-                return LuaValue.valueOf(Harakiri.INSTANCE.getHudManager().findComponent(modulename.toString()).getW());
+                return LuaValue.valueOf(Harakiri.get().getHudManager().findComponent(modulename.toString()).getW());
             }catch(Throwable t){
                 return LuaValue.NIL;
             }
@@ -129,7 +129,7 @@ public class ComponentAPI extends TwoArgFunction {
     protected static class getH extends OneArgFunction {
         public LuaValue call(LuaValue modulename){
             try {
-                return LuaValue.valueOf(Harakiri.INSTANCE.getHudManager().findComponent(modulename.toString()).getH());
+                return LuaValue.valueOf(Harakiri.get().getHudManager().findComponent(modulename.toString()).getH());
             }catch(Throwable t){
                 return LuaValue.NIL;
             }

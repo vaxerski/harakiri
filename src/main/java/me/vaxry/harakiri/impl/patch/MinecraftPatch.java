@@ -51,7 +51,7 @@ public final class MinecraftPatch extends ClassPatch {
      */
     public static void updateFramebufferSizeHook() {
         //dispatch our event "EventUpdateFramebufferSize"
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventUpdateFramebufferSize());
+        Harakiri.get().getEventManager().dispatchEvent(new EventUpdateFramebufferSize());
     }
 
     /**
@@ -91,7 +91,7 @@ public final class MinecraftPatch extends ClassPatch {
      */
     public static void runTickHook(EventStageable.EventStage stage) {
         //dispatch our event "EventRunTick" and pass in the stage(pre, post)
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventRunTick(stage));
+        Harakiri.get().getEventManager().dispatchEvent(new EventRunTick(stage));
     }
 
     /**
@@ -127,7 +127,7 @@ public final class MinecraftPatch extends ClassPatch {
         //check if the key was just pressed
         if (Keyboard.getEventKeyState()) {
             //dispatch our event for key presses and pass in the keycode
-            Harakiri.INSTANCE.getEventManager().dispatchEvent(new EventKeyPress(key));
+            Harakiri.get().getEventManager().dispatchEvent(new EventKeyPress(key));
         }
     }
 
@@ -172,7 +172,7 @@ public final class MinecraftPatch extends ClassPatch {
     public static boolean displayGuiScreenHook(GuiScreen screen) {
         //dispatch our event and pass the gui
         final EventDisplayGui event = new EventDisplayGui(screen);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         //return event.isCanceled() to allow us to cancel the original function
         return event.isCanceled();
@@ -196,7 +196,7 @@ public final class MinecraftPatch extends ClassPatch {
 
     public static boolean loadWorldHook(WorldClient worldClient) {
         final EventLoadWorld event = new EventLoadWorld(worldClient);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         return event.isCanceled();
     }
 
@@ -217,7 +217,7 @@ public final class MinecraftPatch extends ClassPatch {
 
     public static boolean clickMouseHook() {
         final EventMouseLeftClick event = new EventMouseLeftClick();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         return event.isCanceled();
     }
 
@@ -238,7 +238,7 @@ public final class MinecraftPatch extends ClassPatch {
 
     public static boolean rightClickMouseHook() {
         final EventMouseRightClick event = new EventMouseRightClick();
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         return event.isCanceled();
     }
 }

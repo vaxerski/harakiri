@@ -43,7 +43,7 @@ public abstract class Configurable {
             writer.write(str);
             writer.close();
         }catch (Throwable t){
-            //Harakiri.INSTANCE.errorChat("Couldn't save the config.");
+            //Harakiri.get().errorChat("Couldn't save the config.");
         }
     }
 
@@ -55,7 +55,7 @@ public abstract class Configurable {
             FileUtil.closeReader(reader);
             return String.valueOf(buffer);
         }catch (Throwable t){
-            //Harakiri.INSTANCE.errorChat("Couldn't load the config.");
+            //Harakiri.get().errorChat("Couldn't load the config.");
         }
         return "";
     }

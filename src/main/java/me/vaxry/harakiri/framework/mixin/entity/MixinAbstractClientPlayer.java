@@ -23,7 +23,7 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
     @Inject(method = "getLocationCape", cancellable = true, at = @At("HEAD"))
     public void onGetLocationCape(CallbackInfoReturnable<ResourceLocation> cir) {
         EventCapeLocation event = new EventCapeLocation((AbstractClientPlayer) (EntityPlayer) this);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) {
             cir.cancel();
             cir.setReturnValue(event.getLocation());

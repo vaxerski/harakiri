@@ -26,7 +26,7 @@ public final class XrayModule extends Module {
     public XrayModule() {
         super("Xray", new String[]{"JadeVision", "Jade"}, "Allows you to xray.", "NONE", -1, ModuleType.RENDER);
 
-        if (Harakiri.INSTANCE.getConfigManager().isFirstLaunch()) {
+        if (Harakiri.get().getConfigManager().isFirstLaunch()) {
             this.add("diamond_ore");
             this.add("coal_ore");
             this.add("gold_ore");

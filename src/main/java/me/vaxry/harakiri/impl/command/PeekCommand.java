@@ -48,7 +48,7 @@ public final class PeekCommand extends Command {
         }
 
         try {
-            Harakiri.INSTANCE.getEventManager().addEventListener(this);
+            Harakiri.get().getEventManager().addEventListener(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -76,13 +76,13 @@ public final class PeekCommand extends Command {
                     stack = getHeldShulker(target);
 
                     if (stack == null) {
-                        Harakiri.INSTANCE.errorChat("\"" + target.getName() + "\" is not holding a shulker box");
+                        Harakiri.get().errorChat("\"" + target.getName() + "\" is not holding a shulker box");
                         this.entity = null;
-                        Harakiri.INSTANCE.getEventManager().removeEventListener(this);
+                        Harakiri.get().getEventManager().removeEventListener(this);
                         return;
                     }
                 } else {
-                    Harakiri.INSTANCE.errorChat("\"" + this.entity + "\" is not within range");
+                    Harakiri.get().errorChat("\"" + this.entity + "\" is not within range");
                 }
                 this.entity = null;
             } else {
@@ -120,20 +120,20 @@ public final class PeekCommand extends Command {
                             te.readFromNBT(entityTag);
                             mc.displayGuiScreen(new GuiShulkerBox(mc.player.inventory, te));
                         } else {
-                            Harakiri.INSTANCE.errorChat("This shulker box is empty");
+                            Harakiri.get().errorChat("This shulker box is empty");
                         }
                     }
 
                 } else {
-                    Harakiri.INSTANCE.errorChat("Please hold a shulker box");
+                    Harakiri.get().errorChat("Please hold a shulker box");
                 }
             } else {
-                Harakiri.INSTANCE.errorChat("Please hold a shulker box");
+                Harakiri.get().errorChat("Please hold a shulker box");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Harakiri.INSTANCE.getEventManager().removeEventListener(this);
+        Harakiri.get().getEventManager().removeEventListener(this);
     }
 
     private ItemStack getHeldShulker(EntityPlayer entity) {

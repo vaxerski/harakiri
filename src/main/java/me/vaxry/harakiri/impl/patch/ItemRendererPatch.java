@@ -44,7 +44,7 @@ public final class ItemRendererPatch extends ClassPatch {
 
     public static boolean renderSuffocationOverlayHook() {
         final EventRenderOverlay event = new EventRenderOverlay(EventRenderOverlay.OverlayType.BLOCK);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -72,7 +72,7 @@ public final class ItemRendererPatch extends ClassPatch {
 
     public static boolean renderWaterOverlayTextureHook() {
         final EventRenderOverlay event = new EventRenderOverlay(EventRenderOverlay.OverlayType.LIQUID);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }
@@ -100,7 +100,7 @@ public final class ItemRendererPatch extends ClassPatch {
 
     public static boolean renderFireInFirstPersonHook() {
         final EventRenderOverlay event = new EventRenderOverlay(EventRenderOverlay.OverlayType.FIRE);
-        Harakiri.INSTANCE.getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatchEvent(event);
 
         return event.isCanceled();
     }

@@ -172,7 +172,7 @@ public class PlexusEffect {
         }
 
         // CHECK SETTINGS //
-        final PlexusModule plexusModule = (PlexusModule) Harakiri.INSTANCE.getModuleManager().find(PlexusModule.class);
+        final PlexusModule plexusModule = (PlexusModule) Harakiri.get().getModuleManager().find(PlexusModule.class);
         if(plexusModule != null){
             if(PARTICLE_NUM != plexusModule.PARTICLE_NUM.getValue() || LINE_MAX_DIST != plexusModule.LINE_MAX_DIST.getValue() || LINE_MAX_ALPHA != plexusModule.LINE_MAX_ALPHA.getValue() || RAINBOW_SIZE != plexusModule.RAINBOW_SIZE.getValue()) {
                 LINE_MAX_DIST = plexusModule.LINE_MAX_DIST.getValue();
@@ -186,7 +186,7 @@ public class PlexusEffect {
             }
         }
 
-        rainbowColor = Harakiri.INSTANCE.getHudEditor().rainbowColor;
+        rainbowColor = Harakiri.get().getHudEditor().rainbowColor;
 
         //     CALCULATE MOVEMENT     //
 
@@ -242,7 +242,7 @@ public class PlexusEffect {
                     colorP2 = ((int)((float)0xFF * ((float)alpha / 255.f)) * 0x1000000) + (rainbowColor - 0xFF000000);
 
 
-                //harakiri.INSTANCE.logChat("Alpha: " + String.format("0x%08X", colore));
+                //Harakiri.get().logChat("Alpha: " + String.format("0x%08X", colore));
 
                 RenderUtil.drawLine2(p.x, p.y, p2.x, p2.y, 1.0f, colorP, colorP2);//(int)((float)0xFF000000 * ((float)alpha / 255.f)) + 0xFFFFFF);
             }

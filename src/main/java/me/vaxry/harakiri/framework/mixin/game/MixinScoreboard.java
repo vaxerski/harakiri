@@ -20,7 +20,7 @@ public class MixinScoreboard extends Scoreboard{
 
    /* @Inject(method = "addPlayerToTeam", at = @At("HEAD"))
     public void addPlayerToTeam(String player, String newTeam, CallbackInfoReturnable<Boolean> cir){
-        ESPModule espModule = (ESPModule) Harakiri.INSTANCE.getModuleManager().find(ESPModule.class);
+        ESPModule espModule = (ESPModule) Harakiri.get().getModuleManager().find(ESPModule.class);
         if(!newTeam.equalsIgnoreCase(espModule.red.toString()) &&
             !newTeam.equalsIgnoreCase(espModule.green.toString()) &&
             !newTeam.equalsIgnoreCase(espModule.lblue.toString()) &&

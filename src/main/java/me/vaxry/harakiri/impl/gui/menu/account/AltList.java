@@ -90,7 +90,7 @@ public class AltList {
                         String anem = accountJson.get(i + 2).getAsString();
 
                         try {
-                            String key = Harakiri.INSTANCE.getUsername();
+                            String key = Harakiri.get().getUsername();
 
                             if(key.length() < 16){
                                 while(key.length() < 16)
@@ -153,7 +153,7 @@ public class AltList {
                 String username = a.name;
 
                 try {
-                    String key = Harakiri.INSTANCE.getUsername();
+                    String key = Harakiri.get().getUsername();
 
                     if(key.length() < 16){
                         while(key.length() < 16)
