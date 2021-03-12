@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
@@ -16,8 +17,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 
-import java.awt.Font;
-import java.awt.FontFormatException;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +41,7 @@ public class TTFFontUtil
     private float size;
     public boolean isTTF = false;
 
+    private boolean firstString = true;
     private Timer cleanupTimer = new Timer();
     final private ArrayList<CachedTextString> cachedStringsArray = new ArrayList<>();
 
@@ -126,6 +127,8 @@ public class TTFFontUtil
 
     public int drawString(String text, float x, float y, int color)
     {
+        //return drawStringCached(text,x,y,color);
+
         if (text == null)
             return 0;
 
@@ -230,6 +233,30 @@ public class TTFFontUtil
         return (int) getWidth(text);
     }
 
+    private void drawFramebuffer(Framebuffer framein, float x, float y, float w, float h){
+        GlStateManager.pushMatrix();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableLighting();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableBlend();
+        //GlStateManager.enableColorMaterial();
+
+        framein.bindFramebufferTexture();
+
+        final Tessellator tessellator = Tessellator.getInstance();
+        final BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.pos(x, h, 0).tex(0, 0).endVertex();
+        bufferbuilder.pos(w, h, 0).tex(1, 0).endVertex();
+        bufferbuilder.pos(w, y, 0).tex(1, 1).endVertex();
+        bufferbuilder.pos(x, y, 0).tex(0, 1).endVertex();
+        tessellator.draw();
+
+        framein.unbindFramebufferTexture();
+
+        GlStateManager.popMatrix();
+    }
+
     public int drawStringCached(String text, float x, float y, int color)
     {
         if (text == null)
@@ -238,49 +265,85 @@ public class TTFFontUtil
         if(!isTTF())
             return Minecraft.getMinecraft().fontRenderer.drawString(text, x, y, color, false);
 
-        ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
+        if(!OpenGlHelper.isFramebufferEnabled()){
+            try {
+                Harakiri.get().logChat("OpenGL Framebuffers aren't enabled, cannot use accelerated fontRenderer. Falling back to standard.");
+            }catch (Throwable t){
+                // Ops
+            }
 
-        // check for cache
-        final ScaledResolution res = resolution;
-
-        CachedTextString cachedTextString = getCachedString(text);
-        if(cachedTextString != null){
-            final Framebuffer framebuffer = cachedTextString.framebuffer;
-
-            GlStateManager.pushMatrix();
-
-            GlStateManager.enableAlpha();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            GlStateManager.enableBlend();
-
-            GlStateManager.enableTexture2D();
-            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-
-            framebuffer.bindFramebufferTexture();
-
-            GlStateManager.enableTexture2D();
-            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-            RenderUtil.drawTexture(cachedTextString.x,
-                    cachedTextString.y,
-                    cachedTextString.w,
-                    cachedTextString.h,
-                    0,0,1,1);
-
-            GlStateManager.disableTexture2D();
-            GlStateManager.disableBlend();
-            GlStateManager.disableAlpha();
-
-            GlStateManager.bindTexture(0);
-
-            cachedTextString.lastUsed = System.currentTimeMillis();
-
-            GlStateManager.popMatrix();
-
-            return (int) getWidth(text);
+            return Minecraft.getMinecraft().fontRenderer.drawString(text, x, y, color, false);
         }
+
+        if(firstString) {
+            firstString = false;
+            this.cleanupTimer.reset();
+        }
+
+        ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
 
         // idk fix shit
         y -= 1.5f;
+
+        for(CachedTextString c : cachedStringsArray){
+            if(c.text.equals(text)){
+                GlStateManager.pushMatrix();
+                float red = (float) (color >> 16 & 255) / 255.0F;
+                float green = (float) (color >> 8 & 255) / 255.0F;
+                float blue = (float) (color & 255) / 255.0F;
+                float alpha = (float) (color >> 24 & 255) / 255.0F;
+                GlStateManager.color(red, green, blue, alpha);
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
+                this.drawFramebuffer(c.framebuffer, x, y, x + c.w, y + c.h);
+                GlStateManager.disableBlend();
+                c.lastUsed = System.currentTimeMillis();
+                GlStateManager.color(1F, 1F, 1F, 1F);
+                GlStateManager.popMatrix();
+
+                try {
+                    Harakiri.get().logChat("Drawing string (x: " + x + " y: " + y + "): " + text + " | Array size: " + cachedStringsArray.size());
+                }catch (Throwable t){
+                    //ignore, no chat.
+                }
+                return (int)c.w;
+            }
+        }
+
+        if(this.cleanupTimer.passed(1000)){
+            // cleanup every 5s
+
+            for(int i = this.cachedStringsArray.size() / 2; i > 0; --i){
+                this.cachedStringsArray.remove(i);
+                // Effectively removes the first half.
+            }
+
+            this.cleanupTimer.reset();
+        }
+
+        // THIS MEANS THE STRING IS FIRST-TIME.
+
+        // newline counter
+        int newls = 0;
+        for(char c : text.toCharArray()){
+            if(c == '\n'){
+                newls++;
+            }
+        }
+
+        CachedTextString cts = new CachedTextString(text, x, y, -1 /* Set later */, this.FONT_HEIGHT + this.FONT_HEIGHT * newls, true);
+
+        float expectedWidth = this.getWidth(text);
+        cts.w = expectedWidth;
+        cts.color = color;
+
+        cts.framebuffer = new Framebuffer((int)(expectedWidth), this.FONT_HEIGHT + this.FONT_HEIGHT * newls, false);
+        cts.framebuffer.createFramebuffer((int)(expectedWidth), this.FONT_HEIGHT + this.FONT_HEIGHT * newls);
+        //cts.framebuffer = new Framebuffer((int)resolution.getScaledWidth(), resolution.getScaledHeight(), true);
+        //cts.framebuffer.createFramebuffer((int)resolution.getScaledWidth(), resolution.getScaledHeight());
+
+        x = 0;
+        y = 0;
 
         try
         {
@@ -300,30 +363,17 @@ public class TTFFontUtil
 
         this.antiAliasingFactor = resolution.getScaleFactor();
 
-        float width = getWidth(text);
-
-        Framebuffer framebuffer = new Framebuffer((int)width, FONT_HEIGHT, false);
-        framebuffer.createFramebuffer((int)width, FONT_HEIGHT);
-
-        //Framebuffer framebuffer = new Framebuffer((int)res.getScaledWidth() * res.getScaleFactor(), (int)res.getScaledHeight() * res.getScaleFactor(), false);
-        //framebuffer.createFramebuffer((int)res.getScaledWidth() * res.getScaleFactor(), (int)res.getScaledHeight() * res.getScaleFactor());
-
         GL11.glPushMatrix();
-        GlStateManager.scale(1 / antiAliasingFactor, 1 / antiAliasingFactor, 1 / antiAliasingFactor);
-        x *= antiAliasingFactor;
-        y *= antiAliasingFactor;
+        GlStateManager.scale(resolution.getScaledHeight() / cts.h, resolution.getScaledHeight() / cts.h, resolution.getScaledHeight() / cts.h);
+        //GlStateManager.scale(1 / antiAliasingFactor, 1 / antiAliasingFactor, 1 / antiAliasingFactor);
+        //x *= antiAliasingFactor;
+        //y *= antiAliasingFactor;
         float originalX = x;
-        float red = (float) (color >> 16 & 255) / 255.0F;
-        float green = (float) (color >> 8 & 255) / 255.0F;
-        float blue = (float) (color & 255) / 255.0F;
-        float alpha = (float) (color >> 24 & 255) / 255.0F;
-        GlStateManager.color(red, green, blue, alpha);
-        GlStateManager.color(1,1,1,1);
+
+        // All text white. HueShift later so we dont have to update when color changes.
+        GlStateManager.color(1F, 1F, 1F, 1F);
 
         int currentColor = color;
-
-        // Save buffer 1
-        CachedTextString cachedTextStringNew = new CachedTextString(text, x, y, width, FONT_HEIGHT, false);
 
         char[] characters = text.toCharArray();
 
@@ -332,14 +382,9 @@ public class TTFFontUtil
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        framebuffer.bindFramebuffer(false);
+        cts.framebuffer.bindFramebuffer(true);
+
         String[] parts = COLOR_CODE_PATTERN.split(text);
-
-        // Cuz we drawing to a buffer
-        originalX = 0;
-        x = 0;
-        y = 0;
-
         int index = 0;
         for (String s : parts)
         {
@@ -387,58 +432,31 @@ public class TTFFontUtil
                 }
             }
         }
-        framebuffer.unbindFramebuffer();
 
-        //save 2
-        cachedTextStringNew.framebuffer = framebuffer;
-        cachedStringsArray.add(cachedTextStringNew);
-
-        // Buffer cleanup every 5s
-        if(this.cleanupTimer.passed(5000)){
-            for(int i = 0; i < cachedStringsArray.size() / 2; ++i){
-                // Will remove all even elements.
-                cachedStringsArray.remove(i);
-            }
-        }
-
-        // Render the framebuffer :)
-
-        cachedTextString = cachedTextStringNew;
-
-        // render texture
-        GlStateManager.enableAlpha();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.enableBlend();
-
-        GlStateManager.enableTexture2D();
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-        framebuffer.bindFramebufferTexture();
-
-        GlStateManager.enableTexture2D();
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderUtil.drawTexture(cachedTextString.x,
-                cachedTextString.y,
-                cachedTextString.w,
-                cachedTextString.h,
-                0,0,1,1);
-       /* RenderUtil.drawTexture(0,
-                0,
-                res.getScaledWidth(),
-                res.getScaledHeight(),
-                0,0,1,1);*/
-
-        GlStateManager.disableTexture2D();
-        GlStateManager.disableBlend();
-        GlStateManager.disableAlpha();
-
-        cachedTextString.lastUsed = System.currentTimeMillis();
+        cts.framebuffer.unbindFramebuffer();
 
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.bindTexture(0);
-
         GlStateManager.popMatrix();
 
-        return (int) getWidth(text);
+        // Draw last
+        GlStateManager.pushMatrix();
+        float red = (float) (color >> 16 & 255) / 255.0F;
+        float green = (float) (color >> 8 & 255) / 255.0F;
+        float blue = (float) (color & 255) / 255.0F;
+        float alpha = (float) (color >> 24 & 255) / 255.0F;
+        GlStateManager.color(red, green, blue, alpha);
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
+        this.drawFramebuffer(cts.framebuffer, x, y, cts.w, cts.h);
+        GlStateManager.disableBlend();
+        cts.lastUsed = System.currentTimeMillis();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.popMatrix();
+
+        this.cachedStringsArray.add(cts);
+
+        return (int)cts.w;
     }
 
     public String shadowStr(String t){
@@ -650,6 +668,7 @@ public class TTFFontUtil
             this.h = h;
             this.shadow = shadow;
         }
+        public int color;
         public String text;
         public float x;
         public float y;
