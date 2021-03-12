@@ -337,12 +337,19 @@ public final class GuiHudEditor extends GuiScreen {
                 break;
             }
         }
+
+        for (int i = this.hudComponentsSorted.size() - 1; i >= 0; --i) {
+            HudComponent component = this.hudComponentsSorted.get(i);
+            if(component instanceof DraggableHudComponent){
+                DraggableHudComponent component2 = (DraggableHudComponent)this.hudComponentsSorted.get(i);
+                if(component2.isDragging())
+                    component2.mouseRelease(mouseX, mouseY, state);
+            }
+        }
+
+
         try {
             swc.mouseReleased(mouseX, mouseY, state);
-
-            // Fix when going through the half of the screen (when it flips)
-            if(((WarningsComponent)Harakiri.get().getHudManager().findComponent(WarningsComponent.class)).isDragging())
-                Harakiri.get().getHudManager().findComponent(WarningsComponent.class).mouseRelease(mouseX, mouseY, state);
 
         }catch(Throwable t){
         }

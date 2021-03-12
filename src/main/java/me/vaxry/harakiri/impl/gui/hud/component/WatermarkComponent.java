@@ -46,6 +46,12 @@ public final class WatermarkComponent extends HudComponent {
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
 
+        // Fid hud editor
+        this.setX(0);
+        this.setY(0);
+        this.setW(0);
+        this.setH(0);
+
         if((Minecraft.getMinecraft().currentScreen instanceof GuiHudEditor))
             return;
 
