@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.movement;
 
+import com.yworks.yguard.test.B;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventMove;
@@ -8,8 +9,7 @@ import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.module.world.TimerModule;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockTorch;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.Packet;
@@ -17,8 +17,10 @@ import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import org.locationtech.jts.geom.Coordinate;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
+import javax.vecmath.Vector2f;
 import java.util.List;
 
 /**
@@ -84,18 +86,15 @@ public final class StepModule extends Module {
             return;
         }
 
-
-        int height = 1;
         if(!(mc.player.collidedHorizontally && mc.player.onGround) && !isStepping){
             return;
         }
 
-        if(!mc.player.onGround)
+        if(!mc.player.collidedHorizontally)
             return;
 
-        stepX = Math.abs(mc.player.motionX) > Math.abs(mc.player.motionZ);
-
-        isStepping = true;
+        if(!mc.player.onGround)
+            return;
 
         if(waitS < this.wiait.getValue()){
             waitS++;
@@ -103,77 +102,16 @@ public final class StepModule extends Module {
         }
 
         AxisAlignedBB bb = mc.player.getEntityBoundingBox();
-        final AxisAlignedBB extendedbb = new AxisAlignedBB(bb.minX - 0.1f,
-                bb.minY + 0.1f,
-                bb.minZ - 0.1f,
-                bb.maxX + 0.1f,
-                bb.maxY - 0.1f,
-                bb.maxZ + 0.1f);
 
-        // Check if the collision is 1 or 2
-        for (int x = MathHelper.floor(extendedbb.minX); x < MathHelper.floor(extendedbb.maxX + 1.0D); x++) {
-            for (int z = MathHelper.floor(extendedbb.minZ); z < MathHelper.floor(extendedbb.maxZ + 1.0D); z++) {
-                BlockPos blockPos = new BlockPos(x, mc.player.getPosition().getY() + 1.0D, z);
-                Block block = mc.world.getBlockState(blockPos).getBlock();
-                final AxisAlignedBB blockbb = new AxisAlignedBB(
-                        blockPos.getX(),
-                        blockPos.getY(),
-                        blockPos.getZ(),
-                        blockPos.getX() + 1,
-                        blockPos.getY() + 1,
-                        blockPos.getZ() + 1);
-                if (!(block instanceof net.minecraft.block.BlockAir)) {
-                    //if(!mc.world.getBlockState(blockPos).isFullBlock())
-                    //continue;
-                    if(blockbb.intersects(extendedbb)) {
-                        height = 2;
-                        break;
-                    }
-                }
-            }
-        }
+        final float angleLocal = getAngFromLocal();
 
-        // We have confirmed height, now check if its legal.
-
-        boolean legal = true;
-
-        final AxisAlignedBB afterStep = new AxisAlignedBB(bb.minX,
-                bb.minY + height,
-                bb.minZ,
-                bb.maxX,
-                bb.maxY + height,
-                bb.maxZ);
-
-        for (int x = MathHelper.floor(afterStep.minX); x < MathHelper.floor(afterStep.maxX + 1.0D); x++) {
-            for (int z = MathHelper.floor(afterStep.minZ); z < MathHelper.floor(afterStep.maxZ + 1.0D); z++) {
-                BlockPos blockPos = new BlockPos(x, mc.player.getPosition().getY() + 3.0D, z);
-                Block block = mc.world.getBlockState(blockPos).getBlock();
-                final AxisAlignedBB blockbb = new AxisAlignedBB(
-                        blockPos.getX(),
-                        blockPos.getY(),
-                        blockPos.getZ(),
-                        blockPos.getX() + 1,
-                        blockPos.getY() + 1,
-                        blockPos.getZ() + 1);
-                if (!(block instanceof net.minecraft.block.BlockAir)) {
-                    if(isBlockValidPass(block))
-                        continue;
-
-                    if(blockbb.intersects(afterStep)) {
-                        legal = false;
-                        break;
-                    }
-                }
-            }
-        }
-
-        // Recode this someday pls
-
-        if(!legal) {
-            isStepping = false;
+        final int height = checkIfAngleLegitStep(angleLocal);
+        if(height == 0)
             return;
-        }
 
+        stepX = Math.abs(mc.player.motionX) > Math.abs(mc.player.motionZ);
+
+        isStepping = true;
 
         switch (height) {
             case 1:
@@ -182,17 +120,6 @@ public final class StepModule extends Module {
             case 2:
                 this.selectedPositions = this.twoblockPositions;
                 break;
-        }
-
-
-        for (int x = MathHelper.floor(bb.minX); x < MathHelper.floor(bb.maxX + 1.0D); x++) {
-            for (int z = MathHelper.floor(bb.minZ); z < MathHelper.floor(bb.maxZ + 1.0D); z++) {
-                Block block = mc.world.getBlockState(new BlockPos(x, bb.maxY + 1.0D, z)).getBlock();
-                if (!(block instanceof net.minecraft.block.BlockAir)) {
-                    isStepping = false;
-                    return;
-                }
-            }
         }
 
         if (mc.player.onGround && !mc.player.isInsideOfMaterial(Material.WATER) && !mc.player.isInsideOfMaterial(Material.LAVA) && mc.player.collidedVertically && mc.player.fallDistance == 0.0F && !mc.gameSettings.keyBindJump.pressed && mc.player.collidedHorizontally && !mc.player.isOnLadder() /*&& (this.packets > this.selectedPositions.length - 2 || (((Boolean)this.spoof.getValue()).booleanValue() && this.packets > ((Integer)this.ticks.getValue()).intValue()))*/) {
@@ -231,8 +158,251 @@ public final class StepModule extends Module {
         }
     }
 
+    private float getAngFromLocal(){
+        final Minecraft mc = Minecraft.getMinecraft();
+        float result = mc.player.rotationYaw;
+
+        final boolean isMovingForward = mc.gameSettings.keyBindForward.pressed;
+        final boolean isMovingBack = mc.gameSettings.keyBindBack.pressed;
+
+        if(mc.gameSettings.keyBindBack.pressed)
+            result += 180;
+
+        final float multiplySide = isMovingForward || isMovingBack ? 0.5f : 1.f;
+
+        if(mc.gameSettings.keyBindRight.pressed)
+            result += isMovingBack ? -(90 * multiplySide) : 90 * multiplySide;
+
+        if(mc.gameSettings.keyBindLeft.pressed)
+            result -= isMovingBack ? -(90 * multiplySide) : 90 * multiplySide;
+
+        // clamp result
+        if(result > 180F){
+            result = -180 + (result - 180);
+        }else if(result < -180F){
+            result = 180 + (result + 180);
+        }
+
+        return result;
+    }
+
+    private int checkNorth(BlockPos localPos){
+        final Minecraft mc = Minecraft.getMinecraft();
+        if(!isBlockValidPass(mc.world.getBlockState(localPos.north()).getBlock())){
+            // hmm, solid for one.
+            if(!isBlockValidPass(mc.world.getBlockState(localPos.north().up()).getBlock())){
+                //Solid for two
+                if(isBlockValidPass(mc.world.getBlockState(localPos.north().up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.north().up().up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.up().up().up()).getBlock())){
+                    // Possible twoblock!
+                    return 2;
+                }
+            }else{
+                // Empty for two. may be possible oneblock
+                if(isBlockValidPass(mc.world.getBlockState(localPos.up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.north().up().up()).getBlock())){
+                    // Possible oneblock!
+                    return 1;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    private int checkEast(BlockPos localPos){
+        final Minecraft mc = Minecraft.getMinecraft();
+        if(!isBlockValidPass(mc.world.getBlockState(localPos.east()).getBlock())){
+            // hmm, solid for one.
+            if(!isBlockValidPass(mc.world.getBlockState(localPos.east().up()).getBlock())){
+                //Solid for two
+                if(isBlockValidPass(mc.world.getBlockState(localPos.east().up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.east().up().up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.up().up().up()).getBlock())){
+                    // Possible twoblock!
+                    return 2;
+                }
+            }else{
+                // Empty for two. may be possible oneblock
+                if(isBlockValidPass(mc.world.getBlockState(localPos.up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.east().up().up()).getBlock())){
+                    // Possible oneblock!
+                    return 1;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    private int checkWest(BlockPos localPos){
+        final Minecraft mc = Minecraft.getMinecraft();
+        if(!isBlockValidPass(mc.world.getBlockState(localPos.west()).getBlock())){
+            // hmm, solid for one.
+            if(!isBlockValidPass(mc.world.getBlockState(localPos.west().up()).getBlock())){
+                //Solid for two
+                if(isBlockValidPass(mc.world.getBlockState(localPos.west().up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.west().up().up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.up().up().up()).getBlock())){
+                    // Possible twoblock!
+                    return 2;
+                }
+            }else{
+                // Empty for two. may be possible oneblock
+                if(isBlockValidPass(mc.world.getBlockState(localPos.up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.west().up().up()).getBlock())){
+                    // Possible oneblock!
+                    return 1;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    private int checkSouth(BlockPos localPos){
+        final Minecraft mc = Minecraft.getMinecraft();
+        if(!isBlockValidPass(mc.world.getBlockState(localPos.south()).getBlock())){
+            // hmm, solid for one.
+            if(!isBlockValidPass(mc.world.getBlockState(localPos.south().up()).getBlock())){
+                //Solid for two
+                if(isBlockValidPass(mc.world.getBlockState(localPos.south().up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.south().up().up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.up().up().up()).getBlock())){
+                    // Possible twoblock!
+                    return 2;
+                }
+            }else{
+                // Empty for two. may be possible oneblock
+                if(isBlockValidPass(mc.world.getBlockState(localPos.up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.south().up().up()).getBlock())){
+                    // Possible oneblock!
+                    return 1;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    private int checkIfAngleLegitStep(float angle){
+        final Minecraft mc = Minecraft.getMinecraft();
+
+        // Four quarters
+        final BlockPos localPos = GetLocalPlayerPosFloored();
+
+        final int north = checkNorth(localPos);
+        final int east = checkEast(localPos);
+        final int west = checkWest(localPos);
+        final int south = checkSouth(localPos);
+
+        // Eligibleness
+        final boolean eligiblePlusZ = (mc.player.posZ - 0.700F) % 1 == 0;
+        final boolean eligibleMinusZ = (mc.player.posZ - 0.300F) % 1 == 0;
+        final boolean eligiblePlusX = (mc.player.posX - 0.700F) % 1 == 0;
+        final boolean eligibleMinusX = (mc.player.posX - 0.300F) % 1 == 0;
+
+        Vector2f moveVec = new Vector2f(0,0);
+
+        int ret = 0;
+        // First, -180 : -90 (+X-Z)
+        if(angle >= -180 && angle <= -90){
+            if((north != 0 && eligibleMinusZ)) {
+                moveVec.y -= 0.1f;
+                ret = north;
+            }
+            if(east != 0 && eligiblePlusX) {
+                moveVec.x += 0.1f;
+                ret = Math.max(north, east);
+            }
+        }
+        // +X+Z
+        else if(angle >= -90 && angle <= 0){
+            if((south != 0 && eligiblePlusZ)) {
+                moveVec.y += 0.1f;
+                ret = south;
+            }
+            if(east != 0 && eligiblePlusX) {
+                moveVec.x += 0.1f;
+                ret = Math.max(south, east);
+            }
+        }
+        // -X+Z
+        else if(angle >= 0 && angle <= 90){
+            if((south != 0 && eligiblePlusZ)) {
+                moveVec.y += 0.1f;
+                ret = south;
+            }
+            if(west != 0 && eligibleMinusX) {
+                moveVec.x -= 0.1f;
+                ret = Math.max(south, west);
+            }
+        }
+        // -X-Z
+        else if(angle >= 90 && angle <= 180){
+            if((north != 0 && eligibleMinusZ)) {
+                moveVec.y -= 0.1f;
+                ret = north;
+            }
+            if(west != 0 && eligibleMinusX) {
+                moveVec.x -= 0.1f;
+                ret = Math.max(north, west);
+            }
+        }
+
+        // Check hitbox
+        AxisAlignedBB playerbb = mc.player.getEntityBoundingBox();
+        final AxisAlignedBB movedbb1 = new AxisAlignedBB(playerbb.minX + moveVec.x,
+                playerbb.minY + 1,
+                playerbb.minZ + moveVec.y,
+                playerbb.maxX + moveVec.x,
+                playerbb.maxY + 1,
+                playerbb.maxZ + moveVec.y);
+
+        final AxisAlignedBB movedbb2 = new AxisAlignedBB(playerbb.minX + moveVec.x,
+                playerbb.minY + 2,
+                playerbb.minZ + moveVec.y,
+                playerbb.maxX + moveVec.x,
+                playerbb.maxY + 2,
+                playerbb.maxZ + moveVec.y);
+
+        for (int x = localPos.getX() - 2; x < localPos.getX() + 2; x++) {
+            for (int z = localPos.getZ() - 2; z < localPos.getZ() + 2; z++) {
+                for(int y = localPos.getY(); y < localPos.getY() + 4; y++) {
+                    BlockPos blockPos = new BlockPos(x, mc.player.getPosition().getY() + 1.0D, z);
+                    Block block = mc.world.getBlockState(blockPos).getBlock();
+                    final AxisAlignedBB blockbb = new AxisAlignedBB(
+                            blockPos.getX(),
+                            blockPos.getY(),
+                            blockPos.getZ(),
+                            blockPos.getX() + 1,
+                            blockPos.getY() + 1,
+                            blockPos.getZ() + 1);
+                    if (!isBlockValidPass(block)) {
+                        //if(!mc.world.getBlockState(blockPos).isFullBlock())
+                        //continue;
+                        if (blockbb.intersects(movedbb1) && ret == 1) {
+                            if(!blockbb.intersects(movedbb2))
+                                ret = 2;
+                            else
+                                return 0;
+                        }else if(blockbb.intersects(movedbb1) && blockbb.intersects(movedbb2))
+                            return 0;
+                    }
+                }
+            }
+        }
+
+        return ret;
+    }
+
     public boolean isBlockValidPass(Block block){
-        return block instanceof net.minecraft.block.BlockGrass || block instanceof net.minecraft.block.BlockFlower || block instanceof BlockTorch;
+        return block instanceof BlockAir || block instanceof net.minecraft.block.BlockTallGrass || block instanceof BlockBush || block instanceof BlockFlower || block instanceof BlockFlowerPot || block instanceof net.minecraft.block.BlockFlower || block instanceof BlockTorch || block instanceof BlockSign;
     }
 
     public BlockPos GetLocalPlayerPosFloored()
