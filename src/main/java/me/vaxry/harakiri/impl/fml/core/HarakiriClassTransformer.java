@@ -1,20 +1,5 @@
 package me.vaxry.harakiri.impl.fml.core;
 
-import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.patch.ClassPatch;
-import me.vaxry.harakiri.framework.patch.MethodPatch;
-import me.vaxry.harakiri.framework.util.ASMUtil;
-import me.vaxry.harakiri.impl.management.PatchManager;
-import net.minecraft.launchwrapper.IClassTransformer;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.MethodNode;
-
-import javax.swing.*;
-import java.io.*;
-import java.lang.reflect.Method;
-import java.util.logging.Level;
-
 /**
  * Author Seth
  * 4/4/2019 @ 11:49 PM.

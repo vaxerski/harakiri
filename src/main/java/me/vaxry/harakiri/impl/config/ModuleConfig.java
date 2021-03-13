@@ -77,42 +77,52 @@ public class ModuleConfig extends Configurable {
             // Retrieve values :)
             for(Value value : mod.getValueList()){
                 if(value.getValue().getClass() == Float.class){
-                    for(Value<Double> savedValue : settings.values){
-                        if(value.getName().equalsIgnoreCase(savedValue.getName())){
-                            value.setValueForceFloat((double)(savedValue.getValue()));
-                        }
-                    }
-                } else if(value.getValue().getClass() == Double.class){
-                    for(Value<Double> savedValue : settings.values){
-                        if(value.getName().equalsIgnoreCase(savedValue.getName())){
-                            value.setValue(savedValue.getValue());
-                        }
-                    }
-                } else if(value.getValue().getClass() == Boolean.class){
-                    for(Value<Boolean> savedValue : settings.values){
-                        if(value.getName().equalsIgnoreCase(savedValue.getName())){
-                            value.setValue(Boolean.valueOf(savedValue.getValue()));
-                        }
-                    }
-                } else if(value.getValue().getClass() == Color.class){
-                    for(Value<Integer> savedValue : settings.values){ // Color is an int
-                        if(value.getName().equalsIgnoreCase(savedValue.getName())){
-                            try {
-                                String colorVal = String.valueOf(savedValue.getValue());
-                                ColorShitKillMePls colorShitKillMePls = gson.fromJson(colorVal, ColorShitKillMePls.class);
-                                Color col = new Color(Integer.valueOf(colorShitKillMePls.value));
-                                value.setValue(col);
-                            }catch(Throwable t){
-                                // oh well
+                    try {
+                        for (Value<Double> savedValue : settings.values) {
+                            if (value.getName().equalsIgnoreCase(savedValue.getName())) {
+                                value.setValueForceFloat((double) (savedValue.getValue()));
                             }
                         }
-                    }
-                } else if(value.getValue().getClass() == Integer.class){
-                    for(Value savedValue : settings.values){
-                        if(value.getName().equalsIgnoreCase(savedValue.getName())){
-                            value.setValueForceInt((double)(savedValue.getValue()));
+                    }catch (Throwable t){ }
+                } else if(value.getValue().getClass() == Double.class){
+                    try {
+                        for (Value<Double> savedValue : settings.values) {
+                            if (value.getName().equalsIgnoreCase(savedValue.getName())) {
+                                value.setValue(savedValue.getValue());
+                            }
                         }
-                    }
+                    }catch (Throwable t){ }
+                } else if(value.getValue().getClass() == Boolean.class){
+                    try {
+                        for (Value<Boolean> savedValue : settings.values) {
+                            if (value.getName().equalsIgnoreCase(savedValue.getName())) {
+                                value.setValue(Boolean.valueOf(savedValue.getValue()));
+                            }
+                        }
+                    }catch (Throwable t){ }
+                } else if(value.getValue().getClass() == Color.class){
+                    try {
+                        for (Value<Integer> savedValue : settings.values) { // Color is an int
+                            if (value.getName().equalsIgnoreCase(savedValue.getName())) {
+                                try {
+                                    String colorVal = String.valueOf(savedValue.getValue());
+                                    ColorShitKillMePls colorShitKillMePls = gson.fromJson(colorVal, ColorShitKillMePls.class);
+                                    Color col = new Color(Integer.valueOf(colorShitKillMePls.value));
+                                    value.setValue(col);
+                                } catch (Throwable t) {
+                                    // oh well
+                                }
+                            }
+                        }
+                    }catch (Throwable t){ }
+                } else if(value.getValue().getClass() == Integer.class){
+                    try {
+                        for(Value savedValue : settings.values){
+                            if(value.getName().equalsIgnoreCase(savedValue.getName())){
+                                value.setValueForceInt((double)(savedValue.getValue()));
+                            }
+                        }
+                    }catch (Throwable t){ }
                 } /*else if(value.getValue().getClass() == String.class){
                     for(Value<String> savedValue : settings.values){
                         if(value.getName().equalsIgnoreCase(savedValue.getName())){
@@ -121,14 +131,14 @@ public class ModuleConfig extends Configurable {
                     }
                 }*/ else{
                     // it's an enum, prolly
-                    for(Value savedValue : settings.values){
-                        if(value.getName().equalsIgnoreCase(savedValue.getName())){
-                            try {
+                    try {
+                        for(Value savedValue : settings.values){
+                            if(value.getName().equalsIgnoreCase(savedValue.getName())){
                                 value.setEnumValue(String.valueOf(savedValue.getValue()));
-                            }catch(Throwable t){
-                                //ignoer
                             }
                         }
+                    }catch(Throwable t){
+                        //ignoer
                     }
                 }
             }

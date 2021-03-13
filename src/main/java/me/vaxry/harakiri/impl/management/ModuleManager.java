@@ -19,6 +19,7 @@ import me.vaxry.harakiri.impl.module.world.*;
 import me.vaxry.harakiri.impl.module.world.ScaffoldModule;
 import net.minecraftforge.common.MinecraftForge;
 
+import javax.swing.*;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -249,12 +250,17 @@ public final class ModuleManager {
      */
     public Module find(String alias) {
         for (Module mod : this.getModuleList()) {
+            if(alias == null || mod.getDisplayName() == null)
+                continue;
+
             if (alias.equalsIgnoreCase(mod.getDisplayName())) {
                 return mod;
             }
 
             if (mod.getAlias() != null && mod.getAlias().length > 0) {
                 for (String s : mod.getAlias()) {
+                    if(alias == null)
+                        continue; // Fix when obfuscated
                     if (alias.equalsIgnoreCase(s)) {
                         return mod;
                     }

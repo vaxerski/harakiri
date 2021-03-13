@@ -32,7 +32,6 @@
     "gui.MixinGuiScreenBook",
     "gui.MixinGuiScreen",
     "gui.MixinGuiPlayerTabOverlay",
-    "game.MixinScoreboard",
     "render.MixinItemRenderer",
     "net.MixinNetHanderPlayClient",
     "net.MixinNetworkManager",

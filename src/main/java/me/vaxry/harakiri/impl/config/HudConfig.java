@@ -87,25 +87,31 @@ public final class HudConfig extends Configurable {
 
                 // Anchor
                 dhc.setAnchorPoint(null);
-                if (!settings.anch.equalsIgnoreCase("na")) {
-                    for (AnchorPoint anchorPoint : Harakiri.get().getHudManager().getAnchorPoints()) {
-                        if (anchorPoint.getPoint().equals(AnchorPoint.Point.valueOf(settings.anch))) {
-                            dhc.setAnchorPoint(anchorPoint);
+                try {
+                    if (!settings.anch.equalsIgnoreCase("na")) {
+                        for (AnchorPoint anchorPoint : Harakiri.get().getHudManager().getAnchorPoints()) {
+                            if (anchorPoint.getPoint().equals(AnchorPoint.Point.valueOf(settings.anch))) {
+                                dhc.setAnchorPoint(anchorPoint);
+                            }
                         }
                     }
-                }
+                }catch (Throwable t){ }
 
                 // Stick
-                dhc.setGlued(null);
-                if (!settings.stick.equalsIgnoreCase("na")) {
-                    dhc.setGlued((DraggableHudComponent) Harakiri.get().getHudManager().findComponent(settings.stick));
-                }
+                try {
+                    dhc.setGlued(null);
+                    if (!settings.stick.equalsIgnoreCase("na")) {
+                        dhc.setGlued((DraggableHudComponent) Harakiri.get().getHudManager().findComponent(settings.stick));
+                    }
+                }catch (Throwable t){ }
 
                 // StickSide
-                dhc.setGlueSide(null);
-                if (!settings.stickside.equalsIgnoreCase("na")) {
-                    dhc.setGlueSide(DraggableHudComponent.GlueSide.valueOf(settings.stickside));
-                }
+                try {
+                    dhc.setGlueSide(null);
+                    if (!settings.stickside.equalsIgnoreCase("na")) {
+                        dhc.setGlueSide(DraggableHudComponent.GlueSide.valueOf(settings.stickside));
+                    }
+                }catch (Throwable t){ }
             }
         }
     }

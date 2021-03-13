@@ -37,6 +37,7 @@ public final class StepModule extends Module {
     public final Value<Boolean> sureStep = new Value<Boolean>("SureStep", new String[]{"SureStep", "S"}, "SureStep.", false);
     public final Value<Float> sureStepAm = new Value<Float>("SureStepPerc", new String[]{"SureStepPerc", "SSP"}, "SureStep amount.", 0.25f, 0.f, 2.f, 0.1f);
     public final Value<Boolean> stopMotion = new Value<Boolean>("StopMotion", new String[]{"StopMotion", "SM"}, "StopMotion.", false);
+    //public final Value<Integer> resetTimer = new Value<Integer>("ResetTimer", new String[]{"ResetTimer", "RT"}, "How long you have to be on ground to step again. (in ms)", 100, 0, 2000, 100);
 
 
     //public final Value<Boolean> spoof = new Value<Boolean>("Spoof", new String[]{"Spoof", "S"}, "Whether to spoof.", false);
@@ -207,6 +208,18 @@ public final class StepModule extends Module {
                     return 1;
                 }
             }
+        }else{
+            // check for 2
+            if(!isBlockValidPass(mc.world.getBlockState(localPos.north().up()).getBlock())){
+                //Solid for two
+                if(isBlockValidPass(mc.world.getBlockState(localPos.north().up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.north().up().up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.up().up().up()).getBlock())){
+                    // Possible twoblock!
+                    return 2;
+                }
+            }
         }
 
         return 0;
@@ -231,6 +244,18 @@ public final class StepModule extends Module {
                         && isBlockValidPass(mc.world.getBlockState(localPos.east().up().up()).getBlock())){
                     // Possible oneblock!
                     return 1;
+                }
+            }
+        }else{
+            // check for 2
+            if(!isBlockValidPass(mc.world.getBlockState(localPos.east().up()).getBlock())){
+                //Solid for two
+                if(isBlockValidPass(mc.world.getBlockState(localPos.east().up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.east().up().up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.up().up().up()).getBlock())){
+                    // Possible twoblock!
+                    return 2;
                 }
             }
         }
@@ -259,6 +284,18 @@ public final class StepModule extends Module {
                     return 1;
                 }
             }
+        }else{
+            // check for 2
+            if(!isBlockValidPass(mc.world.getBlockState(localPos.west().up()).getBlock())){
+                //Solid for two
+                if(isBlockValidPass(mc.world.getBlockState(localPos.west().up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.west().up().up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.up().up().up()).getBlock())){
+                    // Possible twoblock!
+                    return 2;
+                }
+            }
         }
 
         return 0;
@@ -283,6 +320,18 @@ public final class StepModule extends Module {
                         && isBlockValidPass(mc.world.getBlockState(localPos.south().up().up()).getBlock())){
                     // Possible oneblock!
                     return 1;
+                }
+            }
+        }else{
+            // check for 2
+            if(!isBlockValidPass(mc.world.getBlockState(localPos.south().up()).getBlock())){
+                //Solid for two
+                if(isBlockValidPass(mc.world.getBlockState(localPos.south().up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.south().up().up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.up().up()).getBlock())
+                        && isBlockValidPass(mc.world.getBlockState(localPos.up().up().up()).getBlock())){
+                    // Possible twoblock!
+                    return 2;
                 }
             }
         }
@@ -402,7 +451,7 @@ public final class StepModule extends Module {
     }
 
     public boolean isBlockValidPass(Block block){
-        return block instanceof BlockAir || block instanceof net.minecraft.block.BlockTallGrass || block instanceof BlockBush || block instanceof BlockFlower || block instanceof BlockFlowerPot || block instanceof net.minecraft.block.BlockFlower || block instanceof BlockTorch || block instanceof BlockSign;
+        return block instanceof BlockAir || block instanceof BlockSnow || block instanceof net.minecraft.block.BlockTallGrass || block instanceof BlockBush || block instanceof BlockFlower || block instanceof BlockFlowerPot || block instanceof net.minecraft.block.BlockFlower || block instanceof BlockTorch || block instanceof BlockSign;
     }
 
     public BlockPos GetLocalPlayerPosFloored()

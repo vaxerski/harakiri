@@ -257,6 +257,8 @@ public final class HudManager {
 
     public HudComponent findComponent(String componentName) {
         for (HudComponent component : this.componentList) {
+            if(componentName == null || component.getName() == null)
+                continue;
             if (componentName.equalsIgnoreCase(component.getName())) {
                 return component;
             }
