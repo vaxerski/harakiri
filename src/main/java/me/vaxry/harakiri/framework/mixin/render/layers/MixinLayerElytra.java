@@ -29,7 +29,7 @@ public class MixinLayerElytra {
         GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
         if(!chamsModule.isEnabled() || e == null) {
-            GL11.glColor4f(1,1,1,1);
+            GL11.glColor4f(1F,1F,1F,1F);
             return;
         }
 
@@ -51,7 +51,7 @@ public class MixinLayerElytra {
                 GL11.glColor4f(chamsModule.enemyR.getValue() / 255.f,chamsModule.enemyG.getValue() / 255.f,chamsModule.enemyB.getValue() / 255.f,chamsModule.enemyA.getValue() / 255.f);
             }
         }else{
-            GL11.glColor4f(1,1,1,1);
+            GL11.glColor4f(1F,1F,1F,1F);
         }
     }
 
