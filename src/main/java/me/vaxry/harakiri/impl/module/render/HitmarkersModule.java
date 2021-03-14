@@ -43,6 +43,7 @@ public class HitmarkersModule extends Module {
 
     //public final Value<MODE> mode = new Value<MODE>("Mode", new String[]{"Mode", "Mod"}, "Display mode.", MODE.COD);
     public final Value<Float> life = new Value<Float>("Lifetime", new String[]{"Lifetime", "Life"}, "How long the hitmarker is alive. (in seconds)", 1.f, 0.1f, 5.f, 0.1f);
+    public final Value<Float> scale = new Value<Float>("Scale", new String[]{"Scale", "Sc"}, "Scale of the sprite.", 1.f, 0.25f, 2.f, 0.1f);
 
     ArrayList<HitmarkerData> hitmarkers = new ArrayList<>();
 
@@ -53,6 +54,8 @@ public class HitmarkersModule extends Module {
     }
 
     private class HitmarkerData {
+        private HitmarkersModule parent;
+
         private final float speed = 0.3f;
         private final float size = 16.f;
 
@@ -65,11 +68,12 @@ public class HitmarkersModule extends Module {
         private Timer timer = new Timer();
 
         // Create a hitmarker
-        public HitmarkerData(Coordinate worldCoord, float lifetime, MODE mode, Texture texture){
+        public HitmarkerData(Coordinate worldCoord, float lifetime, MODE mode, Texture texture, HitmarkersModule parent){
             this.worldCoord = worldCoord;
             this.lifetime = lifetime;
             this.mode = mode;
             this.texture = texture;
+            this.parent = parent;
 
             this.timer.reset();
         }
@@ -111,7 +115,8 @@ public class HitmarkersModule extends Module {
             //this.texture.bind();
            // GlStateManager.enableTexture2D();
             GlStateManager.color(1.0f, 1.0f, 1.0f, a);
-            RenderUtil.drawTexture((float)Coord2D.x - size/2.f, (float)Coord2D.y - size/2.f, size, size, 0, 0, 1, 1);
+            RenderUtil.drawTexture((float)Coord2D.x - (size * this.parent.scale.getValue())/2.f, (float)Coord2D.y - (size * this.parent.scale.getValue())/2.f, (size * this.parent.scale.getValue()), (size * this.parent.scale.getValue()), 0, 0, 1, 1);
+            //RenderUtil.drawTexture((float)Coord2D.x - size/2.f, (float)Coord2D.y - size/2.f, size, size, 0, 0, 1, 1);
             GlStateManager.disableBlend();
             GlStateManager.disableAlpha();
 
@@ -183,7 +188,7 @@ public class HitmarkersModule extends Module {
                     hitCoord = new Coordinate(rayTraceResult.hitVec.x, rayTraceResult.hitVec.y, rayTraceResult.hitVec.z);
                 }
 
-                hitmarkers.add(new HitmarkerData(hitCoord, this.life.getValue(), MODE.COD, this.hitmarkerCOD));
+                hitmarkers.add(new HitmarkerData(hitCoord, this.life.getValue(), MODE.COD, this.hitmarkerCOD, this));
                 lastPacket = packet;
             }
         }
