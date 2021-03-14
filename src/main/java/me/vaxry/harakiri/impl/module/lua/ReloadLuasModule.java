@@ -1,16 +1,14 @@
 package me.vaxry.harakiri.impl.module.lua;
 
-import com.yworks.yguard.test.A;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.config.Configurable;
-import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
 import me.vaxry.harakiri.framework.lua.LUAAPI;
 import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.impl.config.LuaConfig;
-import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
+import me.vaxry.harakiri.impl.gui.hud.component.special.ModuleListComponent;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.io.File;

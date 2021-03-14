@@ -1,9 +1,9 @@
-package me.vaxry.harakiri.impl.gui.hud.component.module;
+package me.vaxry.harakiri.impl.gui.hud.component.special;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.gui.hud.component.*;
 import me.vaxry.harakiri.framework.gui.hud.component.TextComponent;
+import me.vaxry.harakiri.framework.gui.hud.component.*;
 import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.texture.Texture;
 import me.vaxry.harakiri.framework.util.ColorUtil;
@@ -18,19 +18,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
-import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * created by noil on 11/4/19 at 12:02 PM
  */
-public final class ModuleListComponent extends ResizableHudComponent {
+public final class ModuleSearchComponent extends ResizableHudComponent {
 
     private Module.ModuleType type;
 
@@ -69,6 +69,10 @@ public final class ModuleListComponent extends ResizableHudComponent {
     private Timer timer = new Timer();
     public float framejitter;
 
+    // Search exclusive
+    private String searchText = "";
+    private boolean isTypingEnabled = false;
+
     private float getJitter() {
         final float seconds = ((System.currentTimeMillis() - this.timer.getTime()) / 1000.0f) % 60.0f;
 
@@ -78,10 +82,9 @@ public final class ModuleListComponent extends ResizableHudComponent {
         return Math.min(desiredTimePerSecond * seconds, 1.0f);
     }
 
-    public ModuleListComponent(Module.ModuleType type) {
-        super(StringUtils.capitalize(type.name().toLowerCase()), 100, type == Module.ModuleType.LUA ? 50 : 150, 160, 400);
-        this.type = type;
-        this.originalName = StringUtils.capitalize(type.name().toLowerCase());
+    public ModuleSearchComponent() {
+        super("Search", 110, 150, 160, 400);
+        this.originalName = "Search";
         this.hudEditorModule = (HudEditorModule) Harakiri.get().getModuleManager().find(HudEditorModule.class);
         //this.texture = new Texture("module-" + type.name().toLowerCase() + ".png");
         this.arrowTexture = new Texture("arrow.png");
@@ -90,36 +93,8 @@ public final class ModuleListComponent extends ResizableHudComponent {
         this.setSnappable(false);
         this.setVisible(true);
 
-        this.setY(20);
-
-        if(Harakiri.get().getConfigManager().isFirstLaunch()){
-            switch(this.type){
-                case MOVEMENT:
-                    this.setX(20);
-                    break;
-                case RENDER:
-                    this.setX(170);
-                    break;
-                case PLAYER:
-                    this.setX(320);
-                    break;
-                case COMBAT:
-                    this.setX(20);
-                    this.setY(250);
-                    break;
-                case WORLD:
-                    this.setX(170);
-                    this.setY(250);
-                    break;
-                case MISC:
-                    this.setX(320);
-                    this.setY(250);
-                    break;
-            }
-        }else{
-            this.setX(20);
-            this.setY(20);
-        }
+        this.setX(370);
+        this.setY(250);
     }
 
     @Override
@@ -131,8 +106,11 @@ public final class ModuleListComponent extends ResizableHudComponent {
         //mouseX /= SCALING;
         //mouseY /= SCALING;
 
-        if (!(mc.currentScreen instanceof GuiHudEditor))
+        if (!(mc.currentScreen instanceof GuiHudEditor)) {
+            this.isTypingEnabled = false;
+            this.searchText = "";
             return;
+        }
 
         // rainbow
         rainbowCol = Harakiri.get().getHudEditor().rainbowColor;
@@ -219,8 +197,28 @@ public final class ModuleListComponent extends ResizableHudComponent {
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         RenderUtil.glScissor((this.getX() + BORDER) * SCALING, (this.getY() + offsetY + BORDER) * SCALING, (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) * SCALING, (this.getY() + this.getH() - BORDER) * SCALING, sr);
 
+        // Render the input box
+        RenderUtil.drawRect(this.getX() + BORDER + 1, this.getY() + offsetY + BORDER + 1, this.getX() + BORDER + this.getW() - 1, this.getY() + offsetY + BORDER + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 1, 0x55111111);
+
+        // its border
+        RenderUtil.drawLine(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getX() + BORDER + this.getW() - SCROLL_WIDTH  - 3, this.getY() + offsetY + BORDER, 1.f, this.isTypingEnabled ? this.useRainbow ? rainbowCol : ACCENT_COLOR : 0x99444444);
+        RenderUtil.drawLine(this.getX() + BORDER, this.getY() + offsetY + BORDER, this.getX() + BORDER, this.getY() + offsetY + BORDER + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 2, 1.f, this.isTypingEnabled ? this.useRainbow ? rainbowCol : ACCENT_COLOR : 0x99444444);
+        RenderUtil.drawLine(this.getX() + BORDER, this.getY() + offsetY + BORDER + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 2, this.getX() + BORDER + this.getW() - SCROLL_WIDTH  - 3, this.getY() + offsetY + BORDER + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 2, 1.f, this.isTypingEnabled ? this.useRainbow ? rainbowCol : ACCENT_COLOR : 0x99444444);
+        RenderUtil.drawLine(this.getX() + BORDER + this.getW() - SCROLL_WIDTH - 3, this.getY() + offsetY + BORDER + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 2, this.getX() + BORDER + this.getW() - SCROLL_WIDTH  - 3, this.getY() + offsetY + BORDER, 1.f, this.isTypingEnabled ? this.useRainbow ? rainbowCol : ACCENT_COLOR : 0x99444444);
+
+        // Render the search text
+        Harakiri.get().getTTFFontUtil().drawStringWithShadow(this.searchText, this.getX() + BORDER + 1, this.getY() + offsetY + BORDER + 1, 0xFFAAAAB7);
+
+        offsetY += Harakiri.get().getTTFFontUtil().FONT_HEIGHT + TEXT_GAP + 2; // Fix offset
+
         this.title = this.originalName;
-        for (Module module : Harakiri.get().getModuleManager().getModuleList(this.type)) {
+        for (Module module : Harakiri.get().getModuleManager().getModuleList()) {
+
+            if(!module.getDisplayName().toLowerCase().contains(searchText.toLowerCase()))
+                continue;
+
+            if(searchText.equalsIgnoreCase(""))
+                break;
 
             // draw module button bg
            // if(useRainbow)
@@ -252,16 +250,16 @@ public final class ModuleListComponent extends ResizableHudComponent {
                     module.highlightA = 48.f;
                 }
 
-                if(module.xOffset < 4.f){
+                /*if(module.xOffset < 4.f){
                     module.xOffset += 60.f * framejitter;
                 }else{
                     module.xOffset = 4.f;
-                }
+                }*/
             } else {
-                if(module.xOffset > 0.f)
+                /*if(module.xOffset > 0.f)
                     module.xOffset -= 0.7f * 60.f * framejitter;
                 else
-                    module.xOffset = 0.f;
+                    module.xOffset = 0.f;*/
 
                 if(module.highlightA > 0.f){
                     module.highlightA -= Math.min(1.f * 60.f * framejitter, 10);
@@ -271,14 +269,15 @@ public final class ModuleListComponent extends ResizableHudComponent {
             }
 
             // draw hover alpha
-            RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.get().getTTFFontUtil().FONT_HEIGHT - this.scroll, ((int)module.highlightA * 0x1000000) + 0x909090);
+            if(insideModule)
+                RenderUtil.drawRect(this.getX() + BORDER + TEXT_GAP, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, this.getX() + BORDER + TEXT_GAP + this.getW() - BORDER - SCROLL_WIDTH - BORDER - 2, this.getY() + offsetY + BORDER + TEXT_GAP + Harakiri.get().getTTFFontUtil().FONT_HEIGHT - this.scroll, ((int)module.highlightA * 0x1000000) + 0x909090);
 
             // draw module name
 
             if(useRainbow)
-                Harakiri.get().getTTFFontUtil().drawStringWithShadow(module.getDisplayName(), this.getX() + BORDER + TEXT_GAP + 1 + module.xOffset, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, module.isEnabled() ? rainbowCol : 0xFFAAAAB7);
+                Harakiri.get().getTTFFontUtil().drawStringWithShadow(module.getDisplayName(), this.getX() + BORDER + TEXT_GAP + 1, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, module.isEnabled() ? rainbowCol : 0xFFAAAAB7);
             else
-                Harakiri.get().getTTFFontUtil().drawStringWithShadow(module.getDisplayName(), this.getX() + BORDER + TEXT_GAP + 1 + module.xOffset, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, module.isEnabled() ? ACCENT_COLOR : 0xFFAAAAB7);
+                Harakiri.get().getTTFFontUtil().drawStringWithShadow(module.getDisplayName(), this.getX() + BORDER + TEXT_GAP + 1, this.getY() + offsetY + BORDER + TEXT_GAP - this.scroll, module.isEnabled() ? ACCENT_COLOR : 0xFFAAAAB7);
 
             offsetY += Harakiri.get().getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
 
@@ -390,7 +389,13 @@ public final class ModuleListComponent extends ResizableHudComponent {
                         }
                     }
                 }
-                for (Module module : Harakiri.get().getModuleManager().getModuleList(this.type)) {
+                for (Module module : Harakiri.get().getModuleManager().getModuleList()) {
+                    if(!module.getDisplayName().toLowerCase().contains(searchText.toLowerCase()))
+                        continue;
+
+                    if(searchText.equalsIgnoreCase(""))
+                        break;
+
                     final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + TEXT_GAP + height - this.scroll) && mouseY <= (this.getY() + BORDER + (Harakiri.get().getTTFFontUtil().FONT_HEIGHT * 2) + 1 + height - this.scroll);
                     if (insideComponent) {
                         tooltipText = module.getDesc();
@@ -444,7 +449,25 @@ public final class ModuleListComponent extends ResizableHudComponent {
 
         if (inside && !insideTitlebar && !isResizeDragging()) {
             int offsetY = BORDER;
-            for (Module module : Harakiri.get().getModuleManager().getModuleList(this.type)) {
+
+            if(mouseX >= (this.getX() + BORDER) * SCALING && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 1) * SCALING &&
+                    mouseY >= this.getY() + BORDER + titleBarHeight - this.scroll && mouseY <= this.getY() + BORDER + titleBarHeight + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 2 - this.scroll){
+                // Inside the textbox
+                this.isTypingEnabled = true;
+            }else{
+                this.isTypingEnabled = false;
+            }
+
+            offsetY += Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 2;
+
+            for (Module module : Harakiri.get().getModuleManager().getModuleList()) {
+
+                if(!module.getDisplayName().toLowerCase().contains(searchText.toLowerCase()))
+                    continue;
+
+                if(searchText.equalsIgnoreCase(""))
+                    break;
+
                 final boolean insideComponent = mouseX >= (this.getX() + BORDER) * SCALING && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 1) * SCALING && mouseY >= (this.getY() + BORDER + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + TEXT_GAP + offsetY - this.scroll) * SCALING && mouseY <= (this.getY() + BORDER + (Harakiri.get().getTTFFontUtil().FONT_HEIGHT * 2) + 1 + offsetY - this.scroll) * SCALING;
                 if (insideComponent) {
                     switch (button) {
@@ -488,6 +511,8 @@ public final class ModuleListComponent extends ResizableHudComponent {
                     //Harakiri.get().getConfigManager().saveAll();
                 }
             }
+        } else {
+            this.isTypingEnabled = false;
         }
     }
 
@@ -515,6 +540,18 @@ public final class ModuleListComponent extends ResizableHudComponent {
             for (ModuleSettingsComponent currentSettings : currentSettingsArr) {
                 currentSettings.keyTyped(typedChar, keyCode);
             }
+        }
+
+        if(this.isTypingEnabled){
+            // Clear the array lol
+            this.currentSettingsArr.clear();
+
+            if(keyCode == KeyEvent.VK_ESCAPE)
+                this.searchText = "";
+            else if(keyCode == KeyEvent.VK_BACK_SPACE || typedChar == '\b')
+                this.searchText = this.searchText.length() == 1 || this.searchText.length() == 0 ? "" : this.searchText.substring(0, Math.max(1,this.searchText.length() - 1));
+            else if("ABCDEFGHIJKLMNOPRSTUWVXYZqwertyuiopasdfghjklzxcvbnm ".indexOf(typedChar) != -1)
+                this.searchText += typedChar;
         }
     }
 
@@ -628,14 +665,10 @@ public final class ModuleListComponent extends ResizableHudComponent {
         return currentSettingsArr;
     }
 
-    public void cleanCurrentSettings() {
-        currentSettingsArr.clear();
-    }
-
     public static class BackButtonComponent extends HudComponent {
-        private final ModuleListComponent parentModuleList;
+        private final ModuleSearchComponent parentModuleList;
 
-        public BackButtonComponent(ModuleListComponent parentModuleList) {
+        public BackButtonComponent(ModuleSearchComponent parentModuleList) {
             super("Back", "Go back.");
             this.parentModuleList = parentModuleList;
         }
@@ -659,8 +692,8 @@ public final class ModuleListComponent extends ResizableHudComponent {
                 return;
 
             for (HudComponent component : Harakiri.get().getHudManager().getComponentList()) {
-                if (component instanceof ModuleListComponent) {
-                    ModuleListComponent moduleList = (ModuleListComponent) component;
+                if (component instanceof ModuleSearchComponent) {
+                    ModuleSearchComponent moduleList = (ModuleSearchComponent) component;
                     if (moduleList.getName().equals(parentModuleList.getName())) {
                         //moduleList.currentSettings = null;
                         moduleList.removeTooltip();
@@ -673,14 +706,14 @@ public final class ModuleListComponent extends ResizableHudComponent {
     public static class ModuleSettingsComponent extends HudComponent {
         public final Module module;
         public final List<HudComponent> components;
-        private final ModuleListComponent parentModuleList;
+        private final ModuleSearchComponent parentModuleList;
         public int alphaForBorder = 255;
         private boolean isAlphaDown = true;
         public float percOpen = 0;
         public float effectiveH = 0;
         public boolean toClose = false;
 
-        public ModuleSettingsComponent(Module module, ModuleListComponent parentModuleList, int yoff) {
+        public ModuleSettingsComponent(Module module, ModuleSearchComponent parentModuleList, int yoff) {
             super(module.getDisplayName());
 
             this.setY(this.getY() + yoff);

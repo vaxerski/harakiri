@@ -10,9 +10,8 @@ import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.SwitchViewComponent;
-import me.vaxry.harakiri.impl.gui.hud.component.WarningsComponent;
-import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
-import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleSearchComponent;
+import me.vaxry.harakiri.impl.gui.hud.component.special.ModuleListComponent;
+import me.vaxry.harakiri.impl.gui.hud.component.special.ModuleSearchComponent;
 import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -21,7 +20,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import org.lwjgl.input.Keyboard;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 

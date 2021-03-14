@@ -1,4 +1,4 @@
-package me.vaxry.harakiri.impl.gui.hud.component;
+package me.vaxry.harakiri.impl.gui.hud.component.special;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.gui.hud.EventHubComponentClick;
@@ -9,12 +9,12 @@ import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
-import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleListComponent;
-import me.vaxry.harakiri.impl.gui.hud.component.module.ModuleSearchComponent;
+import me.vaxry.harakiri.impl.gui.hud.component.SwitchViewComponent;
+import me.vaxry.harakiri.impl.gui.hud.component.special.ModuleListComponent;
+import me.vaxry.harakiri.impl.gui.hud.component.special.ModuleSearchComponent;
 import me.vaxry.harakiri.impl.module.render.HudModule;
 import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -161,11 +161,11 @@ public final class HubComponent extends ResizableHudComponent {
 
                 final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 1 + offsetY - this.scroll - Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 1) && mouseY <= (this.getY() + BORDER + (Harakiri.get().getTTFFontUtil().FONT_HEIGHT) + 1 + offsetY - this.scroll);
                 if (insideComponent) {
-                    if(component.highlightA < 48.f){
-                        component.highlightA += Math.min(5.f * 60.f * framejitter, 10);
-                    }else{
+                    //if(component.highlightA < 48.f){
+                    //    component.highlightA += Math.min(5.f * 60.f * framejitter, 10);
+                    //}else{
                         component.highlightA = 48.f;
-                    }
+                    //}
 
                     if(component.xOffset < 4.f){
                         component.xOffset += 1.f * 60.f * framejitter;
