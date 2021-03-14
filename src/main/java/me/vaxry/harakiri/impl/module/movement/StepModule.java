@@ -23,11 +23,6 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import javax.vecmath.Vector2f;
 import java.util.List;
 
-/**
- * Author: noil
- * Date: 7/14/2019
- * Time: 2:30 PM
- */
 public final class StepModule extends Module {
 
     //public final Value<Integer> height = new Value<Integer>("Height", new String[]{"Height", "H"}, "The step block-height.", 2, 1, 4, 1);
