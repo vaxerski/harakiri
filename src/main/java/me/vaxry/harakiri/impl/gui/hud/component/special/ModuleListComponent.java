@@ -246,11 +246,11 @@ public final class ModuleListComponent extends ResizableHudComponent {
                 //}
 
 
-                //if(module.highlightA < 48.f){
-                //    module.highlightA += Math.min(300.f * framejitter, 10);
-                //}else{
+                if(module.highlightA < 48.f){
+                    module.highlightA += Math.min(300.f * framejitter, 10);
+                }else{
                     module.highlightA = 48.f;
-                //}
+                }
 
                 if(module.xOffset < 4.f){
                     module.xOffset += 60.f * framejitter;
@@ -264,7 +264,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
                     module.xOffset = 0.f;
 
                 if(module.highlightA > 0.f){
-                    module.highlightA -= Math.min(1.f * 60.f * framejitter, 10);
+                    module.highlightA -= Math.min(Math.min(1.f * 60.f * framejitter, 10), module.highlightA);
                 }else{
                     module.highlightA = 0.f;
                 }
