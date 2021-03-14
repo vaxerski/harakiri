@@ -25,7 +25,7 @@ public class MixinModelElytra {
         EntityPlayer e = chamsModule.lastPlayer;
 
         if(!chamsModule.isEnabled() || e == null) {
-            GL11.glColor4f(1,1,1,1);
+            //GL11.glColor4f(1,1,1,1);
             return;
         }
 
@@ -47,7 +47,7 @@ public class MixinModelElytra {
                 GL11.glColor4f(chamsModule.enemyR.getValue() / 255.f,chamsModule.enemyG.getValue() / 255.f,chamsModule.enemyB.getValue() / 255.f,chamsModule.enemyA.getValue() / 255.f);
             }
         }else{
-            GL11.glColor4f(1,1,1,1);
+            //GL11.glColor4f(1,1,1,1);
         }
     }
 }

@@ -21,15 +21,19 @@ public final class EntityControlModule extends Module {
 
     @Listener
     public void pigTravel(EventPigTravel event) {
-        final Minecraft mc = Minecraft.getMinecraft();
-        final boolean moving = mc.player.movementInput.moveForward != 0 || mc.player.movementInput.moveStrafe != 0 || mc.player.movementInput.jump;
+        try {
+            final Minecraft mc = Minecraft.getMinecraft();
+            final boolean moving = mc.player.movementInput.moveForward != 0 || mc.player.movementInput.moveStrafe != 0 || mc.player.movementInput.jump;
 
-        final Entity riding = mc.player.getRidingEntity();
+            final Entity riding = mc.player.getRidingEntity();
 
-        if (riding != null && riding instanceof EntityPig) {
-            if (!moving && riding.onGround) {
-                event.setCanceled(true);
+            if (riding instanceof EntityPig) {
+                if (!moving && riding.onGround) {
+                    event.setCanceled(true);
+                }
             }
+        }catch (Throwable t){
+            // Suppress an error in logs.
         }
     }
 
