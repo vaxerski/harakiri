@@ -18,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
@@ -333,7 +334,19 @@ public final class ESPModule extends Module {
                         GlStateManager.enableOutlineMode(0xFF00EE00);*/
                 }
 
-                mc.getRenderManager().renderEntityStatic(e, partialTicks, false);
+                //mc.getRenderManager().renderEntityStatic(e, partialTicks, false);
+
+                // Force full brightness // // // // // // // // // // // //
+                int i = 15728880;
+                int j = i % 65536;
+                int k = i / 65536;
+                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+                double d0 = e.lastTickPosX + (e.posX - e.lastTickPosX) * (double)partialTicks;
+                double d1 = e.lastTickPosY + (e.posY - e.lastTickPosY) * (double)partialTicks;
+                double d2 = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * (double)partialTicks;
+                float f = e.prevRotationYaw + (e.rotationYaw - e.prevRotationYaw) * partialTicks;
+                mc.getRenderManager().renderEntity(e, d0 - mc.getRenderManager().renderPosX, d1 - mc.getRenderManager().renderPosY, d2 - mc.getRenderManager().renderPosZ, f, partialTicks, false);
+                // // // // // // // // // // // // // // // // // // // //
 
                 GlStateManager.disableOutlineMode();
                 GlStateManager.disableColorMaterial();

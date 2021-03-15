@@ -262,7 +262,7 @@ public final class ElytraFlyModule extends Module {
         // Fix movement if avoid
         if(Harakiri.get().getModuleManager().find(AvoidModule.class).isEnabled()){
             AvoidModule avm = (AvoidModule)Harakiri.get().getModuleManager().find(AvoidModule.class);
-            avm.fixMovevemt(event);
+            avm.fixMovevemt(event, mc.player);
         }
     }
 
