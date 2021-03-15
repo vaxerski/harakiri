@@ -24,6 +24,10 @@ public class MixinModelElytra {
         ChamsModule chamsModule = (ChamsModule) Harakiri.get().getModuleManager().find(ChamsModule.class);
         EntityPlayer e = chamsModule.lastPlayer;
 
+        GlStateManager.enableAlpha();
+        //GlStateManager.enableBlend();
+        //GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
         if(!chamsModule.isEnabled() || e == null) {
             //GL11.glColor4f(1,1,1,1);
             return;
@@ -32,10 +36,6 @@ public class MixinModelElytra {
         if(Harakiri.get().getFriendManager().isFriend(e) != null && chamsModule.friend.getValue() ||
                 Harakiri.get().getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
                 Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName()) && chamsModule.self.getValue()){
-
-            GlStateManager.enableAlpha();
-            GlStateManager.enableBlend();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
             if(Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName())){
                 GL11.glColor4f(chamsModule.selfR.getValue() / 255.f,chamsModule.selfG.getValue() / 255.f,chamsModule.selfB.getValue() / 255.f,chamsModule.selfA.getValue() / 255.f);

@@ -25,8 +25,11 @@ public class MixinLayerElytra {
         ChamsModule chamsModule = (ChamsModule) Harakiri.get().getModuleManager().find(ChamsModule.class);
         EntityPlayer e = chamsModule.lastPlayer;
 
+        //GlStateManager.enableBlend();
+        //GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.enableAlpha();
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         if(!chamsModule.isEnabled() || e == null) {
             GL11.glColor4f(1F,1F,1F,1F);
@@ -37,7 +40,6 @@ public class MixinLayerElytra {
                 Harakiri.get().getFriendManager().isFriend(e) == null && chamsModule.enemy.getValue() ||
                 Minecraft.getMinecraft().player.getName().equalsIgnoreCase(e.getName()) && chamsModule.self.getValue()){
 
-            GlStateManager.enableAlpha();
             //GlStateManager.enableBlend();
             //GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
