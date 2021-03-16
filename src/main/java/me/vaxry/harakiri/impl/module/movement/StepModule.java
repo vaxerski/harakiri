@@ -166,11 +166,12 @@ public final class StepModule extends Module {
 
         final float multiplySide = isMovingForward || isMovingBack ? 0.5f : 1.f;
 
+        final float offsetAng = isMovingBack ? -(90 * multiplySide) : 90 * multiplySide;
         if(mc.gameSettings.keyBindRight.pressed)
-            result += isMovingBack ? -(90 * multiplySide) : 90 * multiplySide;
+            result += offsetAng;
 
         if(mc.gameSettings.keyBindLeft.pressed)
-            result -= isMovingBack ? -(90 * multiplySide) : 90 * multiplySide;
+            result -= offsetAng;
 
         // clamp result
         if(result > 180F){
