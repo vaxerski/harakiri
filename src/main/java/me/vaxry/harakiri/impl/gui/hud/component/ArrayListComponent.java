@@ -59,6 +59,12 @@ public final class ArrayListComponent extends DraggableHudComponent {
     }
 
     @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        this.updateValues();
+    }
+
+    @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
 
