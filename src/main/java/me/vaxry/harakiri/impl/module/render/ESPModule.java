@@ -127,6 +127,13 @@ public final class ESPModule extends Module {
 
         shader = new ResourceLocation("shaders/post/esp.json");
         shaderGlow = new ResourceLocation("shaders/post/espglow.json");
+
+        this.onEnable();
+    }
+
+    @Override
+    public void onDisable() {
+        return;
     }
 
     private float getJitter() {
@@ -469,7 +476,8 @@ public final class ESPModule extends Module {
             mc.getRenderManager().setRenderOutlines(true);
             GlStateManager.disableLighting();
 
-            renderAllEntities(partialTicks, true);
+            if(this.isEnabled())
+                renderAllEntities(partialTicks, true);
 
             if(Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled())
                 renderAllTileEntities(partialTicks, true);
