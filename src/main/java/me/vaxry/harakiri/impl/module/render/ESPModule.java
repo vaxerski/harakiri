@@ -442,7 +442,7 @@ public final class ESPModule extends Module {
                 this.lastShader = this.shaderV.getValue();
                 toLoadShader = false;
             }catch(Throwable t){
-                Harakiri.get().logChat("Shader failed 2: " + t.getMessage());
+                //Harakiri.get().logChat("Shader failed 2: " + t.getMessage());
                 //JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
             }
         }
