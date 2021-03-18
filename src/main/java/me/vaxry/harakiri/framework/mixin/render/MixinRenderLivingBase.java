@@ -43,7 +43,7 @@ public abstract class MixinRenderLivingBase extends Render {
     private void renderLayers(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scaleIn, CallbackInfo ci){
 
         try {
-            if(((ESPModule)Harakiri.get().getModuleManager().find(ESPModule.class)).isRenderingOutline)
+            if(((ESPModule)Harakiri.get().getModuleManager().find(ESPModule.class)).isRenderingOutline && ((ESPModule)Harakiri.get().getModuleManager().find(ESPModule.class)).removeLayers.getValue())
                 ci.cancel();
         }catch (Throwable t){
             // Woops

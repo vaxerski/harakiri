@@ -77,6 +77,7 @@ public final class ESPModule extends Module {
     }
 
     public final Value<SHADER> shaderV = new Value<SHADER>("Style", new String[]{"Style", "s"}, "Select the shader to use.", SHADER.OUTLINE);
+    public final Value<Boolean> removeLayers = new Value<Boolean>("RemoveLayers", new String[]{"RemoveLayers", "rl"}, "Do not draw outlines over layers, for example elytra or armor.", false);
     public final Value<Boolean> items = new Value<Boolean>("Items", new String[]{"Items", "i"}, "Draw Items", false);
     public final Value<Boolean> itemsShader = new Value<Boolean>("ItemsShader", new String[]{"ItemsShader", "is"}, "Draw Items with a shader (not a box)", false);
     public final Value<Boolean> hostile = new Value<Boolean>("Hostile", new String[]{"Hostile", "h"}, "Draw Hostile Entities", false);
