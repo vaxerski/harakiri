@@ -211,7 +211,7 @@ public final class ESPModule extends Module {
         toLoadShader = true;
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void onRenderLivingBasePre(RenderLivingEvent.Specials.Pre<EntityLivingBase> ent){
         Minecraft mc = Minecraft.getMinecraft();
 
@@ -225,7 +225,7 @@ public final class ESPModule extends Module {
         }else{
             board.addPlayerToTeam(ent.getEntity().getUniqueID().toString(), green.getName());
         }
-    }
+    }*/
 
     @Listener
     public void onRenderEntity(EventRenderEntity event) {
@@ -338,6 +338,11 @@ public final class ESPModule extends Module {
                     else
                         GlStateManager.enableOutlineMode(0xFFFF3300);*/
                 } else if (e instanceof EntityLivingBase) {
+                    if(hostileMobsList.contains(e.getClass())) {
+                        board.addPlayerToTeam(e.getUniqueID().toString(), red.getName());
+                    } else {
+                        board.addPlayerToTeam(e.getUniqueID().toString(), green.getName());
+                    }
                     /*if (this.hostileMobsList.contains(e.getClass()))
                         GlStateManager.enableOutlineMode(0xFFFF3300);
                     else
