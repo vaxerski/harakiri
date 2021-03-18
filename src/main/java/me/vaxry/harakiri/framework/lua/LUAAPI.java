@@ -19,12 +19,13 @@ import java.util.Scanner;
 
 public final class LUAAPI {
     public static Module currentModuleHeader = null;
+    public static LuaModule currentLuaModuleHeader = null;
 
     private enum EVENTCODE {
         EVENT_NONE, EVENT_HEADER, EVENT_SCRIPT, EVENT_SCRIPT_PRELOAD
     }
 
-    private enum EVENTFUN {
+    public enum EVENTFUN {
         EVENT_NONE, EVENT_RENDER2D, EVENT_RENDER3D, EVENT_ENABLED, EVENT_DISABLED
     }
 
@@ -37,6 +38,8 @@ public final class LUAAPI {
         private String luaname;
         private boolean hasErrors = false;
 
+        private ArrayList<EVENTFUN> registeredForEvents = new ArrayList<>();
+
         public LuaModule(String luaName){
             luaname = luaName;
 
@@ -46,12 +49,14 @@ public final class LUAAPI {
                 return;
 
             currentModuleHeader = Harakiri.get().getModuleManager().findLua(luaName);
+            currentLuaModuleHeader = this;
             applyLUAHeader();
 
             // So we dont run the entire thing later on, just the func we are interested in.
             this.runScript(this.rawDataScript, EVENTCODE.EVENT_SCRIPT_PRELOAD, EVENTFUN.EVENT_NONE);
 
             currentModuleHeader = null;
+            currentLuaModuleHeader = null;
         }
 
         public void loadAPIFunctions(){
@@ -85,6 +90,9 @@ public final class LUAAPI {
                 if(ec != EVENTCODE.EVENT_NONE && ef != EVENTFUN.EVENT_NONE && ef != null) {
                     // running script
                     LuaValue fun = null;
+
+                    if(!this.isRegisteredForEvent(ef))
+                        return true;
 
                     switch(ef){
                         case EVENT_NONE:
@@ -126,6 +134,18 @@ public final class LUAAPI {
 
             if(!runScript(header, EVENTCODE.EVENT_HEADER, EVENTFUN.EVENT_NONE))
                 this.setErrors(true);
+        }
+
+        public void registerForEvent(EVENTFUN ef){
+            this.registeredForEvents.add(ef);
+        }
+
+        private boolean isRegisteredForEvent(EVENTFUN ef){
+            for(EVENTFUN eff : this.registeredForEvents){
+                if(eff == ef)
+                    return true;
+            }
+            return false;
         }
 
         //--------------Code Data--------------//

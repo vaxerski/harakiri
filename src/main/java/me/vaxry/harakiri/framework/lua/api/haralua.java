@@ -25,6 +25,7 @@ public class haralua extends TwoArgFunction {
         hara.set( "addfloat", new addfloat() );
         hara.set( "readfloat", new readfloat() );
         hara.set( "clearvalues", new clearvalues() );
+        hara.set( "registerfor", new registerfor() );
         env.set( "haralua", hara );
         env.get("package").get("loaded").set("haralua", hara);
         return hara;
@@ -112,6 +113,25 @@ public class haralua extends TwoArgFunction {
     protected static class clearvalues extends VarArgFunction {
         public Varargs invoke(Varargs args) {
             LUAAPI.currentModuleHeader.clearValues();
+            return LuaValue.valueOf(1);
+        }
+    }
+
+    protected static class registerfor extends OneArgFunction {
+        public LuaValue call(LuaValue arg) {
+
+            String event = arg.toString();
+
+            if(event.equalsIgnoreCase("Render2D")){
+                LUAAPI.currentLuaModuleHeader.registerForEvent(LUAAPI.EVENTFUN.EVENT_RENDER2D);
+            }else if(event.equalsIgnoreCase("Render3D")){
+                LUAAPI.currentLuaModuleHeader.registerForEvent(LUAAPI.EVENTFUN.EVENT_RENDER3D);
+            }else if(event.equalsIgnoreCase("onEnable")){
+                LUAAPI.currentLuaModuleHeader.registerForEvent(LUAAPI.EVENTFUN.EVENT_ENABLED);
+            }else if(event.equalsIgnoreCase("onDisable")){
+                LUAAPI.currentLuaModuleHeader.registerForEvent(LUAAPI.EVENTFUN.EVENT_DISABLED);
+            }
+
             return LuaValue.valueOf(1);
         }
     }
