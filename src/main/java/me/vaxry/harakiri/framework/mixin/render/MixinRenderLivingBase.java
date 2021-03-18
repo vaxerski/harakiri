@@ -3,6 +3,7 @@ package me.vaxry.harakiri.framework.mixin.render;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRenderName;
 import me.vaxry.harakiri.impl.module.render.ChamsModule;
+import me.vaxry.harakiri.impl.module.render.ESPModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -40,6 +41,14 @@ public abstract class MixinRenderLivingBase extends Render {
 
     @Inject(method = "renderLayers", at = @At("HEAD"), cancellable = true)
     private void renderLayers(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scaleIn, CallbackInfo ci){
+
+        try {
+            if(((ESPModule)Harakiri.get().getModuleManager().find(ESPModule.class)).isRenderingOutline)
+                ci.cancel();
+        }catch (Throwable t){
+            // Woops
+        }
+
 
         if(!(entitylivingbaseIn instanceof EntityPlayer))
             return; // DONT PARSE ANIMALS AND SHIT!!!!!!!!!!

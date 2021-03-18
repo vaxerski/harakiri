@@ -69,6 +69,8 @@ import java.util.List;
 
 public final class ESPModule extends Module {
 
+    public boolean isRenderingOutline = false;
+
     enum SHADER {
         OUTLINE,
         GLOW
@@ -214,7 +216,7 @@ public final class ESPModule extends Module {
 
         if(!livingBases.contains(ent.getEntity())){
             livingBases.add(ent.getEntity());
-            replaceLayers(ent.getEntity());
+            //replaceLayers(ent.getEntity());
         }
 
         if(hostileMobsList.contains(ent.getEntity().getClass())) {
@@ -312,8 +314,8 @@ public final class ESPModule extends Module {
                     || ((e instanceof EntityBoat || e instanceof EntityMinecart) && !this.vehicles.getValue())
                     || (e instanceof EntityEnderCrystal && !this.crystals.getValue())
                     || (e instanceof EntityPlayer && !this.players.getValue())
-                    || (e instanceof EntityLivingBase && this.hostileMobsList.contains(e.getClass()) && !this.hostile.getValue())
-                    || (e instanceof EntityLivingBase && !this.hostileMobsList.contains(e.getClass()) && !this.passive.getValue()))
+                    || (e instanceof EntityLivingBase && this.hostileMobsList.contains(e.getClass()) && !this.hostile.getValue() && !(e instanceof EntityPlayer))
+                    || (e instanceof EntityLivingBase && !this.hostileMobsList.contains(e.getClass()) && !this.passive.getValue() && !(e instanceof EntityPlayer)))
                 continue;
 
             if(e == mc.getRenderViewEntity())
@@ -476,8 +478,10 @@ public final class ESPModule extends Module {
             mc.getRenderManager().setRenderOutlines(true);
             GlStateManager.disableLighting();
 
+            isRenderingOutline = true;
             if(this.isEnabled())
                 renderAllEntities(partialTicks, true);
+            isRenderingOutline = false;
 
             if(Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled())
                 renderAllTileEntities(partialTicks, true);
