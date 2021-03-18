@@ -2,6 +2,7 @@ package me.vaxry.harakiri.framework.module;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.lua.LUAAPI;
 import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.module.lua.ReloadLuasModule;
 import net.minecraft.client.Minecraft;
@@ -73,12 +74,33 @@ public class Module {
 
     public void onEnable() {
         Harakiri.get().getEventManager().addEventListener(this);
+
+        if(this.type == ModuleType.LUA && !(this instanceof ReloadLuasModule)){
+            try {
+                LUAAPI.onEnabled(
+                        ((ReloadLuasModule)Harakiri.get().getModuleManager().find(ReloadLuasModule.class))
+                                .getLuaModuleByName(this.luaName));
+            }catch (Throwable t){
+                // Something failed. too bad!
+            }
+        }
     }
 
     public void onDisable() {
         if(this instanceof ReloadLuasModule)
             return; // Never
+
         Harakiri.get().getEventManager().removeEventListener(this);
+
+        if(this.type == ModuleType.LUA /*&& !(this instanceof ReloadLuasModule)  Redundant  */){
+            try {
+                LUAAPI.onDisabled(
+                        ((ReloadLuasModule)Harakiri.get().getModuleManager().find(ReloadLuasModule.class))
+                                .getLuaModuleByName(this.luaName));
+            }catch (Throwable t){
+                // Something failed. too bad!
+            }
+        }
     }
 
     public void onToggle() {

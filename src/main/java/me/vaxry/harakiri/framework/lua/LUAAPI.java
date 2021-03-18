@@ -25,7 +25,7 @@ public final class LUAAPI {
     }
 
     private enum EVENTFUN {
-        EVENT_NONE, EVENT_RENDER2D, EVENT_RENDER3D
+        EVENT_NONE, EVENT_RENDER2D, EVENT_RENDER3D, EVENT_ENABLED, EVENT_DISABLED
     }
 
     public static class LuaModule{
@@ -94,6 +94,12 @@ public final class LUAAPI {
                             break;
                         case EVENT_RENDER3D:
                             fun = JSEGlobals.get("EventRender3D");
+                            break;
+                        case EVENT_DISABLED:
+                            fun = JSEGlobals.get("EventDisabled");
+                            break;
+                        case EVENT_ENABLED:
+                            fun = JSEGlobals.get("EventEnabled");
                             break;
                     }
 
@@ -212,5 +218,15 @@ public final class LUAAPI {
             if(!lua.runScript(lua.rawDataScript, EVENTCODE.EVENT_SCRIPT, EVENTFUN.EVENT_RENDER3D))
                 lua.setErrors(true);
         }
+    }
+
+    public static void onEnabled(LuaModule luaModule){
+        if(!luaModule.runScript(luaModule.rawDataScript, EVENTCODE.EVENT_SCRIPT, EVENTFUN.EVENT_ENABLED))
+            luaModule.setErrors(true);
+    }
+
+    public static void onDisabled(LuaModule luaModule){
+        if(!luaModule.runScript(luaModule.rawDataScript, EVENTCODE.EVENT_SCRIPT, EVENTFUN.EVENT_DISABLED))
+            luaModule.setErrors(true);
     }
 }
