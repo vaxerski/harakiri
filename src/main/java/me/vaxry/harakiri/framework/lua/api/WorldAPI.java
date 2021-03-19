@@ -1,9 +1,11 @@
 package me.vaxry.harakiri.framework.lua.api;
 
+import com.yworks.yguard.test.B;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.lua.LUAAPI;
 import me.vaxry.harakiri.framework.notification.Notification;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -27,6 +29,7 @@ public class WorldAPI extends TwoArgFunction {
     public LuaValue call(LuaValue modname, LuaValue env) {
         LuaTable world = new LuaTable(0,30);
         world.set( "scanRadius", new scanRadius() );
+        world.set( "isSourceBlock", new isSourceBlock() );
         env.set( "world", world );
         env.get("package").get("loaded").set("world", world);
         return world;
@@ -73,6 +76,24 @@ public class WorldAPI extends TwoArgFunction {
             int z = args.arg(3).checkint();
 
             return CoerceJavaToLua.coerce(new BlockScanResult(x,y,z));
+        }
+    }
+
+    protected static class isSourceBlock extends VarArgFunction {
+        public LuaValue invoke(Varargs args) {
+            int x = args.arg(1).checkint();
+            int y = args.arg(2).checkint();
+            int z = args.arg(3).checkint();
+
+            IBlockState blockState = Minecraft.getMinecraft().world.getBlockState(new BlockPos(x,y,z));
+
+            if(blockState.getBlock() != Blocks.LAVA && blockState.getBlock() != Blocks.WATER)
+                return LuaValue.valueOf(false);
+
+            if(((Integer)blockState.getValue(BlockLiquid.LEVEL)).intValue() != 0)
+                return LuaValue.valueOf(false);
+
+            return LuaValue.valueOf(true);
         }
     }
 }
