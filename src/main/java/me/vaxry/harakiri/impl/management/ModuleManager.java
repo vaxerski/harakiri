@@ -113,7 +113,7 @@ public final class ModuleManager {
         add(new NewChunksModule());
         add(new NoCrystalModule());
         add(new StorageESPModule());
-        add(new SourceBlockESPModule());
+        //add(new SourceBlockESPModule()); //Replaced by a lua
         add(new BedrockFinder());
         add(new AutoDisconnectModule());
         add(new ChatFilterModule());
