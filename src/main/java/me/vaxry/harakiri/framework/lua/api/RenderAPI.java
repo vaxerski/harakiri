@@ -22,6 +22,8 @@ public class RenderAPI extends TwoArgFunction {
         render.set( "renderString", new renderString() );
         render.set( "renderRect", new renderRect() );
         render.set( "renderLine", new renderLine() );
+        render.set( "render3DBox", new render3DBox() );
+        render.set( "render3DLine", new render3DLine() );
         env.set( "render", render );
         env.get("package").get("loaded").set("render", render);
         return render;

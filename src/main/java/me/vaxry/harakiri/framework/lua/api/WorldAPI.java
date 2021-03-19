@@ -30,6 +30,7 @@ public class WorldAPI extends TwoArgFunction {
         LuaTable world = new LuaTable(0,30);
         world.set( "scanRadius", new scanRadius() );
         world.set( "isSourceBlock", new isSourceBlock() );
+        world.set( "getScanPos", new getScanPos() );
         env.set( "world", world );
         env.get("package").get("loaded").set("world", world);
         return world;
@@ -37,7 +38,6 @@ public class WorldAPI extends TwoArgFunction {
 
     public static class BlockScanResult {
         public int[][][] returnBlocks;
-        public int[] scanCenter = new int[3];
 
         public BlockScanResult(int rx, int ry, int rz){
             final Minecraft mc = Minecraft.getMinecraft();
@@ -45,9 +45,6 @@ public class WorldAPI extends TwoArgFunction {
             returnBlocks = new int[rx*2 + 2][ry*2 + 2][rz*2 + 2];
 
             BlockPos playerPos = mc.player.getPosition();
-            this.scanCenter[0] = playerPos.getX();
-            this.scanCenter[1] = playerPos.getY();
-            this.scanCenter[2] = playerPos.getZ();
 
             for(int x = 0; x < rx * 2 + 1; ++x){
                 for(int y = 0; y < ry * 2 + 1; ++y){
@@ -78,6 +75,18 @@ public class WorldAPI extends TwoArgFunction {
             return CoerceJavaToLua.coerce(new BlockScanResult(x,y,z));
         }
     }
+
+    protected static class getScanPos extends ZeroArgFunction {
+        public LuaValue call() {
+            BlockPos playerPos = Minecraft.getMinecraft().player.getPosition();
+            int[] scanCenter = new int[3];
+            scanCenter[0] = playerPos.getX();
+            scanCenter[1] = playerPos.getY();
+            scanCenter[2] = playerPos.getZ();
+            return CoerceJavaToLua.coerce(scanCenter);
+        }
+    }
+
 
     protected static class isSourceBlock extends VarArgFunction {
         public LuaValue invoke(Varargs args) {
