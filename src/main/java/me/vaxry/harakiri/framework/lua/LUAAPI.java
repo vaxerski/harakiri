@@ -79,6 +79,7 @@ public final class LUAAPI {
             JSEGlobals.load(new ModuleAPI());
             JSEGlobals.load(new ComponentAPI());
             JSEGlobals.load(new EntityAPI());
+            JSEGlobals.load(new WorldAPI());
         }
 
         public boolean runScript(String rawdata, EVENTCODE ec, EVENTFUN ef){
