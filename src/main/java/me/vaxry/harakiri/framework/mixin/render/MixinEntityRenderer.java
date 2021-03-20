@@ -9,6 +9,7 @@ import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.impl.module.render.ESPModule;
 import me.vaxry.harakiri.impl.module.render.NoOverlayModule;
+import me.vaxry.harakiri.impl.module.render.StorageESPModule;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -32,7 +33,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinEntityRenderer {
     @Inject(method = "updateCameraAndRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderGlobal;renderEntityOutlineFramebuffer()V"))
     private void onRenderGameOverlay(CallbackInfo ci) {
-        ((ESPModule)Harakiri.get().getModuleManager().find(ESPModule.class)).renderFramebuffer();
+        if(Harakiri.get().getModuleManager().find(ESPModule.class).isEnabled() || Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled())
+            ((ESPModule)Harakiri.get().getModuleManager().find(ESPModule.class)).renderFramebuffer();
     }
 
 

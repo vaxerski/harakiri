@@ -136,6 +136,8 @@ public final class ESPModule extends Module {
 
     @Override
     public void onDisable() {
+        super.onDisable();
+        Harakiri.get().getEventManager().addEventListener(this);
         return;
     }
 
@@ -152,7 +154,7 @@ public final class ESPModule extends Module {
     public void OnRender3D(EventRender3D event){
         final Minecraft mc = Minecraft.getMinecraft();
 
-        if (mc.player == null)
+        if (mc.player == null || !this.isEnabled())
             return;
 
         if(this.items.getValue() && !this.itemsShader.getValue()){
@@ -270,7 +272,8 @@ public final class ESPModule extends Module {
 
             coloredPlayers.clear();
         } else if(event.getStage() == EventStageable.EventStage.PRE){
-            renderESP(event, event.getPartialTicks());
+            if(this.isEnabled() || Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled())
+                renderESP(event, event.getPartialTicks());
         } else if(event.getStage() == EventStageable.EventStage.MID){
 
             // enable alpha if glow
