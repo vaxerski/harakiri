@@ -11,6 +11,7 @@ import me.vaxry.harakiri.framework.duck.MixinMinecraftInterface;
 import me.vaxry.harakiri.framework.util.GUIUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.util.TTFFontUtil;
+import me.vaxry.harakiri.impl.fml.core.HarakiriLoadingPlugin;
 import me.vaxry.harakiri.impl.fml.harakiriMod;
 import me.vaxry.harakiri.impl.gui.menu.HaraMainMenu;
 import net.minecraft.client.Minecraft;
@@ -29,9 +30,13 @@ import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Timer;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GLContext;
+import org.lwjgl.opengl.SharedDrawable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.gen.Accessor;
@@ -77,6 +82,14 @@ public abstract class MixinMinecraft implements MixinMinecraftInterface {
     @Inject(method = "displayGuiScreen", at = @At("HEAD"), cancellable = true)
     public void displayGuiScreen(GuiScreen guiScreenIn, CallbackInfo info)
     {
+        /*try {
+            HarakiriLoadingPlugin.terminate = true;
+            HarakiriLoadingPlugin.thread.join();
+            GL11.glFlush();        // process any remaining GL calls before releaseContext (prevents missing textures on mac)
+            HarakiriLoadingPlugin.d.releaseContext();
+            Display.getDrawable().makeCurrent();
+        }catch (Throwable t){ ; }*/
+
         if (guiScreenIn == null && this.world == null)
         {
             guiScreenIn = new HaraMainMenu();
@@ -170,6 +183,25 @@ public abstract class MixinMinecraft implements MixinMinecraftInterface {
     @Inject(method = "drawSplashScreen", cancellable = true, at = @At("HEAD"))
     public void drawSplashScreen(TextureManager textureManager, CallbackInfo ci){
         // Loading screen
+        /*try {
+
+            try
+            {
+                HarakiriLoadingPlugin.d = new SharedDrawable(Display.getDrawable());
+                Display.getDrawable().releaseContext();
+                HarakiriLoadingPlugin.d.makeCurrent();
+            }
+            catch (LWJGLException e)
+            {
+
+            }
+
+            HarakiriLoadingPlugin.thread = new HarakiriLoadingPlugin.HaraLoadingThread();
+            HarakiriLoadingPlugin.thread.start();
+        }catch (Throwable t){
+            JOptionPane.showMessageDialog(null, t.toString(), "err!", JOptionPane.INFORMATION_MESSAGE);
+        }*/
+    // Animated. Didnt work well.
 
         ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft());
         int i = scaledresolution.getScaleFactor();
@@ -231,6 +263,8 @@ public abstract class MixinMinecraft implements MixinMinecraftInterface {
         GlStateManager.enableAlpha();
         GlStateManager.alphaFunc(516, 0.1F);
         Minecraft.getMinecraft().updateDisplay();
+
+
 
         ci.cancel();
     }
