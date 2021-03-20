@@ -9,25 +9,42 @@ import me.vaxry.harakiri.framework.event.minecraft.EventUpdateFramebufferSize;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
 import me.vaxry.harakiri.framework.duck.MixinMinecraftInterface;
 import me.vaxry.harakiri.framework.util.GUIUtil;
+import me.vaxry.harakiri.framework.util.RenderUtil;
+import me.vaxry.harakiri.framework.util.TTFFontUtil;
+import me.vaxry.harakiri.impl.fml.harakiriMod;
 import me.vaxry.harakiri.impl.gui.menu.HaraMainMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Timer;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
+import javax.swing.*;
+import java.io.InputStream;
+
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 
 /**
  * @author cats
@@ -148,5 +165,73 @@ public abstract class MixinMinecraft implements MixinMinecraftInterface {
         final EventLoadWorld event = new EventLoadWorld(worldClientIn);
         Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) ci.cancel();
+    }
+
+    @Inject(method = "drawSplashScreen", cancellable = true, at = @At("HEAD"))
+    public void drawSplashScreen(TextureManager textureManager, CallbackInfo ci){
+        // Loading screen
+
+        ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft());
+        int i = scaledresolution.getScaleFactor();
+        Framebuffer framebuffer = new Framebuffer(scaledresolution.getScaledWidth() * i, scaledresolution.getScaledHeight() * i, true);
+        framebuffer.bindFramebuffer(false);
+        GlStateManager.matrixMode(5889);
+        GlStateManager.loadIdentity();
+        GlStateManager.ortho(0.0D, (double)scaledresolution.getScaledWidth(), (double)scaledresolution.getScaledHeight(), 0.0D, 1000.0D, 3000.0D);
+        GlStateManager.matrixMode(5888);
+        GlStateManager.loadIdentity();
+        GlStateManager.translate(0.0F, 0.0F, -2000.0F);
+        GlStateManager.disableLighting();
+        GlStateManager.disableFog();
+        GlStateManager.disableDepth();
+        GlStateManager.enableTexture2D();
+
+        try {
+            ResourceLocation rl = new ResourceLocation("harakirimod", "textures/loadingsplash.png");
+            Minecraft.getMinecraft().getTextureManager().bindTexture(rl);
+            Minecraft.getMinecraft().getTextureManager().bindTexture(rl);
+
+            final int x = 0;
+            final int y = 0;
+            final int width = scaledresolution.getScaledWidth();
+            final int height = scaledresolution.getScaledHeight();
+            final int u = 0;
+            final int v = 0;
+            final int t = 1;
+            final int s = 1;
+
+            final Tessellator tessellator = Tessellator.getInstance();
+            final BufferBuilder bufferbuilder = tessellator.getBuffer();
+            bufferbuilder.begin(GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX);
+            bufferbuilder.pos(x + width, y, 0F).tex(t, v).endVertex();
+            bufferbuilder.pos(x, y, 0F).tex(u, v).endVertex();
+            bufferbuilder.pos(x, y + height, 0F).tex(u, s).endVertex();
+            bufferbuilder.pos(x, y + height, 0F).tex(u, s).endVertex();
+            bufferbuilder.pos(x + width, y + height, 0F).tex(t, s).endVertex();
+            bufferbuilder.pos(x + width, y, 0F).tex(t, v).endVertex();
+            tessellator.draw();
+
+            final BufferBuilder bufferbuilder2 = Tessellator.getInstance().getBuffer();
+            bufferbuilder2.begin(GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX);
+            bufferbuilder2.pos(x + width, y, 0F).tex(t, v).endVertex();
+            bufferbuilder2.pos(x, y, 0F).tex(u, v).endVertex();
+            bufferbuilder2.pos(x, y + height, 0F).tex(u, s).endVertex();
+            bufferbuilder2.pos(x, y + height, 0F).tex(u, s).endVertex();
+            bufferbuilder2.pos(x + width, y + height, 0F).tex(t, s).endVertex();
+            bufferbuilder2.pos(x + width, y, 0F).tex(t, v).endVertex();
+            Tessellator.getInstance().draw();
+        }catch (Throwable t){
+            // If anything happens.
+            //JOptionPane.showMessageDialog(null, t.toString(), "Error in drawSplashScreen!", JOptionPane.INFORMATION_MESSAGE);
+        }
+        GlStateManager.disableLighting();
+        GlStateManager.disableFog();
+        framebuffer.unbindFramebuffer();
+        framebuffer.framebufferRender(scaledresolution.getScaledWidth() * i, scaledresolution.getScaledHeight() * i);
+        GlStateManager.enableAlpha();
+        GlStateManager.alphaFunc(516, 0.1F);
+        Minecraft.getMinecraft().updateDisplay();
+
+        ci.cancel();
     }
 }
