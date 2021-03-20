@@ -296,7 +296,7 @@ public final class ESPModule extends Module {
     private float lastPartialTicks = 0;
 
     public void renderFramebuffer(){
-        if(!this.isEnabled())
+        if(!this.isEnabled() && !Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled())
             return;
         final Minecraft mc = Minecraft.getMinecraft();
         GlStateManager.enableBlend();
