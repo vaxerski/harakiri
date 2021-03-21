@@ -5,6 +5,7 @@ import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
 import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
 import me.vaxry.harakiri.framework.texture.Texture;
 import me.vaxry.harakiri.framework.util.ColorUtil;
+import me.vaxry.harakiri.framework.util.MathUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
@@ -16,12 +17,21 @@ import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL14.GL_FUNC_ADD;
+import static org.lwjgl.opengl.GL14.GL_FUNC_SUBTRACT;
 
 /**
  * Author Seth
@@ -49,6 +59,16 @@ public final class GuiHudEditor extends GuiScreen {
     public String colorPickerName = "";
     public boolean specialColorClick = false;
     public boolean forceCloseColorPicker = false;
+
+    //FadeInOut Smart
+    private Framebuffer GuiFramebuffer;
+    private Timer fadeTimer = new Timer();
+    private float FADE_SPEED = 400F;
+    private boolean isClosing = false;
+    private boolean isFading = false;
+    private boolean wasClosed = true;
+    private float curAlphaFade = 0;
+
 
     public GuiHudEditor(){
         hudComponentsSorted.addAll(Harakiri.get().getHudManager().getComponentList());
@@ -90,64 +110,126 @@ public final class GuiHudEditor extends GuiScreen {
     private float getJitter() {
         final float seconds = ((System.currentTimeMillis() - this.timer.getTime()) / 1000.0f) % 60.0f;
 
-        final float desiredTimePerSecond = rainSpeed;
+        final float desiredTimePerSecond = FADE_SPEED;
 
         this.timer.reset();
-        return Math.min(desiredTimePerSecond * seconds, 1.0f);
+        return Math.min(desiredTimePerSecond * seconds, desiredTimePerSecond);
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
-        // Init plexus
-        if(Harakiri.get().getPlexusEffect() == null)
-            Harakiri.get().initPlexusEffect((PlexusComponent) Harakiri.get().getHudManager().findComponent(PlexusComponent.class));
-
-        rainbowColor = Harakiri.get().getHudManager().rainbowColor;
-
-        super.drawScreen(mouseX, mouseY, partialTicks);
-        this.drawDefaultBackground();
-
         final ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
 
-        // Draw the text
+       /* if(wasClosed){
+            // First run.
+            this.timer.reset();
 
-        if(this.bg == null)
-            this.bg = new Texture("harabackground.png");
+            this.GuiFramebuffer = new Framebuffer(res.getScaledWidth() * res.getScaleFactor(), res.getScaledHeight() * res.getScaleFactor(), true);
+            this.GuiFramebuffer.createFramebuffer(res.getScaledWidth() * res.getScaleFactor(), res.getScaledHeight() * res.getScaleFactor());
+            GlStateManager.enableAlpha();
+            GlStateManager.enableBlend();
+            this.GuiFramebuffer.bindFramebuffer(false);
 
-        GlStateManager.enableAlpha();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.enableBlend();
+            this.curAlphaFade = 0;
 
-        GlStateManager.enableTexture2D();
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-
-        this.bg.bind();
-        this.bg.render(0,0, res.getScaledWidth(), res.getScaledHeight());
-
-        GlStateManager.disableTexture2D();
-        GlStateManager.disableBlend();
-        GlStateManager.disableAlpha();
-
-        // Plexus
-        Harakiri.get().getPlexusEffect().render(mouseX, mouseY);
-
-        final float halfWidth = res.getScaledWidth() / 2.0f;
-        final float halfHeight = res.getScaledHeight() / 2.0f;
-        // ugly
-        //RenderUtil.drawLine(halfWidth, 0, halfWidth, res.getScaledHeight(), 1, 0x75909090);
-        //RenderUtil.drawLine(0, halfHeight, res.getScaledWidth(), halfHeight, 1, 0x75909090);
-
-        // Rainbow Border
-        RenderUtil.drawLine(0, 0,0, res.getScaledHeight(), 2, rainbowColor); // Left
-        RenderUtil.drawLine(0, 0, res.getScaledWidth(), 0, 2, rainbowColor); // Top
-        RenderUtil.drawLine(0, res.getScaledHeight() - 1, res.getScaledWidth(), res.getScaledHeight() - 1, 1, rainbowColor); // Bottom
-        RenderUtil.drawLine(res.getScaledWidth(), res.getScaledHeight(),res.getScaledWidth(), 0, 2, rainbowColor); // Right
-
-        for (AnchorPoint point : Harakiri.get().getHudManager().getAnchorPoints()) {
-            //RenderUtil.drawRect(point.getX() - 1, point.getY() - 1, point.getX() + 1, point.getY() + 1, 0x75909090);
-            //dont :)
+            this.isFading = true;
         }
+
+        if(!wasClosed && this.isFading){
+            if(!this.isClosing){
+                this.curAlphaFade = Math.min(this.curAlphaFade + getJitter(), 100F);
+                //this.curAlphaFade = (float)MathUtil.parabolic(this.curAlphaFade, 100F, getJitter() / 100F);
+                if(this.curAlphaFade >= 100F) {
+                    this.isFading = false;
+                    this.curAlphaFade = 100F;
+                }
+            }else{
+                this.curAlphaFade = Math.max(this.curAlphaFade - getJitter(), 0F);
+                //this.curAlphaFade = (float)MathUtil.parabolic(this.curAlphaFade, 0F, getJitter() / 100F);
+                if(this.curAlphaFade == 0F) {
+                    this.isFading = false;
+                    this.curAlphaFade = 0F;
+                }
+            }
+
+            final Minecraft mc = Minecraft.getMinecraft();
+
+            if (OpenGlHelper.isFramebufferEnabled()) {
+                //GlStateManager.color(1.0F, 1.0F, 1.0F, this.curAlphaFade / 100F);
+                GlStateManager.enableAlpha();
+                GlStateManager.enableBlend();
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR);
+                GlStateManager.glBlendEquation(GL_FUNC_ADD);
+
+                GlStateManager.enableTexture2D();
+                GlStateManager.color(1.0f, 1.0f, 1.0f, 1F);
+
+                this.GuiFramebuffer.bindFramebufferTexture();
+
+                final float offX = (1 - this.curAlphaFade/100F) * (res.getScaledWidth() / 2F);
+                final float offY = (1 - this.curAlphaFade/100F) * (res.getScaledHeight() / 2F);
+
+                Tessellator tessellator = Tessellator.getInstance();
+                BufferBuilder bufferbuilder = tessellator.getBuffer();
+                bufferbuilder.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+                bufferbuilder.pos(offX, (double)res.getScaledHeight() - offY, 0.0D).tex(0.0D, 0.0D).color(255, 255, 255, 255).endVertex();
+                bufferbuilder.pos((double)res.getScaledWidth() - offX, (double)res.getScaledHeight() - offY, 0.0D).tex((double)1, 0.0D).color(255, 255, 255, 255).endVertex();
+                bufferbuilder.pos((double)res.getScaledWidth() - offX, offY, 0.0D).tex((double)1, (double)1).color(255, 255, 255, 255).endVertex();
+                bufferbuilder.pos(offX, offY, 0.0D).tex(0.0D, (double)1).color(255, 255, 255, 255).endVertex();
+                tessellator.draw();
+
+                GlStateManager.disableTexture2D();
+                GlStateManager.disableBlend();
+                GlStateManager.disableAlpha();
+            }
+            GlStateManager.disableBlend();
+        }*/
+
+       // if(!wasClosed) {
+            // Init plexus
+            if (Harakiri.get().getPlexusEffect() == null)
+                Harakiri.get().initPlexusEffect((PlexusComponent) Harakiri.get().getHudManager().findComponent(PlexusComponent.class));
+
+            rainbowColor = Harakiri.get().getHudManager().rainbowColor;
+
+            super.drawScreen(mouseX, mouseY, partialTicks);
+            this.drawDefaultBackground();
+
+            // Draw the text
+
+            if (this.bg == null)
+                this.bg = new Texture("harabackground.png");
+
+            GlStateManager.enableAlpha();
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            GlStateManager.enableBlend();
+
+            GlStateManager.enableTexture2D();
+            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+
+            this.bg.bind();
+            this.bg.render(0, 0, res.getScaledWidth(), res.getScaledHeight());
+
+            GlStateManager.disableTexture2D();
+            GlStateManager.disableBlend();
+            GlStateManager.disableAlpha();
+
+            // Plexus
+            Harakiri.get().getPlexusEffect().render(mouseX, mouseY);
+
+            final float halfWidth = res.getScaledWidth() / 2.0f;
+            final float halfHeight = res.getScaledHeight() / 2.0f;
+
+            // Rainbow Border
+            RenderUtil.drawLine(0, 0,0, res.getScaledHeight(), 2, rainbowColor); // Left
+            RenderUtil.drawLine(0, 0, res.getScaledWidth(), 0, 2, rainbowColor); // Top
+            RenderUtil.drawLine(0, res.getScaledHeight() - 1, res.getScaledWidth(), res.getScaledHeight() - 1, 1, rainbowColor); // Bottom
+            RenderUtil.drawLine(res.getScaledWidth(), res.getScaledHeight(),res.getScaledWidth(), 0, 2, rainbowColor); // Right
+       // }
+
+       // if(!wasClosed && this.isFading)
+           // return;
 
         SwitchViewComponent swc = (SwitchViewComponent)Harakiri.get().getHudManager().findComponent(SwitchViewComponent.class);
 
@@ -213,6 +295,13 @@ public final class GuiHudEditor extends GuiScreen {
         }
 
         swc.render(mouseX, mouseY, partialTicks);
+
+
+        /*if(wasClosed){
+            this.GuiFramebuffer.unbindFramebuffer();
+            Minecraft.getMinecraft().framebuffer.bindFramebuffer(false);
+            wasClosed = false;
+        }*/
     }
 
     HudComponent componentMoving = null;
@@ -383,6 +472,8 @@ public final class GuiHudEditor extends GuiScreen {
                 }
             }
         }
+
+        wasClosed = true;
 
         // go back to previous screen
         super.onGuiClosed();
