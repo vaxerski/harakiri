@@ -4,6 +4,7 @@ import akka.japi.Pair;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.event.render.EventRenderEntities;
 import me.vaxry.harakiri.framework.event.render.EventRenderEntity;
 import me.vaxry.harakiri.framework.module.Module;
@@ -41,11 +42,11 @@ import java.util.*;
 public final class StorageESPModule extends Module {
 
     enum MODE {
-        CPU,
+        SIMPLIFIED,
         SHADER
     }
 
-    public final Value<MODE> modeValue = new Value<MODE>("Mode", new String[]{"Mode"}, "Changes the render mode. Shader is incompatible with rainbow, but might run faster with more storage.\nShader: Faster, connects between colors. Doesn't support Rainbow and thickness.\nCPU: Slower, occasional artifacts. Supports Rainbow and thickness.", MODE.SHADER);
+    public final Value<MODE> modeValue = new Value<MODE>("Mode", new String[]{"Mode"}, "Changes the render mode. Simplified works with Optifine Shaders.", MODE.SHADER);
     public final Value<Float> thickness = new Value<Float>("Thickness", new String[]{"Thickness", "Thick", "t"}, "Thickness of the line", 1.f, 0.1f, 2.f, 0.1f);
     public final Value<Boolean> rainbow = new Value<Boolean>("Rainbow", new String[]{"Rainbow", "Rain", "r"}, "Rainbow mode for the ESP", false);
     public final Value<Integer> rainspeed = new Value<Integer>("RainbowSpeed", new String[]{"RainbowSpeed", "RainSpeed", "rs"}, "Rainbow mode speed", 5, 1, 20, 1);
@@ -70,10 +71,10 @@ public final class StorageESPModule extends Module {
         return Math.min(desiredTimePerSecond * seconds, 1.0f);
     }
 
-    @Listener
+    /*@Listener
     public void render2D(EventRender2D event) {
 
-        if(this.modeValue.getValue() != MODE.CPU)
+        if(this.modeValue.getValue() != MODE.SIMPLIFIED)
             return;
 
         this.CoordTracker3D.clear();
@@ -154,7 +155,7 @@ public final class StorageESPModule extends Module {
                             CoordTracker3D.put(ProjectedPs.get(4), new Coordinate(bb.minX, bb.minY, bb.minZ));
                             CoordTracker3D.put(ProjectedPs.get(5), new Coordinate(bb.maxX, bb.minY, bb.minZ));
                             CoordTracker3D.put(ProjectedPs.get(6), new Coordinate(bb.maxX, bb.maxY, bb.minZ));
-                            CoordTracker3D.put(ProjectedPs.get(7), new Coordinate(bb.minX, bb.maxY, bb.minZ));*/
+                            CoordTracker3D.put(ProjectedPs.get(7), new Coordinate(bb.minX, bb.maxY, bb.minZ));*//*
 
                             Polygon[] polys = new Polygon[6];
                             boolean[] is = new boolean[6];
@@ -304,7 +305,7 @@ public final class StorageESPModule extends Module {
                 RenderUtil.drawOutlinePolygon3D(Fixed3DList.get(i).first(), thickness.getValue(), Fixed3DList.get(i).second(), this.rainbow.getValue(), this.hue);
                 mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
                 RenderUtil.end3D();
-            }*/
+            }*//*
 
             //
             // Leave for another day, throws "Already Building!" for no apparent reason.
@@ -323,6 +324,42 @@ public final class StorageESPModule extends Module {
         }
 
         Minecraft.getMinecraft().gameSettings.viewBobbing = bobbing;
+    }*/
+
+    @Listener
+    public void render3D(EventRender3D event) {
+        final Minecraft mc = Minecraft.getMinecraft();
+        if(this.modeValue.getValue() == MODE.SIMPLIFIED){
+
+            RenderUtil.begin3D();
+
+            mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+
+            camera.setPosition(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().posY, mc.getRenderViewEntity().posZ);
+
+            for(TileEntity te : mc.world.loadedTileEntityList){
+                if(!this.isTileStorage(te))
+                    continue;
+
+                final AxisAlignedBB bb = this.boundingBoxForEnt(te);
+                final AxisAlignedBB bb2 = new AxisAlignedBB(
+                        bb.minX + mc.getRenderManager().viewerPosX,
+                        bb.minY + mc.getRenderManager().viewerPosY,
+                        bb.minZ + mc.getRenderManager().viewerPosZ,
+                        bb.maxX + mc.getRenderManager().viewerPosX,
+                        bb.maxY + mc.getRenderManager().viewerPosY,
+                        bb.maxZ + mc.getRenderManager().viewerPosZ);
+
+                if (!camera.isBoundingBoxInFrustum(bb2)) {
+                    continue;
+                }
+
+                RenderUtil.drawFilledBox(bb, ColorUtil.changeAlpha(this.getColorShader(te), 0x55));
+                RenderUtil.drawBoundingBox(bb, 1.f, 0x44000000);
+            }
+
+            RenderUtil.end3D();
+        }
     }
 
     public boolean isTileStorage(TileEntity te) {

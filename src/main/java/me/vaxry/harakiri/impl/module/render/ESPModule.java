@@ -19,6 +19,7 @@ import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
@@ -73,10 +74,10 @@ public final class ESPModule extends Module {
 
     enum SHADER {
         OUTLINE,
-        GLOW
+        SIMPLIFIED
     }
 
-    public final Value<SHADER> shaderV = new Value<SHADER>("Style", new String[]{"Style", "s"}, "Select the shader to use.", SHADER.OUTLINE);
+    public final Value<SHADER> shaderV = new Value<SHADER>("Style", new String[]{"Style", "s"}, "Select the shader to use. Simplified works with Optifine Shaders.", SHADER.OUTLINE);
     public final Value<Boolean> removeLayers = new Value<Boolean>("RemoveLayers", new String[]{"RemoveLayers", "rl"}, "Do not draw outlines over layers, for example elytra or armor.", true);
     public final Value<Boolean> items = new Value<Boolean>("Items", new String[]{"Items", "i"}, "Draw Items", false);
     public final Value<Boolean> itemsShader = new Value<Boolean>("ItemsShader", new String[]{"ItemsShader", "is"}, "Draw Items with a shader (not a box)", false);
@@ -157,10 +158,11 @@ public final class ESPModule extends Module {
         if (mc.player == null || !this.isEnabled())
             return;
 
-        if(this.items.getValue() && !this.itemsShader.getValue()){
-            RenderUtil.begin3D();
+        RenderUtil.begin3D();
 
-            mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+        mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+
+        if(this.items.getValue() && !this.itemsShader.getValue()){
 
             // Render itemz
             for(Entity e : mc.world.getLoadedEntityList()){
@@ -200,12 +202,58 @@ public final class ESPModule extends Module {
             for(Map.Entry<EntityItem, Float> entry : opacity.entrySet()){
                 opacity.put(entry.getKey(), Math.min(255.f, entry.getValue() + jitter));
             }
-
-            RenderUtil.end3D();
         }
 
-        // process storageesp
-        StorageESPModule storageESPModule = (StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class);
+        if(this.shaderV.getValue() == SHADER.SIMPLIFIED){
+            for(Entity e : mc.world.getLoadedEntityList()) {
+                if (!(e instanceof EntityLivingBase) || e == mc.player)
+                    continue;
+
+                cam.setPosition(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().posY, mc.getRenderViewEntity().posZ);
+
+                AxisAlignedBB hitbox = e.getEntityBoundingBox();
+
+                double deltaX = e.posX - e.lastTickPosX;
+                double deltaY = e.posY - e.lastTickPosY;
+                double deltaZ = e.posZ - e.lastTickPosZ;
+
+                AxisAlignedBB bb = new AxisAlignedBB(
+                        hitbox.minX - mc.getRenderManager().viewerPosX + deltaX,
+                        hitbox.minY - mc.getRenderManager().viewerPosY + deltaY,
+                        hitbox.minZ - mc.getRenderManager().viewerPosZ + deltaZ,
+                        hitbox.maxX - mc.getRenderManager().viewerPosX + deltaX,
+                        hitbox.maxY - mc.getRenderManager().viewerPosY + deltaY,
+                        hitbox.maxZ - mc.getRenderManager().viewerPosZ + deltaZ);
+
+                if (!cam.isBoundingBoxInFrustum(new AxisAlignedBB(bb.minX + mc.getRenderManager().viewerPosX,
+                        bb.minY + mc.getRenderManager().viewerPosY,
+                        bb.minZ + mc.getRenderManager().viewerPosZ,
+                        bb.maxX + mc.getRenderManager().viewerPosX,
+                        bb.maxY + mc.getRenderManager().viewerPosY,
+                        bb.maxZ + mc.getRenderManager().viewerPosZ))) {
+                    continue;
+                }
+
+                int color = 0xFFFFFFFF;
+
+                if(e instanceof EntityPlayer){
+                    if (Harakiri.get().getFriendManager().isFriend(e) != null) {
+                        color = 0xFF80FFFF;
+                    }else{
+                        color = 0xFFFF3333;
+                    }
+                }
+                else if(this.hostileMobsList.contains(e.getClass())){
+                    color = 0xFFFF3333;
+                }else{
+                    color = 0xFF33FF33;
+                }
+
+                RenderUtil.drawBoundingBox(bb, 0.5f, color);
+            }
+        }
+
+        RenderUtil.end3D();
     }
 
     @SubscribeEvent
@@ -245,7 +293,7 @@ public final class ESPModule extends Module {
             if (event.getEntity() instanceof EntityPlayerMP || event.getEntity() instanceof EntityPlayer || event.getEntity() instanceof EntityOtherPlayerMP || event.getEntity() instanceof EntityPlayerSP) {
                 // player
 
-                if(this.players.getValue()) {
+                if(this.players.getValue() && this.shaderV.getValue() != SHADER.SIMPLIFIED) {
 
                     if (!coloredPlayers.contains((EntityPlayer) event.getEntity()))
                         coloredPlayers.add((EntityPlayer) event.getEntity());
@@ -298,6 +346,18 @@ public final class ESPModule extends Module {
     public void renderFramebuffer(){
         if(!this.isEnabled() && !Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled())
             return;
+
+        if(this.isEnabled() && Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled()){
+            if(this.shaderV.getValue() == SHADER.SIMPLIFIED && ((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED)
+                return;
+        }else if(this.isEnabled()){
+            if(this.shaderV.getValue() == SHADER.SIMPLIFIED)
+                return;
+        }else if(Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled()){
+            if(((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED)
+                return;
+        }
+
         final Minecraft mc = Minecraft.getMinecraft();
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
@@ -307,6 +367,9 @@ public final class ESPModule extends Module {
 
     private void renderAllEntities(float partialTicks, boolean doColor){
         final Minecraft mc = Minecraft.getMinecraft();
+
+        if(this.shaderV.getValue() == SHADER.SIMPLIFIED)
+            return;
 
         for(Entity e : mc.world.getLoadedEntityList()){
             if(!(e instanceof EntityItem) && !(e instanceof EntityItemFrame) && !(e instanceof EntityMinecart) && !(e instanceof EntityBoat)
@@ -379,7 +442,7 @@ public final class ESPModule extends Module {
     }
 
     private void renderAllTileEntities(float partialTicks, boolean doColor){
-        if(((StorageESPModule) Harakiri.get().getModuleManager().find(StorageESPModule.class)).modeValue.getValue() == StorageESPModule.MODE.CPU)
+        if(((StorageESPModule) Harakiri.get().getModuleManager().find(StorageESPModule.class)).modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED)
             return;
 
         for(TileEntity te : Minecraft.getMinecraft().world.loadedTileEntityList){
@@ -410,10 +473,15 @@ public final class ESPModule extends Module {
         final Minecraft mc = Minecraft.getMinecraft();
         lastPartialTicks = partialTicks;
 
-        if(this.shaderV.getValue() == SHADER.GLOW){
-            GlStateManager.enableAlpha();
-            GlStateManager.enableBlend();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.DST_ALPHA);
+        if(this.isEnabled() && Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled()){
+            if(this.shaderV.getValue() == SHADER.SIMPLIFIED && ((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED)
+                return;
+        }else if(this.isEnabled()){
+            if(this.shaderV.getValue() == SHADER.SIMPLIFIED)
+                return;
+        }else if(Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled()){
+            if(((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED)
+                return;
         }
 
         // Setup
@@ -443,19 +511,17 @@ public final class ESPModule extends Module {
             }
 
             try {
-                if (this.shaderV.getValue() == SHADER.OUTLINE)
-                    this.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
-                else
-                    this.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shaderGlow);
+                this.entityOutlineShader = new ShaderGroupExt(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
                 this.entityOutlineShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
                 this.entityOutlineFramebuffer = this.entityOutlineShader.getFramebufferRaw("final");
 
                 this.lastShader = this.shaderV.getValue();
-                toLoadShader = false;
             }catch(Throwable t){
                 //Harakiri.get().logChat("Shader failed 2: " + t.getMessage());
                 //JOptionPane.showMessageDialog(null, t.getMessage(), "Error in ESP shader!", JOptionPane.INFORMATION_MESSAGE);
             }
+
+            toLoadShader = false;
         }
 
         // Prep
@@ -508,7 +574,8 @@ public final class ESPModule extends Module {
             GlStateManager.enableDepth();
             GlStateManager.enableAlpha();
 
-            mc.getFramebuffer().bindFramebuffer(false);
+            this.entityOutlineFramebuffer.unbindFramebuffer();
+            mc.framebuffer.bindFramebuffer(false);
 
             mc.gameSettings.gammaSetting = gamma;
         }
