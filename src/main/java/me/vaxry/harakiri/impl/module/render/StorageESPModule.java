@@ -30,6 +30,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.util.AffineTransformation;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
@@ -37,6 +38,9 @@ import java.awt.geom.AffineTransform;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_NICEST;
 
 
 public final class StorageESPModule extends Module {
@@ -331,15 +335,19 @@ public final class StorageESPModule extends Module {
         final Minecraft mc = Minecraft.getMinecraft();
         if(this.modeValue.getValue() == MODE.SIMPLIFIED){
 
-            RenderUtil.begin3D();
+            GlStateManager.disableTexture2D();
+            GlStateManager.disableDepth();
+            GlStateManager.disableLighting();
+            GL11.glEnable(GL_LINE_SMOOTH);
+            glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
             mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
-
-            camera.setPosition(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().posY, mc.getRenderViewEntity().posZ);
 
             for(TileEntity te : mc.world.loadedTileEntityList){
                 if(!this.isTileStorage(te))
                     continue;
+
+                camera.setPosition(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().posY, mc.getRenderViewEntity().posZ);
 
                 final AxisAlignedBB bb = this.boundingBoxForEnt(te);
                 final AxisAlignedBB bb2 = new AxisAlignedBB(
@@ -358,7 +366,10 @@ public final class StorageESPModule extends Module {
                 RenderUtil.drawBoundingBox(bb, 1.f, 0x44000000);
             }
 
-            RenderUtil.end3D();
+            GlStateManager.enableDepth();
+            GlStateManager.enableLighting();
+            GL11.glDisable(GL_LINE_SMOOTH);
+            GlStateManager.enableTexture2D();
         }
     }
 
