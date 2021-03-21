@@ -22,7 +22,7 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: "com.github.johnrengelman.shadow"
 
 
-version = "1.7-dev"
+version = "1.6.1"
 group = "me.vaxry"
 archivesBaseName = "HARAKIRI"
 def buildmode = "RELEASE"

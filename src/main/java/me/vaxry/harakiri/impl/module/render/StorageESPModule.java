@@ -51,9 +51,9 @@ public final class StorageESPModule extends Module {
     }
 
     public final Value<MODE> modeValue = new Value<MODE>("Mode", new String[]{"Mode"}, "Changes the render mode. Simplified works with Optifine Shaders.", MODE.SHADER);
-    public final Value<Float> thickness = new Value<Float>("Thickness", new String[]{"Thickness", "Thick", "t"}, "Thickness of the line", 1.f, 0.1f, 2.f, 0.1f);
-    public final Value<Boolean> rainbow = new Value<Boolean>("Rainbow", new String[]{"Rainbow", "Rain", "r"}, "Rainbow mode for the ESP", false);
-    public final Value<Integer> rainspeed = new Value<Integer>("RainbowSpeed", new String[]{"RainbowSpeed", "RainSpeed", "rs"}, "Rainbow mode speed", 5, 1, 20, 1);
+    //public final Value<Float> thickness = new Value<Float>("Thickness", new String[]{"Thickness", "Thick", "t"}, "Thickness of the line", 1.f, 0.1f, 2.f, 0.1f);
+    //public final Value<Boolean> rainbow = new Value<Boolean>("Rainbow", new String[]{"Rainbow", "Rain", "r"}, "Rainbow mode for the ESP", false);
+    //public final Value<Integer> rainspeed = new Value<Integer>("RainbowSpeed", new String[]{"RainbowSpeed", "RainSpeed", "rs"}, "Rainbow mode speed", 5, 1, 20, 1);
 
     private final ICamera camera = new Frustum();
     private final Timer timer = new Timer();
@@ -66,14 +66,14 @@ public final class StorageESPModule extends Module {
         super("StorageESP", new String[]{"StorageESP", "ChestFinder", "ChestESP"}, "Highlights different types of storage entities.", "NONE", -1, ModuleType.RENDER);
     }
 
-    private float getJitter() {
+    /*private float getJitter() {
         final float seconds = ((System.currentTimeMillis() - this.timer.getTime()) / 1000.0f) % 60.0f;
 
         final float desiredTimePerSecond = rainspeed.getValue() / 100.f;
 
         this.timer.reset();
         return Math.min(desiredTimePerSecond * seconds, 1.0f);
-    }
+    }*/
 
     /*@Listener
     public void render2D(EventRender2D event) {
@@ -333,44 +333,6 @@ public final class StorageESPModule extends Module {
     @Listener
     public void render3D(EventRender3D event) {
         final Minecraft mc = Minecraft.getMinecraft();
-        if(this.modeValue.getValue() == MODE.SIMPLIFIED){
-
-            GlStateManager.disableTexture2D();
-            GlStateManager.disableDepth();
-            GlStateManager.disableLighting();
-            GL11.glEnable(GL_LINE_SMOOTH);
-            glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-
-            mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
-
-            for(TileEntity te : mc.world.loadedTileEntityList){
-                if(!this.isTileStorage(te))
-                    continue;
-
-                camera.setPosition(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().posY, mc.getRenderViewEntity().posZ);
-
-                final AxisAlignedBB bb = this.boundingBoxForEnt(te);
-                final AxisAlignedBB bb2 = new AxisAlignedBB(
-                        bb.minX + mc.getRenderManager().viewerPosX,
-                        bb.minY + mc.getRenderManager().viewerPosY,
-                        bb.minZ + mc.getRenderManager().viewerPosZ,
-                        bb.maxX + mc.getRenderManager().viewerPosX,
-                        bb.maxY + mc.getRenderManager().viewerPosY,
-                        bb.maxZ + mc.getRenderManager().viewerPosZ);
-
-                if (!camera.isBoundingBoxInFrustum(bb2)) {
-                    continue;
-                }
-
-                RenderUtil.drawFilledBox(bb, ColorUtil.changeAlpha(this.getColorShader(te), 0x55));
-                RenderUtil.drawBoundingBox(bb, 1.f, 0x44000000);
-            }
-
-            GlStateManager.enableDepth();
-            GlStateManager.enableLighting();
-            GL11.glDisable(GL_LINE_SMOOTH);
-            GlStateManager.enableTexture2D();
-        }
     }
 
     public boolean isTileStorage(TileEntity te) {
@@ -401,7 +363,7 @@ public final class StorageESPModule extends Module {
         return false;
     }
 
-    private AxisAlignedBB boundingBoxForEnt(TileEntity te) {
+    public AxisAlignedBB boundingBoxForEnt(TileEntity te) {
         final Minecraft mc = Minecraft.getMinecraft();
 
         if (te != null) {

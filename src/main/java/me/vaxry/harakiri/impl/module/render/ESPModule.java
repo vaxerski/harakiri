@@ -63,6 +63,8 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.List;
 
+import static org.lwjgl.opengl.GL11.*;
+
 /**
  * Author Seth
  * 4/20/2019 @ 10:07 AM.
@@ -155,14 +157,14 @@ public final class ESPModule extends Module {
     public void OnRender3D(EventRender3D event){
         final Minecraft mc = Minecraft.getMinecraft();
 
-        if (mc.player == null || !this.isEnabled())
+        if (mc.player == null || (!this.isEnabled() && !((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).isEnabled()))
             return;
 
         RenderUtil.begin3D();
 
         mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
 
-        if(this.items.getValue() && !this.itemsShader.getValue()){
+        if(this.items.getValue() && !this.itemsShader.getValue() && this.isEnabled()){
 
             // Render itemz
             for(Entity e : mc.world.getLoadedEntityList()){
@@ -204,9 +206,17 @@ public final class ESPModule extends Module {
             }
         }
 
-        if(this.shaderV.getValue() == SHADER.SIMPLIFIED){
+        if(this.shaderV.getValue() == SHADER.SIMPLIFIED && this.isEnabled()){
             for(Entity e : mc.world.getLoadedEntityList()) {
-                if (!(e instanceof EntityLivingBase) || e == mc.player)
+                if (e == mc.player)
+                    continue;
+
+                if((e instanceof EntityItemFrame && !this.itemFrames.getValue())
+                        || ((e instanceof EntityBoat || e instanceof EntityMinecart) && !this.vehicles.getValue())
+                        || (e instanceof EntityEnderCrystal && !this.crystals.getValue())
+                        || (e instanceof EntityPlayer && !this.players.getValue())
+                        || (e instanceof EntityLivingBase && this.hostileMobsList.contains(e.getClass()) && !this.hostile.getValue() && !(e instanceof EntityPlayer))
+                        || (e instanceof EntityLivingBase && !this.hostileMobsList.contains(e.getClass()) && !this.passive.getValue() && !(e instanceof EntityPlayer)))
                     continue;
 
                 cam.setPosition(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().posY, mc.getRenderViewEntity().posZ);
@@ -236,20 +246,53 @@ public final class ESPModule extends Module {
 
                 int color = 0xFFFFFFFF;
 
-                if(e instanceof EntityPlayer){
+                if (e instanceof EntityItemFrame || e instanceof EntityMinecart || e instanceof EntityBoat) {
+                    color = 0xFFFF6600;
+                } else if (e instanceof EntityEnderCrystal) {
+                    color = 0xFF9900CC;
+                } else if (e instanceof EntityPlayer) {
                     if (Harakiri.get().getFriendManager().isFriend(e) != null) {
                         color = 0xFF80FFFF;
                     }else{
                         color = 0xFFFF3333;
                     }
-                }
-                else if(this.hostileMobsList.contains(e.getClass())){
-                    color = 0xFFFF3333;
-                }else{
-                    color = 0xFF33FF33;
+                } else if (e instanceof EntityLivingBase) {
+                    if(hostileMobsList.contains(e.getClass())) {
+                        color = 0xFFFF3333;
+                    } else {
+                        color = 0xFF33FF33;
+                    }
                 }
 
                 RenderUtil.drawBoundingBox(bb, 0.5f, color);
+            }
+        }
+
+        if(((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).isEnabled() && ((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED){
+
+            mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+
+            for(TileEntity te : mc.world.loadedTileEntityList){
+                if(!((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).isTileStorage(te))
+                    continue;
+
+                cam.setPosition(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().posY, mc.getRenderViewEntity().posZ);
+
+                final AxisAlignedBB bb = ((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).boundingBoxForEnt(te);
+                final AxisAlignedBB bb2 = new AxisAlignedBB(
+                        bb.minX + mc.getRenderManager().viewerPosX,
+                        bb.minY + mc.getRenderManager().viewerPosY,
+                        bb.minZ + mc.getRenderManager().viewerPosZ,
+                        bb.maxX + mc.getRenderManager().viewerPosX,
+                        bb.maxY + mc.getRenderManager().viewerPosY,
+                        bb.maxZ + mc.getRenderManager().viewerPosZ);
+
+                if (!cam.isBoundingBoxInFrustum(bb2)) {
+                    continue;
+                }
+
+                RenderUtil.drawFilledBox(bb, ColorUtil.changeAlpha(((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).getColorShader(te), 0x55));
+                RenderUtil.drawBoundingBox(bb, 1.f, 0x44000000);
             }
         }
 
