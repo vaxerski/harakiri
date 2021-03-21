@@ -522,6 +522,8 @@ public final class ModuleListComponent extends ResizableHudComponent {
     public void onClosed() {
         super.onClosed();
 
+        this.currentSettingsArr.clear();
+
         if (this.currentToolTip != null) {
             this.currentToolTip = null;
         }

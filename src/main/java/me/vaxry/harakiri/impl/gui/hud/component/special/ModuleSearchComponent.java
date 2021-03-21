@@ -559,6 +559,8 @@ public final class ModuleSearchComponent extends ResizableHudComponent {
     public void onClosed() {
         super.onClosed();
 
+        this.currentSettingsArr.clear();
+
         if (this.currentToolTip != null) {
             this.currentToolTip = null;
         }
