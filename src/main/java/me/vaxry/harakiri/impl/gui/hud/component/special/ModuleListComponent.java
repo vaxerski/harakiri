@@ -374,22 +374,6 @@ public final class ModuleListComponent extends ResizableHudComponent {
                 String tooltipText = "";
                 int height = BORDER;
 
-                if (!this.currentSettingsArr.isEmpty()) {
-                    for (ModuleSettingsComponent currentSettings : currentSettingsArr) {
-                        for (HudComponent valueComponent : currentSettings.components) {
-                            if (valueComponent.isMouseInside(mouseX, mouseY)) {
-                                tooltipText = valueComponent.getTooltipText();
-                            } else {
-                                if (this.currentToolTip != null) {
-                                    if (this.currentToolTip.text.equals(valueComponent.getTooltipText())) {
-                                        this.currentToolTip = null;
-                                    }
-                                }
-                            }
-                            height += Harakiri.get().getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
-                        }
-                    }
-                }
                 for (Module module : Harakiri.get().getModuleManager().getModuleList(this.type)) {
                     final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + TEXT_GAP + height - this.scroll) && mouseY <= (this.getY() + BORDER + (Harakiri.get().getTTFFontUtil().FONT_HEIGHT * 2) + 1 + height - this.scroll);
                     if (insideComponent) {
@@ -402,6 +386,26 @@ public final class ModuleListComponent extends ResizableHudComponent {
                         }
                     }
                     height += Harakiri.get().getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
+
+                    if (!this.currentSettingsArr.isEmpty()) {
+                        for (ModuleSettingsComponent currentSettings : currentSettingsArr) {
+                            if(currentSettings.module != module)
+                                continue;
+                            
+                            for (HudComponent valueComponent : currentSettings.components) {
+                                if (valueComponent.isMouseInside(mouseX, mouseY)) {
+                                    tooltipText = valueComponent.getTooltipText();
+                                } else {
+                                    if (this.currentToolTip != null) {
+                                        if (this.currentToolTip.text.equals(valueComponent.getTooltipText())) {
+                                            this.currentToolTip = null;
+                                        }
+                                    }
+                                }
+                                height += Harakiri.get().getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
+                            }
+                        }
+                    }
                 }
 
                 if (!tooltipText.equals("")) {
