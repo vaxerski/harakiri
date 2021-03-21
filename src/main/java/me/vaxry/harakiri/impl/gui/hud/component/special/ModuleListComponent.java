@@ -134,9 +134,11 @@ public final class ModuleListComponent extends ResizableHudComponent {
         if (!(mc.currentScreen instanceof GuiHudEditor))
             return;
 
+        final float OPENSCALE = Harakiri.get().getHudEditor().curAlphaFade / 100F;
+
         // rainbow
-        rainbowCol = Harakiri.get().getHudEditor().rainbowColor;
-        rainbowColBG = 0x45000000 + Harakiri.get().getHudEditor().rainbowColor - 0xFF000000;
+        rainbowCol = Harakiri.get().getHudManager().rainbowColor;
+        rainbowColBG = 0x45000000 + Harakiri.get().getHudManager().rainbowColor - 0xFF000000;
 
         final HudEditorModule hem = (HudEditorModule) Harakiri.get().getModuleManager().find(HudEditorModule.class);
         ACCENT_COLOR = 0xFF000000 + hem.color.getValue().getRGB();
@@ -217,7 +219,10 @@ public final class ModuleListComponent extends ResizableHudComponent {
 
         // Begin scissoring and render the module "buttons"
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        RenderUtil.glScissor((this.getX() + BORDER) * SCALING, (this.getY() + offsetY + BORDER) * SCALING, (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) * SCALING, (this.getY() + this.getH() - BORDER) * SCALING, sr);
+        if(OPENSCALE >= 0.95F)
+            RenderUtil.glScissor((this.getX() + BORDER) * SCALING, (this.getY() + offsetY + BORDER) * SCALING, (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) * SCALING, (this.getY() + this.getH() - BORDER) * SCALING, sr);
+        else
+            RenderUtil.glScissor(0,0, sr.getScaledWidth(), sr.getScaledHeight(), sr);
 
         this.title = this.originalName;
         for (Module module : Harakiri.get().getModuleManager().getModuleList(this.type)) {
@@ -315,7 +320,10 @@ public final class ModuleListComponent extends ResizableHudComponent {
                         currentSettings.render((int) (mouseX * SCALING), (int) (mouseY * SCALING), partialTicks);
 
                         // Restore scissor
-                        RenderUtil.glScissor((this.getX() + BORDER) * SCALING, (this.getY() + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + TEXT_GAP + BORDER) * SCALING, (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) * SCALING, (this.getY() + this.getH() - BORDER) * SCALING, sr);
+                        if(OPENSCALE >= 0.95F)
+                            RenderUtil.glScissor((this.getX() + BORDER) * SCALING, (this.getY() + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + TEXT_GAP + BORDER) * SCALING, (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) * SCALING, (this.getY() + this.getH() - BORDER) * SCALING, sr);
+                        else
+                            RenderUtil.glScissor(0,0, sr.getScaledWidth(), sr.getScaledHeight(), sr);
 
                         for (HudComponent settingComponent : currentSettings.components) {
                             //if (settingComponent.getY() > this.getY() + this.currentSettings.getH())
@@ -391,7 +399,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
                         for (ModuleSettingsComponent currentSettings : currentSettingsArr) {
                             if(currentSettings.module != module)
                                 continue;
-                            
+
                             for (HudComponent valueComponent : currentSettings.components) {
                                 if (valueComponent.isMouseInside(mouseX, mouseY)) {
                                     tooltipText = valueComponent.getTooltipText();

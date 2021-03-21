@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.input.Keyboard;
@@ -67,7 +68,7 @@ public final class GuiHudEditor extends GuiScreen {
     private boolean isClosing = false;
     private boolean isFading = false;
     private boolean wasClosed = true;
-    private float curAlphaFade = 0;
+    public float curAlphaFade = 0;
 
 
     public GuiHudEditor(){
@@ -121,15 +122,15 @@ public final class GuiHudEditor extends GuiScreen {
 
         final ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
 
-       /* if(wasClosed){
+        if(wasClosed){
             // First run.
             this.timer.reset();
 
-            this.GuiFramebuffer = new Framebuffer(res.getScaledWidth() * res.getScaleFactor(), res.getScaledHeight() * res.getScaleFactor(), true);
-            this.GuiFramebuffer.createFramebuffer(res.getScaledWidth() * res.getScaleFactor(), res.getScaledHeight() * res.getScaleFactor());
-            GlStateManager.enableAlpha();
-            GlStateManager.enableBlend();
-            this.GuiFramebuffer.bindFramebuffer(false);
+            //this.GuiFramebuffer = new Framebuffer(res.getScaledWidth() * res.getScaleFactor(), res.getScaledHeight() * res.getScaleFactor(), true);
+            //this.GuiFramebuffer.createFramebuffer(res.getScaledWidth() * res.getScaleFactor(), res.getScaledHeight() * res.getScaleFactor());
+            //GlStateManager.enableAlpha();
+            //GlStateManager.enableBlend();
+            //this.GuiFramebuffer.bindFramebuffer(false);
 
             this.curAlphaFade = 0;
 
@@ -153,7 +154,7 @@ public final class GuiHudEditor extends GuiScreen {
                 }
             }
 
-            final Minecraft mc = Minecraft.getMinecraft();
+            /*final Minecraft mc = Minecraft.getMinecraft();
 
             if (OpenGlHelper.isFramebufferEnabled()) {
                 //GlStateManager.color(1.0F, 1.0F, 1.0F, this.curAlphaFade / 100F);
@@ -183,18 +184,19 @@ public final class GuiHudEditor extends GuiScreen {
                 GlStateManager.disableBlend();
                 GlStateManager.disableAlpha();
             }
-            GlStateManager.disableBlend();
-        }*/
+            GlStateManager.disableBlend();*/
+        }
 
-       // if(!wasClosed) {
+        if(!wasClosed) {
             // Init plexus
             if (Harakiri.get().getPlexusEffect() == null)
                 Harakiri.get().initPlexusEffect((PlexusComponent) Harakiri.get().getHudManager().findComponent(PlexusComponent.class));
 
-            rainbowColor = Harakiri.get().getHudManager().rainbowColor;
+            rainbowColor = ColorUtil.changeAlpha(Harakiri.get().getHudManager().rainbowColor, (int)(this.curAlphaFade/100F * 255F));
 
             super.drawScreen(mouseX, mouseY, partialTicks);
-            this.drawDefaultBackground();
+            //this.drawDefaultBackground();
+            RenderUtil.drawRect(0,0,res.getScaledWidth(), res.getScaledHeight(), ColorUtil.changeAlpha(0xFF050505, (int)((this.curAlphaFade/100F) * 0xAA)));
 
             // Draw the text
 
@@ -206,14 +208,14 @@ public final class GuiHudEditor extends GuiScreen {
             GlStateManager.enableBlend();
 
             GlStateManager.enableTexture2D();
-            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+            GlStateManager.color(1.0f, 1.0f, 1.0f, this.curAlphaFade/100F);
 
             this.bg.bind();
-            this.bg.render(0, 0, res.getScaledWidth(), res.getScaledHeight());
+            this.bg.render(0, 0, res.getScaledWidth(), res.getScaledHeight(), 0, 0, 1, 1, this.curAlphaFade/100F);
 
             GlStateManager.disableTexture2D();
-            GlStateManager.disableBlend();
-            GlStateManager.disableAlpha();
+            //GlStateManager.disableBlend();
+            //GlStateManager.disableAlpha();
 
             // Plexus
             Harakiri.get().getPlexusEffect().render(mouseX, mouseY);
@@ -226,10 +228,22 @@ public final class GuiHudEditor extends GuiScreen {
             RenderUtil.drawLine(0, 0, res.getScaledWidth(), 0, 2, rainbowColor); // Top
             RenderUtil.drawLine(0, res.getScaledHeight() - 1, res.getScaledWidth(), res.getScaledHeight() - 1, 1, rainbowColor); // Bottom
             RenderUtil.drawLine(res.getScaledWidth(), res.getScaledHeight(),res.getScaledWidth(), 0, 2, rainbowColor); // Right
-       // }
+        }
 
-       // if(!wasClosed && this.isFading)
-           // return;
+        if(wasClosed){
+            //this.GuiFramebuffer.unbindFramebuffer();
+            //Minecraft.getMinecraft().framebuffer.bindFramebuffer(false);
+            wasClosed = false;
+            return;
+        }
+
+        final float scale = this.curAlphaFade / 100F;
+        final float offX = res.getScaledWidth() / 2F - (res.getScaledWidth() * scale) / 2F;
+        final float offY = res.getScaledHeight() / 2F - (res.getScaledHeight() * scale) / 2F;
+        if(!wasClosed && this.isFading) {
+            GlStateManager.translate(offX, offY, 0F);
+            GlStateManager.scale(scale, scale, scale);
+        }
 
         SwitchViewComponent swc = (SwitchViewComponent)Harakiri.get().getHudManager().findComponent(SwitchViewComponent.class);
 
@@ -247,6 +261,7 @@ public final class GuiHudEditor extends GuiScreen {
                 continue;
 
             if (component.isVisible()) {
+                GlStateManager.color(1.0f, 1.0f, 1.0f, this.curAlphaFade/100F);
                 component.render(mouseX, mouseY, partialTicks);
 
                 if (component instanceof DraggableHudComponent) {
@@ -294,14 +309,15 @@ public final class GuiHudEditor extends GuiScreen {
             }
         }
 
+        GlStateManager.color(1.0f, 1.0f, 1.0f, this.curAlphaFade/100F);
         swc.render(mouseX, mouseY, partialTicks);
 
+        if(!wasClosed && this.isFading) {
+            GlStateManager.translate(-offX, -offY, 0F);
+            GlStateManager.scale(1F/scale, 1F/scale, 1F/scale);
+        }
 
-        /*if(wasClosed){
-            this.GuiFramebuffer.unbindFramebuffer();
-            Minecraft.getMinecraft().framebuffer.bindFramebuffer(false);
-            wasClosed = false;
-        }*/
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1F);
     }
 
     HudComponent componentMoving = null;

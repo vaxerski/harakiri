@@ -186,7 +186,7 @@ public class PlexusEffect {
             }
         }
 
-        rainbowColor = Harakiri.get().getHudEditor().rainbowColor;
+        rainbowColor = Harakiri.get().getHudManager().rainbowColor;
 
         //     CALCULATE MOVEMENT     //
 
