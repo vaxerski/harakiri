@@ -1,9 +1,17 @@
 package me.vaxry.harakiri.framework.mixin.render;
 
+import com.google.common.base.MoreObjects;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRenderOverlay;
+import me.vaxry.harakiri.impl.module.render.HandOffsetModule;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mixins;
 import org.spongepowered.asm.mixin.injection.At;
@@ -33,4 +41,37 @@ public abstract class MixinItemRenderer {
         if (event.isCanceled()) ci.cancel();
     }
 
+    @Inject(remap = false, at = @At("HEAD"), method = "renderItemInFirstPerson", cancellable = true)
+    public void renderItemInFirstPerson(AbstractClientPlayer player, float p_187457_2_, float p_187457_3_, EnumHand hand, float p_187457_5_, ItemStack stack, float p_187457_7_, CallbackInfo ci){
+        HandOffsetModule handOffsetModule = (HandOffsetModule)Harakiri.get().getModuleManager().find(HandOffsetModule.class);
+
+        if(handOffsetModule == null)
+            return;
+
+
+        if(handOffsetModule.isEnabled()){
+            if(handOffsetModule.remove.getValue()){
+                ci.cancel();
+                return;
+            }
+
+            GlStateManager.translate(handOffsetModule.posX.getValue(), handOffsetModule.posY.getValue(), handOffsetModule.posZ.getValue());
+        }
+    }
+
+    @Inject(remap = false, at = @At("RETURN"), method = "renderItemInFirstPerson")
+    public void renderItemInFirstPersonPost(AbstractClientPlayer player, float p_187457_2_, float p_187457_3_, EnumHand hand, float p_187457_5_, ItemStack stack, float p_187457_7_, CallbackInfo ci) {
+        HandOffsetModule handOffsetModule = (HandOffsetModule)Harakiri.get().getModuleManager().find(HandOffsetModule.class);
+
+        if(handOffsetModule == null)
+            return;
+
+        if(handOffsetModule.isEnabled()){
+            if(handOffsetModule.remove.getValue()){
+                return;
+            }
+
+            GlStateManager.translate(-handOffsetModule.posX.getValue(), -handOffsetModule.posY.getValue(), -handOffsetModule.posZ.getValue());
+        }
+    }
 }
