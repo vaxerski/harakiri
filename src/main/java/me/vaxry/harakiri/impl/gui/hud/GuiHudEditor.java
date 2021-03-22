@@ -137,19 +137,20 @@ public final class GuiHudEditor extends GuiScreen {
             this.isFading = true;
         }
 
-        final float incline = 0.31F;
+        final float incline = 22F; //0.31F;
 
         if(!wasClosed && this.isFading){
             if(!this.isClosing){
                 //this.curAlphaFade = Math.min(this.curAlphaFade + getJitter(), 100F);
-                this.curAlphaFade = (float)MathUtil.parabolic(this.curAlphaFade, 100F, getJitter() / incline);
+                // this shit doesnt work with jitter wtf
+                this.curAlphaFade = (float)MathUtil.parabolic(this.curAlphaFade, 100F, incline / getJitter());
                 if(this.curAlphaFade >= 99.8F) {
                     this.isFading = false;
                     this.curAlphaFade = 100F;
                 }
             }else{
                 //this.curAlphaFade = Math.max(this.curAlphaFade - getJitter(), 0F);
-                this.curAlphaFade = (float)MathUtil.parabolic(this.curAlphaFade, 0F, getJitter() / incline);
+                this.curAlphaFade = (float)MathUtil.parabolic(this.curAlphaFade, 0F, incline / getJitter());
                 if(this.curAlphaFade == 0F) {
                     this.isFading = false;
                     this.curAlphaFade = 0F;
