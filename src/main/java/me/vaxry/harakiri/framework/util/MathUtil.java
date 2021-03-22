@@ -14,6 +14,8 @@ import java.math.RoundingMode;
  */
 public final class MathUtil {
 
+    public static float TIME_TO_INCLINE = 22.4F / 4F;
+
     public static Vec3d interpolateEntity(Entity entity, float time) {
         return new Vec3d(entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * time,
                 entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * time,
