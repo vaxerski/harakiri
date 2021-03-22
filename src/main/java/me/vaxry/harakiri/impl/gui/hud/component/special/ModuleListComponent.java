@@ -219,7 +219,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
 
         // Begin scissoring and render the module "buttons"
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        if(OPENSCALE >= 0.95F)
+        if(OPENSCALE >= 0.99F)
             RenderUtil.glScissor((this.getX() + BORDER) * SCALING, (this.getY() + offsetY + BORDER) * SCALING, (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) * SCALING, (this.getY() + this.getH() - BORDER) * SCALING, sr);
         else
             RenderUtil.glScissor(0,0, sr.getScaledWidth(), sr.getScaledHeight(), sr);
@@ -320,7 +320,7 @@ public final class ModuleListComponent extends ResizableHudComponent {
                         currentSettings.render((int) (mouseX * SCALING), (int) (mouseY * SCALING), partialTicks);
 
                         // Restore scissor
-                        if(OPENSCALE >= 0.95F)
+                        if(OPENSCALE >= 0.99F)
                             RenderUtil.glScissor((this.getX() + BORDER) * SCALING, (this.getY() + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + TEXT_GAP + BORDER) * SCALING, (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) * SCALING, (this.getY() + this.getH() - BORDER) * SCALING, sr);
                         else
                             RenderUtil.glScissor(0,0, sr.getScaledWidth(), sr.getScaledHeight(), sr);

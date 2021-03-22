@@ -22,6 +22,7 @@ public final class HudEditorModule extends Module {
     public final Value<Boolean> blur = new Value<Boolean>("Blur", new String[]{"b"}, "Apply a blur effect to the Hud Editor's background.", false);
     public final Value<Boolean> tooltips = new Value<Boolean>("ToolTips", new String[]{"TT", "Tool"}, "Displays tooltips for modules.", true);
     public final Value<Float> rainspeed = new Value<Float>("RainbowSpeed", new String[]{"rs"}, "Rainbow effect speed.", 0.1f, 0.001f, 1.f, 0.01f);
+    //public final Value<Float> test = new Value<Float>("test", new String[]{"test"}, "test", 0.1f, 0.001f, 1000.f, 0.01f);
 
     private boolean open;
 

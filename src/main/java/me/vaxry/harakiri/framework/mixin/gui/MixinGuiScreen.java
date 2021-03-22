@@ -25,7 +25,7 @@ public abstract class MixinGuiScreen extends Gui {
     public void drawDefaultBackground(CallbackInfo ci){
         final GuiPlusModule guiPlusModule = (GuiPlusModule)Harakiri.get().getModuleManager().find(GuiPlusModule.class);
 
-        if(guiPlusModule.removeBackground.getValue())
+        if(guiPlusModule.removeBackground.getValue() && guiPlusModule.isEnabled())
             ci.cancel();
     }
 }
