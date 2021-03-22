@@ -72,6 +72,7 @@ public final class ModuleManager {
         add(new NoFallModule());
         add(new NoSwingModule());
         add(new HandOffsetModule());
+        add(new GuiPlusModule());
         ESPModule espmod = new ESPModule();
         add(espmod);
         ChamsModule chammod = new ChamsModule();

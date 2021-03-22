@@ -1,7 +1,9 @@
 package me.vaxry.harakiri.framework.mixin.gui;
 
+import jdk.nashorn.internal.codegen.CompilerConstants;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.gui.EventRenderTooltip;
+import me.vaxry.harakiri.impl.module.render.GuiPlusModule;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
@@ -17,5 +19,13 @@ public abstract class MixinGuiScreen extends Gui {
         final EventRenderTooltip event = new EventRenderTooltip(stack, x, y);
         Harakiri.get().getEventManager().dispatchEvent(event);
         if (event.isCanceled()) ci.cancel();
+    }
+
+    @Inject(method = "drawDefaultBackground", at = @At("HEAD"), cancellable = true)
+    public void drawDefaultBackground(CallbackInfo ci){
+        final GuiPlusModule guiPlusModule = (GuiPlusModule)Harakiri.get().getModuleManager().find(GuiPlusModule.class);
+
+        if(guiPlusModule.removeBackground.getValue())
+            ci.cancel();
     }
 }
