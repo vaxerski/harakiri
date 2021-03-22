@@ -41,8 +41,8 @@ public abstract class MixinItemRenderer {
         if (event.isCanceled()) ci.cancel();
     }
 
-    @Inject(remap = false, at = @At("HEAD"), method = "renderItemInFirstPerson", cancellable = true)
-    public void renderItemInFirstPerson(AbstractClientPlayer player, float p_187457_2_, float p_187457_3_, EnumHand hand, float p_187457_5_, ItemStack stack, float p_187457_7_, CallbackInfo ci){
+    @Inject(at = @At("HEAD"), method = "renderItemInFirstPerson", cancellable = true)
+    public void renderItemInFirstPerson(float p_187457_7_, CallbackInfo ci){
         HandOffsetModule handOffsetModule = (HandOffsetModule)Harakiri.get().getModuleManager().find(HandOffsetModule.class);
 
         if(handOffsetModule == null)
@@ -59,8 +59,8 @@ public abstract class MixinItemRenderer {
         }
     }
 
-    @Inject(remap = false, at = @At("RETURN"), method = "renderItemInFirstPerson")
-    public void renderItemInFirstPersonPost(AbstractClientPlayer player, float p_187457_2_, float p_187457_3_, EnumHand hand, float p_187457_5_, ItemStack stack, float p_187457_7_, CallbackInfo ci) {
+    @Inject(at = @At("RETURN"), method = "renderItemInFirstPerson")
+    public void renderItemInFirstPersonPost(float p_187457_7_, CallbackInfo ci) {
         HandOffsetModule handOffsetModule = (HandOffsetModule)Harakiri.get().getModuleManager().find(HandOffsetModule.class);
 
         if(handOffsetModule == null)
