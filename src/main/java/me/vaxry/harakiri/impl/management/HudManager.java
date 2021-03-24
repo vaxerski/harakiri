@@ -1,6 +1,7 @@
 package me.vaxry.harakiri.impl.management;
 
 import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
 import me.vaxry.harakiri.framework.module.Module;
@@ -12,6 +13,7 @@ import me.vaxry.harakiri.impl.gui.hud.component.*;
 import me.vaxry.harakiri.impl.gui.hud.component.special.HubComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.special.ModuleListComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.special.ModuleSearchComponent;
+import me.vaxry.harakiri.impl.gui.screen.HaraGuiChat;
 import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
@@ -205,6 +207,15 @@ public final class HudManager {
 
         Color rainbowColorC = Color.getHSBColor(hue, 1, 1);
         rainbowColor = 0xFF000000 + rainbowColorC.getRed() * 0x10000 + rainbowColorC.getGreen() * 0x100 + rainbowColorC.getBlue();
+    }
+
+    @Listener
+    public void onGuiScreenOpen(EventDisplayGui eventDisplayGui){
+        if(eventDisplayGui.getScreen() instanceof GuiChat && !(eventDisplayGui.getScreen() instanceof HaraGuiChat)) {
+            eventDisplayGui.setCanceled(true);
+            eventDisplayGui.getScreen().onGuiClosed();
+            Minecraft.getMinecraft().displayGuiScreen(new HaraGuiChat());
+        }
     }
 
     public void loadExternalHudComponents() {
