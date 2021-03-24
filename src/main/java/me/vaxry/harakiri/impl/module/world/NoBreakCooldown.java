@@ -18,12 +18,6 @@ public final class NoBreakCooldown extends Module {
         super("NoBreakCooldown", new String[]{"NoBreakCooldown"}, "Removes break delay.", "NONE", -1, ModuleType.WORLD);
     }
 
-    @Override
-    public void onDisable() {
-        super.onDisable();
-        Minecraft.getMinecraft().rightClickDelayTimer = 6;
-    }
-
     @Listener
     public void onUpdate(EventPlayerUpdate event) {
         if (event.getStage() == EventStageable.EventStage.PRE) {
