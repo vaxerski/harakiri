@@ -122,6 +122,7 @@ public final class ModuleManager {
         add(new ProjectilesModule());
         add(new ScaffoldModule());
         add(new LiquidInteractModule());
+        add(new NoBreakCooldown());
         add(new NoAfkModule());
         add(new NoDesyncModule());
         add(new NukerModule());
