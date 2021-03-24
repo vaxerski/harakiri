@@ -140,7 +140,6 @@ public final class GuiHudEditor extends GuiScreen {
         if(!wasClosed && this.isFading){
             if(!this.isClosing){
                 //this.curAlphaFade = Math.min(this.curAlphaFade + getJitter(), 100F);
-                // this shit doesnt work with jitter wtf
                 this.curAlphaFade = (float)MathUtil.parabolic(this.curAlphaFade, 100F, MathUtil.TIME_TO_INCLINE / getJitter());
                 if(this.curAlphaFade >= 99.8F) {
                     this.isFading = false;

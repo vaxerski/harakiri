@@ -200,6 +200,12 @@ public class ThreatComponent extends DraggableHudComponent {
                 RenderUtil.drawLine(this.getX() + this.getW(),this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 1, 0xFFFF0000); // right
             }
 
+            if(!isIllegal && Harakiri.get().getFriendManager().isFriend(threat) == null) {
+                RenderUtil.drawLine(this.getX(),this.getY(), this.getX() + this.getW(), this.getY(), 1, 0xAA000000); // top
+                RenderUtil.drawLine(this.getX(),this.getY(), this.getX(), this.getY() + this.getH(), 1, 0xAA000000); // left
+                RenderUtil.drawLine(this.getX(),this.getY() + this.getH(), this.getX() + this.getW(), this.getY() + this.getH(), 1, 0xAA000000); // bottom
+                RenderUtil.drawLine(this.getX() + this.getW(),this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 1, 0xAA000000); // right
+            }
         }
     }
 
