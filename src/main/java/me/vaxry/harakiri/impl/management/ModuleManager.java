@@ -178,43 +178,6 @@ public final class ModuleManager {
         moduleList.sort(Comparator.comparing(Module::getDisplayName));
     }
 
-    /**
-     * This is where we load custom external modules from disk
-     * This allows users to create their own modules and load
-     * them during runtime
-     */
-    public void loadExternalModules() {
-        try {
-            //create a directory at "harakiri/Modules"
-            final File dir = new File("harakiri/modules");
-
-            //if it doesnt exist create it
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-
-            //all jars/zip files in the dir
-            //loop though all classes within the jar/zip
-            for (Class clazz : ReflectionUtil.getClassesEx(dir.getPath())) {
-                if (clazz != null) {
-                    //if we have found a class and the class inherits "Module"
-                    if (Module.class.isAssignableFrom(clazz)) {
-                        //create a new instance of the class
-                        final Module module = (Module) clazz.newInstance();
-
-                        //add the class to our list of modules
-                        add(module);
-
-                        Harakiri.get().getEventManager().dispatchEvent(new EventModuleLoad(module));
-                        Harakiri.get().getLogger().log(Level.INFO, "Found external module " + module.getDisplayName());
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void unload() {
         for (Module mod : this.moduleList) {
             mod.onDisable();

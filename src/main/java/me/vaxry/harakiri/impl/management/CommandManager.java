@@ -53,42 +53,6 @@ public final class CommandManager {
         commandList.sort(Comparator.comparing(Command::getDisplayName));
     }
 
-    /**
-     * This is where we load custom external commands from disk
-     * This allows users to create their own commands and load
-     * them during runtime
-     */
-    public void loadExternalCommands() {
-        try {
-            //create a directory at "harakiri/Commands"
-            final File dir = new File("harakiri/commands");
-
-            //if it doesnt exist create it
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-
-            //all jars/zip files in the dir
-            //loop though all classes within the jar/zip
-            for (Class clazz : ReflectionUtil.getClassesEx(dir.getPath())) {
-                if (clazz != null) {
-                    //if we have found a class and the class inherits "Module"
-                    if (Command.class.isAssignableFrom(clazz)) {
-                        //create a new instance of the class
-                        final Command command = (Command) clazz.newInstance();
-
-                        //add the class to our list of modules
-                        this.commandList.add(command);
-                        Harakiri.get().getEventManager().dispatchEvent(new EventCommandLoad(command));
-                        Harakiri.get().getLogger().log(Level.INFO, "Found external command " + command.getDisplayName());
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void loadValueCommands() {
         for (final Module module : Harakiri.get().getModuleManager().getModuleList()) {
             if (module.getValueList().size() > 0) {

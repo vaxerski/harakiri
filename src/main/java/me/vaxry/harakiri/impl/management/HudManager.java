@@ -218,28 +218,6 @@ public final class HudManager {
         }
     }
 
-    public void loadExternalHudComponents() {
-        try {
-            final File dir = new File("harakiri/hud");
-
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-
-            for (Class clazz : ReflectionUtil.getClassesEx(dir.getPath())) {
-                if (clazz != null) {
-                    if (HudComponent.class.isAssignableFrom(clazz)) {
-                        final HudComponent component = (HudComponent) clazz.newInstance();
-                        this.componentList.add(component);
-                        Harakiri.get().getLogger().log(Level.INFO, "Found external hud component " + component.getName());
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void moveToTop(HudComponent component) {
         for (HudComponent comp : this.componentList) {
             if (comp != null && comp == component) {
