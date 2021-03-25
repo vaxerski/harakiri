@@ -133,8 +133,8 @@ public final class BedrockFinder extends Module {
         final IBlockState blockState = event.getBlockState();
         if(blockState.getBlock() == Blocks.BEDROCK){
             if(Minecraft.getMinecraft().player.dimension == 0){
-                // Overworld, no bedrock > 7
-                if(pos.getY() > 7){
+                // Overworld, no bedrock > 5
+                if(pos.getY() > 5){
                     if(!isBlockAdded(pos)) {
                         foundBedrockLastS += 1;
                         illegalBedrock.add(new Coordinate(pos.getX(), pos.getY(), pos.getZ()));
