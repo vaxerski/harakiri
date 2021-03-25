@@ -121,6 +121,7 @@ public final class ModuleManager {
         add(new ChatFilterModule());
         add(new ProjectilesModule());
         add(new ScaffoldModule());
+        add(new SkyModule());
         add(new LiquidInteractModule());
         add(new NoBreakCooldown());
         add(new NoAfkModule());

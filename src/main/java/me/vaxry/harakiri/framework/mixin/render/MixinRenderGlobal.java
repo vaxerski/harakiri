@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.render.*;
+import me.vaxry.harakiri.impl.module.world.SkyModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.culling.ICamera;

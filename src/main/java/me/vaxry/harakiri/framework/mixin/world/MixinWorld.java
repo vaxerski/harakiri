@@ -3,6 +3,7 @@ package me.vaxry.harakiri.framework.mixin.world;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.world.*;
 import me.vaxry.harakiri.impl.module.render.NoLagModule;
+import me.vaxry.harakiri.impl.module.world.SkyModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
@@ -71,6 +72,14 @@ public abstract class MixinWorld {
             if(entityIn instanceof EntityArmorStand && noLagModule.removeChunkBan.getValue()){
                 entityIn.setDead();
             }
+        }
+    }
+
+    @Inject(method = "getCelestialAngle", at = @At("HEAD"))
+    public void getCelestialAngle(float pt, CallbackInfoReturnable<Float> cir){
+        if(Harakiri.get().getModuleManager().find(SkyModule.class).isEnabled()){
+            ((SkyModule)Harakiri.get().getModuleManager().find(SkyModule.class)).worldtime = Minecraft.getMinecraft().world.getWorldTime();
+            Minecraft.getMinecraft().world.setWorldTime(((SkyModule)Harakiri.get().getModuleManager().find(SkyModule.class)).celestialAng.getValue());
         }
     }
 }
