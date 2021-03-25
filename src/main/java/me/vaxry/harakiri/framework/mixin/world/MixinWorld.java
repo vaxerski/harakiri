@@ -77,6 +77,12 @@ public abstract class MixinWorld {
 
     @Inject(method = "getCelestialAngle", at = @At("HEAD"))
     public void getCelestialAngle(float pt, CallbackInfoReturnable<Float> cir){
+        if(Minecraft.getMinecraft().player == null)
+            return;
+
+        if(!(((SkyModule) Harakiri.get().getModuleManager().find(SkyModule.class)).timerWorld).passed(1000))
+            return;
+
         if(Harakiri.get().getModuleManager().find(SkyModule.class).isEnabled()){
             ((SkyModule)Harakiri.get().getModuleManager().find(SkyModule.class)).worldtime = Minecraft.getMinecraft().world.getWorldTime();
             Minecraft.getMinecraft().world.setWorldTime(((SkyModule)Harakiri.get().getModuleManager().find(SkyModule.class)).celestialAng.getValue());
