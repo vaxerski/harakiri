@@ -3,6 +3,7 @@ package me.vaxry.harakiri.framework.lua;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.lua.api.*;
 import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.util.Timer;
 import net.minecraftforge.fml.common.Mod;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LoadState;
@@ -15,6 +16,7 @@ import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public final class LUAAPI {
@@ -37,6 +39,8 @@ public final class LUAAPI {
 
         private String luaname;
         private boolean hasErrors = false;
+        private int updateMs = 0;
+        private HashMap<EVENTFUN, Timer> updateTimers = new HashMap<>();
 
         private ArrayList<EVENTFUN> registeredForEvents = new ArrayList<>();
 
@@ -57,6 +61,13 @@ public final class LUAAPI {
 
             currentModuleHeader = null;
             currentLuaModuleHeader = null;
+
+            // Create timers
+            for(EVENTFUN ef : registeredForEvents) {
+                Timer timer = new Timer();
+                timer.reset();
+                updateTimers.put(ef, timer);
+            }
         }
 
         public void loadAPIFunctions(){
@@ -94,6 +105,12 @@ public final class LUAAPI {
 
                     if(!this.isRegisteredForEvent(ef))
                         return true;
+
+                    if(!this.updateTimers.get(ef).passed(this.updateMs))
+                        return true;
+
+                    // If the timeout has passed, reset the timer
+                    this.updateTimers.get(ef).reset();
 
                     switch(ef){
                         case EVENT_NONE:
@@ -147,6 +164,14 @@ public final class LUAAPI {
                     return true;
             }
             return false;
+        }
+
+        public void setUpdateMs(int ms){
+            this.updateMs = ms;
+        }
+
+        public int getUpdateMs(){
+            return this.updateMs;
         }
 
         //--------------Code Data--------------//

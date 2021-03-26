@@ -26,6 +26,7 @@ public class haralua extends TwoArgFunction {
         hara.set( "readfloat", new readfloat() );
         hara.set( "clearvalues", new clearvalues() );
         hara.set( "registerfor", new registerfor() );
+        hara.set( "setTimeout", new setTimeout() );
         env.set( "haralua", hara );
         env.get("package").get("loaded").set("haralua", hara);
         return hara;
@@ -131,6 +132,17 @@ public class haralua extends TwoArgFunction {
             }else if(event.equalsIgnoreCase("onDisable")){
                 LUAAPI.currentLuaModuleHeader.registerForEvent(LUAAPI.EVENTFUN.EVENT_DISABLED);
             }
+
+            return LuaValue.valueOf(1);
+        }
+    }
+
+    protected static class setTimeout extends OneArgFunction {
+        public LuaValue call(LuaValue arg) {
+
+            int event = arg.checkint();
+
+            LUAAPI.currentLuaModuleHeader.setUpdateMs(event);
 
             return LuaValue.valueOf(1);
         }
