@@ -9,6 +9,11 @@ import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.OneArgFunction;
 import org.luaj.vm2.lib.TwoArgFunction;
 import org.luaj.vm2.lib.ZeroArgFunction;
+import org.luaj.vm2.lib.jse.CoerceJavaToLua;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class GlobalAPI extends TwoArgFunction {
 
@@ -19,6 +24,7 @@ public class GlobalAPI extends TwoArgFunction {
     public LuaValue call(LuaValue modname, LuaValue env) {
         LuaTable global = new LuaTable(0,30);
         global.set( "curtime", new curtime() );
+        global.set( "curhumantime", new curhumantime() );
         global.set( "scaledX", new scaledX() );
         global.set( "scaledY", new scaledY() );
         global.set( "addNotification", new addNotification() );
@@ -27,9 +33,30 @@ public class GlobalAPI extends TwoArgFunction {
         return global;
     }
 
+    private static class HumanTimeReturn {
+        public int hour = 0;
+        public int minute = 0;
+        public int second = 0;
+    }
+
     protected static class curtime extends ZeroArgFunction {
         public LuaValue call(){
             return LuaValue.valueOf(System.currentTimeMillis());
+        }
+    }
+
+    protected static class curhumantime extends ZeroArgFunction {
+        public LuaValue call(){
+            HumanTimeReturn humanTimeReturn = new HumanTimeReturn();
+            Date date = new Date();   // given date
+            Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
+            calendar.setTime(date);   // assigns calendar to given date
+
+            humanTimeReturn.hour = calendar.get(Calendar.HOUR_OF_DAY);
+            humanTimeReturn.minute = calendar.get(Calendar.MINUTE);
+            humanTimeReturn.second = calendar.get(Calendar.SECOND);
+
+            return CoerceJavaToLua.coerce(humanTimeReturn);
         }
     }
 
