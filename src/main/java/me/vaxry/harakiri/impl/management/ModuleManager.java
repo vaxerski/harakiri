@@ -1,9 +1,6 @@
 package me.vaxry.harakiri.impl.management;
 
-import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.event.module.EventModuleLoad;
 import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.util.ReflectionUtil;
 import me.vaxry.harakiri.framework.util.StringUtil;
 import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.module.combat.*;
@@ -19,13 +16,10 @@ import me.vaxry.harakiri.impl.module.world.*;
 import me.vaxry.harakiri.impl.module.world.ScaffoldModule;
 import net.minecraftforge.common.MinecraftForge;
 
-import javax.swing.*;
-import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * Author Seth
@@ -165,6 +159,7 @@ public final class ModuleManager {
         add(new AutoEatModule());
         add(new NoFriendHurtModule());
         add(new ReachModule());
+        add(new StashLoggerModule());
         HitsoundModule hitsoundModule = new HitsoundModule();
         add(hitsoundModule);
 
