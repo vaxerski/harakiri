@@ -24,6 +24,9 @@ public class PullDownModule extends Module {
     public final Value<Float> speed =
             new Value<Float>("Speed", new String[]{"velocity"}, "Speed multiplier at which the player will be falling.", 4.0f,
                     0f, VELOCITY_MAX, 1f);
+    public final Value<Float> minhe =
+            new Value<Float>("MinHeight", new String[]{"minheight"}, "Minimum height to activate.", 3.0f,
+                    1f, 10F, 1f);
 
     public PullDownModule() {
         super("PullDown", new String[]{"FastFall"}, "Increase your falling velocity.",
@@ -43,7 +46,7 @@ public class PullDownModule extends Module {
 
             final Vec3d playerPosition = mc.player.getPositionVector();
             if (!hullCollidesWithBlock(mc.player, playerPosition.subtract(0.0d,
-                    3.0d, 0.0d)))
+                    this.minhe.getValue(), 0.0d)))
                 mc.player.motionY = -this.speed.getValue();
         }
     }
