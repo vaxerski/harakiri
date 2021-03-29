@@ -21,6 +21,7 @@ public final class VisualRangeModule extends Module {
 
     public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "Change between alert modes.", Mode.NOTIFICATION);
     public final Value<Boolean> sound = new Value<Boolean>("Sound", new String[]{"Sound", "S"}, "Plays a sound when someone enters/exits.", false);
+    public final Value<Integer> soundVol = new Value<Integer>("SoundVolume", new String[]{"SoundVolume", "SV"}, "Sound volume.", 1, 0, 10, 1);
 
     private enum Mode {
         CHAT, NOTIFICATION, BOTH
@@ -60,7 +61,7 @@ public final class VisualRangeModule extends Module {
                         Minecraft.getMinecraft().player.posZ,
                         SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
                         SoundCategory.AMBIENT,
-                        1F,
+                        this.soundVol.getValue(),
                         1F,
                         false);
         }
@@ -91,7 +92,7 @@ public final class VisualRangeModule extends Module {
                             Minecraft.getMinecraft().player.posZ,
                             SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
                             SoundCategory.AMBIENT,
-                            1F,
+                            this.soundVol.getValue(),
                             1F,
                             false);
 
