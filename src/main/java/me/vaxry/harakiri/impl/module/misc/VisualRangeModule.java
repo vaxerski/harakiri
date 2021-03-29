@@ -9,6 +9,8 @@ import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.value.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundCategory;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 /**
@@ -18,6 +20,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public final class VisualRangeModule extends Module {
 
     public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "Change between alert modes.", Mode.NOTIFICATION);
+    public final Value<Boolean> sound = new Value<Boolean>("Sound", new String[]{"Sound", "S"}, "Plays a sound when someone enters/exits.", false);
 
     private enum Mode {
         CHAT, NOTIFICATION, BOTH
@@ -50,6 +53,16 @@ public final class VisualRangeModule extends Module {
             if (event.getEntity().getEntityId() == this.prevPlayer) {
                 this.prevPlayer = -1;
             }
+
+            if(this.sound.getValue())
+                Minecraft.getMinecraft().world.playSound(Minecraft.getMinecraft().player.posX,
+                        Minecraft.getMinecraft().player.posY,
+                        Minecraft.getMinecraft().player.posZ,
+                        SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
+                        SoundCategory.AMBIENT,
+                        1F,
+                        1F,
+                        false);
         }
     }
 
@@ -71,6 +84,16 @@ public final class VisualRangeModule extends Module {
                 if (this.mode.getValue() == Mode.CHAT || this.mode.getValue() == Mode.BOTH) {
                     Harakiri.get().logChat(msg);
                 }
+
+                if(this.sound.getValue())
+                    Minecraft.getMinecraft().world.playSound(Minecraft.getMinecraft().player.posX,
+                            Minecraft.getMinecraft().player.posY,
+                            Minecraft.getMinecraft().player.posZ,
+                            SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
+                            SoundCategory.AMBIENT,
+                            1F,
+                            1F,
+                            false);
 
             }
         }
