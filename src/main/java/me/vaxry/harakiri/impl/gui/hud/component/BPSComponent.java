@@ -11,10 +11,6 @@ import javax.vecmath.Vector3f;
 import java.text.DecimalFormat;
 
 
-/**
- * Author Seth
- * 7/27/2019 @ 7:46 PM.
- */
 public final class BPSComponent extends DraggableHudComponent {
 
     public BPSComponent() {
@@ -35,11 +31,11 @@ public final class BPSComponent extends DraggableHudComponent {
 
             final String bps = "BPS: " + df.format((MathHelper.sqrt(deltaX * deltaX + deltaZ * deltaZ) / tickRate));
 
-            this.setW(mc.fontRenderer.getStringWidth(bps));
-            mc.fontRenderer.drawStringWithShadow(bps, this.getX(), this.getY(), -1);
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth(bps));
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(bps, this.getX(), this.getY(), -1);
         } else {
-            this.setW(mc.fontRenderer.getStringWidth("(BPS Speed)"));
-            mc.fontRenderer.drawStringWithShadow("(BPS Speed)", this.getX(), this.getY(), 0xFFCCCCCC);
+            this.setW(Harakiri.get().getTTFFontUtil().getStringWidth("(BPS Speed)"));
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow("(BPS Speed)", this.getX(), this.getY(), 0xFFCCCCCC);
         }
     }
 
