@@ -21,7 +21,7 @@ public final class MiddleClickFriendsModule extends Module {
     private boolean clicked;
 
     public MiddleClickFriendsModule() {
-        super("MiddleClick", new String[]{"MCF", "MiddleClickFriends", "MClick"}, "Allows you to middle click players to add them as a friend.", "NONE", -1, ModuleType.MISC);
+        super("MiddleClickFriends", new String[]{"MCF", "MiddleClickFriends", "MClick"}, "Allows you to middle click players to add them as a friend.", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener
