@@ -17,6 +17,7 @@ import me.vaxry.harakiri.impl.gui.screen.HaraGuiChat;
 import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiSleepMP;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.common.MinecraftForge;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
@@ -211,7 +212,7 @@ public final class HudManager {
 
     @Listener
     public void onGuiScreenOpen(EventDisplayGui eventDisplayGui){
-        if(eventDisplayGui.getScreen() instanceof GuiChat && !(eventDisplayGui.getScreen() instanceof HaraGuiChat)) {
+        if(eventDisplayGui.getScreen() instanceof GuiChat && !(eventDisplayGui.getScreen() instanceof HaraGuiChat) && !(eventDisplayGui.getScreen() instanceof GuiSleepMP)) {
             eventDisplayGui.setCanceled(true);
             eventDisplayGui.getScreen().onGuiClosed();
             Minecraft.getMinecraft().displayGuiScreen(new HaraGuiChat());
