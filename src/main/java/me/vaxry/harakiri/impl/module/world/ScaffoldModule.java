@@ -36,6 +36,7 @@ public final class ScaffoldModule extends Module {
     public final Value<MODE> mode = new Value<MODE>("Mode", new String[]{"Mode", "m"}, "Mode to use.", MODE.CLASSIC);
     public final Value<Integer> reach = new Value<Integer>("Reach", new String[]{"Reach", "range", "r"}, "The reach in blocks from the player to end bridging.", 4, 1, 10, 1);
     public final Value<Boolean> stopmotion = new Value<Boolean>("StopMotion", new String[]{"StopMotion", "sm"}, "Don't move when not placed.", false);
+    public final Value<Boolean> blockfly = new Value<Boolean>("BlockFly", new String[]{"BlockFly", "bf"}, "Rapid towering.", false);
     public final Value<Float> delay = new Value<Float>("Delay", new String[]{"Delay", "d"}, "Delay to place.", 0f, 0f, 1f, 0.1f);
 
     public ScaffoldModule() {
@@ -45,6 +46,9 @@ public final class ScaffoldModule extends Module {
     private Timer _timer = new Timer();
     private Timer _towerPauseTimer = new Timer();
     private Timer _towerTimer = new Timer();
+
+    private boolean lastFeet = false;
+    private double towerStart = 0.0;
 
     @Listener
     public void onUpdate(EventPlayerUpdate event) {
@@ -111,14 +115,37 @@ public final class ScaffoldModule extends Module {
 
         BlockPos toPlaceAt = null;
 
+        if (lastFeet && this.blockfly.getValue() && mc.gameSettings.keyBindJump.isKeyDown())
+        {
+            final double motion = 0.42d; // jump motion
+            if (mc.player.onGround)
+            {
+                towerStart = mc.player.posY;
+                mc.player.motionY = motion;
+            }
+
+            if (mc.player.posY > towerStart + motion)
+            {
+                mc.player.setPosition(mc.player.posX, (int) mc.player.posY, mc.player.posZ);
+                mc.player.motionY = motion;
+                towerStart = mc.player.posY;
+            }
+        }
+        else
+        {
+            towerStart = 0.0;
+        }
+
         BlockPos feetBlock = BlockInteractionUtil.GetLocalPlayerPosFloored().down();
 
         boolean placeAtFeet = BlockInteractionUtil.isValidPlaceBlockState(feetBlock);
 
-        if (placeAtFeet)
+        if (placeAtFeet) {
             toPlaceAt = feetBlock;
-        else // find a supporting position for feet block
+            lastFeet = true;
+        } else // find a supporting position for feet block
         {
+            lastFeet = false;
             BlockInteractionUtil.ValidResult result = BlockInteractionUtil.valid(feetBlock);
 
             // find a supporting block
