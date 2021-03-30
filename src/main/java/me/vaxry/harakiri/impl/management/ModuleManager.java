@@ -160,6 +160,7 @@ public final class ModuleManager {
         add(new NoFriendHurtModule());
         add(new ReachModule());
         add(new StashLoggerModule());
+        add(new SelfWebModule());
         HitsoundModule hitsoundModule = new HitsoundModule();
         add(hitsoundModule);
 
