@@ -29,7 +29,7 @@ public final class BPSComponent extends DraggableHudComponent {
             final double deltaZ = mc.player.posZ - mc.player.prevPosZ;
             final float tickRate = (mc.timer.tickLength / 1000.0f);
 
-            final String bps = "BPS: " + df.format((MathHelper.sqrt(deltaX * deltaX + deltaZ * deltaZ) / tickRate));
+            final String bps = ChatFormatting.GRAY + "BPS: " + ChatFormatting.RESET + df.format((MathHelper.sqrt(deltaX * deltaX + deltaZ * deltaZ) / tickRate));
 
             this.setW(Harakiri.get().getTTFFontUtil().getStringWidth(bps));
             Harakiri.get().getTTFFontUtil().drawStringWithShadow(bps, this.getX(), this.getY(), -1);
