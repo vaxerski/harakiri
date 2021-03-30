@@ -115,6 +115,7 @@ public final class HudManager {
         add(new PlayerCountComponent());
         add(new EntityListComponent());
         add(new WarningsComponent());
+        add(new BPSComponent());
 
         MinecraftForge.EVENT_BUS.register(rfc);
         //MinecraftForge.EVENT_BUS.register(new ThreatCamComponent());
