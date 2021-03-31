@@ -1,9 +1,12 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
+import akka.japi.Pair;
 import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
 import me.vaxry.harakiri.framework.util.PotionUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
+import me.vaxry.harakiri.impl.module.render.HolesModule;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -11,12 +14,14 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.potion.PotionEffect;
 
 import me.vaxry.harakiri.Harakiri;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.Objects;
 
@@ -186,6 +191,9 @@ public class ThreatComponent extends DraggableHudComponent {
                 }
             }
 
+            if(isInHole(threat))
+                moreInfo += "\247cIn Hole! \2478 | ";
+
             if(moreInfo.endsWith("| ")){
                 moreInfo = moreInfo.substring(0, moreInfo.length()-3);
             }
@@ -234,5 +242,23 @@ public class ThreatComponent extends DraggableHudComponent {
 
     private int get3DDistance(EntityPlayer e) {
         return (int)(Math.sqrt(Math.pow((mc.player.posX - e.posX),2) + Math.pow((mc.player.posY - e.posY),2) + Math.pow((mc.player.posZ - e.posZ),2)));
+    }
+
+    private boolean isInHole(EntityPlayer player){
+        final BlockPos legs = new BlockPos(Math.floor(player.posX), Math.floor(player.posY), Math.floor(player.posZ));
+        final Minecraft mc = Minecraft.getMinecraft();
+
+        if(isValidHoleMaterial(mc.world.getBlockState(legs.down()).getBlock())
+        && isValidHoleMaterial(mc.world.getBlockState(legs.north()).getBlock())
+        && isValidHoleMaterial(mc.world.getBlockState(legs.east()).getBlock())
+        && isValidHoleMaterial(mc.world.getBlockState(legs.south()).getBlock())
+        && isValidHoleMaterial(mc.world.getBlockState(legs.west()).getBlock()))
+            return true;
+
+        return false;
+    }
+
+    private boolean isValidHoleMaterial(Block block){
+        return block == Blocks.OBSIDIAN || block == Blocks.BEDROCK;
     }
 }
