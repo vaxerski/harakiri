@@ -161,6 +161,7 @@ public final class ModuleManager {
         add(new ReachModule());
         add(new StashLoggerModule());
         add(new SelfWebModule());
+        add(new BurrowModule());
         HitsoundModule hitsoundModule = new HitsoundModule();
         add(hitsoundModule);
 
