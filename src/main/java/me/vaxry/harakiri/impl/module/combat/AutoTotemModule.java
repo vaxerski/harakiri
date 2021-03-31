@@ -117,4 +117,8 @@ public final class AutoTotemModule extends Module {
         return totems;
     }
 
+    public boolean getOverrideStatus(){
+        return Minecraft.getMinecraft().player.getHealth() + Minecraft.getMinecraft().player.getAbsorptionAmount() <= this.health.getValue() || !this.healthmode.getValue();
+    }
+
 }
