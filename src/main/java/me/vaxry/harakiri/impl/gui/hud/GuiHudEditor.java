@@ -278,7 +278,7 @@ public final class GuiHudEditor extends GuiScreen {
                         for (HudComponent other : Harakiri.get().getHudManager().getComponentList()) {
                             if (other instanceof DraggableHudComponent) {
                                 DraggableHudComponent otherDraggable = (DraggableHudComponent) other;
-                                if (other != draggable && draggable.collidesWith(otherDraggable) && otherDraggable.isVisible() && draggable.isSnappable() && otherDraggable.isSnappable()) {
+                                if (other != draggable && draggable.collidesWith(otherDraggable) && otherDraggable.isVisible() && draggable.isSnappable() && otherDraggable.isSnappable() && !isShiftKeyDown()) {
                                     colliding = true;
                                     RenderUtil.drawBorderedRect(draggable.getX() - 1, draggable.getY() - 1, draggable.getX() + draggable.getW() + 1, draggable.getY() + draggable.getH() + 1, 1, 0x00000000, ColorUtil.changeAlpha(rainbowColor, 0x33));
                                     RenderUtil.drawRect(draggable.getX(), draggable.getY(), draggable.getX() + draggable.getW(), draggable.getY() + draggable.getH(), ColorUtil.changeAlpha(rainbowColor, 0x33));
