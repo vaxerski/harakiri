@@ -7,12 +7,11 @@ import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.task.rotation.RotationTask;
-import me.vaxry.harakiri.framework.util.ColorUtil;
-import me.vaxry.harakiri.framework.util.MathUtil;
-import me.vaxry.harakiri.framework.util.RenderUtil;
-import me.vaxry.harakiri.framework.util.Timer;
+import me.vaxry.harakiri.framework.util.*;
 import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.module.player.GodModeModule;
+import me.vaxry.harakiri.impl.module.render.HudModule;
+import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -32,6 +31,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.*;
 import net.minecraft.world.Explosion;
+import org.locationtech.jts.geom.Coordinate;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.util.List;
@@ -55,6 +55,7 @@ public final class CrystalAuraModule extends Module {
     public final Value<Float> placeMaxDistance = new Value<Float>("PlaceMaxDistance", new String[]{"BlockDistance", "MaxBlockDistance", "PMBD", "MBD", "PBD", "BD"}, "The (max)distance an entity must be to the new crystal to begin placing.", 14.0f, 1.0f, 20.0f, 1.0f);
     public final Value<Float> placeLocalDistance = new Value<Float>("PlaceLocalDistance", new String[]{"LocalDistance", "PLD", "LD"}, "The (max)distance away the entity must be from the local player to begin placing.", 6.0f, 1.0f, 20.0f, 0.5f);
     public final Value<Float> minDamage = new Value<Float>("MinDamage", new String[]{"MinDamage", "Min", "MinDmg"}, "The minimum explosion damage calculated to place down a crystal.", 1.5f, 0.0f, 20.0f, 0.5f);
+    public final Value<Float> maxSelf = new Value<Float>("MaxSelfDMG", new String[]{"MaxSelfDMG", "MaxS", "MaxSelf"}, "Maximum self damage to detonate a crystal.", 4F, 0.0f, 20.0f, 0.5f);
     public final Value<Boolean> ignore = new Value<Boolean>("Ignore", new String[]{"Ig"}, "Ignore self damage checks.", false);
     public final Value<Boolean> render = new Value<Boolean>("Render", new String[]{"R"}, "Draws information about recently placed crystals from your player.", true);
     public final Value<Boolean> renderDamage = new Value<Boolean>("RenderDamage", new String[]{"RD", "RenderDamage", "ShowDamage"}, "Draws calculated explosion damage on recently placed crystals from your player.", true);
@@ -133,7 +134,7 @@ public final class CrystalAuraModule extends Module {
                                                     localDamage = -1;
                                                 }
 
-                                                if (currentDamage > damage && currentDamage >= this.minDamage.getValue() && localDamage <= currentDamage) {
+                                                if (currentDamage > damage && currentDamage >= this.minDamage.getValue() && localDamage <= currentDamage && localDamage <= this.maxSelf.getValue()) {
                                                     damage = currentDamage;
                                                     this.currentPlacePosition = blockPos;
                                                 }
@@ -170,7 +171,7 @@ public final class CrystalAuraModule extends Module {
                                                 localDamage = -1;
                                             }
 
-                                            if (localDamage <= currentDamage && currentDamage >= this.minDamage.getValue()) {
+                                            if (localDamage <= currentDamage && currentDamage >= this.minDamage.getValue() && localDamage <= this.maxSelf.getValue()) {
                                                 final float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), entity.getPositionVector());
 
                                                 Harakiri.get().getRotationManager().startTask(this.attackRotationTask);
@@ -280,24 +281,38 @@ public final class CrystalAuraModule extends Module {
                         placeLocation.getY() + 1 - mc.getRenderManager().viewerPosY,
                         placeLocation.getZ() + 1 - mc.getRenderManager().viewerPosZ);
 
-                RenderUtil.drawFilledBox(bb, ColorUtil.changeAlpha(0xAA9900EE, placeLocation.alpha / 2));
-                RenderUtil.drawBoundingBox(bb, 1, ColorUtil.changeAlpha(0xAAAAAAAA, placeLocation.alpha));
+                final HudModule hudModule = (HudModule)Harakiri.get().getModuleManager().find(HudModule.class);
+                final boolean useRainbow = hudModule.rainbow.getValue();
+
+                final HudEditorModule hem = (HudEditorModule) Harakiri.get().getModuleManager().find(HudEditorModule.class);
+
+                RenderUtil.drawFilledBox(bb, ColorUtil.changeAlpha(useRainbow ? Harakiri.get().getHudManager().rainbowColor : hem.color.getValue().getRGB() + 0xFF000000, placeLocation.alpha / 2));
+                RenderUtil.drawBoundingBox(bb, 1, ColorUtil.changeAlpha(0xFF000000, placeLocation.alpha));
 
                 if (this.renderDamage.getValue()) {
                     GlStateManager.pushMatrix();
-                    RenderUtil.glBillboardDistanceScaled((float) placeLocation.getX() + 0.5f, (float) placeLocation.getY() + 0.5f, (float) placeLocation.getZ() + 0.5f, mc.player, 1);
+                    //RenderUtil.glBillboardDistanceScaled((float) placeLocation.getX() + 0.5f, (float) placeLocation.getY() + 0.5f, (float) placeLocation.getZ() + 0.5f, mc.player, 1);
                     final float damage = placeLocation.damage;
                     if (damage != -1) {
                         final String damageText = (Math.floor(damage) == damage ? (int) damage : String.format("%.1f", damage)) + "";
                         //GlStateManager.disableDepth();
-                        GlStateManager.translate(-(Harakiri.get().getTTFFontUtil().getStringWidth(damageText) / 2.0d), 0, 0);
-                        Harakiri.get().getTTFFontUtil().drawStringWithShadow(damageText, 0, 0, 0xFFAAAAAA);
+
+                        Coordinate textCoord = conv3Dto2DSpace((float) placeLocation.getX() + 0.5f, (float) placeLocation.getY() + 0.5f, (float) placeLocation.getZ() + 0.5f);
+                        textCoord.x -= Harakiri.get().getTTFFontUtil().getStringWidth(damageText) / 2F;
+
+                        Harakiri.get().getTTFFontUtil().drawStringWithShadow(damageText, (float)textCoord.x, (float)textCoord.y, 0xFFAAAACC);
                     }
                     GlStateManager.popMatrix();
                 }
             }
         }
         RenderUtil.end3D();
+    }
+
+    private Coordinate conv3Dto2DSpace(double x, double y, double z) {
+        final GLUProjection.Projection projection = GLUProjection.getInstance().project(x - Minecraft.getMinecraft().getRenderManager().viewerPosX, y - Minecraft.getMinecraft().getRenderManager().viewerPosY, z - Minecraft.getMinecraft().getRenderManager().viewerPosZ, GLUProjection.ClampMode.NONE, false);
+
+        return projection.getType() == GLUProjection.Projection.Type.OUTSIDE || projection.getType() == GLUProjection.Projection.Type.INVERTED ? null : new Coordinate(projection.getX(), projection.getY());
     }
 
     private boolean isLocalImmune() {
