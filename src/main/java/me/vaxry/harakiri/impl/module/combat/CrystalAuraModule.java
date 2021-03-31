@@ -190,8 +190,21 @@ public final class CrystalAuraModule extends Module {
             case POST:
                 if (this.currentPlacePosition != null) {
                     if (this.placeRotationTask.isOnline()) {
-                        mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(this.currentPlacePosition, EnumFacing.UP, this.offHand.getValue() ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0, 0, 0));
-                        this.placeLocations.add(new PlaceLocation(this.currentPlacePosition.getX(), this.currentPlacePosition.getY(), this.currentPlacePosition.getZ()));
+                        EnumHand useHand = null;
+                        if (this.offHand.getValue()) {
+                            if (mc.player.getHeldItem(EnumHand.OFF_HAND).getItem() == Items.END_CRYSTAL) {
+                                useHand = EnumHand.OFF_HAND;
+                            } else {
+                                if (mc.player.getHeldItem(EnumHand.MAIN_HAND).getItem() == Items.END_CRYSTAL)
+                                    useHand = EnumHand.MAIN_HAND;
+                            }
+                        } else {
+                            useHand = EnumHand.MAIN_HAND;
+                        }
+                        if (useHand != null) {
+                            mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(this.currentPlacePosition, EnumFacing.UP, useHand, 0, 0, 0));
+                            this.placeLocations.add(new PlaceLocation(this.currentPlacePosition.getX(), this.currentPlacePosition.getY(), this.currentPlacePosition.getZ()));
+                        }
                     }
                 } else {
                     Harakiri.get().getRotationManager().finishTask(this.placeRotationTask);
@@ -199,9 +212,22 @@ public final class CrystalAuraModule extends Module {
 
                 if (this.currentAttackEntity != null) {
                     if (this.attackTimer.passed(this.attackDelay.getValue()) && this.attackRotationTask.isOnline()) {
-                        mc.player.swingArm(this.offHand.getValue() ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND);
-                        this.crystalAuraHit = true;
-                        mc.playerController.attackEntity(mc.player, this.currentAttackEntity);
+                        EnumHand useHand = null;
+                        if (this.offHand.getValue()) {
+                            if (mc.player.getHeldItem(EnumHand.OFF_HAND).getItem() == Items.END_CRYSTAL) {
+                                useHand = EnumHand.OFF_HAND;
+                            } else {
+                                if (mc.player.getHeldItem(EnumHand.MAIN_HAND).getItem() == Items.END_CRYSTAL)
+                                    useHand = EnumHand.MAIN_HAND;
+                            }
+                        } else {
+                            useHand = EnumHand.MAIN_HAND;
+                        }
+                        if(useHand != null) {
+                            mc.player.swingArm(useHand);
+                            this.crystalAuraHit = true;
+                            mc.playerController.attackEntity(mc.player, this.currentAttackEntity);
+                        }
                         this.attackTimer.reset();
                     }
                 } else {
