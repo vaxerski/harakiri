@@ -8,6 +8,7 @@ import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.module.combat.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
 
 import javax.vecmath.Vector3f;
 import java.text.DecimalFormat;
@@ -19,14 +20,13 @@ public final class CombatInfoComponent extends DraggableHudComponent {
 
     public CombatInfoComponent() {
         super("CombatInfo");
-        this.setH(MODULES_DISPLAYED * Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
+        this.setH(MODULES_DISPLAYED * Harakiri.get().getTTFFontUtil().FONT_HEIGHT - MODULES_DISPLAYED);
     }
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
-
-        RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getH() + this.getY(), 0x44000000);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
 
         String finalDrawString = "";
 
@@ -71,6 +71,8 @@ public final class CombatInfoComponent extends DraggableHudComponent {
 
         this.setW(w);
         Harakiri.get().getTTFFontUtil().drawStringWithShadow(finalDrawString, this.getX(), this.getY(), -1);
+
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
     }
 
 }
