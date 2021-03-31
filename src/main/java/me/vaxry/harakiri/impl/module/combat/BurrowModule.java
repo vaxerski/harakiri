@@ -31,7 +31,8 @@ public class BurrowModule extends Module {
 
     public final Value<Float> rubberbandPerc = new Value<Float>("RubberbandHeight", new String[]{"RubberbandHeight", "RP"}, "Rubberband height.", 20F, -20F, 20F, 1F);
     public final Value<Float> jumpHeight = new Value<Float>("JumpHeight", new String[]{"JumpHeight", "JH"}, "How high to jump before rubberbanding (perc).", 80F, 70F, 100F, 1F);
-    public final Value<Boolean> packet = new Value<Boolean>("Packet", new String[]{"Packet", "Pck"}, "Use packet mode.", false);
+    //public final Value<Boolean> packet = new Value<Boolean>("Packet", new String[]{"Packet", "Pck"}, "Use packet mode.", false);
+    public final Value<Boolean> posVel = new Value<Boolean>("Position", new String[]{"Position", "Pos"}, "Use position instead of velocity.", false);
 
 
     public BurrowModule() {
@@ -89,7 +90,7 @@ public class BurrowModule extends Module {
                 return;
             }
 
-            if(this.packet.getValue()){
+            /*if(this.packet.getValue()){
                 mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.4F, mc.player.posZ, true));
                 mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.75F, mc.player.posZ, true));
                 mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1F, mc.player.posZ, true));
@@ -105,7 +106,7 @@ public class BurrowModule extends Module {
 
                 ceaseAndDesist();
                 return;
-            }
+            }*/
 
             // Jump
             mc.player.jump();
@@ -140,8 +141,12 @@ public class BurrowModule extends Module {
 
                 // Lag back
 
-                if(!packet.getValue())
+                if(this.posVel.getValue())
+                    mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + this.rubberbandPerc.getValue(), mc.player.posZ, true));
+                else
                     mc.player.setVelocity(0, mc.player.motionY + this.rubberbandPerc.getValue(), 0);
+
+                mc.player.setPosition(mc.player.posX, toPlace.getY(), mc.player.posZ);
 
                 // Restore slot
                 if (prevSlot != -1) {
