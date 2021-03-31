@@ -6,6 +6,7 @@ import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.module.combat.*;
+import me.vaxry.harakiri.impl.module.world.ScaffoldModule;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
@@ -16,11 +17,11 @@ import java.text.DecimalFormat;
 
 public final class CombatInfoComponent extends DraggableHudComponent {
 
-    private final int MODULES_DISPLAYED = 5;
+    private final int MODULES_DISPLAYED = 6;
 
     public CombatInfoComponent() {
         super("CombatInfo");
-        this.setH(MODULES_DISPLAYED * Harakiri.get().getTTFFontUtil().FONT_HEIGHT - MODULES_DISPLAYED);
+        this.setH(MODULES_DISPLAYED * Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
     }
 
     @Override
@@ -63,6 +64,13 @@ public final class CombatInfoComponent extends DraggableHudComponent {
                 ChatFormatting.GREEN + "ON" :
                 ChatFormatting.RED + "OFF";
 
+        finalDrawString += ChatFormatting.RESET + " \n";
+
+        finalDrawString += ChatFormatting.GRAY + "S: ";
+        finalDrawString += Harakiri.get().getModuleManager().find(ScaffoldModule.class).isEnabled() ?
+                ChatFormatting.GREEN + "ON" :
+                ChatFormatting.RED + "OFF";
+
         float w = 0;
         for(String s : finalDrawString.split("\n")){
             if(Harakiri.get().getTTFFontUtil().getStringWidth(s) > w)
@@ -70,6 +78,7 @@ public final class CombatInfoComponent extends DraggableHudComponent {
         }
 
         this.setW(w);
+        this.setH(MODULES_DISPLAYED * Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
         Harakiri.get().getTTFFontUtil().drawStringWithShadow(finalDrawString, this.getX(), this.getY(), -1);
 
         GL11.glEnable(GL11.GL_ALPHA_TEST);
