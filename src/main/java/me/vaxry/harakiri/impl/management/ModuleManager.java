@@ -163,6 +163,7 @@ public final class ModuleManager {
         add(new SelfWebModule());
         add(new BurrowModule());
         add(new HealthOverlayModule());
+        add(new AnchorModule());
         HitsoundModule hitsoundModule = new HitsoundModule();
         add(hitsoundModule);
 

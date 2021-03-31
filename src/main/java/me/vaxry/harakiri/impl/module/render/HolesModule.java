@@ -52,27 +52,7 @@ public final class HolesModule extends Module {
         if (mc.player == null)
             return;
 
-        this.holes.clear();
-
-        final Vec3i playerPos = new Vec3i(mc.player.posX, mc.player.posY, mc.player.posZ);
-
-        for (int x = playerPos.getX() - radius.getValue(); x < playerPos.getX() + radius.getValue(); x++) {
-            for (int z = playerPos.getZ() - radius.getValue(); z < playerPos.getZ() + radius.getValue(); z++) {
-                for (int y = playerPos.getY(); y > playerPos.getY() - 4; y--) {
-                    final BlockPos blockPos = new BlockPos(x, y, z);
-                    final IBlockState blockState = mc.world.getBlockState(blockPos);
-                    if (this.isBlockValid(blockState, blockPos)) {
-                        final IBlockState downBlockState = mc.world.getBlockState(blockPos.down());
-                        if (downBlockState.getBlock() != Blocks.AIR) {
-                            final BlockPos downPos = blockPos.down();
-                            int color = getHoleColor(blockPos);
-                            Hole holle = new Hole(downPos.getX(), downPos.getY(), downPos.getZ(), false);
-                            this.holes.add(new Pair<Hole, Integer>(holle, color));
-                        }
-                    }
-                }
-            }
-        }
+        forceHoleRecalc();
     }
 
     @Listener
@@ -204,7 +184,33 @@ public final class HolesModule extends Module {
         return 0xFFFFFF00; // Yellow for partial bedrock
     }
 
-    private class Hole extends Vec3i {
+    public void forceHoleRecalc(){
+        final Minecraft mc = Minecraft.getMinecraft();
+
+        this.holes.clear();
+
+        final Vec3i playerPos = new Vec3i(mc.player.posX, mc.player.posY, mc.player.posZ);
+
+        for (int x = playerPos.getX() - radius.getValue(); x < playerPos.getX() + radius.getValue(); x++) {
+            for (int z = playerPos.getZ() - radius.getValue(); z < playerPos.getZ() + radius.getValue(); z++) {
+                for (int y = playerPos.getY(); y > playerPos.getY() - 4; y--) {
+                    final BlockPos blockPos = new BlockPos(x, y, z);
+                    final IBlockState blockState = mc.world.getBlockState(blockPos);
+                    if (this.isBlockValid(blockState, blockPos)) {
+                        final IBlockState downBlockState = mc.world.getBlockState(blockPos.down());
+                        if (downBlockState.getBlock() != Blocks.AIR) {
+                            final BlockPos downPos = blockPos.down();
+                            int color = getHoleColor(blockPos);
+                            Hole holle = new Hole(downPos.getX(), downPos.getY(), downPos.getZ(), false);
+                            this.holes.add(new Pair<Hole, Integer>(holle, color));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public class Hole extends Vec3i {
 
         private boolean tall;
 
