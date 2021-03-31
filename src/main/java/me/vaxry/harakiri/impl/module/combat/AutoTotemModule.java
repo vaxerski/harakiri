@@ -37,7 +37,7 @@ public final class AutoTotemModule extends Module {
             final Minecraft mc = Minecraft.getMinecraft();
 
             if (mc.currentScreen == null || mc.currentScreen instanceof GuiInventory) {
-                if (mc.player.getHealth() <= this.health.getValue() || !this.healthmode.getValue()) {
+                if (mc.player.getHealth() + mc.player.getAbsorptionAmount() <= this.health.getValue() || !this.healthmode.getValue()) {
                     final ItemStack offHand = mc.player.getHeldItemOffhand();
 
                     if (offHand.getItem() == Items.TOTEM_OF_UNDYING) {
