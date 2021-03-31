@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.combat;
 
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.module.Module;
@@ -51,6 +52,24 @@ public final class AutoTotemModule extends Module {
                         mc.playerController.windowClick(mc.player.inventoryContainer.windowId, slot, 0, ClickType.PICKUP, mc.player);
                         mc.playerController.updateController();
                     }
+                }else {
+                    CrystalAuraModule crystalAuraModule = (CrystalAuraModule) Harakiri.get().getModuleManager().find(CrystalAuraModule.class);
+                    if(crystalAuraModule.offHandAuto.getValue()){
+                        // Here the totem isnt needed anymore, lets find crystals and use them.
+
+                        final ItemStack offHand = mc.player.getHeldItemOffhand();
+                        if(offHand.getItem() == Items.END_CRYSTAL)
+                            return;
+
+                        final int slot = this.getCrystalSlot();
+
+                        if(slot != -1){
+                            mc.playerController.windowClick(mc.player.inventoryContainer.windowId, slot, 0, ClickType.PICKUP, mc.player);
+                            mc.playerController.windowClick(mc.player.inventoryContainer.windowId, 45, 0, ClickType.PICKUP, mc.player);
+                            mc.playerController.windowClick(mc.player.inventoryContainer.windowId, slot, 0, ClickType.PICKUP, mc.player);
+                            mc.playerController.updateController();
+                        }
+                    }
                 }
             }
         }
@@ -60,6 +79,19 @@ public final class AutoTotemModule extends Module {
         for (int i = 0; i < 36; i++) {
             final Item item = Minecraft.getMinecraft().player.inventory.getStackInSlot(i).getItem();
             if (item == Items.TOTEM_OF_UNDYING) {
+                if (i < 9) {
+                    i += 36;
+                }
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int getCrystalSlot() {
+        for (int i = 35; i >= 0; i--) {
+            final Item item = Minecraft.getMinecraft().player.inventory.getStackInSlot(i).getItem();
+            if (item == Items.END_CRYSTAL) {
                 if (i < 9) {
                     i += 36;
                 }

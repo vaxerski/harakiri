@@ -59,6 +59,7 @@ public final class CrystalAuraModule extends Module {
     public final Value<Boolean> render = new Value<Boolean>("Render", new String[]{"R"}, "Draws information about recently placed crystals from your player.", true);
     public final Value<Boolean> renderDamage = new Value<Boolean>("RenderDamage", new String[]{"RD", "RenderDamage", "ShowDamage"}, "Draws calculated explosion damage on recently placed crystals from your player.", true);
     public final Value<Boolean> offHand = new Value<Boolean>("Offhand", new String[]{"Hand", "otherhand", "off"}, "Use crystals in the off-hand instead of holding them with the main-hand.", false);
+    public final Value<Boolean> offHandAuto = new Value<Boolean>("OffhandAuto", new String[]{"HandAuto", "otherhandauto", "offa"}, "Automatically put crystals into the offhand when no need for a totem (AutoTotem).", false);
 
     private final Timer attackTimer = new Timer();
     private final Timer placeTimer = new Timer();
@@ -93,7 +94,7 @@ public final class CrystalAuraModule extends Module {
                 this.currentPlacePosition = null;
                 this.currentAttackEntity = null;
 
-                if (mc.player.getHeldItem(this.offHand.getValue() ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND).getItem() == Items.END_CRYSTAL) {
+                if (mc.player.getHeldItem(this.offHand.getValue() ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND).getItem() == Items.END_CRYSTAL || mc.player.getHeldItem(EnumHand.MAIN_HAND).getItem() == Items.END_CRYSTAL) {
                     if (this.place.getValue()) {
                         if (this.placeTimer.passed(this.placeDelay.getValue())) {
                             final float radius = this.placeRadius.getValue();
