@@ -162,6 +162,7 @@ public final class ModuleManager {
         add(new StashLoggerModule());
         add(new SelfWebModule());
         add(new BurrowModule());
+        add(new HealthOverlayModule());
         HitsoundModule hitsoundModule = new HitsoundModule();
         add(hitsoundModule);
 
