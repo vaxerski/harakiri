@@ -29,6 +29,11 @@ import static org.lwjgl.opengl.GL11.glLineWidth;
  */
 public final class HolesModule extends Module {
 
+    public enum MODES{
+        BOX, PLANE
+    }
+
+    public final Value<MODES> mode = new Value<MODES>("Mode", new String[]{"Mode", "m"}, "Mode to draw.", MODES.BOX);
     public final Value<Integer> radius = new Value<Integer>("Radius", new String[]{"Radius", "Range", "Distance"}, "Radius in blocks to scan for holes.", 8, 0, 32, 1);
     public final Value<Boolean> fade = new Value<Boolean>("FadeIn", new String[]{"f"}, "Fades the opacity of the hole if close.", true);
 
@@ -110,8 +115,21 @@ public final class HolesModule extends Module {
                 glLineWidth(1.5f);
                 final double dist = mc.player.getDistance(hole.getX() + 0.5f, hole.getY() + 0.5f, hole.getZ() + 0.5f) * 0.75f;
                 float alpha = MathUtil.clamp((float) (dist * 255.0f / (this.radius.getValue()) / 255.0f), 0.0f, 0.3f);
-                RenderGlobal.renderFilledBox(bb, red, green, blue, this.fade.getValue() ? alpha : 0.25f);
-                RenderGlobal.drawBoundingBox(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ, red, green, blue, this.fade.getValue() ? alpha : 0.25f);
+
+                if(this.mode.getValue() == MODES.BOX) {
+                    RenderGlobal.renderFilledBox(bb, red, green, blue, this.fade.getValue() ? alpha : 0.25f);
+                    RenderGlobal.drawBoundingBox(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ, red, green, blue, this.fade.getValue() ? alpha : 0.25f);
+                } else {
+                    final AxisAlignedBB bb2 = new AxisAlignedBB(
+                            hole.getX() - mc.getRenderManager().viewerPosX,
+                            hole.getY() + 1 - mc.getRenderManager().viewerPosY,
+                            hole.getZ() - mc.getRenderManager().viewerPosZ,
+                            hole.getX() + 1 - mc.getRenderManager().viewerPosX,
+                            hole.getY() + 1 - mc.getRenderManager().viewerPosY,
+                            hole.getZ() + 1 - mc.getRenderManager().viewerPosZ);
+                    RenderGlobal.renderFilledBox(bb2, red, green, blue, this.fade.getValue() ? alpha : 0.25f);
+                    RenderGlobal.drawBoundingBox(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.minY, bb.maxZ, red, green, blue, this.fade.getValue() ? alpha : 0.25f);
+                }
                 GlStateManager.popMatrix();
             }
         }
