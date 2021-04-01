@@ -4,6 +4,7 @@ import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.util.StringUtil;
 import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.module.combat.*;
+import me.vaxry.harakiri.impl.module.config.ReloadConfigsModule;
 import me.vaxry.harakiri.impl.module.hidden.*;
 import me.vaxry.harakiri.impl.module.lua.ReloadLuasModule;
 import me.vaxry.harakiri.impl.module.misc.*;
@@ -307,6 +308,19 @@ public final class ModuleManager {
         }
         if(toRemove != null)
             moduleList.remove(toRemove);
+    }
+
+    public void removeConfigModule(Module mod){
+        this.moduleList.remove(mod);
+    }
+
+    public Module getConfigFromName(String name){
+        for (Module mod : this.getModuleList()) {
+            if (mod.getDisplayName().equalsIgnoreCase(name) && mod.getType() == Module.ModuleType.CONFIG) {
+                return mod;
+            }
+        }
+        return null;
     }
 
     public List<Module> getModuleList() {

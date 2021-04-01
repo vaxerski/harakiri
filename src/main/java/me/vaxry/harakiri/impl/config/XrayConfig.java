@@ -19,7 +19,7 @@ public final class XrayConfig extends Configurable {
     private final XrayModule xrayModule;
 
     public XrayConfig(File dir) {
-        super(FileUtil.createJsonFile(dir, "xray"));
+        super(FileUtil.createJsonFile(dir, "xray"), "xray.json");
         this.xrayModule = (XrayModule) Harakiri.get().getModuleManager().find("Xray");
     }
 

@@ -115,6 +115,10 @@ public final class ModuleListComponent extends ResizableHudComponent {
                     this.setX(320);
                     this.setY(250);
                     break;
+                case CONFIG:
+                    this.setX(370);
+                    this.setY(250);
+                    break;
             }
         }else{
             this.setX(20);

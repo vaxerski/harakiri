@@ -15,7 +15,7 @@ import java.io.File;
 public final class MacroConfig extends Configurable {
 
     public MacroConfig(File dir) {
-        super(FileUtil.createJsonFile(dir, "macro"));
+        super(FileUtil.createJsonFile(dir, "macro"), "macro.json");
     }
 
     @Override

@@ -9,6 +9,7 @@ import me.vaxry.harakiri.framework.config.Configurable;
 import me.vaxry.harakiri.framework.module.Module;
 import me.vaxry.harakiri.framework.util.FileUtil;
 import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.impl.module.config.ReloadConfigsModule;
 import scala.Int;
 
 import java.awt.*;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 public class ModuleConfig extends Configurable {
 
     public ModuleConfig(File dir) {
-        super(FileUtil.createJsonFile(dir, "mods"));
+        super(FileUtil.createJsonFile(dir, "mods"), "mods.json");
     }
 
     class ModuleConfigJSON{
@@ -68,6 +69,9 @@ public class ModuleConfig extends Configurable {
 
             if(mod == null)
                 continue;
+
+            if(mod.getType() == Module.ModuleType.CONFIG)
+                continue; // Avoid loops
 
             if(!mod.isEnabled() && settings.enabled || mod.isEnabled() && !settings.enabled)
                 mod.toggle();
@@ -154,6 +158,9 @@ public class ModuleConfig extends Configurable {
 
             if(mod.getType() == Module.ModuleType.LUA)
                 continue; // We save luas separately
+
+            if(mod.getType() == Module.ModuleType.CONFIG)
+                continue; // Avoid loops
 
             ModuleConfigJSON config = new ModuleConfigJSON(mod.getDisplayName(), mod.isHidden(), mod.getKey(), mod.isEnabled());
 

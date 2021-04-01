@@ -5,6 +5,7 @@ import me.vaxry.harakiri.framework.config.Configurable;
 import me.vaxry.harakiri.framework.event.client.EventLoadConfig;
 import me.vaxry.harakiri.framework.event.client.EventSaveConfig;
 import me.vaxry.harakiri.impl.config.*;
+import me.vaxry.harakiri.impl.module.config.ReloadConfigsModule;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ public final class ConfigManager {
     private File moduleConfigDir;
     private File hudComponentConfigDir;
     private File luaDir;
+
+    public File current_config;
 
     private boolean firstLaunch = false;
 
@@ -44,14 +47,16 @@ public final class ConfigManager {
     }
 
     public void init() {
-        this.configurableList.add(new ModuleConfig(configDir));
-        this.configurableList.add(new HudConfig(configDir));
-        this.configurableList.add(new LuaConfig(configDir));
-        this.configurableList.add(new FriendConfig(configDir));
-        this.configurableList.add(new XrayConfig(configDir));
-        this.configurableList.add(new SearchConfig(configDir));
-        this.configurableList.add(new MacroConfig(configDir));
-        this.configurableList.add(new WorldConfig(configDir));
+        this.current_config = ((ReloadConfigsModule)Harakiri.get().getModuleManager().find(ReloadConfigsModule.class)).getCurrentConfigDir();
+
+        this.configurableList.add(new ModuleConfig(this.current_config));
+        this.configurableList.add(new HudConfig(this.current_config));
+        this.configurableList.add(new LuaConfig(this.current_config));
+        this.configurableList.add(new FriendConfig(this.current_config));
+        this.configurableList.add(new XrayConfig(this.current_config));
+        this.configurableList.add(new SearchConfig(this.current_config));
+        this.configurableList.add(new MacroConfig(this.current_config));
+        this.configurableList.add(new WorldConfig(this.current_config));
 
         if (this.firstLaunch) {
             this.saveAll();
@@ -63,6 +68,7 @@ public final class ConfigManager {
     public void save(Class configurableClassType) {
         for (Configurable cfg : configurableList) {
             if (cfg.getClass().isAssignableFrom(configurableClassType)) {
+                cfg.setNewConfigFileDir(this.current_config.getPath());
                 cfg.onSave();
             }
         }
@@ -72,6 +78,7 @@ public final class ConfigManager {
 
     public void saveAll() {
         for (Configurable cfg : configurableList) {
+            cfg.setNewConfigFileDir(this.current_config.getPath());
             cfg.onSave();
         }
         Harakiri.get().getEventManager().dispatchEvent(new EventSaveConfig());
@@ -80,6 +87,7 @@ public final class ConfigManager {
     public void load(Class configurableClassType) {
         for (Configurable cfg : configurableList) {
             if (cfg.getClass().isAssignableFrom(configurableClassType)) {
+                cfg.setNewConfigFileDir(this.current_config.getPath());
                 cfg.onLoad();
             }
         }
@@ -88,6 +96,7 @@ public final class ConfigManager {
 
     public void loadAll() {
         for (Configurable cfg : configurableList) {
+            cfg.setNewConfigFileDir(this.current_config.getPath());
             cfg.onLoad();
         }
         Harakiri.get().getEventManager().dispatchEvent(new EventLoadConfig());

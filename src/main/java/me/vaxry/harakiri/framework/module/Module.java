@@ -4,12 +4,14 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.lua.LUAAPI;
 import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.impl.module.config.ReloadConfigsModule;
 import me.vaxry.harakiri.impl.module.lua.ReloadLuasModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.HoverEvent;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +54,19 @@ public class Module {
         this.key = "NONE";
     }
 
+    public Module(File configfile, String configName, ModuleType type){
+        // For cfgs
+        String[] aliases = new String[1];
+        aliases[0] = configName;
+        this.displayName = configName;
+        this.alias = aliases;
+        this.hidden = true;
+        this.desc = "A config.";
+        this.luaName = configName;
+        this.type = type;
+        this.key = "NONE";
+    }
+
     public Module(String displayName, String[] alias, String key, int color, ModuleType type) {
         this.displayName = displayName;
         this.alias = alias;
@@ -84,11 +99,35 @@ public class Module {
                 // Something failed. too bad!
             }
         }
+
+        if(this.type == ModuleType.CONFIG && !(this instanceof ReloadConfigsModule)){
+            for(Module mod : Harakiri.get().getModuleManager().getModuleList()){
+                if(mod.type != ModuleType.CONFIG)
+                    continue;
+
+                if(mod == this)
+                    continue;
+
+                mod.forceDisableConfigModule();
+            }
+
+            // Push the change to the handler
+
+            ReloadConfigsModule reloadConfigsModule = ((ReloadConfigsModule)Harakiri.get().getModuleManager().find(ReloadConfigsModule.class));
+
+            if(reloadConfigsModule != null) // First launch will be null, thats why i set it in the module
+                reloadConfigsModule.setNewConfigFromMod(this);
+        }
     }
 
     public void onDisable() {
         if(this instanceof ReloadLuasModule)
             return; // Never
+
+        if(this.type == ModuleType.CONFIG){
+            this.setEnabled(true); // Never x2
+            return;
+        }
 
         Harakiri.get().getEventManager().removeEventListener(this);
 
@@ -101,6 +140,10 @@ public class Module {
                 // Something failed. too bad!
             }
         }
+    }
+
+    public void forceDisableConfigModule(){
+        this.setEnabled(false);
     }
 
     public void onToggle() {
@@ -181,7 +224,7 @@ public class Module {
     }
 
     public enum ModuleType {
-        COMBAT, MOVEMENT, RENDER, PLAYER, WORLD, MISC, HIDDEN, UI, LUA
+        COMBAT, MOVEMENT, RENDER, PLAYER, WORLD, MISC, HIDDEN, UI, LUA, CONFIG
     }
 
     public String getDisplayName() {

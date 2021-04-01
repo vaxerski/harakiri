@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.util.FileUtil;
+import me.vaxry.harakiri.impl.management.ConfigManager;
 
 import java.io.File;
 import java.io.FileReader;
@@ -13,12 +14,14 @@ import java.io.FileWriter;
 
 public abstract class Configurable {
 
-    private final File file;
+    private File file;
+    private String configType;
 
     private JsonObject jsonObject;
 
-    public Configurable(File file) {
+    public Configurable(File file, String configType) {
         this.file = file;
+        this.configType = configType;
     }
 
     public File getFile() {
@@ -81,5 +84,10 @@ public abstract class Configurable {
 
     public JsonObject getJsonObject() {
         return jsonObject;
+    }
+
+    public void setNewConfigFileDir(String dir){
+        File newFile = new File(ConfigManager.CONFIG_PATH + dir + "/" + this.configType);
+        this.file = newFile;
     }
 }

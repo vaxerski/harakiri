@@ -12,6 +12,7 @@ import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.effect.PlexusEffect;
 import me.vaxry.harakiri.impl.gui.menu.HaraMainMenu;
 import me.vaxry.harakiri.impl.management.*;
+import me.vaxry.harakiri.impl.module.config.ReloadConfigsModule;
 import me.vaxry.harakiri.impl.module.render.CustomFontModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -123,13 +124,9 @@ public final class Harakiri {
 
             //this.plexusEffect = new PlexusEffect(); -- inits in GuiHudEditor
 
+            this.moduleManager.add(new ReloadConfigsModule(this.moduleManager)); // Load cfgs
             this.configManager.init(); // Keep last, so we load configs after everything else inits
 
-            //this.prevTitle = Display.getTitle();
-            //Display.setTitle("Vaxppuku 1.12.2");
-
-            // Register the menu
-            //MinecraftForge.EVENT_BUS.register(this.haraMainMenu);
 
             this.getEventManager().dispatchEvent(new EventLoad());
 

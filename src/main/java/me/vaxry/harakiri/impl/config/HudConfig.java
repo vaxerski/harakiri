@@ -45,7 +45,7 @@ public final class HudConfig extends Configurable {
     }
 
     public HudConfig(File dir) {
-        super(FileUtil.createJsonFile(dir, "hud"));
+        super(FileUtil.createJsonFile(dir, "hud"), "hud.json");
     }
 
     @Override

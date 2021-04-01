@@ -21,7 +21,7 @@ public final class LuaConfig extends Configurable {
     private final ReloadLuasModule reloadLuasModule;
 
     public LuaConfig(File dir) {
-        super(FileUtil.createJsonFile(dir, "lua"));
+        super(FileUtil.createJsonFile(dir, "lua"), "lua.json");
         this.reloadLuasModule = (ReloadLuasModule) Harakiri.get().getModuleManager().find(ReloadLuasModule.class);
         reloadLuasModule.loadLuas();
     }

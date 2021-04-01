@@ -19,7 +19,7 @@ public final class SearchConfig extends Configurable {
     private final SearchModule searchModule;
 
     public SearchConfig(File dir) {
-        super(FileUtil.createJsonFile(dir, "search"));
+        super(FileUtil.createJsonFile(dir, "search"), "search.json");
         this.searchModule = (SearchModule) Harakiri.get().getModuleManager().find("Search");
     }
 
