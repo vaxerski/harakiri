@@ -31,6 +31,7 @@ public class ReloadConfigsModule extends Module {
         super("Reload Configs", new String[]{"ReloadCFG", "ReloadConfig"}, "Reload the config list", "NONE", -1, ModuleType.CONFIG);
         this.moduleManager = moduleManager;
         this.reloadConfigs();
+        Harakiri.get().getEventManager().addEventListener(this);
     }
 
     @Override
@@ -42,8 +43,10 @@ public class ReloadConfigsModule extends Module {
 
     @Listener
     public void worldLoad(EventLoadWorld event){
-        loadWorldFirst = false;
-        reloadConfigs(); // Sort thing
+        if(loadWorldFirst) {
+            loadWorldFirst = false;
+            reloadConfigs(); // Sort thing
+        }
     }
 
     public void reloadConfigs(){
@@ -227,6 +230,29 @@ public class ReloadConfigsModule extends Module {
         saveStringToFile(this.selected_config.name, lastConfigReader);
     }
 
+    public void setNewConfigFile2(File file, String n){
+        Harakiri.get().getConfigManager().current_config = file;
+
+        Config selectedCfg = null;
+        for(Config cfg : this.configs){
+            if(cfg.name.equalsIgnoreCase(n)){
+                selectedCfg = cfg;
+                break;
+            }
+        }
+
+        this.selected_config = selectedCfg;
+
+        File lastConfigReader = new File(System.getenv("APPDATA") + "\\.minecraft\\harakiri\\config\\configManager.txt");
+        try {
+            if (!lastConfigReader.exists()) {
+                lastConfigReader.createNewFile();
+                saveStringToFile("default", lastConfigReader);
+            }
+        }catch (IOException e){ ; }
+        saveStringToFile(this.selected_config.name, lastConfigReader);
+    }
+
     public void setNewConfigFromMod(Module mod){
 
         Harakiri.get().getConfigManager().saveAll();
@@ -270,6 +296,21 @@ public class ReloadConfigsModule extends Module {
             }
         }catch (IOException e){ ; }
         saveStringToFile(this.selected_config.name, lastConfigReader);
+    }
+
+    public void createNewConfig(String name) {
+        Path configPath = Paths.get(System.getenv("APPDATA") + "\\.minecraft\\harakiri\\config\\" + name);
+        try {
+            Files.createDirectories(configPath);
+        }catch(Throwable t){
+            ;
+        }
+
+        this.reloadConfigs();
+
+        this.setNewConfigFile2(new File(name), name);
+
+        Harakiri.get().getConfigManager().saveAll(); // Save to the new config
     }
 
     public class Config{

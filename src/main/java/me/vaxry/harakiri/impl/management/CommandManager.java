@@ -30,6 +30,7 @@ public final class CommandManager {
         this.commandList.add(new VClipCommand());
         this.commandList.add(new HClipCommand());
         this.commandList.add(new BindCommand());
+        this.commandList.add(new CreateConfigCommand());
         this.commandList.add(new XrayCommand());
         this.commandList.add(new FixKeybindsCommand());
         this.commandList.add(new FriendCommand());
