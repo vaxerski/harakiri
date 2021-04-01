@@ -2,20 +2,16 @@ package me.vaxry.harakiri.impl.management;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.command.Command;
-import me.vaxry.harakiri.framework.event.command.EventCommandLoad;
 import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.util.ReflectionUtil;
 import me.vaxry.harakiri.framework.util.StringUtil;
 import me.vaxry.harakiri.framework.value.Value;
 import me.vaxry.harakiri.impl.command.*;
 import me.vaxry.harakiri.impl.config.ModuleConfig;
 import net.minecraft.util.text.TextComponentString;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * Author Seth
