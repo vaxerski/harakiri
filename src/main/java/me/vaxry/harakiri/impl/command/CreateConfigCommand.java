@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.command;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.command.Command;
 import me.vaxry.harakiri.impl.module.config.ReloadConfigsModule;
@@ -24,5 +25,7 @@ public class CreateConfigCommand extends Command {
         ReloadConfigsModule reloadConfigsModule = ((ReloadConfigsModule) Harakiri.get().getModuleManager().find(ReloadConfigsModule.class));
 
         reloadConfigsModule.createNewConfig(split[1]);
+
+        Harakiri.get().logChat("Created a new config: " + ChatFormatting.GREEN + split[1]);
     }
 }

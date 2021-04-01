@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.config;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.yworks.yguard.test.A;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
@@ -130,6 +131,10 @@ public class ReloadConfigsModule extends Module {
         this.selected_config = selectedCfg;
 
         saveStringToFile(this.selected_config.name, lastConfigReader);
+
+        try{
+            Harakiri.get().logChat(ChatFormatting.GRAY + "Reloaded " + ChatFormatting.RESET + this.configs.size() + ChatFormatting.GRAY + " configs.");
+        }catch (Throwable t){ ; }
     }
 
     protected void saveStringToFile(String str, File f){
@@ -296,6 +301,10 @@ public class ReloadConfigsModule extends Module {
             }
         }catch (IOException e){ ; }
         saveStringToFile(this.selected_config.name, lastConfigReader);
+
+        try{
+            Harakiri.get().logChat(ChatFormatting.GRAY + "Loaded " + ChatFormatting.RESET + this.selected_config.name);
+        }catch (Throwable t){ ; }
     }
 
     public void createNewConfig(String name) {
