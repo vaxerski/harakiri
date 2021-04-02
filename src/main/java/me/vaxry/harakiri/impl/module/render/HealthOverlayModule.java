@@ -41,6 +41,10 @@ public class HealthOverlayModule extends Module {
         final Minecraft mc = Minecraft.getMinecraft();
         final ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
 
+        GlStateManager.enableAlpha();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.enableBlend();
+
         GL11.glDisable(GL11.GL_ALPHA_TEST);
 
         final float health = mc.player.getHealth() + mc.player.getAbsorptionAmount();
@@ -53,10 +57,6 @@ public class HealthOverlayModule extends Module {
         alpha = 1 - alpha;
         alpha *= maxa.getValue() / 255F;
 
-        GlStateManager.enableAlpha();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.enableBlend();
-
         GlStateManager.enableTexture2D();
         GlStateManager.color(1.0f, 1.0f, 1.0f, alpha);
 
@@ -64,8 +64,8 @@ public class HealthOverlayModule extends Module {
         this.overlay.render(0, 0, res.getScaledWidth(), res.getScaledHeight(), 0, 0, 1, 1, alpha);
 
         GlStateManager.disableTexture2D();
-        GlStateManager.disableBlend();
-        GlStateManager.disableAlpha();
+        // GlStateManager.disableBlend();
+        // GlStateManager.disableAlpha();
 
         GL11.glEnable(GL11.GL_ALPHA_TEST);
     }
