@@ -191,8 +191,11 @@ public class ThreatComponent extends DraggableHudComponent {
                 }
             }
 
-            if(isInHole(threat))
+            if(isInHole(threat) == 1) {
                 moreInfo += "\247cIn Hole! \2478 | ";
+            }else if(isInHole(threat) == 2){
+                moreInfo += "\247cVulnerable Hole! \2478 | ";
+            }
 
             if(moreInfo.endsWith("| ")){
                 moreInfo = moreInfo.substring(0, moreInfo.length()-3);
@@ -244,7 +247,7 @@ public class ThreatComponent extends DraggableHudComponent {
         return (int)(Math.sqrt(Math.pow((mc.player.posX - e.posX),2) + Math.pow((mc.player.posY - e.posY),2) + Math.pow((mc.player.posZ - e.posZ),2)));
     }
 
-    private boolean isInHole(EntityPlayer player){
+    private int isInHole(EntityPlayer player){
         final BlockPos legs = new BlockPos(Math.floor(player.posX), Math.floor(player.posY), Math.floor(player.posZ));
         final Minecraft mc = Minecraft.getMinecraft();
 
@@ -252,10 +255,18 @@ public class ThreatComponent extends DraggableHudComponent {
         && isValidHoleMaterial(mc.world.getBlockState(legs.north()).getBlock())
         && isValidHoleMaterial(mc.world.getBlockState(legs.east()).getBlock())
         && isValidHoleMaterial(mc.world.getBlockState(legs.south()).getBlock())
-        && isValidHoleMaterial(mc.world.getBlockState(legs.west()).getBlock()))
-            return true;
+        && isValidHoleMaterial(mc.world.getBlockState(legs.west()).getBlock())) {
+            if(mc.world.getBlockState(legs.down()).getBlock() == Blocks.BEDROCK
+            && mc.world.getBlockState(legs.north()).getBlock() == Blocks.BEDROCK
+            && mc.world.getBlockState(legs.east()).getBlock() == Blocks.BEDROCK
+            && mc.world.getBlockState(legs.south()).getBlock() == Blocks.BEDROCK
+            && mc.world.getBlockState(legs.west()).getBlock() == Blocks.BEDROCK)
+                return 1;
 
-        return false;
+            return 2;
+        }
+
+        return 0;
     }
 
     private boolean isValidHoleMaterial(Block block){
