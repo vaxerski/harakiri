@@ -471,6 +471,9 @@ public final class ModuleListComponent extends ResizableHudComponent {
                                 module.toggle();
                                 this.setDragging(false);
                                 foundOne = true;
+                            }else if(this.type != Module.ModuleType.CONFIG){
+                                module.toggle();
+                                this.setDragging(false);
                             }
                             break;
                         case 1:
