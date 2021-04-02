@@ -460,13 +460,18 @@ public final class ModuleListComponent extends ResizableHudComponent {
 
         if (inside && !insideTitlebar && !isResizeDragging()) {
             int offsetY = BORDER;
+            boolean foundOne = false; // Fix configs being ????
             for (Module module : Harakiri.get().getModuleManager().getModuleList(this.type)) {
                 final boolean insideComponent = mouseX >= (this.getX() + BORDER) * SCALING && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH - 1) * SCALING && mouseY >= (this.getY() + BORDER + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + TEXT_GAP + offsetY - this.scroll) * SCALING && mouseY <= (this.getY() + BORDER + (Harakiri.get().getTTFFontUtil().FONT_HEIGHT * 2) + 1 + offsetY - this.scroll) * SCALING;
+
                 if (insideComponent) {
                     switch (button) {
                         case 0:
-                            module.toggle();
-                            this.setDragging(false);
+                            if(this.type == Module.ModuleType.CONFIG && !foundOne) {
+                                module.toggle();
+                                this.setDragging(false);
+                                foundOne = true;
+                            }
                             break;
                         case 1:
                             if(isCurrentSettingOpen(module.getDisplayName())){
