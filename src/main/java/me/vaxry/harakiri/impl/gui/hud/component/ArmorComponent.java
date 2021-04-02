@@ -33,6 +33,7 @@ public final class ArmorComponent extends DraggableHudComponent {
                 final ItemStack stack = mc.player.inventoryContainer.getSlot(8 - i).getStack();
                 if (!stack.isEmpty()) {
                     GlStateManager.pushMatrix();
+                    RenderHelper.disableStandardItemLighting(); // fix boots
                     RenderHelper.enableGUIStandardItemLighting();
                     mc.getRenderItem().renderItemAndEffectIntoGUI(stack, (int) this.getX() + itemSpacingWidth, (int) this.getY());
                     mc.getRenderItem().renderItemOverlays(mc.fontRenderer, stack, (int) this.getX() + itemSpacingWidth, (int) this.getY());
