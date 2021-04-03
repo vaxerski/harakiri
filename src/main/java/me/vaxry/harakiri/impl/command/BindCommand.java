@@ -19,8 +19,8 @@ public final class BindCommand extends Command {
     }
 
     @Override
-    public void exec(String input) {
-        if (!this.clamp(input, 2, 3)) {
+    public void run(String input) {
+        if (!this.verifyInput(input, 2, 3)) {
             this.printUsage();
             return;
         }
@@ -28,7 +28,7 @@ public final class BindCommand extends Command {
         final String[] split = input.split(" ");
 
         if (equals(clearAlias, split[1])) {
-            if (!this.clamp(input, 2, 2)) {
+            if (!this.verifyInput(input, 2, 2)) {
                 this.printUsage();
                 return;
             }
@@ -48,7 +48,7 @@ public final class BindCommand extends Command {
                 Harakiri.get().logChat("You have no binds");
             }
         } else {
-            if (!this.clamp(input, 3, 3)) {
+            if (!this.verifyInput(input, 3, 3)) {
                 this.printUsage();
                 return;
             }

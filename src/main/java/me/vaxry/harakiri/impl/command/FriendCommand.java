@@ -29,8 +29,8 @@ public final class FriendCommand extends Command {
     }
 
     @Override
-    public void exec(String input) {
-        if (!this.clamp(input, 2, 4)) {
+    public void run(String input) {
+        if (!this.verifyInput(input, 2, 4)) {
             this.printUsage();
             return;
         }
@@ -38,7 +38,7 @@ public final class FriendCommand extends Command {
         final String[] split = input.split(" ");
 
         if (equals(addAlias, split[1])) {
-            if (!this.clamp(input, 3, 4)) {
+            if (!this.verifyInput(input, 3, 4)) {
                 this.printUsage();
                 return;
             }
@@ -50,7 +50,7 @@ public final class FriendCommand extends Command {
                 Harakiri.get().logChat("\247c" + username + " \247fis already your friend");
             } else {
                 if (split.length > 3) {
-                    if (!this.clamp(input, 4, 4)) {
+                    if (!this.verifyInput(input, 4, 4)) {
                         this.printUsage();
                         return;
                     }
@@ -63,7 +63,7 @@ public final class FriendCommand extends Command {
                 }
             }
         } else if (equals(removeAlias, split[1])) {
-            if (!this.clamp(input, 3, 3)) {
+            if (!this.verifyInput(input, 3, 3)) {
                 this.printUsage();
                 return;
             }
@@ -86,7 +86,7 @@ public final class FriendCommand extends Command {
                 Harakiri.get().logChat("\247c" + username + " \247fis not your friend");
             }
         } else if (equals(listAlias, split[1])) {
-            if (!this.clamp(input, 2, 2)) {
+            if (!this.verifyInput(input, 2, 2)) {
                 this.printUsage();
                 return;
             }
@@ -110,7 +110,7 @@ public final class FriendCommand extends Command {
                 Harakiri.get().logChat("You don't have any friends :(");
             }
         } else if (equals(clearAlias, split[1])) {
-            if (!this.clamp(input, 2, 2)) {
+            if (!this.verifyInput(input, 2, 2)) {
                 this.printUsage();
                 return;
             }

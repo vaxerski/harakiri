@@ -16,8 +16,8 @@ public final class PitchCommand extends Command {
     }
 
     @Override
-    public void exec(String input) {
-        if (!this.clamp(input, 2, 2)) {
+    public void run(String input) {
+        if (!this.verifyInput(input, 2, 2)) {
             this.printUsage();
             return;
         }

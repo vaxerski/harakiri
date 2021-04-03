@@ -289,6 +289,8 @@ public class Module {
                 return 0xFF009933;
             case LUA:
                 return 0xFF7777FF;
+            case CONFIG:
+                return 0xFF3399FF;
         }
         return 0xFF000000;
     }

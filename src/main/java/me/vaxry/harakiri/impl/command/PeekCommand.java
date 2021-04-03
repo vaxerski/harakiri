@@ -31,8 +31,8 @@ public final class PeekCommand extends Command {
     }
 
     @Override
-    public void exec(String input) {
-        if (!this.clamp(input, 1, 2)) {
+    public void run(String input) {
+        if (!this.verifyInput(input, 1, 2)) {
             this.printUsage();
             return;
         }
@@ -40,7 +40,7 @@ public final class PeekCommand extends Command {
         final String[] split = input.split(" ");
 
         if (split.length > 1) {
-            if (!this.clamp(input, 2, 2)) {
+            if (!this.verifyInput(input, 2, 2)) {
                 this.printUsage();
                 return;
             }

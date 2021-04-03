@@ -61,8 +61,8 @@ public final class CommandManager {
                     }
 
                     @Override
-                    public void exec(String input) {
-                        if (!this.clamp(input, 2, 3)) {
+                    public void run(String input) {
+                        if (!this.verifyInput(input, 2, 3)) {
                             this.printUsage();
                             return;
                         }
@@ -99,7 +99,7 @@ public final class CommandManager {
                             }
 
                             if (v.getValue() instanceof String) {
-                                if (!this.clamp(input, 3, 3)) {
+                                if (!this.verifyInput(input, 3, 3)) {
                                     this.printUsage();
                                     return;
                                 }
@@ -109,7 +109,7 @@ public final class CommandManager {
                             }
 
                             if (v.getValue() instanceof Number && !(v.getValue() instanceof Enum)) {
-                                if (!this.clamp(input, 3, 3)) {
+                                if (!this.verifyInput(input, 3, 3)) {
                                     this.printUsage();
                                     return;
                                 }
@@ -143,7 +143,7 @@ public final class CommandManager {
                             }
 
                             if (v.getValue() instanceof Enum) {
-                                if (!this.clamp(input, 3, 3) || split[2].matches("-?\\d+(\\.\\d+)?")) { // is a number?
+                                if (!this.verifyInput(input, 3, 3) || split[2].matches("-?\\d+(\\.\\d+)?")) { // is a number?
                                     this.printUsage();
                                     return;
                                 }

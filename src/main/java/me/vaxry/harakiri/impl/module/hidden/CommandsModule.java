@@ -49,7 +49,7 @@ public final class CommandsModule extends Module {
 
             if (command != null) {
                 try {
-                    command.exec(input);
+                    command.run(input);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Harakiri.get().errorChat("Error while running command");

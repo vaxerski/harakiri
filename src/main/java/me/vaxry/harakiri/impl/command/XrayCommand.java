@@ -33,8 +33,8 @@ public final class XrayCommand extends Command {
     }
 
     @Override
-    public void exec(String input) {
-        if (!this.clamp(input, 2, 3)) {
+    public void run(String input) {
+        if (!this.verifyInput(input, 2, 3)) {
             this.printUsage();
             return;
         }
@@ -45,7 +45,7 @@ public final class XrayCommand extends Command {
 
         if (xray != null) {
             if (equals(addAlias, split[1])) {
-                if (!this.clamp(input, 3, 3)) {
+                if (!this.verifyInput(input, 3, 3)) {
                     this.printUsage();
                     return;
                 }
@@ -96,7 +96,7 @@ public final class XrayCommand extends Command {
                     }
                 }
             } else if (equals(removeAlias, split[1])) {
-                if (!this.clamp(input, 3, 3)) {
+                if (!this.verifyInput(input, 3, 3)) {
                     this.printUsage();
                     return;
                 }
@@ -147,7 +147,7 @@ public final class XrayCommand extends Command {
                     }
                 }
             } else if (equals(listAlias, split[1])) {
-                if (!this.clamp(input, 2, 2)) {
+                if (!this.verifyInput(input, 2, 2)) {
                     this.printUsage();
                     return;
                 }
@@ -166,7 +166,7 @@ public final class XrayCommand extends Command {
                     Harakiri.get().logChat("You don't have any xray ids");
                 }
             } else if (equals(clearAlias, split[1])) {
-                if (!this.clamp(input, 2, 2)) {
+                if (!this.verifyInput(input, 2, 2)) {
                     this.printUsage();
                     return;
                 }

@@ -134,7 +134,7 @@ public final class Harakiri {
             fontRendererExtd = new FontRendererExtd(Minecraft.getMinecraft().gameSettings, new ResourceLocation("harakirimod", "textures/ascii.png"), Minecraft.getMinecraft().renderEngine, true);
 
             // Add runtime hook to listen for shutdown to save configs
-            Runtime.getRuntime().addShutdownHook(new Thread("Harakiri Shutdown Hook") {
+            Runtime.getRuntime().addShutdownHook(new Thread("Harakiri SH") {
                 @Override
                 public void run() {
                     getConfigManager().saveAll();
@@ -200,18 +200,6 @@ public final class Harakiri {
         //Display.setTitle(this.prevTitle);
         Minecraft.getMinecraft().ingameGUI.getChatGUI().clearChatMessages(true);
         System.gc();
-    }
-
-    //TODO fix multi event firing when reloading modules
-    public void reload() {
-        this.friendManager.getFriendList().clear();
-        this.macroManager.getMacroList().clear();
-        this.worldManager.getWorldDataList().clear();
-
-        this.configManager.getConfigurableList().clear();
-        this.configManager = new ConfigManager();
-
-        this.getEventManager().dispatchEvent(new EventReload());
     }
 
     public String getUsername(){

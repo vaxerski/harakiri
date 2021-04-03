@@ -16,8 +16,8 @@ public final class ToggleCommand extends Command {
     }
 
     @Override
-    public void exec(String input) {
-        if (!this.clamp(input, 2, 5)) {
+    public void run(String input) {
+        if (!this.verifyInput(input, 2, 5)) {
             this.printUsage();
             return;
         }

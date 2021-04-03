@@ -33,9 +33,9 @@ public abstract class Command {
         this.textComponentUsage = textComponentUsage;
     }
 
-    public abstract void exec(String input);
+    public abstract void run(String input);
 
-    public boolean clamp(String input, int min, int max) {
+    public boolean verifyInput(String input, int min, int max) {
         String[] split = input.split(" ");
         if (split.length > max) {
             Harakiri.get().errorChat("Syntax invalid: Too much input");
@@ -48,7 +48,7 @@ public abstract class Command {
         return true;
     }
 
-    public boolean clamp(String input, int min) {
+    public boolean verifyInput(String input, int min) {
         String[] split = input.split(" ");
         if (split.length < min) {
             Harakiri.get().errorChat("Syntax invalid: Not enough input");
@@ -68,7 +68,7 @@ public abstract class Command {
 
     public void printUsage() {
         final String[] usage = this.getUsage().split("\n");
-        Harakiri.get().logChat("Showing usage for " + this.displayName);
+        Harakiri.get().logChat(ChatFormatting.GRAY + "Showing usage for " + ChatFormatting.RESET + this.displayName + ChatFormatting.GRAY + ":" + ChatFormatting.RESET);
 
         if (this.textComponentUsage != null) {
             this.getTextComponentUsage().getSiblings().forEach(Harakiri.get()::logcChat);
