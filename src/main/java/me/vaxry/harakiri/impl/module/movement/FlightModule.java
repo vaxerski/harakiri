@@ -4,9 +4,9 @@ import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.MathUtil;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiDownloadTerrain;
 import net.minecraft.network.play.client.CPacketConfirmTeleport;
@@ -18,10 +18,6 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Author Seth
- * 4/26/2019 @ 1:56 PM.
- */
 public final class FlightModule extends Module {
 
     public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "The flight mode to use.", Mode.VANILLA);

@@ -1,18 +1,14 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.framework.notification.Notification;
+import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
+import me.vaxry.harakiri.framework.Notification;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
-import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
-import net.minecraft.client.Minecraft;
+import me.vaxry.harakiri.framework.gui.anchor.AnchorPoint;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.opengl.GL11;
 
-/**
- * created by noil on 8/17/2019 at 4:39 PM
- */
 public final class NotificationsComponent extends DraggableHudComponent {
 
     public NotificationsComponent(AnchorPoint anchorPoint) {

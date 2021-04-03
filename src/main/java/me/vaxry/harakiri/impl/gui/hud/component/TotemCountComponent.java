@@ -1,14 +1,10 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-/**
- * Author: fsck
- * 2019-10-21
- */
 public final class TotemCountComponent extends DraggableHudComponent {
 
     public TotemCountComponent() {

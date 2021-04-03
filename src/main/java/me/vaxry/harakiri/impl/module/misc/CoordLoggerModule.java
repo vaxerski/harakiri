@@ -3,22 +3,17 @@ package me.vaxry.harakiri.impl.module.misc;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.server.SPacketEffect;
 import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.network.play.server.SPacketSpawnMob;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/17/2019 @ 12:28 AM.
- */
 public final class CoordLoggerModule extends Module {
 
     public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "Change between various coordlogger modes.", Mode.VANILLA);

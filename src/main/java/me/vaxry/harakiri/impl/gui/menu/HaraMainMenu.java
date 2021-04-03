@@ -1,15 +1,12 @@
 package me.vaxry.harakiri.impl.gui.menu;
 
-import com.yworks.yguard.test.A;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
-import me.vaxry.harakiri.framework.texture.Texture;
+import me.vaxry.harakiri.framework.Texture;
 import me.vaxry.harakiri.impl.fml.harakiriMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.util.ArrayList;

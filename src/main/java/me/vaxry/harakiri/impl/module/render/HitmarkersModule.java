@@ -1,15 +1,14 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import com.yworks.yguard.test.A;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.texture.Texture;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Texture;
 import me.vaxry.harakiri.framework.util.GLUProjection;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.util.Timer;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.impl.module.combat.CrystalAuraModule;
 import me.vaxry.harakiri.impl.module.combat.KillAuraModule;
 import net.minecraft.client.Minecraft;
@@ -17,16 +16,9 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.common.MinecraftForge;
 import org.locationtech.jts.geom.Coordinate;
-import scala.Int;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-import javax.swing.*;
-import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 
 public class HitmarkersModule extends Module {

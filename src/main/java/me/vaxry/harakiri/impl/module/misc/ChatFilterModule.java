@@ -2,9 +2,9 @@ package me.vaxry.harakiri.impl.module.misc;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.StringUtil;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.util.text.TextComponentString;
@@ -13,10 +13,6 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Author Seth
- * 5/25/2019 @ 4:34 AM.
- */
 public final class ChatFilterModule extends Module {
 
     public final Value<Boolean> unicode = new Value<>("Unicode", new String[]{"uc"}, "Reverts \"Fancy Chat\" characters back into normal ones. ", true);

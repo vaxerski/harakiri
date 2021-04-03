@@ -1,16 +1,13 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 
-/**
- * Author Seth
- * 7/28/2019 @ 9:23 AM.
- */
+
 public final class ArmorComponent extends DraggableHudComponent {
 
     private static final int ITEM_SIZE = 18;

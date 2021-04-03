@@ -1,17 +1,14 @@
 package me.vaxry.harakiri.framework.lua.api;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.OneArgFunction;
 import org.luaj.vm2.lib.TwoArgFunction;
 import org.luaj.vm2.lib.VarArgFunction;
-import org.luaj.vm2.lib.ZeroArgFunction;
 
 public class ModuleAPI extends TwoArgFunction {
 

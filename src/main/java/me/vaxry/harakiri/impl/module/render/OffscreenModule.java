@@ -2,11 +2,11 @@ package me.vaxry.harakiri.impl.module.render;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.GLUProjection;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.util.Timer;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;

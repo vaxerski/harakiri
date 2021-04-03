@@ -1,13 +1,9 @@
 package me.vaxry.harakiri.impl.module.world;
 
 import me.vaxry.harakiri.framework.event.world.EventCanCollide;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 6/5/2019 @ 9:03 PM.
- */
 public final class LiquidInteractModule extends Module {
 
     public LiquidInteractModule() {

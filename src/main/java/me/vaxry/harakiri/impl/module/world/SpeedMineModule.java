@@ -5,8 +5,8 @@ import me.vaxry.harakiri.framework.event.player.EventClickBlock;
 import me.vaxry.harakiri.framework.event.player.EventPlayerDamageBlock;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.event.player.EventResetBlockRemoving;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -15,10 +15,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/24/2019 @ 12:16 PM.
- */
 public final class SpeedMineModule extends Module {
 
     public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "The speedmine mode to use.", Mode.PACKET);

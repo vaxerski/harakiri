@@ -1,11 +1,11 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.gui.hud.component.ResizableHudComponent;
+import me.vaxry.harakiri.framework.gui.ResizableHudComponent;
 import me.vaxry.harakiri.framework.util.MathUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.util.Timer;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import org.lwjgl.input.Keyboard;
 
@@ -14,9 +14,6 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * @author noil
- */
 public final class TpsGraphComponent extends ResizableHudComponent {
 
     public final Value<Float> delay = new Value<Float>("Delay", new String[]{"Del"}, "The amount of delay(ms) between updates.", 500.0f, 0.0f, 2500.0f, 100.0f);

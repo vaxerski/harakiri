@@ -3,8 +3,8 @@ package me.vaxry.harakiri.impl.module.misc;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.event.player.EventDestroyBlock;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
@@ -15,10 +15,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 6/6/2019 @ 3:12 AM.
- */
 public final class NoDesyncModule extends Module {
 
     public final Value<Boolean> crystals = new Value<Boolean>("Crystals", new String[]{"Crystal", "c"}, "Attempts to fix crystal desync.", false);

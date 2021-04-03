@@ -8,10 +8,6 @@ import net.minecraft.util.math.Vec3d;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-/**
- * Author Seth
- * 4/16/2019 @ 3:26 AM.
- */
 public final class MathUtil {
 
     public static float TIME_TO_INCLINE = 22.4F / 4F;

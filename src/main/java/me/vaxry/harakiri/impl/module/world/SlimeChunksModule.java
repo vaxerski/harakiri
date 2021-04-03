@@ -4,9 +4,9 @@ import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.RenderUtil;
-import me.vaxry.harakiri.impl.management.WorldManager;
+import me.vaxry.harakiri.impl.manager.WorldManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -19,10 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Author Seth
- * 6/11/2019 @ 4:23 AM.
- */
 public final class SlimeChunksModule extends Module {
 
     private ICamera frustum = new Frustum();

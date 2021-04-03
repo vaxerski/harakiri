@@ -4,17 +4,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.config.Configurable;
+import me.vaxry.harakiri.framework.Configurable;
 import me.vaxry.harakiri.framework.lua.LUAAPI;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.FileUtil;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.impl.module.lua.ReloadLuasModule;
-import me.vaxry.harakiri.impl.module.render.XrayModule;
 
 import java.awt.*;
 import java.io.File;
-import java.util.Objects;
 
 public final class LuaConfig extends Configurable {
 

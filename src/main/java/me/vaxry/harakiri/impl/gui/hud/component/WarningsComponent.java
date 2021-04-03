@@ -1,9 +1,8 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
-import com.yworks.yguard.test.A;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.framework.texture.Texture;
+import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
+import me.vaxry.harakiri.framework.Texture;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import net.minecraft.client.Minecraft;
@@ -12,12 +11,9 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class WarningsComponent extends DraggableHudComponent {
 

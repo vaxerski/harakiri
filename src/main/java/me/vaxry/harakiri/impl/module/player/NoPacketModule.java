@@ -2,15 +2,12 @@ package me.vaxry.harakiri.impl.module.player;
 
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.network.play.client.*;
 import net.minecraft.network.play.server.SPacketDestroyEntities;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * @author noil
- */
 public final class NoPacketModule extends Module {
 
     public final Value<Boolean> player = new Value<Boolean>("Player", new String[]{"pos", "p"}, "Cancel all player related movement packets.", false);

@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.misc;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.impl.fml.harakiriMod;
 import me.vaxry.harakiri.impl.gui.hud.component.SpeedComponent;
 import net.minecraft.client.Minecraft;

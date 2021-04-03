@@ -4,12 +4,12 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.client.EventSaveConfig;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
-import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
-import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
+import me.vaxry.harakiri.framework.gui.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.module.combat.VelocityModule;
 import me.vaxry.harakiri.impl.module.hidden.ArrayListModule;
 import me.vaxry.harakiri.impl.module.render.HudModule;
@@ -21,10 +21,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-/**vaxry
- * @author seth  * 7/25/2019 @ 7:24 AM
- * @author noil
- */
 public final class ArrayListComponent extends DraggableHudComponent {
 
     private ArrayListModule.Mode SORTING_MODE = ArrayListModule.Mode.LENGTH;

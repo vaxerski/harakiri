@@ -2,13 +2,9 @@ package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
 import net.minecraft.client.Minecraft;
 
-/**
- * Author Seth
- * 7/27/2019 @ 7:37 PM.
- */
 public final class FpsComponent extends DraggableHudComponent {
 
     public FpsComponent() {

@@ -1,8 +1,8 @@
 package me.vaxry.harakiri.impl.module.render;
 
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderGlobal;

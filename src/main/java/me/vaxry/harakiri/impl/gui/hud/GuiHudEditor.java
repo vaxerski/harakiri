@@ -1,14 +1,14 @@
 package me.vaxry.harakiri.impl.gui.hud;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
-import me.vaxry.harakiri.framework.texture.Texture;
+import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.HudComponent;
+import me.vaxry.harakiri.framework.Texture;
 import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.MathUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.util.Timer;
-import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
+import me.vaxry.harakiri.framework.gui.anchor.AnchorPoint;
 import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.SwitchViewComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.special.ModuleListComponent;
@@ -17,27 +17,14 @@ import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static org.lwjgl.opengl.GL11.GL_QUADS;
-import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
-import static org.lwjgl.opengl.GL14.GL_FUNC_ADD;
-import static org.lwjgl.opengl.GL14.GL_FUNC_SUBTRACT;
-
-/**
- * Author Seth
- * 7/25/2019 @ 4:15 AM.
- */
 public final class GuiHudEditor extends GuiScreen {
 
     float rainSpeed = 0.1f; // +0.1 default

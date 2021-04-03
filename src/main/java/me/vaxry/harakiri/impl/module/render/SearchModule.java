@@ -5,11 +5,11 @@ import me.vaxry.harakiri.framework.event.player.EventDestroyBlock;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.event.render.EventRenderBlockModel;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.GLUProjection;
 import me.vaxry.harakiri.framework.util.RenderUtil;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -25,12 +25,6 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author noil
- * <p>
- * this will be worked on much more
- * just trying to get a smooth working version out
- */
 public final class SearchModule extends Module {
 
     public final Value<Integer> alpha = new Value<Integer>("Alpha", new String[]{"opacity"}, "Alpha value for the tracer.", 185, 1, 255, 1);

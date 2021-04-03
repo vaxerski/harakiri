@@ -5,10 +5,10 @@ import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.task.rotation.RotationTask;
 import me.vaxry.harakiri.framework.util.*;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.impl.module.player.GodModeModule;
 import me.vaxry.harakiri.impl.module.render.HudModule;
 import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
@@ -37,10 +37,6 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * Author Seth
- * 4/29/2019 @ 1:19 AM.
- */
 public final class CrystalAuraModule extends Module {
 
     public boolean crystalAuraHit = false;

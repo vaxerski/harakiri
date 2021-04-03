@@ -2,16 +2,12 @@ package me.vaxry.harakiri.impl.module.world;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemExpBottle;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/23/2019 @ 12:58 PM.
- */
 public final class FastPlaceModule extends Module {
 
     public final Value<Boolean> xp = new Value<Boolean>("OnlyXP", new String[]{"EXP"}, "Only activate while holding XP bottles.", false);

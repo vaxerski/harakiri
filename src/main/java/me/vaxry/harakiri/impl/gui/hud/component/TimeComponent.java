@@ -1,14 +1,11 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * created by noil on 9/1/2019 at 4:27 PM
- */
 public final class TimeComponent extends DraggableHudComponent {
 
     public TimeComponent() {

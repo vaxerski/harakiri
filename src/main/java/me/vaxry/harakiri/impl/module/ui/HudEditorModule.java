@@ -1,18 +1,14 @@
 package me.vaxry.harakiri.impl.module.ui;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
 
-/**
- * Author Seth
- * 7/25/2019 @ 4:16 AM.
- */
 public final class HudEditorModule extends Module {
 
     public final Value<Color> color = new Value<Color>("AccentColor", new String[]{"color", "accentcolor"}, "Change the accent color.", new Color(255, 255, 255));

@@ -3,14 +3,10 @@ package me.vaxry.harakiri.impl.module.render;
 import me.vaxry.harakiri.framework.event.gui.EventRenderHelmet;
 import me.vaxry.harakiri.framework.event.gui.EventRenderPortal;
 import me.vaxry.harakiri.framework.event.render.EventRenderOverlay;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/9/2019 @ 12:45 AM.
- */
 public final class NoOverlayModule extends Module {
 
     public final Value<Boolean> portal = new Value<Boolean>("Portal", new String[]{}, "Disables the portal overlay.", true);

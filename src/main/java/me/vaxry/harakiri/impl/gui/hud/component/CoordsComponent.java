@@ -2,15 +2,11 @@ package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
 import net.minecraft.client.Minecraft;
 
 import java.text.DecimalFormat;
 
-/**
- * Author Seth
- * 7/27/2019 @ 7:44 PM.
- */
 public final class CoordsComponent extends DraggableHudComponent {
 
     public CoordsComponent() {

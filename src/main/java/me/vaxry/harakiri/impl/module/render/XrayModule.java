@@ -4,7 +4,7 @@ import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRenderBlockModel;
 import me.vaxry.harakiri.framework.event.render.EventRenderBlockSide;
 import me.vaxry.harakiri.framework.event.world.EventSetOpaqueCube;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
@@ -12,10 +12,6 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Author Seth
- * 4/9/2019 @ 12:58 PM.
- */
 public final class XrayModule extends Module {
 
     private List<Integer> ids = new ArrayList<>();

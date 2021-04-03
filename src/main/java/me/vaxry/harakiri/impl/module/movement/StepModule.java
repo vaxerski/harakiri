@@ -1,13 +1,11 @@
 package me.vaxry.harakiri.impl.module.movement;
 
-import com.yworks.yguard.test.B;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventMove;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.framework.event.render.EventRender2D;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.impl.module.world.TimerModule;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -16,12 +14,9 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import org.locationtech.jts.geom.Coordinate;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import javax.vecmath.Vector2f;
-import java.util.List;
 
 public final class StepModule extends Module {
 

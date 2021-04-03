@@ -2,15 +2,11 @@ package me.vaxry.harakiri.impl.module.misc;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/19/2019 @ 10:03 PM.
- */
 public final class NoRotateModule extends Module {
 
     public NoRotateModule() {

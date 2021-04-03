@@ -3,7 +3,7 @@ package me.vaxry.harakiri.impl.gui.hud.component;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.event.world.EventSpawnEntity;
-import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
 import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.GLUProjection;
 import me.vaxry.harakiri.framework.util.RenderUtil;

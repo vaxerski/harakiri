@@ -6,10 +6,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-/**
- * @author noil
- */
-
 public final class InventoryUtil {
 
     private static final Minecraft mc = Minecraft.getMinecraft();

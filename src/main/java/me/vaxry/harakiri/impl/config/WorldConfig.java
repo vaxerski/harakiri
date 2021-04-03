@@ -3,15 +3,12 @@ package me.vaxry.harakiri.impl.config;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.config.Configurable;
+import me.vaxry.harakiri.framework.Configurable;
 import me.vaxry.harakiri.framework.util.FileUtil;
-import me.vaxry.harakiri.impl.management.WorldManager;
+import me.vaxry.harakiri.impl.manager.WorldManager;
 
 import java.io.File;
 
-/**
- * @author noil
- */
 public final class WorldConfig extends Configurable {
 
     public WorldConfig(File dir) {

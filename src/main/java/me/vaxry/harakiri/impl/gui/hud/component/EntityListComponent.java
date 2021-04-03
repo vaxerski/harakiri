@@ -3,9 +3,9 @@ package me.vaxry.harakiri.impl.gui.hud.component;
 import com.google.common.collect.Lists;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.friend.Friend;
-import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
+import me.vaxry.harakiri.framework.Friend;
+import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.HudComponent;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockShulkerBox;
@@ -28,9 +28,6 @@ import net.minecraft.tileentity.TileEntityShulkerBox;
 
 import java.util.List;
 
-/**
- * @author noil
- */
 public final class EntityListComponent extends DraggableHudComponent {
 
     private final List<EntityGroup> entityGroups;

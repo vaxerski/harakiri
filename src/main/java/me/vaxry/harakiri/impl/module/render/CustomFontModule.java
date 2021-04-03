@@ -1,9 +1,7 @@
 package me.vaxry.harakiri.impl.module.render;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.module.Module;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
+import me.vaxry.harakiri.framework.Module;
 
 public class CustomFontModule extends Module {
 

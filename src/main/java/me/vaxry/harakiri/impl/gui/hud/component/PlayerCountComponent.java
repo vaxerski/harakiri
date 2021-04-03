@@ -1,12 +1,8 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
 
-/**
- * Author Seth
- * 12/5/2019 @ 3:00 PM.
- */
 public final class PlayerCountComponent extends DraggableHudComponent {
 
     public PlayerCountComponent() {

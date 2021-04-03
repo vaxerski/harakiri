@@ -2,15 +2,11 @@ package me.vaxry.harakiri.impl.module.movement;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketPlayer;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/20/2019 @ 9:00 AM.
- */
 public final class NoFallModule extends Module {
 
     public NoFallModule() {

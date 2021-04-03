@@ -3,11 +3,11 @@ package me.vaxry.harakiri.impl.module.render;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.GLUProjection;
 import me.vaxry.harakiri.framework.util.MathUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityBoat;
@@ -21,10 +21,6 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.awt.*;
 
-/**
- * @author Seth
- * @author noil
- */
 public final class TracersModule extends Module {
 
     public final Value<Boolean> players = new Value<Boolean>("Players", new String[]{"Player"}, "Choose to enable on players.", true);

@@ -7,19 +7,16 @@ import me.vaxry.harakiri.framework.event.player.*;
 import me.vaxry.harakiri.framework.event.render.EventRenderOverlay;
 import me.vaxry.harakiri.framework.event.world.EventAddCollisionBox;
 import me.vaxry.harakiri.framework.event.world.EventSetOpaqueCube;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.MathUtil;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.Vec3d;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/26/2019 @ 11:56 AM.
- */
+
 public final class PhaseModule extends Module {
 
     public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "The phase mode to use.", Mode.SAND);

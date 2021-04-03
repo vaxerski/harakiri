@@ -4,10 +4,10 @@ import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.client.EventSaveConfig;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
@@ -19,10 +19,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Seth
- * @author noil
- */
 public final class NewChunksModule extends Module {
 
     public final Value<Color> color = new Value<Color>("Color", new String[]{"color", "c"}, "Change the color.", new Color(255, 255, 255));

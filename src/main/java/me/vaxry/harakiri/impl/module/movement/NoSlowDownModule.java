@@ -6,8 +6,8 @@ import me.vaxry.harakiri.framework.event.player.EventUpdateInput;
 import me.vaxry.harakiri.framework.event.world.EventCollideSoulSand;
 import me.vaxry.harakiri.framework.event.world.EventLandOnSlime;
 import me.vaxry.harakiri.framework.event.world.EventWalkOnSlime;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemShield;
@@ -15,10 +15,6 @@ import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.util.math.BlockPos;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/10/2019 @ 3:16 AM.
- */
 public final class NoSlowDownModule extends Module {
 
     public final Value<Boolean> soulsand = new Value<Boolean>("SoulSand", new String[]{"Soul", "SS"}, "No slowdown from soul sand.", true);

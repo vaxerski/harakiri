@@ -2,15 +2,12 @@ package me.vaxry.harakiri.impl.module.misc;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.player.EventSendChatMessage;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.impl.module.hidden.CommandsModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketChatMessage;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * created by noil on 11/8/19 at 7:48 PM
- */
 public final class ChatSuffixModule extends Module {
 
     private final String prefix = "\u23D0 \u8179\u5207harakiri";

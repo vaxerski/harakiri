@@ -5,12 +5,12 @@ import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.task.hand.HandSwapContext;
 import me.vaxry.harakiri.framework.task.rotation.RotationTask;
 import me.vaxry.harakiri.framework.util.MathUtil;
 import me.vaxry.harakiri.framework.util.Timer;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockObsidian;
@@ -34,10 +34,6 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.util.List;
 
-/**
- * @author Seth
- * @author noil
- */
 public final class NoCrystalModule extends Module {
 
     private final Minecraft mc = Minecraft.getMinecraft();

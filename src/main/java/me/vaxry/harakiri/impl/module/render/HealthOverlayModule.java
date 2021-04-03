@@ -1,27 +1,13 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.texture.Texture;
-import me.vaxry.harakiri.framework.util.GLUProjection;
-import me.vaxry.harakiri.framework.util.RenderUtil;
-import me.vaxry.harakiri.framework.util.Timer;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Texture;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.culling.Frustum;
-import net.minecraft.client.renderer.culling.ICamera;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.Color;
-import org.lwjgl.util.vector.Vector2f;
-import org.lwjgl.util.vector.Vector3f;
-import scala.collection.parallel.ParIterableLike;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public class HealthOverlayModule extends Module {

@@ -2,16 +2,12 @@ package me.vaxry.harakiri.impl.module.movement;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.player.EventMove;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.client.Minecraft;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/25/2019 @ 6:29 PM.
- */
 public final class SafeWalkModule extends Module {
 
     public final Value<Integer> height = new Value<Integer>("Height", new String[]{"Hei", "H"}, "Checks height.", 1, 0, 32, 1);

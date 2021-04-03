@@ -1,47 +1,31 @@
 package me.vaxry.harakiri.impl.fml.core;
 
-import me.vaxry.harakiri.framework.texture.Texture;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLContext;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mixins;
 
 import javax.annotation.Nullable;
-import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
 import javax.swing.*;
-import java.io.InputStream;
 import java.nio.IntBuffer;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.*;
-import org.lwjgl.opengl.GL11.*;
-import org.lwjgl.opengl.GL12.*;
-import org.lwjgl.*;
+
 import org.lwjgl.opengl.*;
 
-/**
- * Author Seth
- * 4/5/2019 @ 1:24 AM.
- */
 @IFMLLoadingPlugin.TransformerExclusions(value = "me.vaxry.harakiri.impl.fml.core")
 @IFMLLoadingPlugin.Name(value = "Harakiri")
 @IFMLLoadingPlugin.MCVersion(value = "1.12.2")

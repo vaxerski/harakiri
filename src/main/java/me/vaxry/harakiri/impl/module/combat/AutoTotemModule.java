@@ -3,8 +3,8 @@ package me.vaxry.harakiri.impl.module.combat;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.init.Items;
@@ -13,10 +13,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/30/2019 @ 3:37 AM.
- */
 public final class AutoTotemModule extends Module {
 
     public final Value<Boolean> healthmode = new Value("HealthMode", new String[]{"Healthmode"}, "To use health mode.", true);

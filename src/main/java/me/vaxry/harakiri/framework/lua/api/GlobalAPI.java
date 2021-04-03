@@ -1,12 +1,11 @@
 package me.vaxry.harakiri.framework.lua.api;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.notification.Notification;
+import me.vaxry.harakiri.framework.Notification;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.OneArgFunction;
 import org.luaj.vm2.lib.TwoArgFunction;
 import org.luaj.vm2.lib.ZeroArgFunction;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;

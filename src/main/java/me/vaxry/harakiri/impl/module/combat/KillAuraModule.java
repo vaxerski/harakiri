@@ -2,10 +2,10 @@ package me.vaxry.harakiri.impl.module.combat;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.task.rotation.RotationTask;
 import me.vaxry.harakiri.framework.util.MathUtil;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,10 +25,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/30/2019 @ 4:04 PM.
- */
 public final class KillAuraModule extends Module {
 
     public boolean killAuraHit = false;

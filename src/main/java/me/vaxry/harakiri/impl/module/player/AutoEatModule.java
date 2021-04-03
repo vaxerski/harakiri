@@ -2,8 +2,8 @@ package me.vaxry.harakiri.impl.module.player;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
@@ -12,9 +12,6 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * @author noil
- */
 public final class AutoEatModule extends Module {
 
     public final Value<Float> hunger = new Value<Float>("Hunger", new String[]{"food", "h"}, "The amount of hunger needed to acquire some food.", 9.0f, 0.0f, 20.0f, 0.5f);

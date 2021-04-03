@@ -1,11 +1,10 @@
 package me.vaxry.harakiri.impl.module.config;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import com.yworks.yguard.test.A;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.impl.management.ModuleManager;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.impl.manager.ModuleManager;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.io.File;

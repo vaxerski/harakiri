@@ -1,15 +1,11 @@
 package me.vaxry.harakiri.impl.module.combat;
 
 import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGameOver;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/20/2019 @ 9:09 AM.
- */
 public final class RespawnModule extends Module {
 
     public RespawnModule() {

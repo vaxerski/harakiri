@@ -3,15 +3,12 @@ package me.vaxry.harakiri.impl.config;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.config.Configurable;
-import me.vaxry.harakiri.framework.friend.Friend;
+import me.vaxry.harakiri.framework.Configurable;
+import me.vaxry.harakiri.framework.Friend;
 import me.vaxry.harakiri.framework.util.FileUtil;
 
 import java.io.File;
 
-/**
- * @author noil
- */
 public final class FriendConfig extends Configurable {
 
     public FriendConfig(File dir) {

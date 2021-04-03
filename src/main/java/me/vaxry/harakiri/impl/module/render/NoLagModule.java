@@ -1,16 +1,14 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import com.yworks.yguard.test.A;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.event.render.*;
 import me.vaxry.harakiri.framework.event.world.EventLightUpdate;
 import me.vaxry.harakiri.framework.event.world.EventSpawnParticle;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.block.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.item.EntityFireworkRocket;
@@ -22,18 +20,11 @@ import net.minecraft.network.play.server.SPacketSpawnMob;
 import net.minecraft.tileentity.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import org.spongepowered.asm.mixin.Mixin;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
-/**
- * Author Seth
- * 4/11/2019 @ 3:48 AM.
- */
 public final class NoLagModule extends Module {
 
     public final Value<Boolean> light = new Value<Boolean>("Light", new String[]{"Lit", "l"}, "Disables lighting updates.", true);

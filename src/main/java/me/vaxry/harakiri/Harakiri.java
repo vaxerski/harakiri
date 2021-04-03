@@ -1,24 +1,22 @@
 package me.vaxry.harakiri;
 
 import me.vaxry.harakiri.framework.event.client.EventLoad;
-import me.vaxry.harakiri.framework.event.client.EventReload;
 import me.vaxry.harakiri.framework.event.client.EventUnload;
 import me.vaxry.harakiri.framework.extd.FontRendererExtd;
 import me.vaxry.harakiri.framework.extd.RenderItemAlpha;
-import me.vaxry.harakiri.framework.logging.harakiriFormatter;
+import me.vaxry.harakiri.framework.harakiriFormatter;
 import me.vaxry.harakiri.framework.util.TTFFontUtil;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.component.PlexusComponent;
 import me.vaxry.harakiri.impl.gui.hud.component.effect.PlexusEffect;
 import me.vaxry.harakiri.impl.gui.menu.HaraMainMenu;
-import me.vaxry.harakiri.impl.management.*;
+import me.vaxry.harakiri.impl.manager.*;
 import me.vaxry.harakiri.impl.module.config.ReloadConfigsModule;
 import me.vaxry.harakiri.impl.module.render.CustomFontModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import team.stiff.pomelo.EventManager;

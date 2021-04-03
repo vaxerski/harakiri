@@ -1,15 +1,11 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
 import net.minecraft.client.network.NetworkPlayerInfo;
 
 import java.util.Objects;
 
-/**
- * Author Seth
- * 7/28/2019 @ 9:41 AM.
- */
 public final class PingComponent extends DraggableHudComponent {
 
     public PingComponent() {

@@ -8,9 +8,9 @@ import me.vaxry.harakiri.framework.event.player.EventPlayerLeave;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.GLUProjection;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,9 +19,6 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.util.Map;
 
-/**
- * created by noil on 11/5/2019 at 6:37 PM
- */
 public final class LogoutSpotsModule extends Module {
 
     public final Value<Integer> removeDistance = new Value<Integer>("RemoveDistance", new String[]{"RD", "RemoveRange"}, "Minimum distance in blocks the player must be away from the spot for it to be deleted.", 200, 1, 2000, 1);

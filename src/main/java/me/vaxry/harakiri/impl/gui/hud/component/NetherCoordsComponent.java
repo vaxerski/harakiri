@@ -1,11 +1,7 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
-import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
+import me.vaxry.harakiri.framework.gui.HudComponent;
 
-/**
- * Author Seth
- * 7/27/2019 @ 7:45 PM.
- */
 public final class NetherCoordsComponent extends HudComponent {
 
     public NetherCoordsComponent() {

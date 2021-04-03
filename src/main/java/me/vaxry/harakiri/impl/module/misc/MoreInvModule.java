@@ -2,15 +2,11 @@ package me.vaxry.harakiri.impl.module.misc;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketCloseWindow;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/16/2019 @ 6:19 PM.
- */
 public final class MoreInvModule extends Module {
 
     public MoreInvModule() {

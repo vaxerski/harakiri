@@ -2,17 +2,14 @@ package me.vaxry.harakiri.impl.module.player;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemStack;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * @author noil
- */
 public final class AutoGappleModule extends Module {
 
     public final Value<Float> health = new Value<Float>("Health", new String[]{"Hp", "h"}, "The amount of health needed to acquire a notch apple.", 8.0f, 0.0f, 20.0f, 0.5f);

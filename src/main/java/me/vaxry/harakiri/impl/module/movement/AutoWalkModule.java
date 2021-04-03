@@ -6,17 +6,13 @@ import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.Timer;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiDisconnected;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * @author Seth
- * @author noil
- */
 public final class AutoWalkModule extends Module {
 
     public final Value<Boolean> pressKeybind = new Value<>("PressKeybind", new String[]{"Keybind", "Key-bind", "PK", "P"}, "Presses the w key for you.", true);

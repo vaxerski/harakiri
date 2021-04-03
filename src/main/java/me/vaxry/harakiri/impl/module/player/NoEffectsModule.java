@@ -2,15 +2,12 @@ package me.vaxry.harakiri.impl.module.player;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.server.SPacketEntityEffect;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * @author noil
- */
 public final class NoEffectsModule extends Module {
 
     /* any anti-cheat */

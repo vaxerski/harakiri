@@ -2,9 +2,9 @@ package me.vaxry.harakiri.impl.module.combat;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.Timer;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -15,9 +15,6 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * @author noil
- */
 public final class AutoArmorModule extends Module {
 
     public final Value<Float> delay = new Value<Float>("Delay", new String[]{"Del"}, "Delay, in milliseconds.", 250.0f, 0.0f, 500.f, 1.0f);

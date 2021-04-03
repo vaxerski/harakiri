@@ -1,46 +1,19 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import akka.japi.Pair;
-import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.event.EventStageable;
-import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
-import me.vaxry.harakiri.framework.event.render.EventRenderEntities;
-import me.vaxry.harakiri.framework.event.render.EventRenderEntity;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.util.ColorUtil;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.GLUProjection;
-import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.util.Timer;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.tileentity.*;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.locationtech.jts.geom.*;
-import org.locationtech.jts.geom.util.AffineTransformation;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector3f;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-import java.awt.geom.AffineTransform;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.*;
-
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_NICEST;
 
 
 public final class StorageESPModule extends Module {

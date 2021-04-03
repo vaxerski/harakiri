@@ -4,13 +4,13 @@ import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.player.EventRightClickBlock;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.task.rotation.RotationTask;
 import me.vaxry.harakiri.framework.util.BlockUtil;
 import me.vaxry.harakiri.framework.util.EntityUtil;
 import me.vaxry.harakiri.framework.util.MathUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -27,10 +27,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 6/10/2019 @ 2:31 PM.
- */
 public final class NukerModule extends Module {
 
     float r = 0xFE;

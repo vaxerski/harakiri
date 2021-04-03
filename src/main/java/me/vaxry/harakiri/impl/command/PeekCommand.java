@@ -1,7 +1,7 @@
 package me.vaxry.harakiri.impl.command;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.command.Command;
+import me.vaxry.harakiri.framework.Command;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockShulkerBox;

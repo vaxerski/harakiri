@@ -1,9 +1,5 @@
 package me.vaxry.harakiri.framework.util;
 
-/**
- * Author Seth
- * 4/29/2019 @ 1:26 AM.
- */
 public final class Timer {
 
     private long time;

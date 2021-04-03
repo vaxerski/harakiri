@@ -1,15 +1,12 @@
 package me.vaxry.harakiri.impl.module.world;
 
 import me.vaxry.harakiri.framework.event.player.EventGetMouseOver;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemTool;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * @author noil
- */
 public final class NoEntityTraceModule extends Module {
 
     public Value<Boolean> toolsOnly = new Value<Boolean>("Tools", new String[]{"OnlyTools", "Tool", "Pickaxe", "Axe", "Shovel"}, "Only enable when holding a tool.", true);

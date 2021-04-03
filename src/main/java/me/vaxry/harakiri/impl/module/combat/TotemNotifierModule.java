@@ -4,7 +4,7 @@ import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.minecraft.EventRunTick;
 import me.vaxry.harakiri.framework.event.world.EventRemoveEntity;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,10 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * @author jvyden
- * @since 6/24/20
- */
 public class TotemNotifierModule extends Module {
     final Minecraft mc = Minecraft.getMinecraft();
 

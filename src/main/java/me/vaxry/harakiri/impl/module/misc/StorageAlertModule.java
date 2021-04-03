@@ -5,11 +5,9 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.util.FileUtil;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.impl.module.hidden.CommandsModule;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketChunkData;
 import net.minecraft.util.math.Vec2f;
@@ -19,19 +17,8 @@ import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
-/**
- * Author Seth
- * 8/25/2019 @ 10:27 PM.
- */
 public final class StorageAlertModule extends Module {
 
     public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "Change between alert modes.", Mode.BOTH);

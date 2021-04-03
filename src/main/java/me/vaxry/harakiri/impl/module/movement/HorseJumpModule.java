@@ -2,14 +2,10 @@ package me.vaxry.harakiri.impl.module.movement;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 5/11/2019 @ 7:30 AM.
- */
 public final class HorseJumpModule extends Module {
 
     public HorseJumpModule() {

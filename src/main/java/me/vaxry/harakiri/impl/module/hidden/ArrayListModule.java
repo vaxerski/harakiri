@@ -1,12 +1,8 @@
 package me.vaxry.harakiri.impl.module.hidden;
 
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 
-/**
- * Author Ice
- * 05/06/2020 @ 22:49 PM.
- */
 public class ArrayListModule extends Module {
 
     public final Value<ArrayListModule.Mode> mode = new Value<ArrayListModule.Mode>("Sorting", new String[]{"Sorting", "sort"}, "Changes arraylist sorting method.", ArrayListModule.Mode.LENGTH);

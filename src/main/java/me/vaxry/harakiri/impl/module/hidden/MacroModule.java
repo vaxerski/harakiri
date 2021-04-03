@@ -2,16 +2,12 @@ package me.vaxry.harakiri.impl.module.hidden;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.minecraft.EventKeyPress;
-import me.vaxry.harakiri.framework.macro.Macro;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Macro;
+import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 5/7/2019 @ 9:49 PM.
- */
 public final class MacroModule extends Module {
 
     public MacroModule() {

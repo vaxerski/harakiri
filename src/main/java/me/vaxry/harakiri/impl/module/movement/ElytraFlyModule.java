@@ -5,10 +5,10 @@ import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.event.player.EventMove;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.MathUtil;
 import me.vaxry.harakiri.framework.util.Timer;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -23,11 +23,6 @@ import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.util.math.BlockPos;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Authors Seth & noil
- * <p>
- * 5/2/2019 @ 12:43 AM.
- */
 public final class ElytraFlyModule extends Module {
 
     public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "Mode to use for elytra flight.", Mode.VANILLA);

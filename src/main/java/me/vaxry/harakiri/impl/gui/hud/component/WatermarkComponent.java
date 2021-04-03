@@ -2,8 +2,8 @@ package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
-import me.vaxry.harakiri.framework.texture.Texture;
+import me.vaxry.harakiri.framework.gui.HudComponent;
+import me.vaxry.harakiri.framework.Texture;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.impl.fml.harakiriMod;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
@@ -19,10 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-/**
- * Author Seth
- * 7/25/2019 @ 4:55 AM.
- */
 public final class WatermarkComponent extends HudComponent {
 
     private final String WATERMARK = ChatFormatting.BOLD + "Harakiri | " + ChatFormatting.LIGHT_PURPLE + harakiriMod.VERSION;

@@ -3,10 +3,10 @@ package me.vaxry.harakiri.impl.module.render;
 import akka.japi.Pair;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.MathUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -24,9 +24,6 @@ import java.util.List;
 
 import static org.lwjgl.opengl.GL11.glLineWidth;
 
-/**
- * created by noil on 10/4/2019 at 6:05 PM
- */
 public final class HolesModule extends Module {
 
     public enum MODES{

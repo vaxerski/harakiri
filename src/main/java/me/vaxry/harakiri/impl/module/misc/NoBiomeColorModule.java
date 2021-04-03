@@ -5,17 +5,13 @@ import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.event.world.EventFoliageColor;
 import me.vaxry.harakiri.framework.event.world.EventGrassColor;
 import me.vaxry.harakiri.framework.event.world.EventWaterColor;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.awt.*;
 
-/**
- * Author Seth
- * 8/11/2019 @ 1:27 AM.
- */
 public final class NoBiomeColorModule extends Module {
 
     public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "Change between NoBiomeColor modes, Default to use vanilla colors, Custom to use specified RGB values.", Mode.DEFAULT);

@@ -3,13 +3,9 @@ package me.vaxry.harakiri.impl.module.player;
 import me.vaxry.harakiri.framework.event.player.EventApplyCollision;
 import me.vaxry.harakiri.framework.event.player.EventPushOutOfBlocks;
 import me.vaxry.harakiri.framework.event.player.EventPushedByWater;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/9/2019 @ 12:52 AM.
- */
 public final class NoPushModule extends Module {
 
     public NoPushModule() {

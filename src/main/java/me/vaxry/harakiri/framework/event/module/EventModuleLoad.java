@@ -1,6 +1,6 @@
 package me.vaxry.harakiri.framework.event.module;
 
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 
 /**
  * Author Seth

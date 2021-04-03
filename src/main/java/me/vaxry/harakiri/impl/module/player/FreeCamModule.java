@@ -10,9 +10,9 @@ import me.vaxry.harakiri.framework.event.world.EventAddCollisionBox;
 import me.vaxry.harakiri.framework.event.world.EventLiquidCollisionBB;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
 import me.vaxry.harakiri.framework.event.world.EventSetOpaqueCube;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.MathUtil;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
@@ -23,10 +23,6 @@ import net.minecraft.network.play.server.SPacketSetPassengers;
 import net.minecraft.util.math.Vec3d;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/24/2019 @ 7:45 PM.
- */
 public final class FreeCamModule extends Module {
 
     private Entity riding;

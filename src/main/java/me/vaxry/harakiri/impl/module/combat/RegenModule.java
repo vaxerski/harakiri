@@ -2,8 +2,8 @@ package me.vaxry.harakiri.impl.module.combat;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
@@ -12,10 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 5/1/2019 @ 12:13 AM.
- */
 public final class RegenModule extends Module {
 
     public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "Healing mode.", Mode.GAPPLE);

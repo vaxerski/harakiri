@@ -2,18 +2,14 @@ package me.vaxry.harakiri.impl.module.combat;
 
 import akka.japi.Pair;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventMove;
-import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.BlockInteractionUtil;
-import me.vaxry.harakiri.framework.value.Value;
-import me.vaxry.harakiri.impl.module.player.FreeCamModule;
+import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.impl.module.render.HolesModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import scala.tools.reflect.quasiquotes.Holes;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public class AnchorModule extends Module {

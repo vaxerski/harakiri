@@ -3,8 +3,8 @@ package me.vaxry.harakiri.impl.module.world;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import me.vaxry.harakiri.framework.event.player.EventPlayerDamageBlock;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -19,10 +19,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/24/2019 @ 3:04 PM.
- */
 public final class AutoToolModule extends Module {
 
     public final Value<Boolean> silent = new Value<Boolean>("Silent", new String[]{"Sil"}, "Hold any item and spoof your mining tool.", false);

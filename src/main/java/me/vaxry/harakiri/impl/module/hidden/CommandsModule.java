@@ -1,22 +1,18 @@
 package me.vaxry.harakiri.impl.module.hidden;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.command.Command;
+import me.vaxry.harakiri.framework.Command;
 import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
 import me.vaxry.harakiri.framework.event.minecraft.EventKeyPress;
 import me.vaxry.harakiri.framework.event.player.EventSendChatMessage;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiMainMenu;
 import org.lwjgl.input.Keyboard;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/16/2019 @ 8:44 AM.
- */
 public final class CommandsModule extends Module {
 
     private boolean once = false;

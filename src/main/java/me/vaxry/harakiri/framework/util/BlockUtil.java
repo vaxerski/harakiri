@@ -8,9 +8,6 @@ import net.minecraft.util.math.Vec3d;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author noil
- */
 public class BlockUtil {
 
     private static final Minecraft mc = Minecraft.getMinecraft();

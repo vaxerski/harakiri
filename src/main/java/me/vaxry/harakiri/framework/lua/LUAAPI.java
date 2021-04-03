@@ -2,9 +2,8 @@ package me.vaxry.harakiri.framework.lua;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.lua.api.*;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.Timer;
-import net.minecraftforge.fml.common.Mod;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LoadState;
 import org.luaj.vm2.LuaValue;
@@ -12,10 +11,8 @@ import org.luaj.vm2.compiler.LuaC;
 import org.luaj.vm2.lib.*;
 import org.luaj.vm2.lib.jse.*;
 
-import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 

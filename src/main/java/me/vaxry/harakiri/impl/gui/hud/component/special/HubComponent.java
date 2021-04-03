@@ -2,16 +2,14 @@ package me.vaxry.harakiri.impl.gui.hud.component.special;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.gui.hud.EventHubComponentClick;
-import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
-import me.vaxry.harakiri.framework.gui.hud.component.ResizableHudComponent;
-import me.vaxry.harakiri.framework.texture.Texture;
+import me.vaxry.harakiri.framework.gui.HudComponent;
+import me.vaxry.harakiri.framework.gui.ResizableHudComponent;
+import me.vaxry.harakiri.framework.Texture;
 import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.gui.hud.component.SwitchViewComponent;
-import me.vaxry.harakiri.impl.gui.hud.component.special.ModuleListComponent;
-import me.vaxry.harakiri.impl.gui.hud.component.special.ModuleSearchComponent;
 import me.vaxry.harakiri.impl.module.render.HudModule;
 import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import net.minecraft.client.gui.ScaledResolution;
@@ -19,9 +17,6 @@ import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-/**
- * created by noil on 9/29/2019 at 12:23 PM
- */
 public final class HubComponent extends ResizableHudComponent {
 
     private int scroll;
@@ -41,7 +36,7 @@ public final class HubComponent extends ResizableHudComponent {
     private int rainbowCol = 0xFFFFFFFF;
     private int rainbowColBG = 0x45FFFFFF;
 
-    private final Texture texture;
+    //private final Texture texture;
 
     private Timer timer = new Timer();
 
@@ -56,7 +51,7 @@ public final class HubComponent extends ResizableHudComponent {
 
     public HubComponent() {
         super("Components", 100, 120, 125, 1000);
-        this.texture = new Texture("module-components.png");
+        //this.texture = new Texture("module-components.png");
 
         this.setVisible(true);
         this.setSnappable(false);

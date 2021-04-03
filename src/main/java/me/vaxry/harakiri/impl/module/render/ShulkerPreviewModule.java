@@ -2,9 +2,9 @@ package me.vaxry.harakiri.impl.module.render;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.gui.EventRenderTooltip;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.RenderUtil;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockShulkerBox;
 import net.minecraft.client.Minecraft;
@@ -20,9 +20,6 @@ import net.minecraft.util.NonNullList;
 import org.lwjgl.input.Mouse;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * created by noil on 11/4/19 at 1:59 PM
- */
 public final class ShulkerPreviewModule extends Module {
 
     public final Value<Boolean> middleClick = new Value("MiddleClick", new String[]{"MC", "Mid"}, "Middle click to peek.", true);

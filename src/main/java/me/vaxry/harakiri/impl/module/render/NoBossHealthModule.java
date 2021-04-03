@@ -1,12 +1,9 @@
 package me.vaxry.harakiri.impl.module.render;
 
 import me.vaxry.harakiri.framework.event.render.EventRenderBossHealth;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * created by noil on 10/1/2019 at 6:37 PM
- */
 public final class NoBossHealthModule extends Module {
 
     public NoBossHealthModule() {

@@ -2,14 +2,14 @@ package me.vaxry.harakiri.impl.gui.hud.component.special;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.gui.hud.component.TextComponent;
-import me.vaxry.harakiri.framework.gui.hud.component.*;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.texture.Texture;
+import me.vaxry.harakiri.framework.gui.*;
+import me.vaxry.harakiri.framework.gui.TextComponent;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Texture;
 import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.util.Timer;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.impl.config.ModuleConfig;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.impl.module.render.HudModule;
@@ -27,9 +27,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * created by noil on 11/4/19 at 12:02 PM
- */
 public final class ModuleSearchComponent extends ResizableHudComponent {
 
     private Module.ModuleType type;

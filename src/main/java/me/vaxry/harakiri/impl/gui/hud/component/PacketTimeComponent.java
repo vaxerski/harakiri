@@ -3,7 +3,7 @@ package me.vaxry.harakiri.impl.gui.hud.component;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
-import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
 import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import net.minecraft.client.Minecraft;
@@ -11,10 +11,6 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.text.DecimalFormat;
 
-/**
- * Author Seth
- * 8/31/2019 @ 3:07 AM.
- */
 public final class PacketTimeComponent extends DraggableHudComponent {
 
     private final Timer timer = new Timer();

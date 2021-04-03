@@ -1,6 +1,6 @@
 package me.vaxry.harakiri.framework.event.command;
 
-import me.vaxry.harakiri.framework.command.Command;
+import me.vaxry.harakiri.framework.Command;
 
 /**
  * Author Seth

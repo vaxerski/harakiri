@@ -3,17 +3,13 @@ package me.vaxry.harakiri.impl.module.misc;
 import io.netty.buffer.Unpooled;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.CPacketCustomPayload;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/16/2019 @ 8:55 PM.
- */
 public final class NoHandShakeModule extends Module {
 
     public NoHandShakeModule() {

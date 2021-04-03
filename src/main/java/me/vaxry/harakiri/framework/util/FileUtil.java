@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-/**
- * @author noil
- * @since 12/1/19 @ 4:16 PM
- */
 public class FileUtil {
 
     /**

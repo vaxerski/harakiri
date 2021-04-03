@@ -2,15 +2,11 @@ package me.vaxry.harakiri.impl.module.player;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 5/1/2019 @ 7:56 PM.
- */
 public final class RotationLock extends Module {
 
     public final Value<Boolean> yawLock = new Value<Boolean>("Yaw", new String[]{"Y"}, "Lock the player's rotation yaw if enabled.", true);

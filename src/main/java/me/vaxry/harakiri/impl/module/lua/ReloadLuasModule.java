@@ -1,12 +1,12 @@
 package me.vaxry.harakiri.impl.module.lua;
 
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.config.Configurable;
+import me.vaxry.harakiri.framework.Configurable;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
-import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
+import me.vaxry.harakiri.framework.gui.HudComponent;
 import me.vaxry.harakiri.framework.lua.LUAAPI;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.impl.config.LuaConfig;
 import me.vaxry.harakiri.impl.gui.hud.component.special.ModuleListComponent;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;

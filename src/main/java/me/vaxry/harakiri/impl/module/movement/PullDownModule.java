@@ -2,8 +2,8 @@ package me.vaxry.harakiri.impl.module.movement;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -11,12 +11,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * // todo; needs further testing
- *
- * @author cookiedragon234
- * @author Daniel E
- */
 public class PullDownModule extends Module {
     private static final float VELOCITY_MAX = 10.0f;
     public final Value<Boolean> jumpDisables =

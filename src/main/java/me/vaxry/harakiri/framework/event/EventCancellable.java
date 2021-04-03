@@ -1,9 +1,5 @@
 package me.vaxry.harakiri.framework.event;
 
-/**
- * Author Seth
- * 4/6/2019 @ 1:27 AM.
- */
 
 public class EventCancellable extends EventStageable {
 

@@ -2,7 +2,7 @@ package me.vaxry.harakiri.impl.module.movement;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.settings.KeyBinding;
@@ -10,10 +10,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/16/2019 @ 8:37 PM.
- */
 public final class GuiMoveModule extends Module {
 
     public GuiMoveModule() {

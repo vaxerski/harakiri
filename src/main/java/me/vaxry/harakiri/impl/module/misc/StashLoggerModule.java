@@ -1,32 +1,20 @@
 package me.vaxry.harakiri.impl.module.misc;
 
-import com.google.common.collect.Maps;
-import com.mojang.realmsclient.gui.ChatFormatting;
-import com.yworks.yguard.test.A;
-import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.util.FileUtil;
-import me.vaxry.harakiri.framework.value.Value;
-import me.vaxry.harakiri.impl.module.hidden.CommandsModule;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketChunkData;
 import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.event.ClickEvent;
-import net.minecraft.util.text.event.HoverEvent;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class StashLoggerModule extends Module {
 

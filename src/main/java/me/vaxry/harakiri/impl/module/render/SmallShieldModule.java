@@ -1,15 +1,11 @@
 package me.vaxry.harakiri.impl.module.render;
 
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author fsck
- * 2019-10-20.
- */
 public final class SmallShieldModule extends Module {
 
     final Minecraft mc = Minecraft.getMinecraft();

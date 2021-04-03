@@ -2,9 +2,6 @@ package me.vaxry.harakiri.framework.util;
 
 import net.minecraft.enchantment.Enchantment;
 
-/**
- * created by noil on 10/13/2019 at 10:22 AM
- */
 public final class ItemUtil {
 
     public static boolean isIllegalEnchant(Enchantment enc, short lvl) {

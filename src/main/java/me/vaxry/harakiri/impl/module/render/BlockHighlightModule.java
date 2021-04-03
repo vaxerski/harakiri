@@ -1,11 +1,11 @@
 package me.vaxry.harakiri.impl.module.render;
 
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.MathUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -17,10 +17,6 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.awt.*;
 
-/**
- * @author Seth
- * @author noil
- */
 public final class BlockHighlightModule extends Module {
 
     public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"M", "type", "t"}, "Select which mode to draw the HighlightX.", Mode.BOX);

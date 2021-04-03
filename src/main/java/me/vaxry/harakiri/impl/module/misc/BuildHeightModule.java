@@ -2,15 +2,11 @@ package me.vaxry.harakiri.impl.module.misc;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.util.EnumFacing;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 8/13/2019 @ 11:58 PM.
- */
 public final class BuildHeightModule extends Module {
 
     public BuildHeightModule() {

@@ -2,16 +2,12 @@ package me.vaxry.harakiri.impl.module.combat;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketHeldItemChange;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 5/23/2019 @ 7:41 PM.
- */
 public final class AutoDisconnectModule extends Module {
 
     public final Value<Float> health = new Value("Health", new String[]{"Hp"}, "The amount of health, in HP, to disconnect.", 8.0f, 0.0f, 20.0f, 0.5f);

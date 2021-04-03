@@ -3,20 +3,16 @@ package me.vaxry.harakiri.impl.module.render;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.gui.EventRenderPotions;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
-import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
-import me.vaxry.harakiri.framework.gui.hud.component.HudComponent;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.HudComponent;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
-import me.vaxry.harakiri.impl.gui.hud.anchor.AnchorPoint;
+import me.vaxry.harakiri.framework.gui.anchor.AnchorPoint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/7/2019 @ 10:17 PM.
- */
 public final class HudModule extends Module {
 
     public final Value<Boolean> hidePotions = new Value<Boolean>("HidePotions", new String[]{"HidePotions", "HidePots", "Hide_Potions"}, "Hides the Vanilla potion hud (at the top right of the screen).", true);

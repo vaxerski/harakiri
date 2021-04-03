@@ -1,10 +1,10 @@
 package me.vaxry.harakiri.impl.module.render;
 
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.MathUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -28,19 +28,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static org.lwjgl.opengl.GL11.*;
 
-/**
- * A feature that projects the possible path of an entity that was fired.
- * Throwables in this game use randomness to come up with a path that
- * is <b>never</b> the same using {@link java.util.Random}.
- * <p>
- * This results in <b>perfect</b> predictions when disregarding
- * the randomness in the trajectory.
- * <p>
- * todo; remove un-needed flightPoint collection
- *
- * @author Ddong
- * @since Feb 18, 2017
- */
 public final class ProjectilesModule extends Module {
 
     private final Queue<Vec3d> flightPoint = new ConcurrentLinkedQueue<>();

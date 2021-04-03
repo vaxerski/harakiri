@@ -2,13 +2,9 @@ package me.vaxry.harakiri.impl.module.misc;
 
 import me.vaxry.harakiri.framework.event.gui.EventBookPage;
 import me.vaxry.harakiri.framework.event.gui.EventBookTitle;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/16/2019 @ 8:07 AM.
- */
 public final class ColoredBooksModule extends Module {
 
     public ColoredBooksModule() {

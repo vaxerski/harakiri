@@ -5,7 +5,7 @@ import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.task.block.BlockPlacementRequest;
 import me.vaxry.harakiri.framework.task.hand.HandSwapContext;
 import me.vaxry.harakiri.impl.module.player.FreeCamModule;
@@ -29,9 +29,6 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.BiFunction;
 
-/**
- * @author Daniel E
- */
 public final class ObsidianReplaceModule extends Module {
     private static final int[][] BLOCK_DIRECTION_OFFSET = {
             {1, 0, 0},

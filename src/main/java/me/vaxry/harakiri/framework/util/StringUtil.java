@@ -4,10 +4,6 @@ import me.vaxry.harakiri.Harakiri;
 
 import java.util.logging.Level;
 
-/**
- * Author Seth
- * 4/16/2019 @ 8:32 AM.
- */
 public final class StringUtil {
 
     public static boolean isInt(String s) {

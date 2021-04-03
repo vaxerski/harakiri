@@ -2,18 +2,15 @@ package me.vaxry.harakiri.impl.module.render;
 
 
 import akka.japi.Pair;
-import com.yworks.yguard.test.A;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.event.render.EventRenderName;
-import me.vaxry.harakiri.framework.event.world.EventAddEntity;
 import me.vaxry.harakiri.framework.event.world.EventRemoveEntity;
-import me.vaxry.harakiri.framework.extd.RenderItemAlpha;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.ColorUtil;
 import me.vaxry.harakiri.framework.util.GLUProjection;
 import me.vaxry.harakiri.framework.util.RenderUtil;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -28,10 +25,8 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import org.apache.tools.ant.taskdefs.PathConvert;
 import org.locationtech.jts.geom.Coordinate;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 

@@ -1,13 +1,9 @@
 package me.vaxry.harakiri.impl.module.render;
 
 import me.vaxry.harakiri.framework.event.render.EventHurtCamEffect;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/11/2019 @ 2:55 AM.
- */
 public final class NoHurtCamModule extends Module {
 
     public NoHurtCamModule() {

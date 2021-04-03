@@ -2,7 +2,7 @@ package me.vaxry.harakiri.impl.module.player;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.network.Packet;
@@ -12,10 +12,6 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-/**
- * Author Seth
- * 4/9/2019 @ 9:14 AM.
- */
 public final class BlinkModule extends Module {
 
     private EntityOtherPlayerMP entity;

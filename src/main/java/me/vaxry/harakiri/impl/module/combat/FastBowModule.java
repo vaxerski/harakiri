@@ -2,7 +2,7 @@ package me.vaxry.harakiri.impl.module.combat;
 
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemBow;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
@@ -10,10 +10,6 @@ import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
 import net.minecraft.util.math.BlockPos;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/30/2019 @ 4:27 AM.
- */
 public final class FastBowModule extends Module {
 
     public FastBowModule() {

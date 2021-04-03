@@ -3,8 +3,8 @@ package me.vaxry.harakiri.impl.module.combat;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityFishHook;
@@ -13,10 +13,6 @@ import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.network.play.server.SPacketExplosion;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/17/2019 @ 5:25 AM.
- */
 public final class VelocityModule extends Module {
 
     public final Value<Integer> horizontalVelocity = new Value<>("Horizontal", new String[]{"HorizontalVelocity", "Horizontal_Velocity", "HVel", "HV", "HorizontalVel", "Horizontal", "H"}, "The horizontal velocity you take.", 0, 0, 100, 1);

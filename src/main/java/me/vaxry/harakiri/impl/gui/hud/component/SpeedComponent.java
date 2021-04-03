@@ -2,7 +2,7 @@ package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.gui.hud.component.DraggableHudComponent;
+import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
 import me.vaxry.harakiri.framework.util.Timer;
 import net.minecraft.util.math.Vec3d;
 
@@ -10,10 +10,6 @@ import javax.vecmath.Vector3f;
 import java.text.DecimalFormat;
 
 
-/**
- * Author Seth
- * 7/27/2019 @ 7:46 PM.
- */
 public final class SpeedComponent extends DraggableHudComponent {
 
     private Timer timer = new Timer();

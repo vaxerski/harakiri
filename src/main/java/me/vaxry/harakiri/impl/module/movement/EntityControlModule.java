@@ -3,16 +3,12 @@ package me.vaxry.harakiri.impl.module.movement;
 import me.vaxry.harakiri.framework.event.entity.EventHorseSaddled;
 import me.vaxry.harakiri.framework.event.entity.EventPigTravel;
 import me.vaxry.harakiri.framework.event.entity.EventSteerEntity;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityPig;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * Author Seth
- * 4/24/2019 @ 8:53 PM.
- */
 public final class EntityControlModule extends Module {
 
     public EntityControlModule() {

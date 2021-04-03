@@ -1,7 +1,5 @@
 package me.vaxry.harakiri.impl.module.render;
 
-import ibxm.Player;
-import io.netty.util.internal.ReflectionUtil;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
@@ -10,16 +8,15 @@ import me.vaxry.harakiri.framework.event.render.EventRenderEntity;
 import me.vaxry.harakiri.framework.extd.ShaderGroupExt;
 import me.vaxry.harakiri.framework.layeredit.LayerEnderman;
 import me.vaxry.harakiri.framework.layeredit.LayerSpider;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.*;
 import me.vaxry.harakiri.framework.util.Timer;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
@@ -42,33 +39,19 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityBanner;
-import net.minecraft.tileentity.TileEntityBed;
-import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import org.lwjgl.opengl.GL11;
-import scala.collection.parallel.ParIterableLike;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-import javax.swing.*;
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.List;
 
-import static org.lwjgl.opengl.GL11.*;
-
-/**
- * Author Seth
- * 4/20/2019 @ 10:07 AM.
- */
 
 public final class ESPModule extends Module {
 

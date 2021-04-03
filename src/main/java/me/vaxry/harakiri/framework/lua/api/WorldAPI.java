@@ -1,17 +1,11 @@
 package me.vaxry.harakiri.framework.lua.api;
 
-import com.yworks.yguard.test.B;
-import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.lua.LUAAPI;
-import me.vaxry.harakiri.framework.notification.Notification;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;

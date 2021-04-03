@@ -2,7 +2,7 @@ package me.vaxry.harakiri.impl.command;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
-import me.vaxry.harakiri.framework.command.Command;
+import me.vaxry.harakiri.framework.Command;
 import me.vaxry.harakiri.impl.module.config.ReloadConfigsModule;
 
 public class CreateConfigCommand extends Command {

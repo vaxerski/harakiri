@@ -2,17 +2,13 @@ package me.vaxry.harakiri.impl.module.movement;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.player.EventMove;
-import me.vaxry.harakiri.framework.module.Module;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.MobEffects;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * created by noil on 9/22/2019 at 11:01 AM
- * updated on 12/12/2020 - sn01
- */
 public final class StrafeModule extends Module {
 
     public Value<Boolean> ground = new Value<Boolean>("Ground", new String[]{"Ground", "OnGround"}, "Enables strafe movement while on ground.", false);

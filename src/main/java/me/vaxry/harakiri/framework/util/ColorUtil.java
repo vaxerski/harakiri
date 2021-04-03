@@ -2,9 +2,6 @@ package me.vaxry.harakiri.framework.util;
 
 import java.awt.*;
 
-/**
- * created by noil on 9/22/2019 at 1:22 PM
- */
 public final class ColorUtil {
 
     public static int changeAlpha(int origColor, int userInputedAlpha) {

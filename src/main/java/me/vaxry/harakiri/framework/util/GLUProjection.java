@@ -7,10 +7,6 @@ import org.lwjgl.util.vector.Matrix4f;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-/**
- * Helper class to project world space coordinates to screen space coordinates with {@link GLU#gluProject(float, float, float, FloatBuffer, FloatBuffer, IntBuffer, FloatBuffer)}
- * Author TheCyberBrick
- */
 public final class GLUProjection {
     public static class Line {
         public Vector3D sourcePoint = new Vector3D(0, 0, 0);

@@ -4,17 +4,13 @@ import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.task.rotation.RotationTask;
-import me.vaxry.harakiri.framework.value.Value;
+import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketPlayer;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * @author Seth
- * @author noil
- */
 public final class NoAfkModule extends Module {
 
     public final Value<Integer> yawOffset = new Value<Integer>("Yaw", new String[]{"yaw", "y"}, "The yaw to alternate each tick.", 1, 0, 180, 1);

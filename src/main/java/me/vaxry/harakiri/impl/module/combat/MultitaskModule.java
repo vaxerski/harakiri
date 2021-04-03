@@ -3,12 +3,9 @@ package me.vaxry.harakiri.impl.module.combat;
 import me.vaxry.harakiri.framework.event.player.EventHandActive;
 import me.vaxry.harakiri.framework.event.player.EventHittingBlock;
 import me.vaxry.harakiri.framework.event.player.EventResetBlockRemoving;
-import me.vaxry.harakiri.framework.module.Module;
+import me.vaxry.harakiri.framework.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-/**
- * @author noil
- */
 public final class MultitaskModule extends Module {
 
     public MultitaskModule() {
