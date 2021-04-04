@@ -15,6 +15,8 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public final class AutoTotemModule extends Module {
 
+    private CrystalAuraModule crystalAuraModule = null;
+
     public final Value<Boolean> healthmode = new Value("HealthMode", new String[]{"Healthmode"}, "To use health mode.", true);
     public final Value<Float> health = new Value("Health", new String[]{"Hp"}, "The amount of health needed to auto-put a totem.", 16.0f, 0.0f, 20.0f, 0.5f);
 
@@ -25,6 +27,12 @@ public final class AutoTotemModule extends Module {
     @Override
     public String getMetaData() {
         return "" + this.getTotemCount();
+    }
+
+    @Override
+    public void onFullLoad() {
+        super.onFullLoad();
+        this.crystalAuraModule = (CrystalAuraModule) Harakiri.get().getModuleManager().find(CrystalAuraModule.class);
     }
 
     @Listener
@@ -49,7 +57,6 @@ public final class AutoTotemModule extends Module {
                         mc.playerController.updateController();
                     }
                 }else {
-                    CrystalAuraModule crystalAuraModule = (CrystalAuraModule) Harakiri.get().getModuleManager().find(CrystalAuraModule.class);
                     if(crystalAuraModule.offHandAuto.getValue()){
                         // Here the totem isnt needed anymore, lets find crystals and use them.
 

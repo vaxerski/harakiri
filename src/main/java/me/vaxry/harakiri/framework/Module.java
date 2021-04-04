@@ -217,6 +217,10 @@ public class Module {
         this.valueList.clear();
     }
 
+    public void onFullLoad(){
+
+    }
+
     public enum ModuleType {
         COMBAT, MOVEMENT, RENDER, PLAYER, WORLD, MISC, HIDDEN, UI, LUA, CONFIG
     }

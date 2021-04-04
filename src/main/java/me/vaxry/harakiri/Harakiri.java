@@ -1,5 +1,6 @@
 package me.vaxry.harakiri;
 
+import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.event.client.EventLoad;
 import me.vaxry.harakiri.framework.event.client.EventUnload;
 import me.vaxry.harakiri.framework.extd.FontRendererExtd;
@@ -121,6 +122,10 @@ public final class Harakiri {
             this.haraMainMenu = new HaraMainMenu();
 
             //this.plexusEffect = new PlexusEffect(); -- inits in GuiHudEditor
+
+            for(Module mod : this.moduleManager.getModuleList()){
+                mod.onFullLoad();
+            }
 
             this.moduleManager.add(new ReloadConfigsModule(this.moduleManager)); // Load cfgs
             this.configManager.init(); // Keep last, so we load configs after everything else inits

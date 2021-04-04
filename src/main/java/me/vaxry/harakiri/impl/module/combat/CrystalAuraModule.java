@@ -39,6 +39,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class CrystalAuraModule extends Module {
 
+    private HudModule hudModule = null;
+    private HudEditorModule hudEditorModule = null;
+    private GodModeModule godModeModule = null;
+
     public boolean crystalAuraHit = false;
 
     public final Value<Boolean> attack = new Value<Boolean>("Attack", new String[]{"AutoAttack"}, "Automatically attack crystals.", true);
@@ -71,6 +75,14 @@ public final class CrystalAuraModule extends Module {
 
     public CrystalAuraModule() {
         super("CrystalAura", new String[]{"AutoCrystal", "Crystal"}, "Automatically places crystals near enemies and detonates them", "NONE", -1, ModuleType.COMBAT);
+    }
+
+    @Override
+    public void onFullLoad() {
+        super.onFullLoad();
+        hudModule = (HudModule)Harakiri.get().getModuleManager().find(HudModule.class);
+        hudEditorModule = (HudEditorModule) Harakiri.get().getModuleManager().find(HudEditorModule.class);
+        godModeModule = (GodModeModule) Harakiri.get().getModuleManager().find(GodModeModule.class);
     }
 
     @Override
@@ -277,12 +289,9 @@ public final class CrystalAuraModule extends Module {
                         placeLocation.getY() + 1 - mc.getRenderManager().viewerPosY,
                         placeLocation.getZ() + 1 - mc.getRenderManager().viewerPosZ);
 
-                final HudModule hudModule = (HudModule)Harakiri.get().getModuleManager().find(HudModule.class);
                 final boolean useRainbow = hudModule.rainbow.getValue();
 
-                final HudEditorModule hem = (HudEditorModule) Harakiri.get().getModuleManager().find(HudEditorModule.class);
-
-                RenderUtil.drawFilledBox(bb, ColorUtil.changeAlpha(useRainbow ? Harakiri.get().getHudManager().rainbowColor : hem.color.getValue().getRGB() + 0xFF000000, placeLocation.alpha / 2));
+                RenderUtil.drawFilledBox(bb, ColorUtil.changeAlpha(useRainbow ? Harakiri.get().getHudManager().rainbowColor : hudEditorModule.color.getValue().getRGB() + 0xFF000000, placeLocation.alpha / 2));
                 RenderUtil.drawBoundingBox(bb, 1, ColorUtil.changeAlpha(0xFF000000, placeLocation.alpha));
 
                 if (this.renderDamage.getValue()) {
@@ -317,8 +326,7 @@ public final class CrystalAuraModule extends Module {
         if (mc.player.capabilities.isCreativeMode)
             return true;
 
-        final GodModeModule mod = (GodModeModule) Harakiri.get().getModuleManager().find(GodModeModule.class);
-        if (mod != null && mod.isEnabled())
+        if (godModeModule != null && godModeModule.isEnabled())
             return true;
 
         if (this.ignore.getValue())

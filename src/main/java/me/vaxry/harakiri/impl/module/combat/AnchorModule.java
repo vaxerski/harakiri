@@ -14,18 +14,24 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public class AnchorModule extends Module {
 
+    private HolesModule holesModule = null;
+
     public final Value<Boolean> spacedisable = new Value<Boolean>("JumpDisables", new String[]{"JumpDisables"}, "If on, doesnt stop you when you hold the jump key.", false);
 
     public AnchorModule() {
         super("Anchor", new String[]{"Anchor", "Anch"}, "Automatically stops you over a hole.", "NONE", -1, ModuleType.COMBAT);
     }
 
+    @Override
+    public void onFullLoad() {
+        super.onFullLoad();
+        holesModule = ((HolesModule)Harakiri.get().getModuleManager().find(HolesModule.class));
+    }
+
     @Listener
     public void move(EventMove event) {
 
         // Check if over a hole.
-
-        HolesModule holesModule = ((HolesModule)Harakiri.get().getModuleManager().find(HolesModule.class));
 
         if(!holesModule.isEnabled())
             holesModule.forceHoleRecalc();

@@ -57,6 +57,8 @@ public final class ESPModule extends Module {
 
     public boolean isRenderingOutline = false;
 
+    private StorageESPModule storageESPModule = null;
+
     enum SHADER {
         OUTLINE,
         SIMPLIFIED
@@ -121,6 +123,12 @@ public final class ESPModule extends Module {
     }
 
     @Override
+    public void onFullLoad() {
+        super.onFullLoad();
+        this.storageESPModule = (StorageESPModule) Harakiri.get().getModuleManager().find(StorageESPModule.class);
+    }
+
+    @Override
     public void onDisable() {
         super.onDisable();
         Harakiri.get().getEventManager().addEventListener(this);
@@ -140,7 +148,7 @@ public final class ESPModule extends Module {
     public void OnRender3D(EventRender3D event){
         final Minecraft mc = Minecraft.getMinecraft();
 
-        if (mc.player == null || (!this.isEnabled() && !((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).isEnabled()))
+        if (mc.player == null || (!this.isEnabled() && !storageESPModule.isEnabled()))
             return;
 
         RenderUtil.begin3D();
@@ -251,17 +259,17 @@ public final class ESPModule extends Module {
             }
         }
 
-        if(((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).isEnabled() && ((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED){
+        if(storageESPModule.isEnabled() && storageESPModule.modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED){
 
             mc.entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
 
             for(TileEntity te : mc.world.loadedTileEntityList){
-                if(!((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).isTileStorage(te))
+                if(!storageESPModule.isTileStorage(te))
                     continue;
 
                 cam.setPosition(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().posY, mc.getRenderViewEntity().posZ);
 
-                final AxisAlignedBB bb = ((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).boundingBoxForEnt(te);
+                final AxisAlignedBB bb = storageESPModule.boundingBoxForEnt(te);
                 final AxisAlignedBB bb2 = new AxisAlignedBB(
                         bb.minX + mc.getRenderManager().viewerPosX,
                         bb.minY + mc.getRenderManager().viewerPosY,
@@ -274,7 +282,7 @@ public final class ESPModule extends Module {
                     continue;
                 }
 
-                RenderUtil.drawFilledBox(bb, ColorUtil.changeAlpha(((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).getColorShader(te), 0x55));
+                RenderUtil.drawFilledBox(bb, ColorUtil.changeAlpha(storageESPModule.getColorShader(te), 0x55));
                 RenderUtil.drawBoundingBox(bb, 1.f, 0x44000000);
             }
         }
@@ -346,7 +354,7 @@ public final class ESPModule extends Module {
 
             coloredPlayers.clear();
         } else if(event.getStage() == EventStageable.EventStage.PRE){
-            if(this.isEnabled() || Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled())
+            if(this.isEnabled() || storageESPModule.isEnabled())
                 renderESP(event, event.getPartialTicks());
         } else if(event.getStage() == EventStageable.EventStage.MID){
 
@@ -370,17 +378,17 @@ public final class ESPModule extends Module {
     private float lastPartialTicks = 0;
 
     public void renderFramebuffer(){
-        if(!this.isEnabled() && !Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled())
+        if(!this.isEnabled() && !storageESPModule.isEnabled())
             return;
 
-        if(this.isEnabled() && Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled()){
-            if(this.shaderV.getValue() == SHADER.SIMPLIFIED && ((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED)
+        if(this.isEnabled() && storageESPModule.isEnabled()){
+            if(this.shaderV.getValue() == SHADER.SIMPLIFIED && storageESPModule.modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED)
                 return;
         }else if(this.isEnabled()){
             if(this.shaderV.getValue() == SHADER.SIMPLIFIED)
                 return;
-        }else if(Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled()){
-            if(((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED)
+        }else if(storageESPModule.isEnabled()){
+            if(storageESPModule.modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED)
                 return;
         }
 
@@ -468,16 +476,16 @@ public final class ESPModule extends Module {
     }
 
     private void renderAllTileEntities(float partialTicks, boolean doColor){
-        if(((StorageESPModule) Harakiri.get().getModuleManager().find(StorageESPModule.class)).modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED)
+        if(((StorageESPModule) storageESPModule).modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED)
             return;
 
         for(TileEntity te : Minecraft.getMinecraft().world.loadedTileEntityList){
-            if(((StorageESPModule) Harakiri.get().getModuleManager().find(StorageESPModule.class)).getColorShader(te) == 0)
+            if(((StorageESPModule) storageESPModule).getColorShader(te) == 0)
                 continue; // Cuz fuck stuff we dont care bout
 
             if(doColor) {
                 GlStateManager.enableColorMaterial();
-                GlStateManager.enableOutlineMode(((StorageESPModule) Harakiri.get().getModuleManager().find(StorageESPModule.class)).getColorShader(te));
+                GlStateManager.enableOutlineMode(((StorageESPModule) storageESPModule).getColorShader(te));
             }
 
             // This doesnt force lighting
@@ -499,14 +507,14 @@ public final class ESPModule extends Module {
         final Minecraft mc = Minecraft.getMinecraft();
         lastPartialTicks = partialTicks;
 
-        if(this.isEnabled() && Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled()){
-            if(this.shaderV.getValue() == SHADER.SIMPLIFIED && ((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED)
+        if(this.isEnabled() && storageESPModule.isEnabled()){
+            if(this.shaderV.getValue() == SHADER.SIMPLIFIED && storageESPModule.modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED)
                 return;
         }else if(this.isEnabled()){
             if(this.shaderV.getValue() == SHADER.SIMPLIFIED)
                 return;
-        }else if(Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled()){
-            if(((StorageESPModule)Harakiri.get().getModuleManager().find(StorageESPModule.class)).modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED)
+        }else if(storageESPModule.isEnabled()){
+            if(storageESPModule.modeValue.getValue() == StorageESPModule.MODE.SIMPLIFIED)
                 return;
         }
 
@@ -584,7 +592,7 @@ public final class ESPModule extends Module {
                 renderAllEntities(partialTicks, true);
             isRenderingOutline = false;
 
-            if(Harakiri.get().getModuleManager().find(StorageESPModule.class).isEnabled())
+            if(storageESPModule.isEnabled())
                 renderAllTileEntities(partialTicks, true);
 
             mc.getRenderManager().setRenderOutlines(false);
