@@ -53,8 +53,10 @@ public class HaraMainMenu extends GuiMainMenu {
 
         if(first){
             this.mainMenuButtons.clear();
+            float delaySeconds = 0.25F;
             for(GuiButton button : this.buttonList){
-                this.mainMenuButtons.add(new HaraMainMenuButton(button.id, button.x, (int)(button.y + Y_OFFSET), button.width, button.height, button.displayString));
+                this.mainMenuButtons.add(new HaraMainMenuButton(button.id, button.x, (int)(button.y + Y_OFFSET), button.width, button.height, button.displayString, delaySeconds));
+                delaySeconds += 0.25F;
             }
             first = false;
         }
@@ -103,7 +105,7 @@ public class HaraMainMenu extends GuiMainMenu {
         if(needsAnUpdate()) {
             this.mainMenuButtons.clear();
             for (GuiButton button : this.buttonList) {
-                this.mainMenuButtons.add(new HaraMainMenuButton(button.id, button.x, (int)(button.y + Y_OFFSET), button.width, button.height, button.displayString));
+                this.mainMenuButtons.add(new HaraMainMenuButton(button.id, button.x, (int)(button.y + Y_OFFSET), button.width, button.height, button.displayString, -1F /*Fadein is 1s, skip it*/));
             }
         }
     }

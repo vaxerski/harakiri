@@ -13,6 +13,8 @@ public class HaraMainMenuButton extends GuiButton {
     private float hoverPerc = 0;
     private Timer timer = new Timer();
 
+    private float visiblePerc;
+
     private float BAR_HEIGHT = 2;
 
     private float getJitter() {
@@ -29,9 +31,10 @@ public class HaraMainMenuButton extends GuiButton {
         timer.reset();
     }
 
-    public HaraMainMenuButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText) {
+    public HaraMainMenuButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, float visibleDelay) {
         super(buttonId, x, y, widthIn, heightIn, buttonText);
         timer.reset();
+        this.visiblePerc = -visibleDelay;
     }
 
     @Override
@@ -53,12 +56,18 @@ public class HaraMainMenuButton extends GuiButton {
             hoverPerc = Math.max(hoverPerc - 2.5f * jitter, 0);
         }
 
-        RenderUtil.drawRect(this.x, this.y, this.x + this.width, this.y + this.height, 0x88FFFFFF + (int)(hoverPerc * 0x77) * 0x1000000);
-        Harakiri.get().getTTFFontUtil().drawStringWithShadow(this.displayString, this.x + this.width / 2.f -
-                        Harakiri.get().getTTFFontUtil().getStringWidth(this.displayString)/2.f,
-                this.y + this.height / 2.f - Harakiri.get().getTTFFontUtil().FONT_HEIGHT / 2.f,
-                0xFF00CCFF);
-        RenderUtil.drawRect(this.x, this.y + this.height - this.BAR_HEIGHT, this.x + ((float)this.width * hoverPerc), this.height + this.y, 0xFF00CCFF);
+        if(this.visiblePerc < 1F){
+            this.visiblePerc = Math.min(1F, jitter * 2F + this.visiblePerc);
+        }
+
+        if(this.visiblePerc > 0F) {
+            RenderUtil.drawRect(this.x, this.y, this.x + this.width, this.y + this.height, (((int)(0x88 * this.visiblePerc)) * 0x1000000) + 0xFFFFFF + (int) (this.visiblePerc * hoverPerc * 0x77) * 0x1000000);
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow(this.displayString, this.x + this.width / 2.f -
+                            Harakiri.get().getTTFFontUtil().getStringWidth(this.displayString) / 2.f,
+                    this.y + this.height / 2.f - Harakiri.get().getTTFFontUtil().FONT_HEIGHT / 2.f,
+                    (((int)(0xFF * this.visiblePerc)) * 0x1000000) + 0x00CCFF);
+            RenderUtil.drawRect(this.x, this.y + this.height - this.BAR_HEIGHT, this.x + ((float) this.width * hoverPerc), this.height + this.y, 0xFF00CCFF);
+        }
 
         GlStateManager.disableBlend();
     }

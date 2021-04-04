@@ -159,6 +159,7 @@ public class TTFFontUtil
         this.antiAliasingFactor = resolution.getScaleFactor();
 
         GL11.glPushMatrix();
+        GlStateManager.enableAlpha();
         GlStateManager.scale(1 / antiAliasingFactor, 1 / antiAliasingFactor, 1 / antiAliasingFactor);
         x *= antiAliasingFactor;
         y *= antiAliasingFactor;
@@ -175,7 +176,7 @@ public class TTFFontUtil
 
         GlStateManager.disableLighting();
         GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         String[] parts = COLOR_CODE_PATTERN.split(text);
@@ -229,6 +230,7 @@ public class TTFFontUtil
 
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.bindTexture(0);
+        GlStateManager.disableAlpha();
         GlStateManager.popMatrix();
         return (int) getWidth(text);
     }
