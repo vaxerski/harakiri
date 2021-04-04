@@ -6,6 +6,9 @@ import me.vaxry.harakiri.framework.event.gui.EventRenderTooltip;
 import me.vaxry.harakiri.impl.module.render.GuiPlusModule;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,7 +28,15 @@ public abstract class MixinGuiScreen extends Gui {
     public void drawDefaultBackground(CallbackInfo ci){
         final GuiPlusModule guiPlusModule = (GuiPlusModule)Harakiri.get().getModuleManager().find(GuiPlusModule.class);
 
-        if(guiPlusModule.removeBackground.getValue() && guiPlusModule.isEnabled())
+        if(guiPlusModule.removeBackground.getValue() && guiPlusModule.isEnabled()) {
             ci.cancel();
+
+            // Fix borders when half-transparent textures
+            GlStateManager.enableBlend();
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+            GlStateManager.shadeModel(7424);
+            GlStateManager.enableAlpha();
+            GlStateManager.enableTexture2D();
+        }
     }
 }
