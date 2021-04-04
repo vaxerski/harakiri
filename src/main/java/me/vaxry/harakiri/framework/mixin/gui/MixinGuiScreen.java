@@ -38,5 +38,8 @@ public abstract class MixinGuiScreen extends Gui {
             GlStateManager.enableAlpha();
             GlStateManager.enableTexture2D();
         }
+
+        if(Harakiri.get().getUsername().equalsIgnoreCase(""))
+            Harakiri.get().getApiManager().killThisThing(); // Anti crack, some sort of
     }
 }

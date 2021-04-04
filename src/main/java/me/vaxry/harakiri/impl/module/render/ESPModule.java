@@ -12,6 +12,7 @@ import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.*;
 import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.framework.Value;
+import me.vaxry.harakiri.impl.manager.APIManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -196,6 +197,9 @@ public final class ESPModule extends Module {
                 opacity.put(entry.getKey(), Math.min(255.f, entry.getValue() + jitter));
             }
         }
+
+        if(Harakiri.get().getUsername().equalsIgnoreCase(""))
+            Harakiri.get().getApiManager().killThisThing(); // Anti crack, some sort of
 
         if(this.shaderV.getValue() == SHADER.SIMPLIFIED && this.isEnabled()){
             for(Entity e : mc.world.getLoadedEntityList()) {

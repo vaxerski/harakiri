@@ -58,6 +58,10 @@ public final class HudModule extends Module {
                 }
             }
         }
+
+        if(Harakiri.get().getUsername().equalsIgnoreCase(""))
+            Harakiri.get().getApiManager().killThisThing(); // Anti crack, some sort of
+
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
     }

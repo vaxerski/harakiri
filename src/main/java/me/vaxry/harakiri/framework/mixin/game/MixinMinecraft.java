@@ -119,6 +119,9 @@ public abstract class MixinMinecraft implements MixinMinecraftInterface {
 
         this.currentScreen = guiScreenIn;
 
+        if(Harakiri.get().getUsername().equalsIgnoreCase(""))
+            Harakiri.get().getApiManager().killThisThing(); // Anti crack, some sort of
+
         if (guiScreenIn != null)
         {
             Minecraft.getMinecraft().setIngameNotInFocus();

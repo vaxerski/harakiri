@@ -232,6 +232,9 @@ public final class GuiHudEditor extends GuiScreen {
             GlStateManager.scale(scale, scale, scale);
         }
 
+        if(Harakiri.get().getUsername().equalsIgnoreCase(""))
+            Harakiri.get().getApiManager().killThisThing(); // Anti crack, some sort of
+
         SwitchViewComponent swc = (SwitchViewComponent)Harakiri.get().getHudManager().findComponent(SwitchViewComponent.class);
 
         for (int i = 0; i < this.hudComponentsSorted.size(); ++i) {
