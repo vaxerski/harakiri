@@ -1,6 +1,7 @@
 package me.vaxry.harakiri.impl.module.world;
 
 import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.event.player.EventRightClickBlock;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
@@ -11,6 +12,7 @@ import me.vaxry.harakiri.framework.util.EntityUtil;
 import me.vaxry.harakiri.framework.util.MathUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.Value;
+import me.vaxry.harakiri.impl.module.misc.NoDesyncModule;
 import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -106,7 +108,6 @@ public final class NukerModule extends Module {
                 break;
             case POST:
                 if (this.mode.getValue().equals(Mode.CREATIVE)) {
-
                     /* the amazing creative 'nuker' straight from the latch hacked client */
                     for (double y = Math.round(mc.player.posY - 1) + this.vDistance.getValue(); y > Math.round(mc.player.posY - 1); y -= 1.0D) {
                         for (double x = mc.player.posX - this.hDistance.getValue(); x < mc.player.posX + this.hDistance.getValue(); x += 1.0D) {
@@ -304,6 +305,14 @@ public final class NukerModule extends Module {
                 event.setCanceled(true);
             }
         }
+    }
+
+    @Listener
+    public void receivePacket(EventReceivePacket event) {
+        NoDesyncModule noDesyncModule = (NoDesyncModule) Harakiri.get().getModuleManager().find(NoDesyncModule.class);
+
+        if(!noDesyncModule.isEnabled() && this.mode.getValue() == Mode.CREATIVE) // Automatically remove lag when creative nuking.
+            noDesyncModule.receivePacket(event);
     }
 
     private boolean canBreak(BlockPos pos) {
