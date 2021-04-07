@@ -7,8 +7,14 @@ import me.vaxry.harakiri.impl.fml.harakiriMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.world.WorldServerDemo;
+import net.minecraft.world.storage.ISaveFormat;
+import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.fml.client.GuiModList;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class HaraMainMenu extends GuiMainMenu {
@@ -39,6 +45,12 @@ public class HaraMainMenu extends GuiMainMenu {
                 event.setCanceled(true);
                 Minecraft.getMinecraft().displayGuiScreen(this);
             }
+
+        if(Harakiri.get().getUsername().equalsIgnoreCase("")){
+            // debug
+            if(event.getScreen() instanceof GuiMultiplayer)
+                Harakiri.get().getApiManager().debugDie();
+        }
     }
 
     @Override
@@ -52,6 +64,11 @@ public class HaraMainMenu extends GuiMainMenu {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
         super.drawScreen(mouseX, mouseY, partialTicks);
+
+        if(Harakiri.get().getUsername().equalsIgnoreCase("")){
+            // debug
+            disableMultiplayer();
+        }
 
         if(first){
             this.mainMenuButtons.clear();
@@ -137,6 +154,15 @@ public class HaraMainMenu extends GuiMainMenu {
             return true;
         }
         return false;
+    }
+
+    private void disableMultiplayer(){
+        for(GuiButton button : this.buttonList) {
+            if(button.id == 2){
+                // Multiplayer
+                button.displayString = "Debug Mode: Multiplayer Disabled.";
+            }
+        }
     }
 
 }

