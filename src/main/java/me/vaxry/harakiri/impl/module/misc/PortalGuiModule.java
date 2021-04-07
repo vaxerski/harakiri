@@ -14,8 +14,9 @@ public final class PortalGuiModule extends Module {
 
     @Listener
     public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
-        if (event.getStage() == EventStageable.EventStage.PRE) {
-            Minecraft.getMinecraft().player.inPortal = false;
-        }
+        if(event.getStage() != EventStageable.EventStage.PRE)
+            return;
+
+        Minecraft.getMinecraft().player.inPortal = false;
     }
 }
