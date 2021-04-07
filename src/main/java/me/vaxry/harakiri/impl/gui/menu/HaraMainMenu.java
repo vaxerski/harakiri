@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 public class HaraMainMenu extends GuiMainMenu {
     private Texture backgroundTex;
+    private Texture backgroundTexLogo;
     private ArrayList<HaraMainMenuButton> mainMenuButtons = new ArrayList<>();
     private boolean first = true;
 
@@ -43,7 +44,8 @@ public class HaraMainMenu extends GuiMainMenu {
     @Override
     public void initGui() {
         super.initGui();
-        backgroundTex   = new Texture("haramenu.png");
+        backgroundTex       = new Texture("haramenu.png");
+        backgroundTexLogo   = new Texture("haramainlogo.png");
     }
 
     @Override
@@ -63,11 +65,15 @@ public class HaraMainMenu extends GuiMainMenu {
 
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         final ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
 
         this.backgroundTex.bind();
         this.backgroundTex.render(0,0, res.getScaledWidth(), res.getScaledHeight());
+
+        this.backgroundTexLogo.bind();
+        this.backgroundTexLogo.render(0,0, res.getScaledWidth(), res.getScaledHeight());
 
         for(HaraMainMenuButton button : this.mainMenuButtons){
             button.drawButton(mc, mouseX, mouseY, partialTicks);
