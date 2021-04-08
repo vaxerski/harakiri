@@ -35,14 +35,26 @@ public class SwitchViewComponent extends HudComponent {
         x = res.getScaledWidth() / 2.f;
         y = res.getScaledHeight();
 
-        if(didClick && isMouse(mouseX, mouseY, x - margin - Harakiri.get().getTTFFontUtil().getStringWidth(str)/2.f, y - Harakiri.get().getTTFFontUtil().FONT_HEIGHT - margin, Harakiri.get().getTTFFontUtil().getStringWidth(str) + 2 * margin, Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 2 * margin))
+        final boolean isInside = isMouse(mouseX, mouseY, x - margin - Harakiri.get().getTTFFontUtil().getStringWidth(str)/2.f, y - Harakiri.get().getTTFFontUtil().FONT_HEIGHT - margin, Harakiri.get().getTTFFontUtil().getStringWidth(str) + 2 * margin, Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 2 * margin);
+
+        if(didClick && isInside)
             y = 0 + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + margin;
 
-        RenderUtil.drawRect(x - Harakiri.get().getTTFFontUtil().getStringWidth(str)/2.f - margin,
-                y - Harakiri.get().getTTFFontUtil().FONT_HEIGHT - margin,
-                x + Harakiri.get().getTTFFontUtil().getStringWidth(str)/2.f + margin,
-                y,
-                0x551D1D1D);
+        if(isInside && !didClick){
+            RenderUtil.drawRoundedRect(x - Harakiri.get().getTTFFontUtil().getStringWidth(str)/2.f - margin,
+                    y - Harakiri.get().getTTFFontUtil().FONT_HEIGHT - margin,
+                    Harakiri.get().getTTFFontUtil().getStringWidth(str) + 2 * margin,
+                    Harakiri.get().getTTFFontUtil().FONT_HEIGHT + margin,
+                    2,
+                    0x77555555);
+        }else{
+            RenderUtil.drawRoundedRect(x - Harakiri.get().getTTFFontUtil().getStringWidth(str)/2.f - margin,
+                    y - Harakiri.get().getTTFFontUtil().FONT_HEIGHT - margin,
+                    Harakiri.get().getTTFFontUtil().getStringWidth(str) + 2 * margin,
+                    Harakiri.get().getTTFFontUtil().FONT_HEIGHT + margin,
+                    2,
+                    0x771D1D1D);
+        }
 
         Harakiri.get().getTTFFontUtil().drawStringWithShadow(str, x - Harakiri.get().getTTFFontUtil().getStringWidth(str)/2.f, y - Harakiri.get().getTTFFontUtil().FONT_HEIGHT - margin, 0xFFFFFFFF);
     }
