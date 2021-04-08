@@ -18,7 +18,7 @@ public final class NoAfkModule extends Module {
     private final RotationTask rotationTask = new RotationTask("NoAFKTask", 1); /* 1 == low priority */
 
     public NoAfkModule() {
-        super("AntiAFK", new String[]{"AntiAFK"}, "Prevents you from being kicked while AFS.", "NONE", -1, ModuleType.MISC);
+        super("AntiAFK", new String[]{"AntiAFK"}, "Prevents you from being kicked while AFK.", "NONE", -1, ModuleType.MISC);
     }
 
     @Override
