@@ -2,17 +2,19 @@ package me.vaxry.harakiri.impl.module.world;
 
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.event.player.EventDestroyBlock;
 import me.vaxry.harakiri.framework.event.player.EventRightClickBlock;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.event.world.EventSetBlockState;
 import me.vaxry.harakiri.framework.task.rotation.RotationTask;
 import me.vaxry.harakiri.framework.util.BlockUtil;
 import me.vaxry.harakiri.framework.util.EntityUtil;
 import me.vaxry.harakiri.framework.util.MathUtil;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.Value;
-import me.vaxry.harakiri.impl.module.misc.NoDesyncModule;
+import me.vaxry.harakiri.impl.module.misc.NoGlitchBlocks;
 import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -308,11 +310,19 @@ public final class NukerModule extends Module {
     }
 
     @Listener
-    public void receivePacket(EventReceivePacket event) {
-        NoDesyncModule noDesyncModule = (NoDesyncModule) Harakiri.get().getModuleManager().find(NoDesyncModule.class);
+    public void ondestroy(EventDestroyBlock event) {
+        NoGlitchBlocks noGlitchBlocks = (NoGlitchBlocks) Harakiri.get().getModuleManager().find(NoGlitchBlocks.class);
 
-        if(!noDesyncModule.isEnabled() && this.mode.getValue() == Mode.CREATIVE) // Automatically remove lag when creative nuking.
-            noDesyncModule.receivePacket(event);
+        if(!noGlitchBlocks.isEnabled() && this.mode.getValue() == Mode.CREATIVE) // Automatically remove lag when creative nuking.
+            noGlitchBlocks.ondestroy(event);
+    }
+
+    @Listener
+    public void setblockstate(EventSetBlockState event) {
+        NoGlitchBlocks noGlitchBlocks = (NoGlitchBlocks) Harakiri.get().getModuleManager().find(NoGlitchBlocks.class);
+
+        if(!noGlitchBlocks.isEnabled() && this.mode.getValue() == Mode.CREATIVE) // Automatically remove lag when creative nuking.
+            noGlitchBlocks.setblockstate(event);
     }
 
     private boolean canBreak(BlockPos pos) {

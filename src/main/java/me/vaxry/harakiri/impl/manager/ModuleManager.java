@@ -115,7 +115,7 @@ public final class ModuleManager {
         add(new LiquidInteractModule());
         add(new NoBreakCooldown());
         add(new NoAfkModule());
-        add(new NoDesyncModule());
+        add(new NoGlitchBlocks());
         add(new NukerModule());
         add(new SlimeChunksModule());
         add(new StepModule());

@@ -4,6 +4,8 @@ import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.world.*;
 import me.vaxry.harakiri.impl.module.render.NoLagModule;
 import me.vaxry.harakiri.impl.module.world.SkyModule;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
@@ -86,6 +88,20 @@ public abstract class MixinWorld {
         if(Harakiri.get().getModuleManager().find(SkyModule.class).isEnabled()){
             ((SkyModule)Harakiri.get().getModuleManager().find(SkyModule.class)).worldtime = Minecraft.getMinecraft().world.getWorldTime();
             Minecraft.getMinecraft().world.setWorldTime(((SkyModule)Harakiri.get().getModuleManager().find(SkyModule.class)).celestialAng.getValue());
+        }
+    }
+
+    @Inject(method = "setBlockState", at = @At("HEAD"), cancellable = true)
+    public void setBlockState(BlockPos pos, IBlockState newState, int flags, CallbackInfoReturnable<Boolean> cir)
+    {
+        EventSetBlockState event = new EventSetBlockState(pos, newState, flags);
+
+        Harakiri.get().getEventManager().dispatchEvent(event);
+
+        if (event.isCanceled())
+        {
+            cir.cancel();
+            cir.setReturnValue(false);
         }
     }
 }
