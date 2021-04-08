@@ -163,6 +163,13 @@ public class HaraMainMenu extends GuiMainMenu {
                 button.displayString = "Debug Mode: Multiplayer Disabled.";
             }
         }
+
+        for(HaraMainMenuButton button : this.mainMenuButtons){
+            if(button.id == 2){
+                // Multiplayer
+                button.displayString = "Debug Mode: Multiplayer Disabled.";
+            }
+        }
     }
 
 }
