@@ -24,10 +24,10 @@ public final class MacroModule extends Module {
                 final String[] split = macro.getMacro().split(";");
 
                 for (String s : split) {
+                    s = "." + s;
                     Minecraft.getMinecraft().player.sendChatMessage(s);
                 }
             }
         }
     }
-
 }
