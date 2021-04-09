@@ -311,10 +311,8 @@ public final class NukerModule extends Module {
 
     @Listener
     public void ondestroy(EventDestroyBlock event) {
-        NoGlitchBlocks noGlitchBlocks = (NoGlitchBlocks) Harakiri.get().getModuleManager().find(NoGlitchBlocks.class);
-
-        if(!noGlitchBlocks.isEnabled() && this.mode.getValue() == Mode.CREATIVE) // Automatically remove lag when creative nuking.
-            noGlitchBlocks.ondestroy(event);
+        if(this.mode.getValue() == Mode.CREATIVE) // Automatically remove lag when creative nuking.
+            event.setCanceled(true);
     }
 
     @Listener
