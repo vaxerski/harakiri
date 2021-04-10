@@ -85,6 +85,11 @@ public abstract class Configurable {
         return jsonObject;
     }
 
+    public void forceGlobalDir(){
+        File newFile = new File(ConfigManager.CONFIG_PATH + this.configType);
+        this.file = newFile;
+    }
+
     public void setNewConfigFileDir(String dir){
         File newFile = new File(ConfigManager.CONFIG_PATH + dir + "/" + this.configType);
         this.file = newFile;

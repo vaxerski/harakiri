@@ -65,7 +65,10 @@ public final class ConfigManager {
     public void save(Class configurableClassType) {
         for (Configurable cfg : configurableList) {
             if (cfg.getClass().isAssignableFrom(configurableClassType)) {
-                cfg.setNewConfigFileDir(this.current_config.getPath());
+                if(cfg instanceof FriendConfig)
+                    cfg.forceGlobalDir(); // root path, dont
+                else // Config-reliant settings
+                    cfg.setNewConfigFileDir(this.current_config.getPath());
                 cfg.onSave();
             }
         }
@@ -75,7 +78,10 @@ public final class ConfigManager {
 
     public void saveAll() {
         for (Configurable cfg : configurableList) {
-            cfg.setNewConfigFileDir(this.current_config.getPath());
+            if(cfg instanceof FriendConfig)
+                cfg.forceGlobalDir(); // root path, dont
+            else // Config-reliant settings
+                cfg.setNewConfigFileDir(this.current_config.getPath());
             cfg.onSave();
         }
         Harakiri.get().getEventManager().dispatchEvent(new EventSaveConfig());
@@ -84,7 +90,10 @@ public final class ConfigManager {
     public void load(Class configurableClassType) {
         for (Configurable cfg : configurableList) {
             if (cfg.getClass().isAssignableFrom(configurableClassType)) {
-                cfg.setNewConfigFileDir(this.current_config.getPath());
+                if(cfg instanceof FriendConfig)
+                    cfg.forceGlobalDir(); // root path, dont
+                else // Config-reliant settings
+                    cfg.setNewConfigFileDir(this.current_config.getPath());
                 cfg.onLoad();
             }
         }
@@ -93,7 +102,10 @@ public final class ConfigManager {
 
     public void loadAll() {
         for (Configurable cfg : configurableList) {
-            cfg.setNewConfigFileDir(this.current_config.getPath());
+            if(cfg instanceof FriendConfig)
+                cfg.forceGlobalDir(); // root path, dont
+            else // Config-reliant settings
+                cfg.setNewConfigFileDir(this.current_config.getPath());
             cfg.onLoad();
         }
         Harakiri.get().getEventManager().dispatchEvent(new EventLoadConfig());
