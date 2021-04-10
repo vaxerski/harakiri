@@ -4,6 +4,7 @@ import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Texture;
 import me.vaxry.harakiri.framework.Value;
+import me.vaxry.harakiri.framework.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -54,5 +55,8 @@ public class HealthOverlayModule extends Module {
         // GlStateManager.disableAlpha();
 
         GL11.glEnable(GL11.GL_ALPHA_TEST);
+
+        // fix opengl flags
+        RenderUtil.drawRect(0,0,1,1,0x00FFFFFF);
     }
 }
