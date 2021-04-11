@@ -5,6 +5,7 @@ import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -25,16 +26,19 @@ import java.util.Date;
 
 public class PacketLogModule extends Module {
 
+    public final Value<Boolean> in = new Value<Boolean>("In", new String[]{"in"}, "Log packets you recieve.", true);
+    public final Value<Boolean> out = new Value<Boolean>("Out", new String[]{"out"}, "Log packets you send.", false);
+
     public PacketLogModule() {
         super("PacketLog", new String[]{"PacketLog", "PacketL"}, "Logs packets to a file in .minecraft/harakiri", "NONE", -1, ModuleType.MISC);
     }
 
     @Listener
     public void recievePacket(EventReceivePacket event) {
-        if (event.getStage() == EventStageable.EventStage.POST) {
+        if (event.getStage() == EventStageable.EventStage.PRE && this.in.getValue()) {
             final String time = new SimpleDateFormat("h:mm:ss").format(new Date());
 
-            String finalMsg = "[" + time + "] " + "Packet of type (" + event.getPacket().getClass().getSimpleName() + "): \n";
+            String finalMsg = "[" + time + "] " + "Packet of type (" + event.getPacket().getClass().getSimpleName() + ") is IN: \n";
 
             for (Field field : event.getPacket().getClass().getDeclaredFields()) {
                 if (field != null) {
@@ -57,7 +61,39 @@ public class PacketLogModule extends Module {
 
             saveStringToFile(finalMsg);
 
-            Harakiri.get().logChat("Logged a packet of type: " + event.getPacket().getClass().getSimpleName());
+            Harakiri.get().logChat("Logged an incoming packet of type: " + event.getPacket().getClass().getSimpleName());
+        }
+    }
+
+    @Listener
+    public void sendPacket(EventSendPacket event) {
+        if (event.getStage() == EventStageable.EventStage.PRE && this.out.getValue()) {
+            final String time = new SimpleDateFormat("h:mm:ss").format(new Date());
+
+            String finalMsg = "[" + time + "] " + "Packet of type (" + event.getPacket().getClass().getSimpleName() + ") is OUT: \n";
+
+            for (Field field : event.getPacket().getClass().getDeclaredFields()) {
+                if (field != null) {
+                    if (!field.isAccessible()) {
+                        field.setAccessible(true);
+                    }
+                    try {
+                        finalMsg += field.getType().getSimpleName() + " " + field.getName() + " -> " + field.get(event.getPacket()) + "\n";
+                    }catch (Throwable t) { ; }
+                }
+            }
+
+            finalMsg += "\n- - - - -\n\n";
+
+            String lastFileRead = getFileStringCreateIfNone();
+
+            finalMsg = lastFileRead + finalMsg;
+
+            //finalMsg = finalMsg.replace("\0", "");
+
+            saveStringToFile(finalMsg);
+
+            Harakiri.get().logChat("Logged an outgoing packet of type: " + event.getPacket().getClass().getSimpleName());
         }
     }
 
