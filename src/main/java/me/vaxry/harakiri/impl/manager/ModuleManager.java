@@ -156,6 +156,7 @@ public final class ModuleManager {
         add(new NoFriendHurtModule());
         add(new ReachModule());
         add(new StashLoggerModule());
+        add(new PacketLogModule());
         add(new SelfWebModule());
         add(new BurrowModule());
         add(new HealthOverlayModule());
