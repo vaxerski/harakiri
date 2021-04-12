@@ -25,6 +25,8 @@ public final class ArmorComponent extends DraggableHudComponent {
         int itemSpacingWidth = 0;
         boolean playerHasArmor = false;
 
+        boolean fixedFirstEnchant = false;
+
         if (mc.player != null) {
             for (int i = 0; i <= 3; i++) {
                 final ItemStack stack = mc.player.inventoryContainer.getSlot(8 - i).getStack();
@@ -32,6 +34,12 @@ public final class ArmorComponent extends DraggableHudComponent {
                     GlStateManager.pushMatrix();
                     RenderHelper.disableStandardItemLighting(); // fix boots
                     RenderHelper.enableGUIStandardItemLighting();
+
+                    if(stack.hasEffect() && !fixedFirstEnchant){
+                        mc.getRenderItem().renderItemAndEffectIntoGUI(stack, (int) -10000, (int) -10000);
+                        fixedFirstEnchant = true;
+                    }
+
                     mc.getRenderItem().renderItemAndEffectIntoGUI(stack, (int) this.getX() + itemSpacingWidth, (int) this.getY());
                     mc.getRenderItem().renderItemOverlays(mc.fontRenderer, stack, (int) this.getX() + itemSpacingWidth, (int) this.getY());
                     RenderHelper.disableStandardItemLighting();
