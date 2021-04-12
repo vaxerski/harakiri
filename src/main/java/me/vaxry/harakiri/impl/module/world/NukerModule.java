@@ -42,7 +42,7 @@ public final class NukerModule extends Module {
 
     public final Value<Mode> mode = new Value<Mode>("Mode", new String[]{"Mode", "M"}, "The nuker mode to use.", Mode.SELECTION);
 
-    private enum Mode {
+    public enum Mode {
         SELECTION, ALL, CREATIVE
     }
 
