@@ -3,6 +3,7 @@ package me.vaxry.harakiri.framework.lua.api;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
+import me.vaxry.harakiri.impl.gui.hud.component.WatermarkComponent;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
@@ -58,6 +59,11 @@ public class ModuleAPI extends TwoArgFunction {
             String module = args.arg(1).checkjstring();
             String value = args.arg(2).checkjstring();
 
+            if(module.equalsIgnoreCase("watermark") && value.equalsIgnoreCase("text")){
+                ((WatermarkComponent)Harakiri.get().getHudManager().findComponent(WatermarkComponent.class)).watermark = args.arg(3).checkjstring();
+                return LuaValue.valueOf(1);
+            }
+
             try {
                 Value realVal = Harakiri.get().getModuleManager().find(module).findValue(value);
                 if(realVal.getValue() instanceof Boolean){
@@ -82,6 +88,10 @@ public class ModuleAPI extends TwoArgFunction {
     protected static class getValue extends TwoArgFunction {
         public LuaValue call(LuaValue modulename, LuaValue value){
             try {
+                if(modulename.checkjstring().equalsIgnoreCase("watermark") && value.checkjstring().equalsIgnoreCase("text")){
+                    return LuaValue.valueOf(((WatermarkComponent)Harakiri.get().getHudManager().findComponent(WatermarkComponent.class)).watermark);
+                }
+
                 Value realVal = Harakiri.get().getModuleManager().find(modulename.toString()).findValue(value.toString());
                 if(realVal.getValue() instanceof Boolean){
                     return LuaValue.valueOf(Boolean.valueOf((Boolean)realVal.getValue()));
