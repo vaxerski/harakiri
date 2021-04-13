@@ -25,6 +25,8 @@ public final class WatermarkComponent extends HudComponent {
     private final float OFFSET_X = 2;
     private final float OFFSET_Y = 2;
 
+    private final String[] allowedCodes = { "{ver}", "{Account}", "{User}", "{Server}", "{ping}", "{time}" };
+
     public String watermark = "HARAKIRI v{ver} | {Account}({User}) | {Server} | ping: {ping} | {time}";
 
     public WatermarkComponent() {
@@ -57,7 +59,7 @@ public final class WatermarkComponent extends HudComponent {
         watermarkModule.setWMOnState(this.isVisible());
 
         String finalWatermark = this.watermark;
-        while(finalWatermark.contains("{") || finalWatermark.contains("}")){
+        while(containsCodes(finalWatermark)){
             finalWatermark = finalWatermark.replace("{ver}", getVersion());
             finalWatermark = finalWatermark.replace("{Account}", getGameName());
             finalWatermark = finalWatermark.replace("{User}", getUsername());
@@ -87,6 +89,15 @@ public final class WatermarkComponent extends HudComponent {
         Harakiri.get().getTTFFontUtil().drawStringScaled(finalWatermark, (int)((OFFSET_X + 2) * SCALE), (int)((OFFSET_Y + 2) * SCALE), 0xFFDDDDDD, SCALE);
 
 
+    }
+
+    private boolean containsCodes(String s){
+        for(String code : this.allowedCodes){
+            if(s.contains(code))
+                return true;
+        }
+
+        return false;
     }
 
     private String getPing(){
