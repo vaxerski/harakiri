@@ -246,7 +246,7 @@ public final class ModuleManager {
 
     public Module findLuaShort(String luaName) {
         for (Module mod : this.getModuleList()) {
-            if(mod.luaName.equals(""))
+            if(mod.luaName.equals("") || mod.getType() != Module.ModuleType.LUA /* Fix configs */)
                 continue;
             if (luaName.equalsIgnoreCase(mod.luaName.substring(0, mod.luaName.indexOf(".lua")))) {
                 return mod;
