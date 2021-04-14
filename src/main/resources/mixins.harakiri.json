@@ -44,6 +44,7 @@
     "render.layers.MixinLayerElytra",
     "render.layers.MixinLayerArmorBase",
     "render.model.MixinModelElytra",
-    "render.model.MixinModelPlayer"
+    "render.model.MixinModelPlayer",
+    "render.MixinTileEntityRenderDispatcher"
   ]
 }

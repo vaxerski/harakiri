@@ -40,8 +40,8 @@ public final class NoLagModule extends Module {
     public final Value<Boolean> witherSkulls = new Value<Boolean>("WitherSkulls", new String[]{"WitherSkull", "skulls", "skull", "ws"}, "Disables the rendering of flying wither skulls.", false);
     public final Value<Boolean> crystals = new Value<Boolean>("Crystals", new String[]{"Wither", "w"}, "Disables the rendering of crystals.", false);
     public final Value<Boolean> tnt = new Value<Boolean>("TNT", new String[]{"Wither", "w"}, "Disables the rendering of TNT.", false);
-    //public final Value<Boolean> tiles = new Value<Boolean>("TileEntities", new String[]{"TileEntities", "t"}, "Remove Tile entities.", false);
-    //public final Value<Float> tileDist = new Value<Float>("TileDistance", new String[]{"TileDistance", "td"}, "Distance to remove the tile entities.", 50.f, 0.f, 100.f, 1.f);
+    public final Value<Boolean> tiles = new Value<Boolean>("TileEntities", new String[]{"TileEntities", "t"}, "Remove Tile entities.", false);
+    public final Value<Float> tileDist = new Value<Float>("TileDistance", new String[]{"TileDistance", "td"}, "Distance to remove the tile entities.", 50.f, 0.f, 100.f, 1.f);
     public final Value<Boolean> firework = new Value<Boolean>("Fireworks", new String[]{"Fir", "f"}, "Disables the rendering of fireworks.", false);
     public final Value<Boolean> removeChunkBan = new Value<Boolean>("NoChunkBan", new String[]{"NoChunk", "nw"}, "Remove certain chunkbans.", false);
     public final Value<Boolean> hardRemove = new Value<Boolean>("HardRemove", new String[]{"HardRemove", "hr"}, "Hard removes certain entities (e.g. items)", false);
@@ -87,6 +87,17 @@ public final class NoLagModule extends Module {
             final Block block = event.getBlockState().getBlock();
             if (block instanceof BlockBeacon || block instanceof BlockEnchantmentTable) {
                 event.setRenderable(false);
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    @Listener
+    public void renderTe(EventRenderTileEntity event){
+        if(this.tiles.getValue()){
+            double distance = Math.sqrt(event.te.getDistanceSq(Minecraft.getMinecraft().player.posX, Minecraft.getMinecraft().player.posY, Minecraft.getMinecraft().player.posZ));
+
+            if(distance > this.tileDist.getValue()){
                 event.setCanceled(true);
             }
         }
