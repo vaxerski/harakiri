@@ -39,6 +39,7 @@ public final class Harakiri {
     private boolean isTTF = true;
     private static final Harakiri INSTANCE = new Harakiri();
     private String username = "";
+    private String loggedAccount = "";
 
     private Logger logger;
 
@@ -211,6 +212,14 @@ public final class Harakiri {
 
     public void setUsername(String u){
         this.username = u;
+    }
+
+    public String getLoggedAccount(){
+        return this.loggedAccount;
+    }
+
+    public void setLoggedAccount(String l){
+        this.loggedAccount = l;
     }
 
     /**

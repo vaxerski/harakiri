@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.gui.menu;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
 import me.vaxry.harakiri.framework.Texture;
@@ -112,6 +113,12 @@ public class HaraMainMenu extends GuiMainMenu {
         Harakiri.get().getTTFFontUtil().drawStringWithShadow("Logged in as " + Harakiri.get().getUsername(),
                 res.getScaledWidth() - Harakiri.get().getTTFFontUtil().getStringWidth("Logged in as " + Harakiri.get().getUsername()) - 2,
                 0,
+                0xFFFFFFFF);
+
+        if(!Harakiri.get().getLoggedAccount().equalsIgnoreCase(""))
+            Harakiri.get().getTTFFontUtil().drawStringWithShadow("Selected Account: " + ChatFormatting.GREEN + Harakiri.get().getLoggedAccount(),
+                res.getScaledWidth() - Harakiri.get().getTTFFontUtil().getStringWidth("Selected Account: " + ChatFormatting.GREEN + Harakiri.get().getLoggedAccount()) - 2,
+                Harakiri.get().getTTFFontUtil().FONT_HEIGHT,
                 0xFFFFFFFF);
 
         Harakiri.get().getTTFFontUtil().drawStringWithShadow("Account Manager",
