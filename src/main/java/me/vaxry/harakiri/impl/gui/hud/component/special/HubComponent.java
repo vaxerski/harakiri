@@ -23,7 +23,7 @@ public final class HubComponent extends ResizableHudComponent {
 
     private int totalHeight;
 
-    private final int SCROLL_WIDTH = 5;
+    private final int SCROLL_WIDTH = 0;
     private final int BORDER = 2;
     private final int TEXT_GAP = 1;
     private final int TEXTURE_SIZE = 8;

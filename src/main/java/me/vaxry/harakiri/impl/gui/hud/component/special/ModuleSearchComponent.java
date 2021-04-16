@@ -39,7 +39,7 @@ public final class ModuleSearchComponent extends ResizableHudComponent {
     private static int scomponentY = 0;
 
     private final float SCALING = 1f;
-    private final int SCROLL_WIDTH = 5;
+    private final int SCROLL_WIDTH = 0;
     private final int BORDER = 2;
     private final int TEXT_GAP = 2;
     private final int TEXTURE_SIZE = 8;
