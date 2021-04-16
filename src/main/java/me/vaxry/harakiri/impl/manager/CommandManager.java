@@ -30,6 +30,7 @@ public final class CommandManager {
         this.commandList.add(new SpectateCommand());
         this.commandList.add(new YawCommand());
         this.commandList.add(new PitchCommand());
+        this.commandList.add(new SayCommand());
         this.commandList.add(new NameCommand());
         this.commandList.add(new MacroCommand());
         this.commandList.add(new SeedCommand());
