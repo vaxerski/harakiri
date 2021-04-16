@@ -47,7 +47,7 @@ public final class NameAlertModule extends Module {
                     if (chatUsernameMatcher.find()) {
                         String username = chatUsernameMatcher.group(1).replaceAll(">", "");
                         if (!username.equals(localUsername)) {
-                            Harakiri.get().getNotificationManager().addNotification("Public Chat", String.format("Someone mentioned you in chat. <%s>", username));
+                            Harakiri.get().getNotificationManager().addNotification("Chat", String.format("<%s> mentioned you in chat.", username));
                         }
                     }
                 }

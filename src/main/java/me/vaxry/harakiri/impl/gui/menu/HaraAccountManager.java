@@ -124,7 +124,7 @@ public class HaraAccountManager extends GuiScreen {
                                 this.lastUsernameLoggedIn = accountLoginName;
                                 this.altList.saveAltList();
                                 lastStatus = "Status: " + ChatFormatting.GREEN + "Success " + ChatFormatting.GRAY + "(Logged in as " + this.selectedAccount.name + ")";
-                                
+
                                 Harakiri.get().setLoggedAccount(this.selectedAccount.name);
                             } else {
                                 lastStatus = "Status: " + ChatFormatting.RED + "Failed to login." + ChatFormatting.RESET + " (" + accountLoginName + ")";
