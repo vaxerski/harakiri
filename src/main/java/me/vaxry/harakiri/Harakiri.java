@@ -168,6 +168,10 @@ public final class Harakiri {
         Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("\2475[\2477\247lHarakiri\247r\2475]\247r\247f ").appendSibling(textComponent));
     }
 
+    public void logChatRaw(String s) {
+        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString(s));
+    }
+
     public void logfChat(String format, Object... objects) {
         logChat(String.format(format, objects));
     }
