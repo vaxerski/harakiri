@@ -7,13 +7,15 @@ import me.vaxry.harakiri.framework.event.client.EventSaveConfig;
 import me.vaxry.harakiri.impl.config.*;
 import me.vaxry.harakiri.impl.module.config.ReloadConfigsModule;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import javax.swing.*;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,9 @@ public final class ConfigManager {
     public static final String CONFIG_PATH = "harakiri/config/";
     public static final String LUA_PATH = "harakiri/Lua/";
 
+    public final int DAYS_TO_KEEP_BACKUPS = 30;
+    public final int MIN_BACKUPS_TO_CLEAN = 10;
+
     public ConfigManager() {
         this.generateDirectories();
     }
@@ -54,6 +59,7 @@ public final class ConfigManager {
 
     public void init() {
         this.backupConfigs(); // backup configs
+        this.cleanupOldConfigBackups();
         this.current_config = ((ReloadConfigsModule)Harakiri.get().getModuleManager().find(ReloadConfigsModule.class)).getCurrentConfigDir();
 
         this.configurableList.add(new ModuleConfig(this.current_config));
@@ -157,7 +163,7 @@ public final class ConfigManager {
 
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
-            final String filename = "config " + now.getYear() + "-" + now.getMonthValue() + "-" + now.getDayOfMonth() + " " + now.getHour() + "_" + now.getMinute() + ".zip";
+            final String filename = "config " + now.getYear() + "-" + ((now.getMonthValue() < 10) ? "0" : "") + now.getMonthValue() + "-" + ((now.getDayOfMonth() < 10) ? "0" : "") + now.getDayOfMonth() + " " + now.getHour() + "_" + now.getMinute() + ".zip";
 
             FileOutputStream fos = new FileOutputStream(System.getenv("APPDATA") + "\\harakiri\\backup\\" + filename);
             ZipOutputStream zos = new ZipOutputStream(fos);
@@ -169,6 +175,33 @@ public final class ConfigManager {
 
         }catch (Throwable t){
             return;
+        }
+    }
+
+    private void cleanupOldConfigBackups(){
+        File folder = new File(System.getenv("APPDATA") + "\\harakiri\\backup\\");
+        File[] listOfFiles = folder.listFiles();
+
+        if(listOfFiles.length < this.MIN_BACKUPS_TO_CLEAN)
+            return; // dont delete if there are less than 10 backups
+
+        for (int i = 0; i < listOfFiles.length; i++) {
+            if (listOfFiles[i].isFile()) {
+                try {
+                    String[] args = listOfFiles[i].getName().split(" ");
+
+                    LocalDate now = LocalDate.now();
+                    DateTimeFormatter dtfPast = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate past = LocalDate.parse(args[1], dtfPast);
+
+                    if(Period.between(past, now).getDays() + Period.between(past, now).getMonths() * 31 + Period.between(past, now).getYears() * 365 > this.DAYS_TO_KEEP_BACKUPS){
+                        listOfFiles[i].delete();
+                    }
+
+                }catch (Throwable t){
+                    // Any index errors and stuff
+                }
+            }
         }
     }
 
