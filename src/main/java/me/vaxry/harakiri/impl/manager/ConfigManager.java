@@ -8,8 +8,17 @@ import me.vaxry.harakiri.impl.config.*;
 import me.vaxry.harakiri.impl.module.config.ReloadConfigsModule;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public final class ConfigManager {
 
@@ -44,6 +53,7 @@ public final class ConfigManager {
     }
 
     public void init() {
+        this.backupConfigs(); // backup configs
         this.current_config = ((ReloadConfigsModule)Harakiri.get().getModuleManager().find(ReloadConfigsModule.class)).getCurrentConfigDir();
 
         this.configurableList.add(new ModuleConfig(this.current_config));
@@ -109,6 +119,57 @@ public final class ConfigManager {
             cfg.onLoad();
         }
         Harakiri.get().getEventManager().dispatchEvent(new EventLoadConfig());
+    }
+
+    private void addDirToZipArchive(ZipOutputStream zos, File fileToZip, String parrentDirectoryName) throws Exception {
+        if (fileToZip == null || !fileToZip.exists()) {
+            return;
+        }
+
+        String zipEntryName = fileToZip.getName();
+        if (parrentDirectoryName!=null && !parrentDirectoryName.isEmpty()) {
+            zipEntryName = parrentDirectoryName + "/" + fileToZip.getName();
+        }
+
+        if (fileToZip.isDirectory()) {
+            System.out.println("+" + zipEntryName);
+            for (File file : fileToZip.listFiles()) {
+                addDirToZipArchive(zos, file, zipEntryName);
+            }
+        } else {
+            System.out.println("   " + zipEntryName);
+            byte[] buffer = new byte[1024];
+            FileInputStream fis = new FileInputStream(fileToZip);
+            zos.putNextEntry(new ZipEntry(zipEntryName));
+            int length;
+            while ((length = fis.read(buffer)) > 0) {
+                zos.write(buffer, 0, length);
+            }
+            zos.closeEntry();
+            fis.close();
+        }
+    }
+
+    private void backupConfigs() {
+        try {
+            Path path = Paths.get(System.getenv("APPDATA") + "\\harakiri\\backup\\");
+            Files.createDirectories(path);
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            final String filename = "config " + now.getYear() + "-" + now.getMonthValue() + "-" + now.getDayOfMonth() + " " + now.getHour() + "_" + now.getMinute() + ".zip";
+
+            FileOutputStream fos = new FileOutputStream(System.getenv("APPDATA") + "\\harakiri\\backup\\" + filename);
+            ZipOutputStream zos = new ZipOutputStream(fos);
+            addDirToZipArchive(zos, new File(System.getenv("APPDATA") + "\\.minecraft\\" + CONFIG_PATH), null);
+            zos.flush();
+            fos.flush();
+            zos.close();
+            fos.close();
+
+        }catch (Throwable t){
+            return;
+        }
     }
 
     public File getConfigDir() {
