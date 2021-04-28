@@ -30,9 +30,7 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
 
 /**
- * @author Seth (riga)
- * @author noil
- * @author github contributors
+ * @author vax
  */
 public final class Harakiri {
 
@@ -93,10 +91,7 @@ public final class Harakiri {
 
     private RenderItemAlpha renderItemAlpha;
 
-    /**
-     * The initialization point of the client
-     * this is called post launch
-     */
+
     public void init() {
         try {
             this.fontUtil = new TTFFontUtil("gravity", 18);
@@ -127,6 +122,8 @@ public final class Harakiri {
             for(Module mod : this.moduleManager.getModuleList()){
                 mod.onFullLoad();
             }
+
+            this.username = "Final";
 
             try {
                 this.moduleManager.add(new ReloadConfigsModule(this.moduleManager)); // Load cfgs

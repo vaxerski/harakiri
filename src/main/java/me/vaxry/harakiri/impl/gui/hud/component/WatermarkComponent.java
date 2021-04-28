@@ -27,7 +27,7 @@ public final class WatermarkComponent extends HudComponent {
 
     private final String[] allowedCodes = { "{ver}", "{Account}", "{User}", "{Server}", "{ping}", "{time}" };
 
-    public String watermark = "HARAKIRI v{ver} | {Account}({User}) | {Server} | ping: {ping} | {time}";
+    public String watermark = "HARAKIRI v{ver} | {User} | {Server} | ping: {ping} | {time}";
 
     public WatermarkComponent() {
         super("Watermark");

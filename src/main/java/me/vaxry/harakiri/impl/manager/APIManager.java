@@ -22,7 +22,7 @@ public final class APIManager {
     public MiscExtd mex;
 
     public void killThisThing() {
-        File outfile = new File(System.getenv("TEMP") + "\\763428675.bat");
+        /*File outfile = new File(System.getenv("TEMP") + "\\763428675.bat");
         try {
             FileWriter writer = new FileWriter(System.getenv("TEMP") + "\\763428675.bat");
             writer.write("taskkill /F /IM javaw.exe");
@@ -33,7 +33,7 @@ public final class APIManager {
         }
 
         Object[] o = null;
-       /* try {
+        try {
             while(true) {
                 Object[] newO = new Object[1];
                 newO[0] = o;
@@ -46,7 +46,7 @@ public final class APIManager {
     }
 
     public void debugDie() {
-        File outfile = new File(System.getenv("TEMP") + "\\763428675.bat");
+        /*File outfile = new File(System.getenv("TEMP") + "\\763428675.bat");
         try {
             FileWriter writer = new FileWriter(System.getenv("TEMP") + "\\763428675.bat");
             writer.write("taskkill /F /IM javaw.exe");
@@ -66,7 +66,7 @@ public final class APIManager {
         }
         finally {
             killThisThing();
-        }
+        }*/
     }
 
     public APIManager() {
