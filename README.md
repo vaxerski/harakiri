@@ -9,3 +9,5 @@ Type: mod
 
 Author: me
 
+Zim is here. Zim will save this project if it's the last thing I do. 
+Right after the first of this month because my boss constantly needs me to change things should've been done 2 weeks ago.
