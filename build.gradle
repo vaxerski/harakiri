@@ -3,7 +3,7 @@ buildscript {
         mavenLocal()
         mavenCentral()
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
+        maven { url = "https://minecraft.curseforge.com/api/maven" }
         maven {
             url = 'https://repo.spongepowered.org/maven'
         }
@@ -13,9 +13,9 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         classpath "com.github.jengelman.gradle.plugins:shadow:1.2.3"
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+        classpath group: 'org.locationtech.jts', name: 'jts-core', version: '1.18.1'
     }
 }
-
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'org.spongepowered.mixin'
@@ -68,6 +68,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'org.luaj:luaj-jse:3.0.1'
     compile 'club.minnced:java-discord-rpc:2.0.2'
+    compile group: 'org.locationtech.jts', name: 'jts-core', version: '1.18.1'
 }
 
 jar {
@@ -101,6 +102,7 @@ shadowJar {
         include(dependency('org.luaj:luaj-jse:3.0.1'))
         include(dependency('net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'))
         include(dependency('club.minnced:java-discord-rpc'))
+        include(dependency(group: 'org.locationtech.jts', name: 'jts-core', version: '1.18.1'))
     }
 
     manifest {
