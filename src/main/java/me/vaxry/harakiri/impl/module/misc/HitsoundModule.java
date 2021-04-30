@@ -4,6 +4,7 @@ import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
@@ -18,7 +19,7 @@ public class HitsoundModule extends Module {
 
     public HitsoundModule(){
         super("Hitsounds", new String[]{"Hitsounds"}, "Plays a sound when you hit an entity.", "NONE", -1, ModuleType.MISC);
-        audiopath = System.getenv("APPDATA") + "\\.minecraft\\Harakiri\\hitsound.wav";
+        audiopath = Minecraft.getMinecraft().gameDir + "\\harakiri\\hitsound.wav";
     }
 
     @Listener
