@@ -6,6 +6,7 @@ import me.vaxry.harakiri.framework.event.client.EventLoadConfig;
 import me.vaxry.harakiri.framework.event.client.EventSaveConfig;
 import me.vaxry.harakiri.impl.config.*;
 import me.vaxry.harakiri.impl.module.config.ReloadConfigsModule;
+import net.minecraft.client.Minecraft;
 
 import javax.swing.*;
 import java.io.*;
@@ -19,6 +20,7 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -60,8 +62,7 @@ public final class ConfigManager {
     public void init() {
         this.backupConfigs(); // backup configs
         this.cleanupOldConfigBackups();
-        this.current_config = ((ReloadConfigsModule)Harakiri.get().getModuleManager().find(ReloadConfigsModule.class)).getCurrentConfigDir();
-
+        this.current_config = ((ReloadConfigsModule) Objects.requireNonNull(Harakiri.get().getModuleManager().find(ReloadConfigsModule.class))).getCurrentConfigDir();
         this.configurableList.add(new ModuleConfig(this.current_config));
         this.configurableList.add(new HudConfig(this.current_config));
         this.configurableList.add(new LuaConfig(this.current_config));
@@ -158,16 +159,16 @@ public final class ConfigManager {
 
     private void backupConfigs() {
         try {
-            Path path = Paths.get(System.getenv("APPDATA") + "\\harakiri\\backup\\");
+            Path path = Paths.get(Minecraft.getMinecraft().gameDir + "\\harakiri\\backup\\");
             Files.createDirectories(path);
 
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
             final String filename = "config " + now.getYear() + "-" + ((now.getMonthValue() < 10) ? "0" : "") + now.getMonthValue() + "-" + ((now.getDayOfMonth() < 10) ? "0" : "") + now.getDayOfMonth() + " " + now.getHour() + "_" + now.getMinute() + ".zip";
 
-            FileOutputStream fos = new FileOutputStream(System.getenv("APPDATA") + "\\harakiri\\backup\\" + filename);
+            FileOutputStream fos = new FileOutputStream(Minecraft.getMinecraft().gameDir + "\\harakiri\\backup\\" + filename);
             ZipOutputStream zos = new ZipOutputStream(fos);
-            addDirToZipArchive(zos, new File(System.getenv("APPDATA") + "\\.minecraft\\" + CONFIG_PATH), null);
+            addDirToZipArchive(zos, new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\" + CONFIG_PATH), null);
             zos.flush();
             fos.flush();
             zos.close();
@@ -179,7 +180,7 @@ public final class ConfigManager {
     }
 
     private void cleanupOldConfigBackups(){
-        File folder = new File(System.getenv("APPDATA") + "\\harakiri\\backup\\");
+        File folder = new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\backup\\");
         File[] listOfFiles = folder.listFiles();
 
         if(listOfFiles.length < this.MIN_BACKUPS_TO_CLEAN)

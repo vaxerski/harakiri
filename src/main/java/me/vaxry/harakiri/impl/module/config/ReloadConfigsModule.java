@@ -5,6 +5,7 @@ import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.impl.manager.ModuleManager;
+import net.minecraft.client.Minecraft;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.io.File;
@@ -52,7 +53,7 @@ public class ReloadConfigsModule extends Module {
     public void reloadConfigs(){
 
         // First, get the last used config. If none, create one.
-        File file = new File(System.getenv("APPDATA") + "\\.minecraft\\harakiri\\config");
+        File file = new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\config");
         String[] directories = file.list(new FilenameFilter() {
             @Override
             public boolean accept(File current, String name) {
@@ -96,7 +97,7 @@ public class ReloadConfigsModule extends Module {
         }
 
         // Toggle the correct one on
-        File lastConfigReader = new File(System.getenv("APPDATA") + "\\.minecraft\\harakiri\\config\\configManager.txt");
+        File lastConfigReader = new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\configManager.txt");
         try {
             if (!lastConfigReader.exists()) {
                 lastConfigReader.createNewFile();
@@ -174,11 +175,11 @@ public class ReloadConfigsModule extends Module {
     }
 
     private boolean fixOldConfigStyle(){
-        Path configPath = Paths.get(System.getenv("APPDATA") + "\\.minecraft\\harakiri\\config\\default");
+        Path configPath = Paths.get(Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\default");
         try {
             Files.createDirectories(configPath);
 
-            File file = new File(System.getenv("APPDATA") + "\\.minecraft\\harakiri\\config");
+            File file = new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\");
             String[] files = file.list(new FilenameFilter() {
                 @Override
                 public boolean accept(File current, String name) {
@@ -191,7 +192,7 @@ public class ReloadConfigsModule extends Module {
                 return false;
             }else{
                 for(String f : files){
-                    f = System.getenv("APPDATA") + "\\.minecraft\\harakiri\\config\\" + f;
+                    f = Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\" + f;
                     File fi = new File(f);
                     String renameLoc = f;
                     f = f.substring(0, f.lastIndexOf('\\')) + "default\\" + f.substring(f.lastIndexOf('\\') + 1);
@@ -224,7 +225,7 @@ public class ReloadConfigsModule extends Module {
 
         this.selected_config = selectedCfg;
 
-        File lastConfigReader = new File(System.getenv("APPDATA") + "\\.minecraft\\harakiri\\config\\configManager.txt");
+        File lastConfigReader = new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\configManager.txt");
         try {
             if (!lastConfigReader.exists()) {
                 lastConfigReader.createNewFile();
@@ -247,7 +248,7 @@ public class ReloadConfigsModule extends Module {
 
         this.selected_config = selectedCfg;
 
-        File lastConfigReader = new File(System.getenv("APPDATA") + "\\.minecraft\\harakiri\\config\\configManager.txt");
+        File lastConfigReader = new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\configManager.txt");
         try {
             if (!lastConfigReader.exists()) {
                 lastConfigReader.createNewFile();
@@ -292,7 +293,7 @@ public class ReloadConfigsModule extends Module {
 
         Harakiri.get().getConfigManager().loadAll();
 
-        File lastConfigReader = new File(System.getenv("APPDATA") + "\\.minecraft\\harakiri\\config\\configManager.txt");
+        File lastConfigReader = new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\configManager.txt");
         try {
             if (!lastConfigReader.exists()) {
                 lastConfigReader.createNewFile();
@@ -307,7 +308,7 @@ public class ReloadConfigsModule extends Module {
     }
 
     public void createNewConfig(String name) {
-        Path configPath = Paths.get(System.getenv("APPDATA") + "\\.minecraft\\harakiri\\config\\" + name);
+        Path configPath = Paths.get(Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\" + name);
         try {
             Files.createDirectories(configPath);
         }catch(Throwable t){

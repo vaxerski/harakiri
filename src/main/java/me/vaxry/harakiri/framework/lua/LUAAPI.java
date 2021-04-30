@@ -4,6 +4,7 @@ import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.lua.api.*;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.Timer;
+import net.minecraft.client.Minecraft;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LoadState;
 import org.luaj.vm2.LuaValue;
@@ -183,7 +184,7 @@ public final class LUAAPI {
     }
 
     public static boolean parseLUAScript(String name, LuaModule luaModule){
-        String filepath = System.getenv("APPDATA") + "\\.minecraft\\Harakiri\\Lua\\" + name;
+        String filepath = Minecraft.getMinecraft().gameDir + "\\harakiri\\config" + name;
         File luafile = new File(filepath);
 
         String rawdata = "";

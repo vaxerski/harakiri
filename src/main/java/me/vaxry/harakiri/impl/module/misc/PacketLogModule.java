@@ -103,7 +103,7 @@ public class PacketLogModule extends Module {
 
     protected void saveStringToFile(String str){
         try {
-            FileWriter writer = new FileWriter(new File(System.getenv("APPDATA") + "\\.minecraft\\harakiri\\packetlog.txt"));
+            FileWriter writer = new FileWriter(new File(Minecraft.getMinecraft().gameDir + "harakiri\\packetlog.txt"));
             writer.write(str);
             writer.close();
         }catch (Throwable t){
@@ -130,7 +130,7 @@ public class PacketLogModule extends Module {
     protected String loadRawFile(){
         try {
             String res;
-            res = readAllBytesJava7(System.getenv("APPDATA") + "\\.minecraft\\harakiri\\packetlog.txt");
+            res = readAllBytesJava7(Minecraft.getMinecraft().gameDir + "harakiri\\packetlog.txt");
             return res;
         }catch (Throwable t){
             ;

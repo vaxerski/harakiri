@@ -128,8 +128,8 @@ public final class Harakiri {
             try {
                 this.moduleManager.add(new ReloadConfigsModule(this.moduleManager)); // Load cfgs
                 this.configManager.init(); // Keep last, so we load configs after everything else inits
-            }catch(Throwable t){
-                JOptionPane.showMessageDialog(null, "Config Manager could not launch correctly. (Corrupt config?)\nTry recovering your config from %appdata%/harakiri/backup.\nIf that doesn't work, contact Vaxry.", "Init failed!", JOptionPane.INFORMATION_MESSAGE);
+            }catch(Exception t){
+                JOptionPane.showMessageDialog(null, t.toString(), "Init failed!", JOptionPane.INFORMATION_MESSAGE);
             }
 
             this.getEventManager().dispatchEvent(new EventLoad());

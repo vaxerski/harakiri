@@ -55,6 +55,11 @@ minecraft {
 
 repositories {
     maven { url = "https://repo.spongepowered.org/maven" }
+    maven {
+        name = "jitpack.io"
+        url = "https://jitpack.io"
+    }
+    mavenCentral()
 }
 
 dependencies {
@@ -69,6 +74,7 @@ dependencies {
     compile 'org.luaj:luaj-jse:3.0.1'
     compile 'club.minnced:java-discord-rpc:2.0.2'
     compile group: 'org.locationtech.jts', name: 'jts-core', version: '1.18.1'
+    compile("com.github.vialdevelopment:attendance:rewrite-SNAPSHOT")
 }
 
 jar {
@@ -103,6 +109,7 @@ shadowJar {
         include(dependency('net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'))
         include(dependency('club.minnced:java-discord-rpc'))
         include(dependency(group: 'org.locationtech.jts', name: 'jts-core', version: '1.18.1'))
+        include(dependency("com.github.vialdevelopment:attendance"))
     }
 
     manifest {
