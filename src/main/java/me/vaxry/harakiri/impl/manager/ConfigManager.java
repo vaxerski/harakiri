@@ -159,16 +159,16 @@ public final class ConfigManager {
 
     private void backupConfigs() {
         try {
-            Path path = Paths.get(Minecraft.getMinecraft().gameDir + "\\harakiri\\backup\\");
+            Path path = Paths.get(Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/backup/" : "\\harakiri\\backup\\"));
             Files.createDirectories(path);
 
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
             final String filename = "config " + now.getYear() + "-" + ((now.getMonthValue() < 10) ? "0" : "") + now.getMonthValue() + "-" + ((now.getDayOfMonth() < 10) ? "0" : "") + now.getDayOfMonth() + " " + now.getHour() + "_" + now.getMinute() + ".zip";
 
-            FileOutputStream fos = new FileOutputStream(Minecraft.getMinecraft().gameDir + "\\harakiri\\backup\\" + filename);
+            FileOutputStream fos = new FileOutputStream(Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/backup/" : "\\harakiri\\backup\\") + filename);
             ZipOutputStream zos = new ZipOutputStream(fos);
-            addDirToZipArchive(zos, new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\" + CONFIG_PATH), null);
+            addDirToZipArchive(zos, new File(Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/" : "\\harakiri\\") + CONFIG_PATH), null);
             zos.flush();
             fos.flush();
             zos.close();
@@ -180,7 +180,7 @@ public final class ConfigManager {
     }
 
     private void cleanupOldConfigBackups(){
-        File folder = new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\backup\\");
+        File folder = new File(Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/backup/" : "\\harakiri\\backup\\"));
         File[] listOfFiles = folder.listFiles();
 
         if(listOfFiles.length < this.MIN_BACKUPS_TO_CLEAN)

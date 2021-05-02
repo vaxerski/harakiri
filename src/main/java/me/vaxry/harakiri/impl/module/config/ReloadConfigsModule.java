@@ -53,7 +53,7 @@ public class ReloadConfigsModule extends Module {
     public void reloadConfigs(){
 
         // First, get the last used config. If none, create one.
-        File file = new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\config");
+        File file = new File(Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/config" : "\\harakiri\\config"));
         String[] directories = file.list(new FilenameFilter() {
             @Override
             public boolean accept(File current, String name) {
@@ -97,7 +97,7 @@ public class ReloadConfigsModule extends Module {
         }
 
         // Toggle the correct one on
-        File lastConfigReader = new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\configManager.txt");
+        File lastConfigReader = new File(Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/config/configManager.txt" : "\\harakiri\\config\\configManager.txt"));
         try {
             if (!lastConfigReader.exists()) {
                 lastConfigReader.createNewFile();
@@ -175,11 +175,11 @@ public class ReloadConfigsModule extends Module {
     }
 
     private boolean fixOldConfigStyle(){
-        Path configPath = Paths.get(Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\default");
+        Path configPath = Paths.get(Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/config/default" : "\\harakiri\\config\\default"));
         try {
             Files.createDirectories(configPath);
 
-            File file = new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\");
+            File file = new File(Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/config/" : "\\harakiri\\config\\"));
             String[] files = file.list(new FilenameFilter() {
                 @Override
                 public boolean accept(File current, String name) {
@@ -192,10 +192,16 @@ public class ReloadConfigsModule extends Module {
                 return false;
             }else{
                 for(String f : files){
-                    f = Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\" + f;
+                    if(Harakiri.isNix())
+                        f = Minecraft.getMinecraft().gameDir + "/harakiri/config/" + f;
+                    else
+                        f = Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\" + f;
                     File fi = new File(f);
                     String renameLoc = f;
-                    f = f.substring(0, f.lastIndexOf('\\')) + "default\\" + f.substring(f.lastIndexOf('\\') + 1);
+                    if(Harakiri.isNix())
+                        f = f.substring(0, f.lastIndexOf('/')) + "default/" + f.substring(f.lastIndexOf('/') + 1);
+                    else
+                        f = f.substring(0, f.lastIndexOf('\\')) + "default\\" + f.substring(f.lastIndexOf('\\') + 1);
                     fi.renameTo(new File(f));
                 }
             }
@@ -225,7 +231,7 @@ public class ReloadConfigsModule extends Module {
 
         this.selected_config = selectedCfg;
 
-        File lastConfigReader = new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\configManager.txt");
+        File lastConfigReader = new File(Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/config/configManager.txt" : "\\harakiri\\config\\configManager.txt"));
         try {
             if (!lastConfigReader.exists()) {
                 lastConfigReader.createNewFile();
@@ -248,7 +254,7 @@ public class ReloadConfigsModule extends Module {
 
         this.selected_config = selectedCfg;
 
-        File lastConfigReader = new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\configManager.txt");
+        File lastConfigReader = new File(Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/config/configManager.txt" : "\\harakiri\\config\\configManager.txt"));
         try {
             if (!lastConfigReader.exists()) {
                 lastConfigReader.createNewFile();
@@ -293,7 +299,7 @@ public class ReloadConfigsModule extends Module {
 
         Harakiri.get().getConfigManager().loadAll();
 
-        File lastConfigReader = new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\configManager.txt");
+        File lastConfigReader = new File(Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/config/configManager.txt" : "\\harakiri\\config\\configManager.txt"));
         try {
             if (!lastConfigReader.exists()) {
                 lastConfigReader.createNewFile();
@@ -308,7 +314,7 @@ public class ReloadConfigsModule extends Module {
     }
 
     public void createNewConfig(String name) {
-        Path configPath = Paths.get(Minecraft.getMinecraft().gameDir + "\\harakiri\\config\\" + name);
+        Path configPath = Paths.get(Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/config/" : "\\harakiri\\config\\") + name);
         try {
             Files.createDirectories(configPath);
         }catch(Throwable t){
@@ -329,8 +335,13 @@ public class ReloadConfigsModule extends Module {
         public Config(File file){
             cfgFile = file;
             name = file.getPath();
-            if(name.indexOf('\\') != -1)
-                name = name.substring(file.getPath().lastIndexOf('\\'));
+            if(!Harakiri.isNix()) {
+                if (name.indexOf('\\') != -1)
+                    name = name.substring(file.getPath().lastIndexOf('\\'));
+            }else{
+                if (name.indexOf('/') != -1)
+                    name = name.substring(file.getPath().lastIndexOf('/'));
+            }
         }
     }
 }

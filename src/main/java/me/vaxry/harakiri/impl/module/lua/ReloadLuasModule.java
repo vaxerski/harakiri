@@ -147,7 +147,7 @@ public class ReloadLuasModule extends Module {
         if(config != null)
             config.onSave();
 
-        File f = new File(Minecraft.getMinecraft().gameDir + "\\harakiri\\Lua");
+        File f = new File(Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/Lua" : "\\harakiri\\Lua"));
 
         pathnames = f.list();
 
