@@ -19,7 +19,7 @@ public class HitsoundModule extends Module {
 
     public HitsoundModule(){
         super("Hitsounds", new String[]{"Hitsounds"}, "Plays a sound when you hit an entity.", "NONE", -1, ModuleType.MISC);
-        audiopath = Minecraft.getMinecraft().gameDir + "\\harakiri\\hitsound.wav";
+        audiopath = Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/hitsound.wav" : "\\harakiri\\hitsound.wav");
     }
 
     @Listener
