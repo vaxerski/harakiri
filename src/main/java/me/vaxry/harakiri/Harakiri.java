@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 
 /**
  * @author vax
+ * @author Zim
  */
 public final class Harakiri {
 
