@@ -184,7 +184,7 @@ public final class LUAAPI {
     }
 
     public static boolean parseLUAScript(String name, LuaModule luaModule){
-        String filepath = Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/config/" : "\\harakiri\\config\\") + name;
+        String filepath = Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/Lua/" : "\\harakiri\\Lua\\") + name;
         File luafile = new File(filepath);
 
         String rawdata = "";
