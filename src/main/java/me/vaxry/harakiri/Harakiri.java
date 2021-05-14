@@ -429,6 +429,6 @@ public final class Harakiri {
     public static final ResourceLocation ENCHANTED_ITEM_GLINT_RES = new ResourceLocation("textures/misc/enchanted_item_glint.png");
 
     public static boolean isNix(){
-        return OS.contains("nix") || OS.contains("nux") || OS.contains("aix");
+        return OS.contains("nix") || OS.contains("nux") || OS.contains("aix") || OS.contains("darwin");
     }
 }
