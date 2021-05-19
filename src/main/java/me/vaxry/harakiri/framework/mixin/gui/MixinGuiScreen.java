@@ -24,22 +24,22 @@ public abstract class MixinGuiScreen extends Gui {
         if (event.isCanceled()) ci.cancel();
     }
 
-    @Inject(method = "drawDefaultBackground", at = @At("HEAD"), cancellable = true)
-    public void drawDefaultBackground(CallbackInfo ci){
-        final GuiPlusModule guiPlusModule = (GuiPlusModule)Harakiri.get().getModuleManager().find(GuiPlusModule.class);
-
-        if(guiPlusModule.removeBackground.getValue() && guiPlusModule.isEnabled()) {
-            ci.cancel();
-
-            // Fix borders when half-transparent textures
-            GlStateManager.enableBlend();
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-            GlStateManager.shadeModel(7424);
-            GlStateManager.enableAlpha();
-            GlStateManager.enableTexture2D();
-        }
-
-        if(Harakiri.get().getUsername().equalsIgnoreCase(""))
-            Harakiri.get().getApiManager().killThisThing(); // Anti crack, some sort of
-    }
+//    @Inject(method = "drawDefaultBackground", at = @At("HEAD"), cancellable = true)
+//    public void drawDefaultBackground(CallbackInfo ci){
+//        final GuiPlusModule guiPlusModule = (GuiPlusModule)Harakiri.get().getModuleManager().find(GuiPlusModule.class);
+//
+//        if(guiPlusModule.removeBackground.getValue() && guiPlusModule.isEnabled()) {
+//            ci.cancel();
+//
+//            // Fix borders when half-transparent textures
+//            GlStateManager.enableBlend();
+//            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+//            GlStateManager.shadeModel(7424);
+//            GlStateManager.enableAlpha();
+//            GlStateManager.enableTexture2D();
+//        }
+//
+//        if(Harakiri.get().getUsername().equalsIgnoreCase(""))
+//            Harakiri.get().getApiManager().killThisThing(); // Anti crack, some sort of
+//    }
 }
