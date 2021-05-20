@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.world;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
@@ -29,14 +30,13 @@ public final class SlimeChunksModule extends Module {
         super("SlimeChunks", new String[]{"SlimesChunks", "SlimeC"}, "Highlights slime chunks (Requires the world seed)", "NONE", -1, ModuleType.WORLD);
     }
 
-    @Listener
+    @Override
     public void onToggle() {
         super.onToggle();
         this.slimeChunkList.clear();
     }
 
-    @Listener
-    public void render3D(EventRender3D event) {
+    Attender<EventRender3D> onRender3D = new Attender<>(EventRender3D.class, event -> {
         RenderUtil.begin3D();
         for (SlimeChunk slimeChunk : this.slimeChunkList) {
             if (slimeChunk != null) {
@@ -50,10 +50,9 @@ public final class SlimeChunksModule extends Module {
             }
         }
         RenderUtil.end3D();
-    }
+    });
 
-    @Listener
-    public void receivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof SPacketChunkData) {
                 final SPacketChunkData packet = (SPacketChunkData) event.getPacket();
@@ -70,7 +69,7 @@ public final class SlimeChunksModule extends Module {
                 }
             }
         }
-    }
+    });
 
     private boolean isSlimeChunk(final long seed, int x, int z) {
         final Random rand = new Random(seed +

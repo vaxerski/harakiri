@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.player;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.Module;
@@ -27,8 +28,7 @@ public final class AutoGappleModule extends Module {
         return "" + this.getNotchAppleCount();
     }
 
-    @Listener
-    public void onPlayerUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() != EventStageable.EventStage.PRE)
             return;
 
@@ -73,7 +73,7 @@ public final class AutoGappleModule extends Module {
                 mc.gameSettings.keyBindUseItem.pressed = true;
             }
         }
-    }
+    });
 
     private int findNotchApple() {
         for (int slot = 44; slot > 8; slot--) {

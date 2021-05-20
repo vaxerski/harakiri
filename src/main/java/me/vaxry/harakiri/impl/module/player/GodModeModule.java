@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.player;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
@@ -83,8 +84,7 @@ public final class GodModeModule extends Module {
         }
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             final Minecraft mc = Minecraft.getMinecraft();
 
@@ -97,10 +97,9 @@ public final class GodModeModule extends Module {
                 mc.player.isDead = false;
             }
         }
-    }
+    });
 
-    @Listener
-    public void sendPacket(EventSendPacket event) {
+    Attender<EventSendPacket> onPacketSend = new Attender<>(EventSendPacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (this.mode.getValue() == Mode.PORTAL) {
                 if (event.getPacket() instanceof CPacketConfirmTeleport) {
@@ -135,13 +134,11 @@ public final class GodModeModule extends Module {
                 }
             }
         }
-    }
+    });
 
-    @Listener
-    public void displayGui(EventDisplayGui event) {
+    Attender<EventDisplayGui> onDisplayGUI = new Attender<>(EventDisplayGui.class, event -> {
         if (event.getScreen() != null && event.getScreen() instanceof GuiGameOver && this.mode.getValue() == Mode.LOCK) {
             event.setCanceled(true);
         }
-    }
-
+    });
 }

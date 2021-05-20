@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.world;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import me.vaxry.harakiri.framework.event.player.EventPlayerDamageBlock;
@@ -129,8 +130,7 @@ public final class AutoToolModule extends Module {
         return (f < 0 ? 0 : f);
     }
 
-    @Listener
-    public void damageBlock(EventPlayerDamageBlock event) {
+    Attender<EventPlayerDamageBlock> onPlayerDamageBlock = new Attender<>(EventPlayerDamageBlock.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
         if (this.silent.getValue()) {
             final int slot = getToolInventory(event.getPos());
@@ -149,10 +149,9 @@ public final class AutoToolModule extends Module {
                 mc.playerController.updateController();
             }
         }
-    }
+    });
 
-    @Listener
-    public void sendPacket(EventSendPacket event) {
+    Attender<EventSendPacket> onPacketSend = new Attender<>(EventSendPacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (this.send) {
                 this.send = false;
@@ -186,7 +185,7 @@ public final class AutoToolModule extends Module {
                 }
             }
         }
-    }
+    });
 
     private int getToolInventory(BlockPos pos) {
         int index = -1;

@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.world;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
@@ -40,8 +41,7 @@ public final class ScaffoldModule extends Module {
     private boolean lastFeet = false;
     private double towerStart = 0.0;
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage().equals(EventStageable.EventStage.POST) || mode.getValue() == MODE.CLASSIC)
             return;
 
@@ -59,10 +59,9 @@ public final class ScaffoldModule extends Module {
                 }
             }
         }
-    }
+    });
 
-    @Listener
-    public void onMotionUpdate(EventUpdateWalkingPlayer event){
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         if(mode.getValue() == MODE.EXTRAPOLATE)
             return;
 
@@ -207,7 +206,7 @@ public final class ScaffoldModule extends Module {
             mc.player.inventory.currentItem = prevSlot;
             mc.playerController.updateController();
         }
-    }
+    });
 
     private Vec3i getNextBlock(Vec3i direction, final Minecraft mc) {
         for (int i = 0; i <= (int) reach.getValue(); i++) {

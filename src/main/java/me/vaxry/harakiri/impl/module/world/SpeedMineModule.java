@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.world;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventClickBlock;
 import me.vaxry.harakiri.framework.event.player.EventPlayerDamageBlock;
@@ -35,8 +36,7 @@ public final class SpeedMineModule extends Module {
         return this.mode.getValue().name();
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             Minecraft.getMinecraft().playerController.blockHitDelay = 0;
 
@@ -44,26 +44,23 @@ public final class SpeedMineModule extends Module {
                 Minecraft.getMinecraft().playerController.isHittingBlock = false;
             }
         }
-    }
+    });
 
-    @Listener
-    public void resetBlockDamage(EventResetBlockRemoving event) {
+    Attender<EventResetBlockRemoving> onResetBlockDamage = new Attender<>(EventResetBlockRemoving.class, event -> {
         if (this.reset.getValue()) {
             event.setCanceled(true);
         }
-    }
+    });
 
-    @Listener
-    public void clickBlock(EventClickBlock event) {
+    Attender<EventClickBlock> onClickBlock = new Attender<>(EventClickBlock.class, event -> {
         if (this.reset.getValue()) {
             if (Minecraft.getMinecraft().playerController.curBlockDamageMP > 0.1f) {
                 Minecraft.getMinecraft().playerController.isHittingBlock = true;
             }
         }
-    }
+    });
 
-    @Listener
-    public void damageBlock(EventPlayerDamageBlock event) {
+    Attender<EventPlayerDamageBlock> onPlayerDamageBlock = new Attender<>(EventPlayerDamageBlock.class, event -> {
         if (canBreak(event.getPos())) {
 
             final Minecraft mc = Minecraft.getMinecraft();
@@ -107,7 +104,7 @@ public final class SpeedMineModule extends Module {
                 mc.world.setBlockToAir(above);
             }
         }
-    }
+    });
 
     private boolean canBreak(BlockPos pos) {
         final IBlockState blockState = Minecraft.getMinecraft().world.getBlockState(pos);

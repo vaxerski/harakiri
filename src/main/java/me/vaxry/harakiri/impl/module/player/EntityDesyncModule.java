@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.player;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
@@ -35,8 +36,7 @@ public final class EntityDesyncModule extends Module {
         this.setDesc("Dismounts you from an entity client-side.");
     }
 
-    @Listener
-    public void onReceivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onReceivePacket = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage().equals(EventStageable.EventStage.POST)) {
             if (event.getPacket() instanceof SPacketSetPassengers) {
                 if (this.hasOriginalRidingEntity() && Minecraft.getMinecraft().world != null) {
@@ -59,7 +59,7 @@ public final class EntityDesyncModule extends Module {
                 }
             }
         }
-    }
+    });
 
     /**
      * NoDismount for 9b9t, and possibly others.
@@ -67,8 +67,7 @@ public final class EntityDesyncModule extends Module {
      * @param event
      * @author Seth
      */
-    @Listener
-    public void onSendPacket(EventSendPacket event) {
+    Attender<EventSendPacket> onPacketSend = new Attender<>(EventSendPacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (this.noDismountPlugin.getValue()) {
                 if (event.getPacket() instanceof CPacketPlayer.Position) {
@@ -80,10 +79,9 @@ public final class EntityDesyncModule extends Module {
                     event.setCanceled(true);
             }
         }
-    }
+    });
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onUpdatePlayer = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage().equals(EventStageable.EventStage.POST)) {
             final Minecraft mc = Minecraft.getMinecraft();
             if (mc.world != null && mc.player != null) {
@@ -99,7 +97,7 @@ public final class EntityDesyncModule extends Module {
                 }
             }
         }
-    }
+    });
 
     @Override
     public void onEnable() {

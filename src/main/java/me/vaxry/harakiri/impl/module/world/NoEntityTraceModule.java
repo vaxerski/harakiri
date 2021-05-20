@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.world;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.player.EventGetMouseOver;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
@@ -15,8 +16,7 @@ public final class NoEntityTraceModule extends Module {
         super("NoEntityHit", new String[]{"MineThrough", "MineThrough", "MineThrough", "MineT"}, "Do stuff through entities.", "NONE", -1, ModuleType.WORLD);
     }
 
-    @Listener
-    public void onGetMouseOver(EventGetMouseOver event) {
+    Attender<EventGetMouseOver> onMouseOver = new Attender<>(EventGetMouseOver.class, event -> {
         if (this.toolsOnly.getValue()) {
             final Minecraft mc = Minecraft.getMinecraft();
             if (mc.player != null) {
@@ -29,5 +29,5 @@ public final class NoEntityTraceModule extends Module {
         }
 
         event.setCanceled(true);
-    }
+    });
 }

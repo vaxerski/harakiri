@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.player;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import me.vaxry.harakiri.framework.Module;
@@ -24,8 +25,7 @@ public final class NoPacketModule extends Module {
         super("AntiPacket", new String[]{"NoPacket", "NoPac", "AntiPacket", "PacketDisable", "PacketCancel"}, "Disables various packets from being sent to the server, or to the client.", "NONE", -1, ModuleType.PLAYER);
     }
 
-    @Listener
-    public void onSendPacket(EventSendPacket event) {
+    Attender<EventSendPacket> onPacketSend = new Attender<>(EventSendPacket.class, event -> {
         if (this.playerPosRot.getValue())
             if (event.getPacket() instanceof CPacketPlayer.PositionRotation)
                 event.setCanceled(true);
@@ -57,12 +57,11 @@ public final class NoPacketModule extends Module {
         if (this.input.getValue())
             if (event.getPacket() instanceof CPacketInput)
                 event.setCanceled(true);
-    }
+    });
 
-    @Listener
-    public void onReceivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (this.removeEntity.getValue())
             if (event.getPacket() instanceof SPacketDestroyEntities)
                 event.setCanceled(true);
-    }
+    });
 }

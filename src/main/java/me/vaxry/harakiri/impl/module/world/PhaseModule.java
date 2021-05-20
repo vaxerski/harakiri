@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.world;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.gui.EventRenderHelmet;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
@@ -36,38 +37,15 @@ public final class PhaseModule extends Module {
         return this.mode.getValue().name();
     }
 
-    @Listener
-    public void setOpaqueCube(EventSetOpaqueCube event) {
-        event.setCanceled(true);
-    }
+    Attender<EventSetOpaqueCube> onSetOpaqueCube = new Attender<>(EventSetOpaqueCube.class, event -> event.setCanceled(true));
+    Attender<EventRenderOverlay> onRenderOverlay = new Attender<>(EventRenderOverlay.class, event -> event.setCanceled(true));
+    Attender<EventRenderHelmet> onRenderHelmet = new Attender<>(EventRenderHelmet.class, event -> event.setCanceled(true));
+    Attender<EventPushOutOfBlocks> onPushOutOfBlocks = new Attender<>(EventPushOutOfBlocks.class, event -> event.setCanceled(true));
+    Attender<EventPushedByWater> onPushedByWater = new Attender<>(EventPushedByWater.class, event -> event.setCanceled(true));
+    Attender<EventApplyCollision> onApplyCollision = new Attender<>(EventApplyCollision.class, event -> event.setCanceled(true));
 
-    @Listener
-    public void renderOverlay(EventRenderOverlay event) {
-        event.setCanceled(true);
-    }
 
-    @Listener
-    public void renderHelmet(EventRenderHelmet event) {
-        event.setCanceled(true);
-    }
-
-    @Listener
-    public void pushOutOfBlocks(EventPushOutOfBlocks event) {
-        event.setCanceled(true);
-    }
-
-    @Listener
-    public void pushedByWater(EventPushedByWater event) {
-        event.setCanceled(true);
-    }
-
-    @Listener
-    public void applyCollision(EventApplyCollision event) {
-        event.setCanceled(true);
-    }
-
-    @Listener
-    public void collideWithBlock(EventAddCollisionBox event) {
+    Attender<EventAddCollisionBox> onAddCollisionBox = new Attender<>(EventAddCollisionBox.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         if (mc.player != null) {
@@ -106,10 +84,9 @@ public final class PhaseModule extends Module {
                 event.setCanceled(true);
             }
         }
-    }
+    });
 
-    @Listener
-    public void sendPacket(EventSendPacket event) {
+    Attender<EventSendPacket> onSendPacket = new Attender<>(EventSendPacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (this.mode.getValue() == Mode.NOCLIP) {
                 if (event.getPacket() instanceof CPacketPlayer && !(event.getPacket() instanceof CPacketPlayer.Position)) {
@@ -117,10 +94,9 @@ public final class PhaseModule extends Module {
                 }
             }
         }
-    }
+    });
 
-    @Listener
-    public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             final Minecraft mc = Minecraft.getMinecraft();
 
@@ -142,10 +118,9 @@ public final class PhaseModule extends Module {
                 }
             }
         }
-    }
+    });
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             final Minecraft mc = Minecraft.getMinecraft();
 
@@ -182,6 +157,5 @@ public final class PhaseModule extends Module {
                 }
             }
         }
-    }
-
+    });
 }

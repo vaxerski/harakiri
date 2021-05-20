@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.player;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
@@ -13,8 +14,7 @@ public class AntiHungerModule extends Module {
         super("AntiHunger", new String[]{"AntiHunger", "AH"}, "Makes you lose less hunger.", "NONE", -1, ModuleType.PLAYER);
     }
 
-    @Listener
-    public void onPacketSend(EventSendPacket event){
+    Attender<EventSendPacket> onPacketSend = new Attender<>(EventSendPacket.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
         if(event.getPacket() instanceof CPacketPlayer && mc.player.onGround && !mc.player.isElytraFlying()){
             final CPacketPlayer packet = (CPacketPlayer)event.getPacket();
@@ -37,5 +37,5 @@ public class AntiHungerModule extends Module {
                 event.setCanceled(true);
             }
         }
-    }
+    });
 }

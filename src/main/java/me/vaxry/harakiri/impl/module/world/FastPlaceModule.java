@@ -1,9 +1,11 @@
 package me.vaxry.harakiri.impl.module.world;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemExpBottle;
 
@@ -22,8 +24,7 @@ public final class FastPlaceModule extends Module {
         Minecraft.getMinecraft().rightClickDelayTimer = 6;
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (this.xp.getValue()) {
                 if (Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() instanceof ItemExpBottle || Minecraft.getMinecraft().player.getHeldItemOffhand().getItem() instanceof ItemExpBottle) {
@@ -33,6 +34,5 @@ public final class FastPlaceModule extends Module {
                 Minecraft.getMinecraft().rightClickDelayTimer = 0;
             }
         }
-    }
-
+    });
 }
