@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.lua;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.Configurable;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
@@ -33,21 +34,19 @@ public class ReloadLuasModule extends Module {
     //                    LUA EVENTS                    //
     // ------------------------------------------------ //
 
-    @Listener
-    public void render2D(EventRender2D event){
+    Attender<EventRender2D> onRender2D = new Attender<>(EventRender2D.class, event -> {
         // Update LUAs
         updateEnabledLuas();
 
         LUAAPI.onRender2D(enabledLuas);
-    }
+    });
 
-    @Listener
-    public void render3D(EventRender3D event){
+    Attender<EventRender3D> onRender3D = new Attender<>(EventRender3D.class, event -> {
         // Update LUAs
         updateEnabledLuas();
 
         LUAAPI.onRender3D(enabledLuas);
-    }
+    });
 
     // ------------------------------------------------ //
     // ------------------------------------------------ //

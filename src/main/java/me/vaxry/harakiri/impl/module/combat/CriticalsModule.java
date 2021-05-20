@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.combat;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import me.vaxry.harakiri.framework.Module;
@@ -23,8 +24,7 @@ public final class CriticalsModule extends Module {
         return this.mode.getValue().name();
     }
 
-    @Listener
-    public void sendPacket(EventSendPacket event) {
+    Attender<EventSendPacket> onPacketSend = new Attender<>(EventSendPacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof CPacketUseEntity) {
                 final CPacketUseEntity packet = (CPacketUseEntity) event.getPacket();
@@ -46,8 +46,8 @@ public final class CriticalsModule extends Module {
                 }
             }
         }
-    }
-
+    });
+    
     private enum Mode {
         JUMP, PACKET
     }

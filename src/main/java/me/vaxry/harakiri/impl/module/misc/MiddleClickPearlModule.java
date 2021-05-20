@@ -1,8 +1,10 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemEnderPearl;
@@ -19,8 +21,7 @@ public class MiddleClickPearlModule extends Module {
         super("MiddleClickPearl", new String[]{"mcp", "autopearl"}, "Throws a pearl when you middle-click pointing in mid-air", "NONE", -1, ModuleType.MISC);
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onUpdatePlayer = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             final Minecraft mc = Minecraft.getMinecraft();
             if (mc.player == null || mc.world == null)
@@ -46,7 +47,7 @@ public class MiddleClickPearlModule extends Module {
                 }
             }
         }
-    }
+    });
 
     private boolean isItemStackPearl(final ItemStack itemStack) {
         return itemStack.getItem() instanceof ItemEnderPearl;

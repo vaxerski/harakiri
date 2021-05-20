@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.hidden;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.minecraft.EventRunTick;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
@@ -37,8 +38,7 @@ public final class ReconnectModule extends Module {
         }
     }
 
-    @Listener
-    public void sendPacket(EventSendPacket event) {
+    Attender<EventSendPacket> onSendPacket = new Attender<>(EventSendPacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof C00Handshake) {
                 final C00Handshake packet = (C00Handshake) event.getPacket();
@@ -48,10 +48,9 @@ public final class ReconnectModule extends Module {
                 }
             }
         }
-    }
+    });
 
-    @Listener
-    public void runTick(EventRunTick event) {
+    Attender<EventRunTick> onRunTick = new Attender<>(EventRunTick.class, event -> {
         if (event.getStage() == EventStageable.EventStage.POST) {
             if (this.lastIp != null && this.lastPort > 0 && this.reconnect) {
                 if (this.timer.passed(this.delay.getValue())) {
@@ -59,7 +58,7 @@ public final class ReconnectModule extends Module {
                 }
             }
         }
-    }
+    });
 
     public boolean reconnect(){
         if (this.lastIp != null && this.lastPort > 0) {

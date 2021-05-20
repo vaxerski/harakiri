@@ -1,10 +1,12 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.Friend;
 import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,8 +22,7 @@ public final class MiddleClickFriendsModule extends Module {
         super("MiddleClickFriends", new String[]{"MCF", "MiddleClickFriends", "MClick"}, "Allows you to middle click players to add them as a friend.", "NONE", -1, ModuleType.MISC);
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onUpdatePlayer = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             final Minecraft mc = Minecraft.getMinecraft();
 
@@ -50,6 +51,5 @@ public final class MiddleClickFriendsModule extends Module {
                 }
             }
         }
-    }
-
+    });
 }

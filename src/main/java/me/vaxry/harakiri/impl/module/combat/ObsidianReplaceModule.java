@@ -1,7 +1,9 @@
 package me.vaxry.harakiri.impl.module.combat;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.client.EventLoad;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
@@ -25,6 +27,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 
+import javax.swing.border.MatteBorder;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.BiFunction;
@@ -51,8 +54,7 @@ public final class ObsidianReplaceModule extends Module {
                 "NONE", -1, ModuleType.COMBAT);
     }
 
-    @Listener
-    public void onWalkingUpdate(final EventUpdateWalkingPlayer event) {
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         if (placementRequests.isEmpty())
             return;
 
@@ -80,10 +82,9 @@ public final class ObsidianReplaceModule extends Module {
         }
 
         handSwapContext.handleHandSwap(true, minecraft);
-    }
+    });
 
-    @Listener
-    public void onReceivePacket(final EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() != EventStageable.EventStage.POST)
             return;
 
@@ -101,14 +102,13 @@ public final class ObsidianReplaceModule extends Module {
                     buildPlacementRequest(minecraft, blockPosition);
             }
         }
-    }
+    });
 
-    @Listener
-    public void onLoadWorld(EventLoadWorld event) {
+    Attender<EventLoadWorld> onLoadWorld = new Attender<>(EventLoadWorld.class, event -> {
         if (event.getWorld() != null) {
             freeCamModule = (FreeCamModule) Harakiri.get().getModuleManager().find(FreeCamModule.class);
         }
-    }
+    });
 
     @Override
     public void onDisable() {

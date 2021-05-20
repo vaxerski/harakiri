@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
@@ -26,8 +27,7 @@ public class StashLoggerModule extends Module {
         super("StashLogger", new String[]{"StashLogger", "StashLog"}, "Logs possible stashes to a file in .minecraft/harakiri.", "NONE", -1, ModuleType.MISC);
     }
 
-    @Listener
-    public void recievePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.POST) {
             if (event.getPacket() instanceof SPacketChunkData) {
                 final SPacketChunkData packet = (SPacketChunkData) event.getPacket();
@@ -68,7 +68,7 @@ public class StashLoggerModule extends Module {
                 }
             }
         }
-    }
+    });
 
     public String getFileStringCreateIfNone() {
         return loadRawFile();

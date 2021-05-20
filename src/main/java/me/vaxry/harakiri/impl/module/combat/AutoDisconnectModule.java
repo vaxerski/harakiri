@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.combat;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.Module;
@@ -16,14 +17,13 @@ public final class AutoDisconnectModule extends Module {
         super("AutoDisconnect", new String[]{"Disconnect"}, "Automatically disconnects when your health is low enough.", "NONE", -1, ModuleType.COMBAT);
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (Minecraft.getMinecraft().player.getHealth() <= this.health.getValue()) {
                 Minecraft.getMinecraft().player.connection.sendPacket(new CPacketHeldItemChange(420));
                 this.toggle();
             }
         }
-    }
+    });
 
 }

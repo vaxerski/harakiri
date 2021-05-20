@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
@@ -36,8 +37,7 @@ public final class CoordLoggerModule extends Module {
         return this.mode.getValue().name();
     }
 
-    @Listener
-    public void receivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
 
             if (event.getPacket() instanceof SPacketSpawnMob) {
@@ -96,5 +96,5 @@ public final class CoordLoggerModule extends Module {
                 }
             }
         }
-    }
+    });
 }

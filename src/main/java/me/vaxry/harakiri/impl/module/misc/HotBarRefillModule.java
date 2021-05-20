@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.framework.Module;
@@ -25,8 +26,7 @@ public class HotBarRefillModule extends Module {
         this.setDesc("Automatically refills your hotbar.");
     }
 
-    @Listener
-    public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         if (this.timer.passed(this.delay.getValue())) {
             if (event.getStage() == EventStageable.EventStage.PRE) {
                 Minecraft mc = Minecraft.getMinecraft();
@@ -43,7 +43,7 @@ public class HotBarRefillModule extends Module {
 
             timer.reset();
         }
-    }
+    });
 
     /**
      * Checks all items in the hotbar that can be refilled

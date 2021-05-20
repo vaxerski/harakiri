@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.Module;
@@ -15,8 +16,7 @@ public final class NoGlobalSoundsModule extends Module {
         super("NoGlobalSounds", new String[]{"NoSounds", "AntiGlobalSounds"}, "Prevents loud global sounds from playing client-side", "NONE", -1, ModuleType.MISC);
     }
 
-    @Listener
-    public void receivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof SPacketSoundEffect) {
                 final SPacketSoundEffect packet = (SPacketSoundEffect) event.getPacket();
@@ -33,6 +33,5 @@ public final class NoGlobalSoundsModule extends Module {
                 }
             }
         }
-    }
-
+    });
 }

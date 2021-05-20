@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.event.world.EventFoliageColor;
@@ -67,8 +68,7 @@ public final class NoBiomeColorModule extends Module {
         return (255 << 24) | (this.color.getValue().getRed() << 16) | (this.color.getValue().getGreen() << 8 | this.color.getValue().getBlue());
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (this.prevRed != this.color.getValue().getRed()) {
                 this.prevRed = this.color.getValue().getRed();
@@ -87,10 +87,9 @@ public final class NoBiomeColorModule extends Module {
                 this.reload();
             }
         }
-    }
+    });
 
-    @Listener
-    public void getGrassColor(EventGrassColor event) {
+    Attender<EventGrassColor> onGrassColor = new Attender<>(EventGrassColor.class, event -> {
         switch (this.mode.getValue()) {
             case DEFAULT:
                 event.setColor(0x79c05a);
@@ -100,10 +99,9 @@ public final class NoBiomeColorModule extends Module {
                 break;
         }
         event.setCanceled(true);
-    }
+    });
 
-    @Listener
-    public void getFoliageColor(EventFoliageColor event) {
+    Attender<EventFoliageColor> onFoliageColor = new Attender<>(EventFoliageColor.class, event -> {
         switch (this.mode.getValue()) {
             case DEFAULT:
                 event.setColor(0x59ae30);
@@ -113,10 +111,9 @@ public final class NoBiomeColorModule extends Module {
                 break;
         }
         event.setCanceled(true);
-    }
+    });
 
-    @Listener
-    public void getWaterColor(EventWaterColor event) {
+    Attender<EventWaterColor> onWaterColor = new Attender<>(EventWaterColor.class, event -> {
         switch (this.mode.getValue()) {
             case DEFAULT:
                 event.setColor(0x1E97F2);
@@ -126,6 +123,5 @@ public final class NoBiomeColorModule extends Module {
                 break;
         }
         event.setCanceled(true);
-    }
-
+    });
 }

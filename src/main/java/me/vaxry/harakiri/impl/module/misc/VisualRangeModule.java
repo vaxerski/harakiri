@@ -1,6 +1,7 @@
 package me.vaxry.harakiri.impl.module.misc;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.world.EventAddEntity;
 import me.vaxry.harakiri.framework.event.world.EventRemoveEntity;
@@ -29,8 +30,7 @@ public final class VisualRangeModule extends Module {
         super("VisualRange", new String[]{"VisRange", "VRange", "VR"}, "Sends a notification when someone enters your visual range.", "NONE", -1, ModuleType.MISC);
     }
 
-    @Listener
-    public void onEntityAdded(EventAddEntity event) {
+    Attender<EventAddEntity> onAddEntity = new Attender<>(EventAddEntity.class, event -> {
         if (Minecraft.getMinecraft().world == null || Minecraft.getMinecraft().player == null)
             return;
 
@@ -61,10 +61,9 @@ public final class VisualRangeModule extends Module {
                         1F,
                         false);
         }
-    }
+    });
 
-    @Listener
-    public void onEntityRemove(EventRemoveEntity event) {
+    Attender<EventRemoveEntity> onEntityRemove = new Attender<>(EventRemoveEntity.class, event -> {
         if (Minecraft.getMinecraft().world == null || Minecraft.getMinecraft().player == null)
             return;
 
@@ -94,7 +93,5 @@ public final class VisualRangeModule extends Module {
 
             }
         }
-    }
-
-
+    });
 }

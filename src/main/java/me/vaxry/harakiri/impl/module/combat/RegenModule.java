@@ -1,9 +1,11 @@
 package me.vaxry.harakiri.impl.module.combat;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
@@ -35,8 +37,7 @@ public final class RegenModule extends Module {
         super.onToggle();
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             final Minecraft mc = Minecraft.getMinecraft();
 
@@ -82,7 +83,7 @@ public final class RegenModule extends Module {
                     break;
             }
         }
-    }
+    });
 
     private int getItemHotbar(Item input) {
         for (int i = 0; i < 9; i++) {

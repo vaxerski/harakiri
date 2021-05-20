@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.combat;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.framework.Module;
@@ -16,8 +17,7 @@ public final class FastBowModule extends Module {
         super("FastBow", new String[]{"FBow"}, "Releases the bow as soon as possible", "NONE", -1, ModuleType.COMBAT);
     }
 
-    @Listener
-    public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             final Minecraft mc = Minecraft.getMinecraft();
 
@@ -29,6 +29,5 @@ public final class FastBowModule extends Module {
                 }
             }
         }
-    }
-
+    });
 }

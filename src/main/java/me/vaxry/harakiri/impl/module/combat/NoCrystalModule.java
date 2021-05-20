@@ -1,8 +1,10 @@
 package me.vaxry.harakiri.impl.module.combat;
 
 import com.google.common.collect.Lists;
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.client.EventLoad;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
 import me.vaxry.harakiri.framework.Module;
@@ -62,8 +64,7 @@ public final class NoCrystalModule extends Module {
         Harakiri.get().getRotationManager().finishTask(this.rotationTask);
     }
 
-    @Listener
-    public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         if (event.getStage() != EventStageable.EventStage.PRE)
             return;
 
@@ -165,14 +166,13 @@ public final class NoCrystalModule extends Module {
             if (blocksToPlace.size() == 0) // no more blocks
                 this.toggle(); // auto disable
         }
-    }
+    });
 
-    @Listener
-    public void onLoadWorld(EventLoadWorld event) {
+    Attender<EventLoadWorld> onLoadWorld = new Attender<>(EventLoadWorld.class, event -> {
         if (event.getWorld() != null) {
             freeCamModule = (FreeCamModule) Harakiri.get().getModuleManager().find(FreeCamModule.class);
         }
-    }
+    });
 
     private boolean isItemStackObsidian(final ItemStack itemStack) {
         if (itemStack.getItem() instanceof ItemBlock)

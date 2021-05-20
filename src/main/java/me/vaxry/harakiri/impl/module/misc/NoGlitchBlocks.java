@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.framework.event.player.EventDestroyBlock;
@@ -27,8 +28,7 @@ public final class NoGlitchBlocks extends Module {
         nukerModule = (NukerModule) Harakiri.get().getModuleManager().find(NukerModule.class);
     }
 
-    @Listener
-    public void ondestroy(EventDestroyBlock event) {
+    Attender<EventDestroyBlock> onDestroyBlock = new Attender<>(EventDestroyBlock.class, event -> {
         if(!brek.getValue())
             return;
 
@@ -36,14 +36,13 @@ public final class NoGlitchBlocks extends Module {
             Minecraft.getMinecraft().world.playEvent(2001, event.getPos(), Block.getStateId(Minecraft.getMinecraft().world.getBlockState(event.getPos())));
 
         event.setCanceled(true);
-    }
+    });
 
-    @Listener
-    public void setblockstate(EventSetBlockState event) {
+    Attender<EventSetBlockState> onSetBlockState = new Attender<>(EventSetBlockState.class, event -> {
         if(!plac.getValue())
             return;
 
         if(event.flags != 3 && !Minecraft.getMinecraft().isSingleplayer())
             event.setCanceled(true);
-    }
+    });
 }

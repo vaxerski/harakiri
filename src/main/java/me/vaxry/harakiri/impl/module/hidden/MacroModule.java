@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.hidden;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.minecraft.EventKeyPress;
 import me.vaxry.harakiri.framework.Macro;
@@ -17,8 +18,7 @@ public final class MacroModule extends Module {
         this.onEnable();
     }
 
-    @Listener
-    public void keyPress(EventKeyPress event) {
+    Attender<EventKeyPress> onKeyPress = new Attender<>(EventKeyPress.class, event -> {
         for (Macro macro : Harakiri.get().getMacroManager().getMacroList()) {
             if (event.getKey() == Keyboard.getKeyIndex(macro.getKey()) && Keyboard.getKeyIndex(macro.getKey()) != Keyboard.KEY_NONE) {
                 final String[] split = macro.getMacro().split(";");
@@ -29,5 +29,5 @@ public final class MacroModule extends Module {
                 }
             }
         }
-    }
+    });
 }

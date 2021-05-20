@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.combat;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
@@ -35,8 +36,7 @@ public final class AutoTotemModule extends Module {
         this.crystalAuraModule = (CrystalAuraModule) Harakiri.get().getModuleManager().find(CrystalAuraModule.class);
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             final Minecraft mc = Minecraft.getMinecraft();
 
@@ -76,7 +76,7 @@ public final class AutoTotemModule extends Module {
                 }
             }
         }
-    }
+    });
 
     private int getTotemSlot() {
         for (int i = 0; i < 36; i++) {

@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.Module;
@@ -18,8 +19,7 @@ public final class AutoFishModule extends Module {
         super("AutoFish", new String[]{"AutomaticFish"}, "Automatically catches fish.", "NONE", -1, ModuleType.MISC);
     }
 
-    @Listener
-    public void receivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
 
             if (event.getPacket() instanceof SPacketSoundEffect) {
@@ -36,6 +36,5 @@ public final class AutoFishModule extends Module {
                 }
             }
         }
-    }
-
+    });
 }

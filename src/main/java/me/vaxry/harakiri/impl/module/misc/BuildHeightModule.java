@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import me.vaxry.harakiri.framework.Module;
@@ -13,8 +14,7 @@ public final class BuildHeightModule extends Module {
         super("MaxHeight", new String[]{"BuildH", "BHeight"}, "Allows you to interact with blocks at y=255.", "NONE", -1, ModuleType.MISC);
     }
 
-    @Listener
-    public void sendPacket(EventSendPacket event) {
+    Attender<EventSendPacket> onPacketSend = new Attender<>(EventSendPacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof CPacketPlayerTryUseItemOnBlock) {
                 final CPacketPlayerTryUseItemOnBlock packet = (CPacketPlayerTryUseItemOnBlock) event.getPacket();
@@ -23,6 +23,5 @@ public final class BuildHeightModule extends Module {
                 }
             }
         }
-    }
-
+    });
 }

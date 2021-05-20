@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import me.vaxry.harakiri.framework.Module;
@@ -22,8 +23,7 @@ public class HitsoundModule extends Module {
         audiopath = Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/hitsound.wav" : "\\harakiri\\hitsound.wav");
     }
 
-    @Listener
-    public void onPacketSend(EventSendPacket event){
+    Attender<EventSendPacket> onPacketSend = new Attender<>(EventSendPacket.class, event -> {
         if(event.getPacket() instanceof CPacketUseEntity){
             CPacketUseEntity packet = (CPacketUseEntity) event.getPacket();
             if(packet.getAction() == CPacketUseEntity.Action.ATTACK && packet != lastPacket) {
@@ -31,7 +31,7 @@ public class HitsoundModule extends Module {
                 lastPacket = packet;
             }
         }
-    }
+    });
 
     /*@SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event){

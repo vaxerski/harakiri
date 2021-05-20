@@ -1,11 +1,14 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.player.EventSendChatMessage;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.impl.module.hidden.CommandsModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketChatMessage;
+
+import javax.swing.border.MatteBorder;
 
 
 public final class ChatSuffixModule extends Module {
@@ -16,8 +19,7 @@ public final class ChatSuffixModule extends Module {
         super("ChatSuffix", new String[]{"Suffix", "Chat_Suffix", "CustomChat", "Custom_Chat"}, "Add a custom Harakiri suffix to your chat messages.", "NONE", -1, ModuleType.MISC);
     }
 
-    @Listener
-    public void onSendChatMessage(EventSendChatMessage event) {
+    Attender<EventSendChatMessage> onSendChatMessage = new Attender<>(EventSendChatMessage.class, event -> {
         final CommandsModule cmds = (CommandsModule) Harakiri.get().getModuleManager().find(CommandsModule.class);
         if (cmds == null)
             return;
@@ -27,5 +29,5 @@ public final class ChatSuffixModule extends Module {
 
         event.setCanceled(true);
         Minecraft.getMinecraft().getConnection().sendPacket(new CPacketChatMessage(event.getMessage() + " " + prefix));
-    }
+    });
 }

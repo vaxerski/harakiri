@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.combat;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
@@ -22,8 +23,7 @@ public class SelfWebModule extends Module {
         super("SelfWeb", new String[]{"SelfWeb", "SW"}, "Automatically places a cobweb at your feet (must have cobweb in hotbar)", "NONE", -1, ModuleType.COMBAT);
     }
 
-    @Listener
-    public void onMotionUpdate(EventUpdateWalkingPlayer event){
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
 
         if (event.isCanceled())
             return;
@@ -99,7 +99,7 @@ public class SelfWebModule extends Module {
         }
 
         ceaseAndDesist();
-    }
+    });
 
     private boolean isCobweb(ItemStack stack){
         return stack.getItem() == Item.getItemFromBlock(Blocks.WEB);

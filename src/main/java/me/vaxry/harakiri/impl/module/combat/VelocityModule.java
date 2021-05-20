@@ -1,6 +1,7 @@
 package me.vaxry.harakiri.impl.module.combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.Module;
@@ -31,8 +32,7 @@ public final class VelocityModule extends Module {
         return String.format(ChatFormatting.WHITE + "H:%s%%" + ChatFormatting.GRAY + "|" + ChatFormatting.WHITE + "V:%s%%", this.horizontalVelocity.getValue(), this.verticalVelocity.getValue());
     }
 
-    @Listener
-    public void receivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (mc.player == null || mc.world == null)
                 return;
@@ -85,6 +85,5 @@ public final class VelocityModule extends Module {
                 }
             }
         }
-    }
-
+    });
 }

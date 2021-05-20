@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.MathUtil;
@@ -40,8 +41,7 @@ public final class ProjectilesModule extends Module {
         super("Projectiles", new String[]{"Proj"}, "Projects the path of an entity that was fired.", "NONE", -1, ModuleType.RENDER);
     }
 
-    @Listener
-    public void onRender(EventRender3D event) {
+    Attender<EventRender3D> onRender3D = new Attender<>(EventRender3D.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         ThrowableType throwingType = this.getTypeFromCurrentItem(mc.player);
@@ -112,7 +112,7 @@ public final class ProjectilesModule extends Module {
             }
         }
         RenderUtil.end3D();
-    }
+    });
 
     private ThrowableType getTypeFromCurrentItem(EntityPlayerSP player) {
         // Check if we're holding an item first

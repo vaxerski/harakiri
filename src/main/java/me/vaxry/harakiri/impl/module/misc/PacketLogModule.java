@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
@@ -33,8 +34,7 @@ public class PacketLogModule extends Module {
         super("PacketLog", new String[]{"PacketLog", "PacketL"}, "Logs packets to a file in .minecraft/harakiri", "NONE", -1, ModuleType.MISC);
     }
 
-    @Listener
-    public void recievePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onReceivePacket = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE && this.in.getValue()) {
             final String time = new SimpleDateFormat("h:mm:ss").format(new Date());
 
@@ -63,10 +63,9 @@ public class PacketLogModule extends Module {
 
             Harakiri.get().logChat("Logged an incoming packet of type: " + event.getPacket().getClass().getSimpleName());
         }
-    }
+    });
 
-    @Listener
-    public void sendPacket(EventSendPacket event) {
+    Attender<EventSendPacket> onPacketSend = new Attender<>(EventSendPacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE && this.out.getValue()) {
             final String time = new SimpleDateFormat("h:mm:ss").format(new Date());
 
@@ -95,7 +94,7 @@ public class PacketLogModule extends Module {
 
             Harakiri.get().logChat("Logged an outgoing packet of type: " + event.getPacket().getClass().getSimpleName());
         }
-    }
+    });
 
     public String getFileStringCreateIfNone() {
         return loadRawFile();

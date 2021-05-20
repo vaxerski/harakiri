@@ -1,10 +1,12 @@
 package me.vaxry.harakiri.impl.module.misc;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.event.player.EventSendChatMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.util.StringUtils;
@@ -24,8 +26,7 @@ public final class NameAlertModule extends Module {
         super("MentionAlert", new String[]{"MentionAlert", "SayMyName", "WhoSaid"}, "Alerts you when someone says your name in chat.", "NONE", -1, ModuleType.MISC);
     }
 
-    @Listener
-    public void onChat(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.POST) {
             if (event.getPacket() instanceof SPacketChat) {
                 final SPacketChat packetChat = (SPacketChat) event.getPacket();
@@ -53,5 +54,5 @@ public final class NameAlertModule extends Module {
                 }
             }
         }
-    }
+    });
 }

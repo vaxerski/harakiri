@@ -2,6 +2,7 @@ package me.vaxry.harakiri.impl.module.misc;
 
 import com.google.common.collect.Maps;
 import com.mojang.realmsclient.gui.ChatFormatting;
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
@@ -40,8 +41,7 @@ public final class StorageAlertModule extends Module {
         super("StorageAlert", new String[]{"StorageAlerts", "ChestAlert"}, "Alerts you how many storage blocks are in a chunk when it's loaded", "NONE", -1, ModuleType.MISC);
     }
 
-    @Listener
-    public void recievePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.POST) {
             if (event.getPacket() instanceof SPacketChunkData) {
                 final SPacketChunkData packet = (SPacketChunkData) event.getPacket();
@@ -92,5 +92,5 @@ public final class StorageAlertModule extends Module {
                 }
             }
         }
-    }
+    });
 }

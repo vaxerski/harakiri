@@ -1,6 +1,7 @@
 package me.vaxry.harakiri.impl.module.config;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
 import me.vaxry.harakiri.framework.Module;
@@ -43,13 +44,12 @@ public class ReloadConfigsModule extends Module {
         super.onEnable();
     }
 
-    @Listener
-    public void worldLoad(EventLoadWorld event){
+    Attender<EventLoadWorld> onWorldLoad = new Attender<>(EventLoadWorld.class, event -> {
         if(loadWorldFirst) {
             loadWorldFirst = false;
             reloadConfigs(); // Sort thing
         }
-    }
+    });
 
     public void reloadConfigs(){
 

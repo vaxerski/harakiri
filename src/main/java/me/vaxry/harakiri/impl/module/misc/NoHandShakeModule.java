@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import io.netty.buffer.Unpooled;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
@@ -16,8 +17,7 @@ public final class NoHandShakeModule extends Module {
         super("NoHandShake", new String[]{"AntiHandShake", "NoShake"}, "Prevents forge from sending your mod list to the server while connecting.", "NONE", -1, ModuleType.MISC);
     }
 
-    @Listener
-    public void sendPacket(EventSendPacket event) {
+    Attender<EventSendPacket> onPacketSend = new Attender<>(EventSendPacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof FMLProxyPacket && !Minecraft.getMinecraft().isSingleplayer()) {
                 event.setCanceled(true);
@@ -29,6 +29,5 @@ public final class NoHandShakeModule extends Module {
                 }
             }
         }
-    }
-
+    });
 }

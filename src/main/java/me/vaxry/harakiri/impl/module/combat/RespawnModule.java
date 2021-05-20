@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.combat;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
 import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
@@ -12,11 +13,9 @@ public final class RespawnModule extends Module {
         super("AutoRespawn", new String[]{"AutoRespawn", "Resp"}, "Automatically respawns you after death", "NONE", -1, ModuleType.COMBAT);
     }
 
-    @Listener
-    public void displayGuiScreen(EventDisplayGui event) {
+    Attender<EventDisplayGui> onDisplayGUI = new Attender<>(EventDisplayGui.class, event -> {
         if (event.getScreen() != null && event.getScreen() instanceof GuiGameOver) {
             Minecraft.getMinecraft().player.respawnPlayer();
         }
-    }
-
+    });
 }

@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.combat;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventApplyCollision;
@@ -21,6 +22,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+
+import javax.swing.border.MatteBorder;
 
 
 public class BurrowModule extends Module {
@@ -48,8 +51,7 @@ public class BurrowModule extends Module {
         this.gotHeight = false;
     }
 
-    @Listener
-    public void onMotionUpdate(EventUpdateWalkingPlayer event){
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
 
         if (event.isCanceled())
             return;
@@ -157,31 +159,27 @@ public class BurrowModule extends Module {
                 Harakiri.get().getNotificationManager().addNotification("Burrow", "Burrow couldn't place the block!");
             }
         }
-    }
+    });
 
-    @Listener
-    public void collideWithBlock(EventAddCollisionBox event) {
+    Attender<EventAddCollisionBox> onAddCollisionBox = new Attender<>(EventAddCollisionBox.class, event -> {
         if(this.jumped)
             event.setCanceled(true);
-    }
+    });
 
-    @Listener
-    public void pushOutOfBlocks(EventPushOutOfBlocks event) {
+    Attender<EventPushOutOfBlocks> onPushedOutOfBlock = new Attender<>(EventPushOutOfBlocks.class, event -> {
         if(this.jumped)
             event.setCanceled(true);
-    }
+    });
 
-    @Listener
-    public void pushedByWater(EventPushedByWater event) {
+    Attender<EventPushedByWater> onPushedByWater = new Attender<>(EventPushedByWater.class, event -> {
         if(this.jumped)
             event.setCanceled(true);
-    }
+    });
 
-    @Listener
-    public void applyCollision(EventApplyCollision event) {
+    Attender<EventApplyCollision> onApplyCollision = new Attender<>(EventApplyCollision.class, event -> {
         if(this.jumped)
             event.setCanceled(true);
-    }
+    });
 
     private boolean isObsidian(ItemStack stack){
         return stack.getItem() == Item.getItemFromBlock(Blocks.OBSIDIAN);

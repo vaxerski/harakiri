@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.combat;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.minecraft.EventRunTick;
@@ -27,8 +28,7 @@ public class TotemNotifierModule extends Module {
 
     public final List<Integer> entitiesWithTotems = new ArrayList<>();
 
-    @Listener
-    public void runTick(EventRunTick event) {
+    Attender<EventRunTick> onRunTick = new Attender<>(EventRunTick.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (mc.world == null) return;
             for (Entity entity : mc.world.loadedEntityList) {
@@ -50,12 +50,12 @@ public class TotemNotifierModule extends Module {
                 }
             }
         }
-    }
 
-    @Listener
-    public void onEntityRemove(EventRemoveEntity event) {
+    });
+
+    Attender<EventRemoveEntity> onRemoveEntity = new Attender<>(EventRemoveEntity.class, event -> {
         if (entitiesWithTotems.contains(event.getEntity().getEntityId())) {
             entitiesWithTotems.removeIf(i -> i.equals(event.getEntity().getEntityId()));
         }
-    }
+    });
 }

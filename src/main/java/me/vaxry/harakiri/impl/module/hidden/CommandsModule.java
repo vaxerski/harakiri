@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.hidden;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.Command;
 import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
@@ -25,18 +26,16 @@ public final class CommandsModule extends Module {
         this.onEnable();
     }
 
-    @Listener
-    public void keyPress(EventKeyPress event) {
+    Attender<EventKeyPress> onKeyPress = new Attender<>(EventKeyPress.class, event -> {
         if (this.prefix.getValue().length() == 1) {
             final char key = Keyboard.getEventCharacter();
             if (this.prefix.getValue().charAt(0) == key) {
                 Minecraft.getMinecraft().displayGuiScreen(new GuiChat());
             }
         }
-    }
+    });
 
-    @Listener
-    public void sendChatMessage(EventSendChatMessage event) {
+    Attender<EventSendChatMessage> onSendChatMessage = new Attender<>(EventSendChatMessage.class, event -> {
         if (event.getMessage().startsWith(this.prefix.getValue())) {
             final String input = event.getMessage().substring(this.prefix.getValue().length());
             final String[] split = input.split(" ");
@@ -61,10 +60,9 @@ public final class CommandsModule extends Module {
 
             event.setCanceled(true);
         }
-    }
+    });
 
-    @Listener
-    public void displayScreen(EventDisplayGui event) {
+    Attender<EventDisplayGui> onDisplayGUI = new Attender<>(EventDisplayGui.class, event -> {
         if(!once){
             if(Minecraft.getMinecraft().currentScreen instanceof GuiMainMenu){
                 // Send a MSG
@@ -72,7 +70,7 @@ public final class CommandsModule extends Module {
                 once = true;
             }
         }
-    }
+    });
 
     public Value<String> getPrefix() {
         return prefix;

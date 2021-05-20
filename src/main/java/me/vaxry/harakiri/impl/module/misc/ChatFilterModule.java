@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.Module;
@@ -25,14 +26,13 @@ public final class ChatFilterModule extends Module {
         super("ChatFilter", new String[]{"CFilter"}, "Filters out malicious or annoying chat messages", "NONE", -1, ModuleType.MISC);
     }
 
-    @Listener
+    @Override
     public void onDisable() {
         super.onDisable();
         this.cache.clear();
     }
 
-    @Listener
-    public void receivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onReceivePacket = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof SPacketChat) {
                 final SPacketChat packet = (SPacketChat) event.getPacket();
@@ -102,6 +102,5 @@ public final class ChatFilterModule extends Module {
                 }
             }
         }
-    }
-
+    });
 }

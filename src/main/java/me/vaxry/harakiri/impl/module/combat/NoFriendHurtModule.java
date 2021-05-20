@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.combat;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
@@ -15,8 +16,7 @@ public final class NoFriendHurtModule extends Module {
         super("NoFriendDamage", new String[]{"NoFriendDMG", "FriendProtect"}, "Makes you not hit friends.", "NONE", -1, ModuleType.COMBAT);
     }
 
-    @Listener
-    public void onSendPacket(EventSendPacket event) {
+    Attender<EventSendPacket> onSendPacket = new Attender<>(EventSendPacket.class, event -> {
         if (event.getStage().equals(EventStageable.EventStage.PRE)) {
             if (event.getPacket() instanceof CPacketUseEntity) {
                 final CPacketUseEntity packetUseEntity = (CPacketUseEntity) event.getPacket();
@@ -32,5 +32,5 @@ public final class NoFriendHurtModule extends Module {
                 }
             }
         }
-    }
+    });
 }

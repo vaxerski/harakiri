@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.combat;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.Module;
@@ -26,8 +27,7 @@ public final class AutoArmorModule extends Module {
         super("AutoArmor", new String[]{"AutoArm", "AutoArmour"}, "Automatically equips armor.", "NONE", -1, ModuleType.COMBAT);
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onUpdatePlayer = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             final Minecraft mc = Minecraft.getMinecraft();
             if (shouldEquip(mc)) {
@@ -35,7 +35,7 @@ public final class AutoArmorModule extends Module {
                 equipTimer.reset();
             }
         }
-    }
+    });
 
     private void equip(final Minecraft mc) {
         int[] armorSlots = new int[]{-1, -1, -1, -1}, armorValues = new int[]{-1, -1, -1, -1};

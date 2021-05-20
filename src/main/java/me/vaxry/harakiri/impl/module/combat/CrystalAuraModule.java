@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.combat;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
@@ -92,8 +93,7 @@ public final class CrystalAuraModule extends Module {
         Harakiri.get().getRotationManager().finishTask(this.attackRotationTask);
     }
 
-    @Listener
-    public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
         if (mc.player == null || mc.world == null)
             return;
@@ -246,10 +246,9 @@ public final class CrystalAuraModule extends Module {
                 this.crystalAuraHit = false;
                 break;
         }
-    }
+    });
 
-    @Listener
-    public void onReceivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.POST) {
             if (event.getPacket() instanceof SPacketSpawnObject) {
                 final SPacketSpawnObject packetSpawnObject = (SPacketSpawnObject) event.getPacket();
@@ -262,10 +261,9 @@ public final class CrystalAuraModule extends Module {
                 }
             }
         }
-    }
+    });
 
-    @Listener
-    public void onRender(EventRender3D event) {
+    Attender<EventRender3D> onRender3D = new Attender<>(EventRender3D.class, event -> {
         if (!this.render.getValue())
             return;
 
@@ -312,7 +310,7 @@ public final class CrystalAuraModule extends Module {
             }
         }
         RenderUtil.end3D();
-    }
+    });
 
     private Coordinate conv3Dto2DSpace(double x, double y, double z) {
         final GLUProjection.Projection projection = GLUProjection.getInstance().project(x - Minecraft.getMinecraft().getRenderManager().viewerPosX, y - Minecraft.getMinecraft().getRenderManager().viewerPosY, z - Minecraft.getMinecraft().getRenderManager().viewerPosZ, GLUProjection.ClampMode.NONE, false);

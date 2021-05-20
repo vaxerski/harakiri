@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
@@ -42,8 +43,7 @@ public final class NoAfkModule extends Module {
         super.onDisable();
     }
 
-    @Listener
-    public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
         if (mc.player == null || mc.world == null)
             return;
@@ -64,7 +64,5 @@ public final class NoAfkModule extends Module {
 
             timer.reset();
         }
-
-    }
-
+    });
 }

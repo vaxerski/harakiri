@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.combat;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.player.EventHandActive;
 import me.vaxry.harakiri.framework.event.player.EventHittingBlock;
 import me.vaxry.harakiri.framework.event.player.EventResetBlockRemoving;
@@ -12,18 +13,7 @@ public final class MultitaskModule extends Module {
         super("Multitask", new String[]{"multi", "task"}, "Allows you to perform multiple actions at once.", "NONE", -1, ModuleType.COMBAT);
     }
 
-    @Listener
-    public void onActiveHand(EventHandActive event) {
-        event.setCanceled(true);
-    }
-
-    @Listener
-    public void onHittingBlock(EventHittingBlock event) {
-        event.setCanceled(true);
-    }
-
-    @Listener
-    public void onResetBlockRemoving(EventResetBlockRemoving event) {
-        event.setCanceled(true);
-    }
+    Attender<EventHandActive> onActiveHand = new Attender<>(EventHandActive.class, event-> event.setCanceled(true));
+    Attender<EventHittingBlock> onHittingBlock = new Attender<>(EventHittingBlock.class, event-> event.setCanceled(true));
+    Attender<EventResetBlockRemoving> onResetBlockRemoving = new Attender<>(EventResetBlockRemoving.class, event -> event.setCanceled(true));
 }

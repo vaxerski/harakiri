@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.combat;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.framework.Module;
@@ -54,8 +55,7 @@ public final class KillAuraModule extends Module {
         Harakiri.get().getRotationManager().finishTask(this.rotationTask);
     }
 
-    @Listener
-    public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
         if (mc.player == null || mc.world == null)
             return;
@@ -93,7 +93,7 @@ public final class KillAuraModule extends Module {
                 }
                 break;
         }
-    }
+    });
 
     private Entity findTarget() {
         Entity ent = null;

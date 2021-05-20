@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.Module;
@@ -13,8 +14,7 @@ public final class NoRotateModule extends Module {
         super("NoRotate", new String[]{"NoRot", "AntiRotate"}, "Prevents you from processing server rotations.", "NONE", -1, ModuleType.MISC);
     }
 
-    @Listener
-    public void receivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof SPacketPlayerPosLook) {
                 final SPacketPlayerPosLook packet = (SPacketPlayerPosLook) event.getPacket();
@@ -24,6 +24,6 @@ public final class NoRotateModule extends Module {
                 }
             }
         }
-    }
+    });
 
 }

@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.hidden;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.minecraft.EventKeyPress;
 import me.vaxry.harakiri.framework.Module;
@@ -15,8 +16,7 @@ public final class KeybindsModule extends Module {
             this.toggle();
     }
 
-    @Listener
-    public void keyPress(EventKeyPress event) {
+    Attender<EventKeyPress> onKeyPress = new Attender<>(EventKeyPress.class, event -> {
         for (Module mod : Harakiri.get().getModuleManager().getModuleList()) {
             if (mod != null) {
                 if (mod.getType() != ModuleType.HIDDEN && event.getKey() == Keyboard.getKeyIndex(mod.getKey()) && Keyboard.getKeyIndex(mod.getKey()) != Keyboard.KEY_NONE) {
@@ -24,6 +24,6 @@ public final class KeybindsModule extends Module {
                 }
             }
         }
-    }
+    });
 
 }
