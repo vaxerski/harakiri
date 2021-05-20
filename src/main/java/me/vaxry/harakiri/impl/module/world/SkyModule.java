@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.world;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.Timer;
@@ -18,9 +19,5 @@ public class SkyModule extends Module {
         super("Sky", new String[]{"Sky"}, "Change the sky behavior.", "NONE", -1, Module.ModuleType.WORLD);
     }
 
-    @Listener
-    public void onLoadWorld(EventLoadWorld event) {
-        this.timerWorld.reset();
-    }
-
+    Attender<EventLoadWorld> onLoadWorld = new Attender<>(EventLoadWorld.class, event -> this.timerWorld.reset());
 }

@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.player;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.Module;
@@ -28,8 +29,7 @@ public final class RotationLock extends Module {
         }
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onUpdatePlayer = new Attender<>(EventPlayerUpdate.class, event -> {
         Harakiri.get().getRotationManager().updateRotations();
         if (this.yawLock.getValue()) {
             Harakiri.get().getRotationManager().setPlayerYaw(this.yaw);
@@ -37,6 +37,5 @@ public final class RotationLock extends Module {
         if (this.pitchLock.getValue()) {
             Harakiri.get().getRotationManager().setPlayerPitch(this.pitch);
         }
-    }
-
+    });
 }

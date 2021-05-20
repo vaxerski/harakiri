@@ -1,9 +1,11 @@
 package me.vaxry.harakiri.impl.module.player;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
@@ -29,8 +31,7 @@ public final class AutoEatModule extends Module {
         return "" + this.getFoodCount();
     }
 
-    @Listener
-    public void onPlayerUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() != EventStageable.EventStage.PRE)
             return;
 
@@ -76,7 +77,7 @@ public final class AutoEatModule extends Module {
                 mc.gameSettings.keyBindUseItem.pressed = true;
             }
         }
-    }
+    });
 
     private int findFood() {
         float bestSaturation = -1;

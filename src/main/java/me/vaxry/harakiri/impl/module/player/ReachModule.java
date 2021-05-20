@@ -1,8 +1,11 @@
 package me.vaxry.harakiri.impl.module.player;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.client.EventLoad;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
+import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
 import me.vaxry.harakiri.framework.Module;
@@ -31,16 +34,14 @@ public final class ReachModule extends Module {
         super("Reach", new String[]{"Rch"}, "Extends your reach.", "NONE", -1, ModuleType.PLAYER);
     }
 
-    @Listener
-    public void onLoadWorld(EventLoadWorld event) {
+    Attender<EventLoadWorld> onWorldLoad = new Attender<>(EventLoadWorld.class, event -> {
         if (event.getWorld() == null)
             return;
 
         this.blockHighlightModule = (BlockHighlightModule) Harakiri.get().getModuleManager().find(BlockHighlightModule.class);
-    }
+    });
 
-    @Listener
-    public void onRender3D(EventRender3D event) {
+    Attender<EventRender3D> onRender3D = new Attender<>(EventRender3D.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         if (mc.player == null)
@@ -78,10 +79,9 @@ public final class ReachModule extends Module {
             //this.currentEntityTrace = mc.world.rayTraceBlocks()
         }
         */
-    }
+    });
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() != EventStageable.EventStage.PRE)
             return;
 
@@ -124,5 +124,5 @@ public final class ReachModule extends Module {
             }
         }
         */
-    }
+    });
 }

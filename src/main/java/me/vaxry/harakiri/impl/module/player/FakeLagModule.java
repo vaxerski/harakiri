@@ -1,10 +1,13 @@
 package me.vaxry.harakiri.impl.module.player;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.client.EventLoad;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
 import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.event.world.EventSetBlockState;
 import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
@@ -55,10 +58,7 @@ public class FakeLagModule extends Module {
         this.jointimer.reset();
     }
 
-    @Listener
-    public void onLoadWorld(EventLoadWorld event){
-        this.jointimer.reset();
-    }
+    Attender<EventLoadWorld> onLoadWorld = new Attender<>(EventLoadWorld.class, event -> this.jointimer.reset());
 
     @Override
     public void onEnable() {
@@ -76,8 +76,7 @@ public class FakeLagModule extends Module {
         }
     }
 
-    @Listener
-    public void sendPacket(EventSendPacket event) {
+    Attender<EventSendPacket> onPacketSend = new Attender<>(EventSendPacket.class, event -> {
 
         // Avoid sendPacket() Listener loop a few lines later.
         if(lastPacket == event.getPacket())
@@ -164,13 +163,9 @@ public class FakeLagModule extends Module {
             this.packets.add(packet);
             event.setCanceled(true);
         }
+    });
 
-    }
-
-    // FOR LAG DISABLE
-    // isLagging will *NOT* be true if stopWhenLag is off
-    @Listener
-    public void onReceivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() != null) {
                 this.lagtimer.reset();
@@ -180,5 +175,5 @@ public class FakeLagModule extends Module {
         final float seconds = ((System.currentTimeMillis() - this.lagtimer.getTime()) / 1000.0f) % 60.0f;
         if(this.stopwhenlag.getValue() && seconds > 1.0f) isLagging = true;
         else isLagging = false;
-    }
+    });
 }

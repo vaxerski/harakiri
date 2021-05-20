@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.world;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.Module;
@@ -26,11 +27,9 @@ public final class TimerModule extends Module {
         return "" + this.speed.getValue();
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onUpdatePlayer = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             Minecraft.getMinecraft().timer.tickLength = 50.0f / speed.getValue();
         }
-    }
-
+    });
 }

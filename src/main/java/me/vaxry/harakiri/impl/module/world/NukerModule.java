@@ -1,7 +1,9 @@
 package me.vaxry.harakiri.impl.module.world;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
+import me.vaxry.harakiri.framework.event.player.EventClickBlock;
 import me.vaxry.harakiri.framework.event.player.EventDestroyBlock;
 import me.vaxry.harakiri.framework.event.player.EventRightClickBlock;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
@@ -80,8 +82,7 @@ public final class NukerModule extends Module {
         return this.mode.getValue().name();
     }
 
-    @Listener
-    public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
         if (mc.player == null || mc.world == null || Harakiri.get().getModuleManager().find(FreeCamModule.class).isEnabled())
             return;
@@ -136,7 +137,7 @@ public final class NukerModule extends Module {
 
                                     // check if side is facing towards player
                                     //if (distanceSqHitVec >= distanceSqPosVec)
-                                        //continue;
+                                    //continue;
 
                                     // face block
                                     final float[] rotations = EntityUtil.getRotations(hitVec.x, hitVec.y, hitVec.z);
@@ -164,12 +165,11 @@ public final class NukerModule extends Module {
                 }
                 break;
         }
-    }
+    });
 
     private ICamera camera = new Frustum();
 
-    @Listener
-    public void render3D(EventRender3D event) {
+    Attender<EventRender3D> onRender3D = new Attender<>(EventRender3D.class, event -> {
 
         if (!this.drawMining.getValue() || Harakiri.get().getModuleManager().find(FreeCamModule.class).isEnabled()) return;
 
@@ -295,10 +295,9 @@ public final class NukerModule extends Module {
                 }
                 break;
         }
-    }
+    });
 
-    @Listener
-    public void clickBlock(EventRightClickBlock event) {
+    Attender<EventRightClickBlock> onRightClickBlock = new Attender<>(EventRightClickBlock.class, event -> {
         if (this.mode.getValue() == Mode.SELECTION) {
             final Block block = Minecraft.getMinecraft().world.getBlockState(event.getPos()).getBlock();
             if (block != this.selected) {
@@ -307,21 +306,20 @@ public final class NukerModule extends Module {
                 event.setCanceled(true);
             }
         }
-    }
+    });
 
-    @Listener
-    public void ondestroy(EventDestroyBlock event) {
+    Attender<EventDestroyBlock> onDestroyBlock = new Attender<>(EventDestroyBlock.class, event -> {
         if(this.mode.getValue() == Mode.CREATIVE) // Automatically remove lag when creative nuking.
             event.setCanceled(true);
-    }
+    });
 
-    @Listener
-    public void setblockstate(EventSetBlockState event) {
+    Attender<EventSetBlockState> onSetBlockState = new Attender<>(EventSetBlockState.class, event -> {
         NoGlitchBlocks noGlitchBlocks = (NoGlitchBlocks) Harakiri.get().getModuleManager().find(NoGlitchBlocks.class);
 
-        if(!noGlitchBlocks.isEnabled() && this.mode.getValue() == Mode.CREATIVE) // Automatically remove lag when creative nuking.
-            noGlitchBlocks.setblockstate(event);
-    }
+        if(!noGlitchBlocks.isEnabled() && this.mode.getValue() == Mode.CREATIVE) {
+            noGlitchBlocks.onDestroyBlock.dispatch(new EventDestroyBlock(event.pos));
+        }
+    });
 
     private boolean canBreak(BlockPos pos) {
         final IBlockState blockState = Minecraft.getMinecraft().world.getBlockState(pos);

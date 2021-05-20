@@ -28,7 +28,7 @@ public final class NoGlitchBlocks extends Module {
         nukerModule = (NukerModule) Harakiri.get().getModuleManager().find(NukerModule.class);
     }
 
-    Attender<EventDestroyBlock> onDestroyBlock = new Attender<>(EventDestroyBlock.class, event -> {
+    public Attender<EventDestroyBlock> onDestroyBlock = new Attender<>(EventDestroyBlock.class, event -> {
         if(!brek.getValue())
             return;
 

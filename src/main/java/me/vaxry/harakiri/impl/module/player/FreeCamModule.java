@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.player;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.gui.EventRenderHelmet;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
@@ -98,13 +99,9 @@ public final class FreeCamModule extends Module {
         }
     }
 
-    @Listener
-    public void onMove(EventMove event) {
-        Minecraft.getMinecraft().player.noClip = true;
-    }
+    Attender<EventMove> onMove = new Attender<>(EventMove.class, event -> Minecraft.getMinecraft().player.noClip = true);
 
-    @Listener
-    public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             final Minecraft mc = Minecraft.getMinecraft();
             mc.player.setVelocity(0, 0, 0);
@@ -131,10 +128,9 @@ public final class FreeCamModule extends Module {
                 mc.player.motionY -= this.speed.getValue();
             }
         }
-    }
+    });
 
-    @Listener
-    public void sendPacket(EventSendPacket event) {
+    Attender<EventSendPacket> onPacketSend = new Attender<>(EventSendPacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (Minecraft.getMinecraft().world != null) {
                 if (!this.allowDismount.getValue()) {
@@ -160,16 +156,14 @@ public final class FreeCamModule extends Module {
                 }
             }
         }
-    }
+    });
 
-    @Listener
-    public void onLoadWorld(EventLoadWorld event) {
+    Attender<EventLoadWorld> onLoadWorld = new Attender<>(EventLoadWorld.class, event -> {
         this.setEnabled(false);
         this.onDisable();
-    }
+    });
 
-    @Listener
-    public void receivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof SPacketSetPassengers) {
                 final SPacketSetPassengers packet = (SPacketSetPassengers) event.getPacket();
@@ -193,49 +187,40 @@ public final class FreeCamModule extends Module {
                 }
             }
         }
-    }
+    });
 
-    @Listener
-    public void collideWithBlock(EventAddCollisionBox event) {
+    Attender<EventAddCollisionBox> onCollideWithBlock = new Attender<>(EventAddCollisionBox.class, event -> {
         if (event.getEntity() == Minecraft.getMinecraft().player) {
             event.setCanceled(true);
         }
-    }
+    });
 
-    @Listener
-    public void getLiquidCollisionBB(EventLiquidCollisionBB event) {
+    Attender<EventLiquidCollisionBB> onLiquidCollisionBB = new Attender<>(EventLiquidCollisionBB.class, event -> {
         event.setBoundingBox(Block.NULL_AABB);
         event.setCanceled(true);
-    }
+    });
 
-    @Listener
-    public void setOpaqueCube(EventSetOpaqueCube event) {
+    Attender<EventSetOpaqueCube> onSetOpaqueCube = new Attender<>(EventSetOpaqueCube.class, event -> {
         event.setCanceled(true);
-    }
+    });
 
-    @Listener
-    public void renderOverlay(EventRenderOverlay event) {
+    Attender<EventRenderOverlay> onRenderOverlay = new Attender<>(EventRenderOverlay.class, event -> {
         event.setCanceled(true);
-    }
+    });
 
-    @Listener
-    public void renderHelmet(EventRenderHelmet event) {
+    Attender<EventRenderHelmet> onRenderHelmet = new Attender<>(EventRenderHelmet.class, event -> {
         event.setCanceled(true);
-    }
+    });
 
-    @Listener
-    public void pushOutOfBlocks(EventPushOutOfBlocks event) {
+    Attender<EventPushOutOfBlocks> onPushOutOfBlocks = new Attender<>(EventPushOutOfBlocks.class, event -> {
         event.setCanceled(true);
-    }
+    });
 
-    @Listener
-    public void pushedByWater(EventPushedByWater event) {
+    Attender<EventPushedByWater> onPushedByWater = new Attender<>(EventPushedByWater.class, event -> {
         event.setCanceled(true);
-    }
+    });
 
-    @Listener
-    public void applyCollision(EventApplyCollision event) {
+    Attender<EventApplyCollision> onApplyCollision = new Attender<>(EventApplyCollision.class, event -> {
         event.setCanceled(true);
-    }
-
+    });
 }

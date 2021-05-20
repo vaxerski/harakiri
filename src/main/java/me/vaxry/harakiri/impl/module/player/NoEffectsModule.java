@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.player;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.Module;
@@ -23,8 +24,7 @@ public final class NoEffectsModule extends Module {
         super("NoEffects", new String[]{"AntiEffects", "NoEff", "AntiEff"}, "Removes potion effects from you.", "NONE", -1, ModuleType.PLAYER);
     }
 
-    @Listener
-    public void receivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof SPacketEntityEffect) {
                 final SPacketEntityEffect packet = (SPacketEntityEffect) event.getPacket();
@@ -47,5 +47,5 @@ public final class NoEffectsModule extends Module {
                 }
             }
         }
-    }
+    });
 }
