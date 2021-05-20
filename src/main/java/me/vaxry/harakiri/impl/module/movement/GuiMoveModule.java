@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.movement;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.Module;
@@ -16,8 +17,7 @@ public final class GuiMoveModule extends Module {
         super("GUIMove", new String[]{"InvMove", "InventoryMove", "GUIM"}, "Allows you to move while having open gui.", "NONE", -1, ModuleType.MOVEMENT);
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             final Minecraft mc = Minecraft.getMinecraft();
 
@@ -53,6 +53,5 @@ public final class GuiMoveModule extends Module {
                 mc.inGameHasFocus = false;
             }
         }
-    }
-
+    });
 }

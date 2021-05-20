@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.movement;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.player.EventMove;
 import me.vaxry.harakiri.framework.Module;
@@ -19,13 +20,10 @@ public class AvoidModule extends Module {
     }
 
 
-    @Listener
-    public void move(EventMove event) {
+    Attender<EventMove> onMove = new Attender<>(EventMove.class, event -> {
         if(!Harakiri.get().getModuleManager().find(FreeCamModule.class).isEnabled())
             fixMovevemt(event, Minecraft.getMinecraft().player);
-
-        // ezd
-    }
+    });
 
     public void fixMovevemt(EventMove event, EntityPlayerSP player){
         Minecraft mc = Minecraft.getMinecraft();

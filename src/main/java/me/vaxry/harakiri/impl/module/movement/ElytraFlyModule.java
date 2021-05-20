@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.movement;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
@@ -74,8 +75,7 @@ public final class ElytraFlyModule extends Module {
         return super.getMetaData();
     }*/
 
-    @Listener
-    public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         //if (!this.autoEquip.getValue() && mc.player.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() != Items.ELYTRA)
@@ -86,9 +86,9 @@ public final class ElytraFlyModule extends Module {
                 final ItemStack stackOnChestSlot = mc.player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 
                 // handle disabling stay airborne if it is on
-               // if (this.stayAirborneDisable.getValue() && this.stayAirborne.getValue()) {
-               //     if (mc.player.onGround) {
-               //         this.stayAirborne.setValue(false);
+                // if (this.stayAirborneDisable.getValue() && this.stayAirborne.getValue()) {
+                //     if (mc.player.onGround) {
+                //         this.stayAirborne.setValue(false);
                 //        Harakiri.get().logChat("\247rToggled\2477 ElytraFly " + this.stayAirborne.getName() + " \247coff\247r, as you've touched the ground.");
                 //    }
                 //}
@@ -199,10 +199,9 @@ public final class ElytraFlyModule extends Module {
                 }
                 break;
         }
-    }
+    });
 
-    @Listener
-    public void move(EventMove event) {
+    Attender<EventMove> onMove = new Attender<>(EventMove.class, event -> {
         Minecraft mc = Minecraft.getMinecraft();
 
         if (mc.player.isElytraFlying()) {
@@ -259,10 +258,9 @@ public final class ElytraFlyModule extends Module {
             AvoidModule avm = (AvoidModule)Harakiri.get().getModuleManager().find(AvoidModule.class);
             avm.fixMovevemt(event, mc.player);
         }
-    }
+    });
 
-    @Listener
-    public void receivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof SPacketChat) {
                 final SPacketChat packet = (SPacketChat) event.getPacket();
@@ -284,7 +282,7 @@ public final class ElytraFlyModule extends Module {
                 }
             }
         }
-    }
+    });
 
     private void freezePlayer(EntityPlayer player) {
         player.motionX = 0;

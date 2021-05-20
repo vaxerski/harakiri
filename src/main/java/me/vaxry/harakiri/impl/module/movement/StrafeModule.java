@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.movement;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.player.EventMove;
 import me.vaxry.harakiri.framework.Module;
@@ -18,8 +19,7 @@ public final class StrafeModule extends Module {
         super("Strafe", new String[]{"Strafe"}, "Full movement control while airborne, and optionally on ground.", "NONE", -1, ModuleType.MOVEMENT);
     }
 
-    @Listener
-    public void onMove(EventMove event) {
+    Attender<EventMove> onMove = new Attender<>(EventMove.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         if (mc.player == null)
@@ -82,9 +82,9 @@ public final class StrafeModule extends Module {
         }
 
         // we need to ensure we don't interfere with safewalk's limitations, so we run it's checks again on the same event
-        final SafeWalkModule safeWalkModule = (SafeWalkModule) Harakiri.get().getModuleManager().find(SafeWalkModule.class);
-        if (safeWalkModule != null && safeWalkModule.isEnabled()) {
-            safeWalkModule.onMove(event);
-        }
-    }
+//        final SafeWalkModule safeWalkModule = (SafeWalkModule) Harakiri.get().getModuleManager().find(SafeWalkModule.class);
+//        if (safeWalkModule != null && safeWalkModule.isEnabled()) {
+//            safeWalkModule.onMove(event);
+//        }
+    });
 }

@@ -1,7 +1,9 @@
 package me.vaxry.harakiri.impl.module.movement;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
+import me.vaxry.harakiri.framework.event.client.EventLoad;
 import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
@@ -11,6 +13,7 @@ import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiDisconnected;
+import org.spongepowered.asm.mixin.injection.At;
 
 
 public final class AutoWalkModule extends Module {
@@ -48,17 +51,15 @@ public final class AutoWalkModule extends Module {
             Minecraft.getMinecraft().gameSettings.keyBindForward.pressed = false;
     }
 
-    @Listener
-    public void onLoadWorld(EventLoadWorld event) {
+    Attender<EventLoadWorld> onLoadWorld = new Attender<>(EventLoadWorld.class, event -> {
         if (event.getWorld() != null) {
             if (this.autoDisable.getValue()) {
                 this.toggle(); // toggle off
             }
         }
-    }
+    });
 
-    @Listener
-    public void onDisplayGui(EventDisplayGui event) {
+    Attender<EventDisplayGui> onDisplayGUI = new Attender<>(EventDisplayGui.class, event -> {
         if (event.getScreen() != null) {
             if (this.autoDisable.getValue()) {
                 if (event.getScreen() instanceof GuiDisconnected) {
@@ -66,19 +67,17 @@ public final class AutoWalkModule extends Module {
                 }
             }
         }
-    }
+    });
 
-    @Listener
-    public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         if (this.useBaritone.getValue())
             return;
 
         if (this.pressKeybind.getValue())
             Minecraft.getMinecraft().gameSettings.keyBindForward.pressed = true;
-    }
+    });
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage().equals(EventStageable.EventStage.PRE)) {
             if (Minecraft.getMinecraft().player == null || Minecraft.getMinecraft().world == null)
                 return;
@@ -102,7 +101,7 @@ public final class AutoWalkModule extends Module {
             if (this.pressKeybind.getValue())
                 Minecraft.getMinecraft().gameSettings.keyBindForward.pressed = true;
         }
-    }
+    });
 
     private void sendBaritoneCommand() {
         if (this.baritoneCommand.getValue().length() > 0) {

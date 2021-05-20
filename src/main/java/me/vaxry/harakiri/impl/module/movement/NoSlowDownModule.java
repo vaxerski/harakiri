@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.movement;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.event.player.EventUpdateInput;
@@ -35,29 +36,25 @@ public final class NoSlowDownModule extends Module {
         Blocks.PACKED_ICE.setDefaultSlipperiness(0.98f);
     }
 
-    @Listener
-    public void collideSoulSand(EventCollideSoulSand event) {
+    Attender<EventCollideSoulSand> onCollideWithSoulSand = new Attender<>(EventCollideSoulSand.class, event -> {
         if (this.soulsand.getValue()) {
             event.setCanceled(true);
         }
-    }
+    });
 
-    @Listener
-    public void onWalkOnSlime(EventWalkOnSlime event) {
+    Attender<EventWalkOnSlime> onWalkOnSlime = new Attender<>(EventWalkOnSlime.class, event -> {
         if (this.slime.getValue()) {
             event.setCanceled(true);
         }
-    }
+    });
 
-    @Listener
-    public void onLandOnSlime(EventLandOnSlime event) {
+    Attender<EventLandOnSlime> onLandOnSlime = new Attender<>(EventLandOnSlime.class, event -> {
         if (this.slime.getValue()) {
             event.setCanceled(true);
         }
-    }
+    });
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
 
             final Minecraft mc = Minecraft.getMinecraft();
@@ -88,10 +85,9 @@ public final class NoSlowDownModule extends Module {
                 }
             }
         }
-    }
+    });
 
-    @Listener
-    public void updateInput(EventUpdateInput event) {
+    Attender<EventUpdateInput> onUpdateInput = new Attender<>(EventUpdateInput.class, event -> {
         if (this.items.getValue()) {
             final Minecraft mc = Minecraft.getMinecraft();
             if (mc.player.isHandActive() && !mc.player.isRiding()) {
@@ -99,6 +95,5 @@ public final class NoSlowDownModule extends Module {
                 mc.player.movementInput.moveForward /= 0.2f;
             }
         }
-    }
-
+    });
 }

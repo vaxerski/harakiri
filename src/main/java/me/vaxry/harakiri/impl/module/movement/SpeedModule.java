@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.movement;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventMove;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
@@ -71,8 +72,7 @@ public final class SpeedModule extends Module {
         return defaultSpeed;
     }
 
-    @Listener
-    public void onMove(EventMove event) {
+    Attender<EventMove> onMove = new Attender<>(EventMove.class, event -> {
         if (this.mode.getValue() == Mode.BHOP) {
             final Minecraft mc = Minecraft.getMinecraft();
 
@@ -102,10 +102,9 @@ public final class SpeedModule extends Module {
 
             this.tick += 1;
         }
-    }
+    });
 
-    @Listener
-    public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (this.mode.getValue() == Mode.BHOP) {
                 final Minecraft mc = Minecraft.getMinecraft();
@@ -114,10 +113,9 @@ public final class SpeedModule extends Module {
                 this.prevDistance = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
             }
         }
-    }
+    });
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             final Minecraft mc = Minecraft.getMinecraft();
 
@@ -135,5 +133,5 @@ public final class SpeedModule extends Module {
                 }
             }
         }
-    }
+    });
 }

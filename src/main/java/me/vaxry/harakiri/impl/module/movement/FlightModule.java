@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.movement;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
@@ -63,8 +64,7 @@ public final class FlightModule extends Module {
         return this.mode.getValue().name();
     }
 
-    @Listener
-    public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             final Minecraft mc = Minecraft.getMinecraft();
 
@@ -166,7 +166,7 @@ public final class FlightModule extends Module {
                 }
             }
         }
-    }
+    });
 
     private void move(double x, double y, double z) {
         final Minecraft mc = Minecraft.getMinecraft();
@@ -184,8 +184,7 @@ public final class FlightModule extends Module {
         mc.player.connection.sendPacket(new CPacketConfirmTeleport(this.teleportId + 1));
     }
 
-    @Listener
-    public void sendPacket(EventSendPacket event) {
+    Attender<EventSendPacket> onPacketSend = new Attender<>(EventSendPacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (this.mode.getValue() == Mode.PACKET) {
                 if (event.getPacket() instanceof CPacketPlayer && !(event.getPacket() instanceof CPacketPlayer.Position)) {
@@ -201,10 +200,9 @@ public final class FlightModule extends Module {
                 }
             }
         }
-    }
+    });
 
-    @Listener
-    public void recievePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (this.mode.getValue() == Mode.PACKET) {
                 if (event.getPacket() instanceof SPacketPlayerPosLook) {
@@ -219,6 +217,5 @@ public final class FlightModule extends Module {
                 }
             }
         }
-    }
-
+    });
 }

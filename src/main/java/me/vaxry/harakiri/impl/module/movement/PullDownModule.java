@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.movement;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.Module;
@@ -27,8 +28,7 @@ public class PullDownModule extends Module {
                 "NONE", -1, ModuleType.MOVEMENT);
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onPlayerUpdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             final Minecraft mc = Minecraft.getMinecraft();
             if (this.jumpDisables.getValue() && mc.gameSettings.keyBindJump.isKeyDown())
@@ -43,7 +43,7 @@ public class PullDownModule extends Module {
                     this.minhe.getValue(), 0.0d)))
                 mc.player.motionY = -this.speed.getValue();
         }
-    }
+    });
 
     private boolean hullCollidesWithBlock(final Entity entity,
                                           final Vec3d nextPosition) {

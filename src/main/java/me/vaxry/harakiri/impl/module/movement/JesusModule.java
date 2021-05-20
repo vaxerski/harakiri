@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.movement;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
@@ -36,8 +37,7 @@ public final class JesusModule extends Module {
         return this.mode.getValue().name();
     }
 
-    @Listener
-    public void getLiquidCollisionBB(EventLiquidCollisionBB event) {
+    Attender<EventLiquidCollisionBB> onLiquidCollisionBB = new Attender<>(EventLiquidCollisionBB.class, event -> {
         if (Minecraft.getMinecraft().world != null && Minecraft.getMinecraft().player != null) {
             if (this.checkCollide() && !(Minecraft.getMinecraft().player.motionY >= 0.1f) && event.getBlockPos().getY() < Minecraft.getMinecraft().player.posY - this.offset.getValue()) {
                 if (Minecraft.getMinecraft().player.getRidingEntity() != null) {
@@ -52,19 +52,17 @@ public final class JesusModule extends Module {
                 event.setCanceled(true);
             }
         }
-    }
+    });
 
-    @Listener
-    public void updateWalkingPlayer(EventUpdateWalkingPlayer event) {
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (!Minecraft.getMinecraft().player.isSneaking() && !Minecraft.getMinecraft().player.noClip && !Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() && isInLiquid()) {
                 Minecraft.getMinecraft().player.motionY = 0.1f;
             }
         }
-    }
+    });
 
-    @Listener
-    public void sendPacket(EventSendPacket event) {
+    Attender<EventSendPacket> onSendPacket = new Attender<>(EventSendPacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof CPacketPlayer) {
                 if (this.mode.getValue() != Mode.VANILLA && Minecraft.getMinecraft().player.getRidingEntity() == null && !Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown()) {
@@ -76,7 +74,7 @@ public final class JesusModule extends Module {
                 }
             }
         }
-    }
+    });
 
     private boolean checkCollide() {
         final Minecraft mc = Minecraft.getMinecraft();

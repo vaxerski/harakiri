@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.movement;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventMove;
@@ -54,12 +55,11 @@ public final class StepModule extends Module {
         super.onDisable();
     }
 
-    @Listener
-    public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
+    Attender<EventUpdateWalkingPlayer> onUpdateWalkingPlayer = new Attender<>(EventUpdateWalkingPlayer.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             step();
         }
-    }
+    });
 
     private void step(){
         final Minecraft mc = Minecraft.getMinecraft();
@@ -134,8 +134,7 @@ public final class StepModule extends Module {
         isStepping = false;
     }
 
-    @Listener
-    public void move(EventMove event){
+    Attender<EventMove> onMove = new Attender<>(EventMove.class, event -> {
         if(!isStepping){
             return;
         }
@@ -147,7 +146,7 @@ public final class StepModule extends Module {
             else
                 event.setZ(0);
         }
-    }
+    });
 
     private float getAngFromLocal(){
         final Minecraft mc = Minecraft.getMinecraft();

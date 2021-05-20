@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.movement;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.player.EventMove;
 import me.vaxry.harakiri.framework.Module;
@@ -16,8 +17,7 @@ public final class SafeWalkModule extends Module {
         super("SafeWalk", new String[]{"SWalk"}, "Prevents you from walking off certain blocks.", "NONE", -1, ModuleType.MOVEMENT);
     }
 
-    @Listener
-    public void onMove(EventMove event) {
+    Attender<EventMove> onMove = new Attender<>(EventMove.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
         double x = event.getX();
         double y = event.getY();
@@ -69,10 +69,9 @@ public final class SafeWalkModule extends Module {
         event.setX(x);
         event.setY(y);
         event.setZ(z);
-    }
+    });
 
     private boolean isOffsetBBEmpty(double x, double y, double z) {
         return Minecraft.getMinecraft().world.getCollisionBoxes(Minecraft.getMinecraft().player, Minecraft.getMinecraft().player.getEntityBoundingBox().offset(x, y, z)).isEmpty();
     }
-
 }
