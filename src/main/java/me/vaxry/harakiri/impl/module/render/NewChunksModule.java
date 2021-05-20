@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.client.EventSaveConfig;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
@@ -39,15 +40,14 @@ public final class NewChunksModule extends Module {
         this.currentColor = new Color(this.color.getValue().getRed(), this.color.getValue().getGreen(), this.color.getValue().getBlue(), this.alpha.getValue());
     }
 
-    @Listener
+    @Override
     public void onToggle() {
         super.onToggle();
         this.chunkDataList.clear();
         this.currentColor = new Color(this.color.getValue().getRed(), this.color.getValue().getGreen(), this.color.getValue().getBlue(), this.alpha.getValue());
     }
 
-    @Listener
-    public void receivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onrecievepacket = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof SPacketChunkData) {
                 final SPacketChunkData packet = (SPacketChunkData) event.getPacket();
@@ -60,10 +60,9 @@ public final class NewChunksModule extends Module {
                 }
             }
         }
-    }
+    });
 
-    @Listener
-    public void render3D(EventRender3D event) {
+    Attender<EventRender3D> onrender3d = new Attender<>(EventRender3D.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
         if (mc.getRenderViewEntity() == null)
             return;
@@ -88,12 +87,11 @@ public final class NewChunksModule extends Module {
             }
         }
         RenderUtil.end3D();
-    }
+    });
 
-    @Listener
-    public void onConfigSave(EventSaveConfig event) {
+    Attender<EventSaveConfig> onsavecfg = new Attender<>(EventSaveConfig.class, event -> {
         this.currentColor = new Color(this.color.getValue().getRed(), this.color.getValue().getGreen(), this.color.getValue().getBlue());
-    }
+    });
 
     private boolean contains(final ChunkData chunkData) {
         boolean temp = false;

@@ -1,8 +1,10 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.gui.EventRenderPotions;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
 import me.vaxry.harakiri.framework.gui.HudComponent;
 import me.vaxry.harakiri.framework.Module;
@@ -31,8 +33,7 @@ public final class HudModule extends Module {
         this.onEnable();
     }
 
-    @Listener
-    public void render(EventRender2D event) {
+    Attender<EventRender2D> onrender = new Attender<>(EventRender2D.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         if (mc.gameSettings.showDebugInfo || mc.currentScreen instanceof GuiHudEditor || mc.player == null) {
@@ -64,12 +65,11 @@ public final class HudModule extends Module {
 
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
-    }
+    });
 
-    @Listener
-    public void renderPotions(EventRenderPotions event) {
+    Attender<EventRenderPotions> onrenderpotions = new Attender<>(EventRenderPotions.class, event -> {
         if (this.hidePotions.getValue()) {
             event.setCanceled(true);
         }
-    }
+    });
 }

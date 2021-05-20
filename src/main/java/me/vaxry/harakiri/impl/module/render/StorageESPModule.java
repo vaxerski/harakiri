@@ -303,11 +303,6 @@ public final class StorageESPModule extends Module {
         Minecraft.getMinecraft().gameSettings.viewBobbing = bobbing;
     }*/
 
-    @Listener
-    public void render3D(EventRender3D event) {
-        final Minecraft mc = Minecraft.getMinecraft();
-    }
-
     public boolean isTileStorage(TileEntity te) {
         if (te instanceof TileEntityChest) {
             return true;

@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.event.render.*;
@@ -53,8 +54,7 @@ public final class NoLagModule extends Module {
         super("NoLag", new String[]{"AntiLag", "NoRender"}, "Fixes malicious lag exploits and bugs.", "NONE", -1, ModuleType.RENDER);
     }
 
-    @Listener
-    public void recievePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onrecieve = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (this.slimes.getValue()) {
                 if (event.getPacket() instanceof SPacketSpawnMob) {
@@ -65,17 +65,15 @@ public final class NoLagModule extends Module {
                 }
             }
         }
-    }
+    });
 
-    @Listener
-    public void updateLighting(EventLightUpdate event) {
+    Attender<EventLightUpdate> onlight = new Attender<>(EventLightUpdate.class, event -> {
         if (this.light.getValue()) {
             event.setCanceled(true);
         }
-    }
+    });
 
-    @Listener
-    public void renderBlockModel(EventRenderBlockModel event) {
+    Attender<EventRenderBlockModel> onblock = new Attender<>(EventRenderBlockModel.class, event -> {
         /*if (this.pistons.getValue()) {
             final Block block = event.getBlockState().getBlock();
             if (block instanceof BlockPistonMoving || block instanceof BlockPistonExtension) {
@@ -90,10 +88,9 @@ public final class NoLagModule extends Module {
                 event.setCanceled(true);
             }
         }
-    }
+    });
 
-    @Listener
-    public void renderTe(EventRenderTileEntity event){
+    Attender<EventRenderTileEntity> onrenderte = new Attender<>(EventRenderTileEntity.class, event -> {
         if(this.tiles.getValue()){
             double distance = Math.sqrt(event.te.getDistanceSq(Minecraft.getMinecraft().player.posX, Minecraft.getMinecraft().player.posY, Minecraft.getMinecraft().player.posZ));
 
@@ -101,10 +98,9 @@ public final class NoLagModule extends Module {
                 event.setCanceled(true);
             }
         }
-    }
+    });
 
-    @Listener
-    public void renderWorld(EventRender3D event) {
+    Attender<EventRender3D> on3d = new Attender<>(EventRender3D.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
         if (this.signs.getValue() || this.removeChunkBan.getValue()) {
             for (TileEntity te : mc.world.loadedTileEntityList) {
@@ -140,17 +136,15 @@ public final class NoLagModule extends Module {
 
             signTexts.clear();
         }
-    }
+    });
 
-    @Listener
-    public void onSpawnParticle(EventSpawnParticle event) {
+    Attender<EventSpawnParticle> onpart = new Attender<>(EventSpawnParticle.class, event -> {
         if (this.particles.getValue()) {
             event.setCanceled(true);
         }
-    }
+    });
 
-    @Listener
-    public void receivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onpacket = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof SPacketSoundEffect) {
                 /*if (this.sounds.getValue()) {
@@ -161,10 +155,9 @@ public final class NoLagModule extends Module {
                 }*/
             }
         }
-    }
+    });
 
-    @Listener
-    public void onRenderEntity(EventRenderEntity event) {
+    Attender<EventRenderEntity> onrenderentity = new Attender<>(EventRenderEntity.class, event -> {
         if (event.getEntity() != null) {
             if (this.items.getValue()) {
                 if (event.getEntity() instanceof EntityItem)
@@ -196,21 +189,19 @@ public final class NoLagModule extends Module {
                     event.setCanceled(true);
             }
         }
-    }
+    });
 
-    @Listener
-    public void onRenderSky(EventRenderSky event) {
+    Attender<EventRenderSky> onsky = new Attender<>(EventRenderSky.class, event -> {
         if (this.sky.getValue()) {
             event.setCanceled(true);
         }
-    }
+    });
 
-    @Listener
-    public void onRenderName(EventRenderName event) {
+    Attender<EventRenderName> onname = new Attender<>(EventRenderName.class, event -> {
         if (this.names.getValue()) {
             event.setCanceled(true);
         }
-    }
+    });
 
     @Override
     public void onDisable() {

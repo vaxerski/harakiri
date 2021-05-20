@@ -1,9 +1,11 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Texture;
 import me.vaxry.harakiri.framework.Value;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -23,8 +25,7 @@ public class HealthOverlayModule extends Module {
     }
 
 
-    @Listener
-    public void render2D(EventRender2D event) {
+    Attender<EventRender2D> onrender2d = new Attender<>(EventRender2D.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
         final ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
 
@@ -58,5 +59,5 @@ public class HealthOverlayModule extends Module {
 
         // fix opengl flags
         RenderUtil.drawRect(0,0,1,1,0x00FFFFFF);
-    }
+    });
 }

@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
@@ -144,8 +145,7 @@ public final class ESPModule extends Module {
         return Math.min(desiredTimePerSecond * seconds, 1.0f);
     }
 
-    @Listener
-    public void OnRender3D(EventRender3D event){
+    Attender<EventRender3D> onrender = new Attender<>(EventRender3D.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         if (mc.player == null || (!this.isEnabled() && !storageESPModule.isEnabled()))
@@ -291,7 +291,7 @@ public final class ESPModule extends Module {
         }
 
         RenderUtil.end3D();
-    }
+    });
 
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
@@ -314,8 +314,7 @@ public final class ESPModule extends Module {
         }
     }*/
 
-    @Listener
-    public void onRenderEntity(EventRenderEntity event) {
+    Attender<EventRenderEntity> onrenderentity = new Attender<>(EventRenderEntity.class, event -> {
         Minecraft mc = Minecraft.getMinecraft();
         if(event.getStage() == EventStageable.EventStage.PRE && this.isEnabled()) {
 
@@ -345,10 +344,9 @@ public final class ESPModule extends Module {
                 }
             }
         }
-    }
+    });
 
-    @Listener
-    public void onRenderEntities(EventRenderEntities event){
+    Attender<EventRenderEntities> onrenderentities = new Attender<>(EventRenderEntities.class, event -> {
         if(event.getStage() == EventStageable.EventStage.POST){
             for(EntityPlayer e : coloredPlayers) {
                 board.removePlayerFromTeams(e.getName());
@@ -366,7 +364,7 @@ public final class ESPModule extends Module {
         } else if(event.getStage() == EventStageable.EventStage.RENDER1){
 
         }
-    }
+    });
 
     @SubscribeEvent
     public void onRenderLivingBasePost(RenderLivingEvent.Specials.Post<EntityLivingBase> ent){

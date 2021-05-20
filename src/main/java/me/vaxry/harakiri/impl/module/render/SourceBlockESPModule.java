@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
@@ -26,8 +27,7 @@ public final class SourceBlockESPModule extends Module {
         super("SourceBlockESP", new String[]{"SourceBlockESP", "SourceBlockESP", "SourceBlockESP"}, "Highlights Source Blocks", "NONE", -1, ModuleType.RENDER);
     }
 
-    @Listener
-    public void render3D(EventRender3D event) {
+    Attender<EventRender3D> onrender3d = new Attender<>(EventRender3D.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         if (mc.player == null)
@@ -76,5 +76,5 @@ public final class SourceBlockESPModule extends Module {
         }
 
         RenderUtil.end3D();
-    }
+    });
 }

@@ -1,8 +1,10 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.util.GLUProjection;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.util.Timer;
@@ -64,8 +66,7 @@ public class OffscreenModule extends Module {
         return desiredTimePerSecond * seconds;
     }
 
-    @Listener
-    public void render2D(EventRender2D event) {
+    Attender<EventRender2D> on3d = new Attender<>(EventRender2D.class, event -> {
 
         hue += getJitter();
         if(hue > 1)
@@ -178,7 +179,7 @@ public class OffscreenModule extends Module {
             RenderUtil.end2D();
             GlStateManager.popMatrix();
         }
-    }
+    });
 
     private float clamp(float val, float min, float max) {
         return Math.max(min, Math.min(max, val));

@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
@@ -53,8 +54,7 @@ public final class TracersModule extends Module {
         return this.mode.getValue().name();
     }
 
-    @Listener
-    public void render2D(EventRender2D event) {
+    Attender<EventRender2D> on2d = new Attender<>(EventRender2D.class, event -> {
         if (this.mode.getValue() == Mode.TWO_D) {
             final Minecraft mc = Minecraft.getMinecraft();
 
@@ -68,10 +68,9 @@ public final class TracersModule extends Module {
                 }
             }
         }
-    }
+    });
 
-    @Listener
-    public void render3D(EventRender3D event) {
+    Attender<EventRender3D> onrender3d = new Attender<>(EventRender3D.class, event -> {
         if (this.mode.getValue() == Mode.THREE_D) {
             final Minecraft mc = Minecraft.getMinecraft();
 
@@ -92,7 +91,7 @@ public final class TracersModule extends Module {
             }
             RenderUtil.end3D();
         }
-    }
+    });
 
     private boolean checkFilter(Entity entity) {
         boolean ret = false;

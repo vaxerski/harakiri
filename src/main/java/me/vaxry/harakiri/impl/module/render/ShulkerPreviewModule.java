@@ -1,8 +1,10 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.gui.EventRenderTooltip;
 import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.Value;
 import net.minecraft.block.Block;
@@ -30,8 +32,7 @@ public final class ShulkerPreviewModule extends Module {
         super("ShulkerPreview", new String[]{"SPreview", "ShulkerView"}, "Shows the insides of a shulker box.", "NONE", -1, ModuleType.RENDER);
     }
 
-    @Listener
-    public void onRenderTooltip(EventRenderTooltip event) {
+    Attender<EventRenderTooltip> ontooltip = new Attender<>(EventRenderTooltip.class, event -> {
         if (event.getItemStack() == null)
             return;
 
@@ -109,5 +110,5 @@ public final class ShulkerPreviewModule extends Module {
                 }
             }
         }
-    }
+    });
 }

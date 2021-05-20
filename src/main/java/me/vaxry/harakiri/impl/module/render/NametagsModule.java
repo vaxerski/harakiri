@@ -2,8 +2,10 @@ package me.vaxry.harakiri.impl.module.render;
 
 
 import akka.japi.Pair;
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.event.render.EventRenderName;
 import me.vaxry.harakiri.framework.event.world.EventRemoveEntity;
 import me.vaxry.harakiri.framework.Module;
@@ -50,8 +52,7 @@ public final class NametagsModule extends Module {
         Minecraft mc = Minecraft.getMinecraft();
     }
 
-    @Listener
-    public void onRender2D(EventRender2D event){
+    Attender<EventRender2D> onrender = new Attender<>(EventRender2D.class, event -> {
 
         Minecraft mc = Minecraft.getMinecraft();
 
@@ -372,23 +373,21 @@ public final class NametagsModule extends Module {
             GlStateManager.scale(1/scale, 1/scale, 1/scale);
             GlStateManager.popMatrix();
         }
-    }
+    });
 
-    @Listener
-    public void onEntityRemove(EventRemoveEntity event) {
+    Attender<EventRemoveEntity> onremovenet = new Attender<>(EventRemoveEntity.class, event -> {
         if(event.getEntity() instanceof EntityPlayer){
             playersList.remove(event.getEntity());
         }
-    }
+    });
 
-    @Listener
-    public void renderName(EventRenderName event) {
+    Attender<EventRenderName> onrendername = new Attender<>(EventRenderName.class, event -> {
         if(!this.isEnabled())
             return;
         if (event.getEntity() instanceof EntityPlayer) {
             event.setCanceled(true);
         }
-    }
+    });
 
     Coordinate rotate_point(Coordinate around, Coordinate point, float theta) {
         double p1x = (Math.cos(theta) * (point.x - around.x) - Math.sin(theta) * (point.y - around.y) + around.x);

@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.Module;
@@ -60,8 +61,7 @@ public class ChamsModule extends Module {
         super("Chams", new String[]{"Chams"}, "Changes the renderer's behavior.", "NONE", -1, ModuleType.RENDER);
     }
 
-    @Listener
-    public void onRender3D(EventRender3D event){
+    Attender<EventRender3D> onrender = new Attender<>(EventRender3D.class, event -> {
         if(!this.isEnabled())
             return;
 
@@ -103,7 +103,7 @@ public class ChamsModule extends Module {
                     this.enemyBdown = true;
             }
         }
-    }
+    });
 
     @SubscribeEvent
     public void onRenderPlayerEvent(RenderPlayerEvent.Pre event){

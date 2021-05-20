@@ -1,6 +1,7 @@
 package me.vaxry.harakiri.impl.module.render;
 
 import akka.japi.Pair;
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.Module;
@@ -42,18 +43,16 @@ public final class HolesModule extends Module {
         super("HoleESP", new String[]{"Hole", "HoleESP"}, "Highlights Holes.", "NONE", -1, ModuleType.RENDER);
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onupdate = new Attender<>(EventPlayerUpdate.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         if (mc.player == null)
             return;
 
         forceHoleRecalc();
-    }
+    });
 
-    @Listener
-    public void onRender(EventRender3D event) {
+    Attender<EventRender3D> onrender = new Attender<>(EventRender3D.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
         if (mc.getRenderViewEntity() == null)
             return;
@@ -111,7 +110,7 @@ public final class HolesModule extends Module {
             }
         }
         RenderUtil.end3D();
-    }
+    });
 
     private boolean isBlockValid(IBlockState blockState, BlockPos blockPos) {
         if (this.holes.contains(blockPos))

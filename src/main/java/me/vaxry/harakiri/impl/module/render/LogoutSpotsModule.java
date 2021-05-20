@@ -2,6 +2,7 @@ package me.vaxry.harakiri.impl.module.render;
 
 import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.player.EventPlayerJoin;
 import me.vaxry.harakiri.framework.event.player.EventPlayerLeave;
@@ -37,8 +38,7 @@ public final class LogoutSpotsModule extends Module {
         logoutCache.clear();
     }
 
-    @Listener
-    public void onPlayerUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onplayerupdate = new Attender<>(EventPlayerUpdate.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         if (mc.player == null)
@@ -50,10 +50,9 @@ public final class LogoutSpotsModule extends Module {
 
             this.updatePlayerCache(player.getGameProfile().getId().toString(), player);
         }
-    }
+    });
 
-    @Listener
-    public void onRenderWorld(EventRender3D event) {
+    Attender<EventRender3D> onrender = new Attender<>(EventRender3D.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         for (String uuid : this.logoutCache.keySet()) {
@@ -79,10 +78,9 @@ public final class LogoutSpotsModule extends Module {
             GlStateManager.disableBlend();
             GlStateManager.popMatrix();
         }
-    }
+    });
 
-    @Listener
-    public void onRender2D(EventRender2D event) {
+    Attender<EventRender2D> onrender2 = new Attender<>(EventRender2D.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         for (String uuid : this.logoutCache.keySet()) {
@@ -104,10 +102,9 @@ public final class LogoutSpotsModule extends Module {
                 GlStateManager.popMatrix();
             }
         }
-    }
+    });
 
-    @Listener
-    public void onPlayerLeave(EventPlayerLeave event) {
+    Attender<EventPlayerLeave> onleave = new Attender<>(EventPlayerLeave.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         for (String uuid : this.playerCache.keySet()) {
@@ -125,10 +122,9 @@ public final class LogoutSpotsModule extends Module {
         }
 
         this.playerCache.clear();
-    }
+    });
 
-    @Listener
-    public void onPlayerJoin(EventPlayerJoin event) {
+    Attender<EventPlayerJoin> onenter = new Attender<>(EventPlayerJoin.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         for (String uuid : this.logoutCache.keySet()) {
@@ -139,7 +135,7 @@ public final class LogoutSpotsModule extends Module {
         }
 
         this.playerCache.clear();
-    }
+    });
 
     private void cleanLogoutCache(String uuid) {
         this.logoutCache.remove(uuid);

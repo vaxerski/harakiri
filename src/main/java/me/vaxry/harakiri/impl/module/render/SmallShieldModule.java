@@ -1,7 +1,9 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 
@@ -15,8 +17,7 @@ public final class SmallShieldModule extends Module {
         super("SmallShield", new String[]{"SmallShield", "SS"}, "Smaller offhand item.", "NONE", -1, ModuleType.RENDER);
     }
 
-    @Listener
-    public void changeOffhandProgress(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onplayer = new Attender<>(EventPlayerUpdate.class, event -> {
         itemRenderer.equippedProgressOffHand = 0.5F;
-    }
+    });
 }

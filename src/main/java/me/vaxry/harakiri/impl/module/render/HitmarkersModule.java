@@ -1,10 +1,12 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Texture;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.util.GLUProjection;
 import me.vaxry.harakiri.framework.util.RenderUtil;
 import me.vaxry.harakiri.framework.util.Timer;
@@ -131,8 +133,7 @@ public class HitmarkersModule extends Module {
         }
     }
 
-    @Listener
-    public void onRender2D(EventRender2D event){
+    Attender<EventRender2D> onrender = new Attender<>(EventRender2D.class, event -> {
         ArrayList<HitmarkerData> toremove = new ArrayList<>();
         for(HitmarkerData hitmarkerData : hitmarkers){
             if(!hitmarkerData.draw())
@@ -142,10 +143,9 @@ public class HitmarkersModule extends Module {
 
         for(HitmarkerData hitmarkerData : toremove)
             hitmarkers.remove(hitmarkerData);
-    }
+    });
 
-    @Listener
-    public void onPacketSend(EventSendPacket event){
+    Attender<EventSendPacket> onsendpacket = new Attender<>(EventSendPacket.class, event -> {
         if (event.getPacket() instanceof CPacketUseEntity) {
             CPacketUseEntity packet = (CPacketUseEntity) event.getPacket();
             if (packet.getAction() == CPacketUseEntity.Action.ATTACK && packet != lastPacket) {
@@ -184,5 +184,5 @@ public class HitmarkersModule extends Module {
                 lastPacket = packet;
             }
         }
-    }
+    });
 }

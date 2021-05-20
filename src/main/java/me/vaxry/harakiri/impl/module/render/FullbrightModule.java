@@ -1,9 +1,11 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -64,8 +66,7 @@ public final class FullbrightModule extends Module {
         return this.mode.getValue().name();
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onupdate = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (!this.mode.getValue().equals(Mode.POTION) && this.disablePotion.getValue())
                 Minecraft.getMinecraft().player.removePotionEffect(MobEffects.NIGHT_VISION);
@@ -89,5 +90,5 @@ public final class FullbrightModule extends Module {
                     break;
             }
         }
-    }
+    });
 }

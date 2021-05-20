@@ -1,7 +1,9 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.gui.EventRenderHelmet;
 import me.vaxry.harakiri.framework.event.gui.EventRenderPortal;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.event.render.EventRenderOverlay;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
@@ -20,8 +22,7 @@ public final class NoOverlayModule extends Module {
         super("NoOverlay", new String[]{"AntiOverlay"}, "Removes some overlay effects.", "NONE", -1, ModuleType.RENDER);
     }
 
-    @Listener
-    public void renderOverlay(EventRenderOverlay event) {
+    Attender<EventRenderOverlay> onoverlay = new Attender<>(EventRenderOverlay.class, event -> {
         if (this.block.getValue() && event.getType() == EventRenderOverlay.OverlayType.BLOCK) {
             event.setCanceled(true);
         }
@@ -31,19 +32,17 @@ public final class NoOverlayModule extends Module {
         if (this.fire.getValue() && event.getType() == EventRenderOverlay.OverlayType.FIRE) {
             event.setCanceled(true);
         }
-    }
+    });
 
-    @Listener
-    public void renderHelmet(EventRenderHelmet event) {
+    Attender<EventRenderHelmet> onhelmet = new Attender<>(EventRenderHelmet.class, event -> {
         if (this.helmet.getValue()) {
             event.setCanceled(true);
         }
-    }
+    });
 
-    @Listener
-    public void renderPortal(EventRenderPortal event) {
+    Attender<EventRenderPortal> onportal = new Attender<>(EventRenderPortal.class, event -> {
         if (this.portal.getValue()) {
             event.setCanceled(true);
         }
-    }
+    });
 }

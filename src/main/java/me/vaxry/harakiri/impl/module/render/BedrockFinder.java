@@ -1,6 +1,9 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.event.client.EventLoad;
+import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
 import me.vaxry.harakiri.framework.event.player.EventDestroyBlock;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.event.render.EventRenderBlockModel;
@@ -36,8 +39,7 @@ public final class BedrockFinder extends Module {
         timer.reset();
     }
 
-    @Listener
-    public void onRender(EventRender3D event) {
+    Attender<EventRender3D> onrender = new Attender<>(EventRender3D.class, event -> {
         final float seconds = ((System.currentTimeMillis() - this.timer.getTime()) / 1000.0f) % 60.0f;
         if(seconds > 1){
             timer.reset();
@@ -84,7 +86,7 @@ public final class BedrockFinder extends Module {
             removeBlock(d);
 
         RenderUtil.end3D();
-    }
+    });
 
     @Override
     public void onToggle() {
@@ -93,19 +95,17 @@ public final class BedrockFinder extends Module {
         this.illegalBedrock.clear();
     }
 
-    @Listener
-    public void onLoadWorld(EventLoadWorld event) {
+    Attender<EventLoadWorld> onloadworld = new Attender<>(EventLoadWorld.class, event -> {
         if (event.getWorld() != null) {
             this.illegalBedrock.clear();
         }
-    }
+    });
 
-    @Listener
-    public void onDestroyBlock(EventDestroyBlock event) {
+    Attender<EventDestroyBlock> ondestroyblock = new Attender<>(EventDestroyBlock.class, event -> {
         if (event.getPos() != null) {
             this.removeBlock(event.getPos());
         }
-    }
+    });
 
     private void removeBlock(BlockPos x) {
         for (int i = this.illegalBedrock.size() - 1; i >= 0; i--) {
@@ -127,8 +127,7 @@ public final class BedrockFinder extends Module {
         return false;
     }
 
-    @Listener
-    public void onRenderBlock(EventRenderBlockModel event) {
+    Attender<EventRenderBlockModel> onrenderblockmodel = new Attender<>(EventRenderBlockModel.class, event -> {
         final BlockPos pos = event.getBlockPos();
         final IBlockState blockState = event.getBlockState();
         if(blockState.getBlock() == Blocks.BEDROCK){
@@ -142,6 +141,6 @@ public final class BedrockFinder extends Module {
                 }
             }
         }
-    }
+    });
 
 }

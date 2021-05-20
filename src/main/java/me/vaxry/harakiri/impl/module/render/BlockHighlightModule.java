@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.ColorUtil;
@@ -33,14 +34,13 @@ public final class BlockHighlightModule extends Module {
         super("HighlightX", new String[]{"BHighlight", "BlockHigh"}, "Highlights the block you are looking at.", "NONE", -1, ModuleType.RENDER);
     }
 
-    @Listener
-    public void render3D(EventRender3D event) {
+    Attender<EventRender3D> onrender3d = new Attender<>(EventRender3D.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
         final RayTraceResult ray = mc.objectMouseOver;
         if (ray.typeOfHit == RayTraceResult.Type.BLOCK) {
             this.drawHighlight(ray, mc);
         }
-    }
+    });
 
     public void drawHighlight(final RayTraceResult ray, final Minecraft mc) {
         final BlockPos blockpos = ray.getBlockPos();

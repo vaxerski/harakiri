@@ -1,8 +1,11 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.event.client.EventLoad;
 import me.vaxry.harakiri.framework.event.player.EventDestroyBlock;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.event.render.EventRenderBlockModel;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
 import me.vaxry.harakiri.framework.Module;
@@ -50,24 +53,21 @@ public final class SearchModule extends Module {
         }
     }
 
-    @Listener
-    public void onLoadWorld(EventLoadWorld event) {
+    Attender<EventLoadWorld> onworld = new Attender<>(EventLoadWorld.class, event -> {
         if (event.getWorld() != null) {
             this.blocks.clear();
         }
-    }
+    });
 
-    @Listener
-    public void onDestroyBlock(EventDestroyBlock event) {
+    Attender<EventDestroyBlock> onblock = new Attender<>(EventDestroyBlock.class, event -> {
         if (event.getPos() != null) {
             if (this.isPosCached(event.getPos())) {
                 this.removeBlock(event.getPos());
             }
         }
-    }
+    });
 
-    @Listener
-    public void render2D(EventRender2D event) {
+    Attender<EventRender2D> on2d = new Attender<>(EventRender2D.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
         if (mc.getRenderViewEntity() == null)
             return;
@@ -102,16 +102,15 @@ public final class SearchModule extends Module {
                 RenderUtil.drawLine(res.getScaledWidth()/2.f,res.getScaledHeight()/2.f, (float)coord2D.x, (float)coord2D.y, this.width.getValue(), color);
             }
         }
-    }
+    });
 
-    @Listener
-    public void onRenderBlock(EventRenderBlockModel event) {
+    Attender<EventRenderBlockModel> onrenderblockmodel = new Attender<>(EventRenderBlockModel.class, event -> {
         final BlockPos pos = event.getBlockPos();
         final IBlockState blockState = event.getBlockState();
         if (this.contains(Block.getIdFromBlock(blockState.getBlock())) && !this.isPosCached(pos.getX(), pos.getY(), pos.getZ()) && this.blocks.size() < MAX_BLOCKS) {
             this.blocks.add(new Vec3d(pos));
         }
-    }
+    });
 
     @Override
     public void onEnable() {

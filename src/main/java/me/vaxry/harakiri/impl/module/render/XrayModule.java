@@ -1,6 +1,8 @@
 package me.vaxry.harakiri.impl.module.render;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
+import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.event.render.EventRenderBlockModel;
 import me.vaxry.harakiri.framework.event.render.EventRenderBlockSide;
 import me.vaxry.harakiri.framework.event.world.EventSetOpaqueCube;
@@ -59,16 +61,14 @@ public final class XrayModule extends Module {
         Minecraft.getMinecraft().renderGlobal.loadRenderers();
     }
 
-    @Listener
-    public void shouldSideBeRendered(EventRenderBlockSide event) {
+    Attender<EventRenderBlockSide> onside = new Attender<>(EventRenderBlockSide.class, event -> {
         if (this.contains(Block.getIdFromBlock(event.getBlock()))) {
             event.setRenderable(true);
         }
         event.setCanceled(true);
-    }
+    });
 
-    @Listener
-    public void renderBlockModel(EventRenderBlockModel event) {
+    Attender<EventRenderBlockModel> onmodel = new Attender<>(EventRenderBlockModel.class, event -> {
         final Block block = event.getBlockState().getBlock();
         if (this.contains(Block.getIdFromBlock(block))) {
             if (Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModelFlat(event.getBlockAccess(), event.getBakedModel(), event.getBlockState(), event.getBlockPos(), event.getBufferBuilder(), event.isCheckSides(), event.getRand())) {
@@ -76,12 +76,11 @@ public final class XrayModule extends Module {
             }
         }
         event.setCanceled(true);
-    }
+    });
 
-    @Listener
-    public void setOpaqueCube(EventSetOpaqueCube event) {
+    Attender<EventSetOpaqueCube> onopaqcube = new Attender<>(EventSetOpaqueCube.class, event -> {
         event.setCanceled(true);
-    }
+    });
 
     public void updateRenders() {
         //Minecraft.getMinecraft().renderGlobal.loadRenderers();
