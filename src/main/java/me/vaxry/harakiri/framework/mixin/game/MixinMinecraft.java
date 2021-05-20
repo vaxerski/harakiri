@@ -79,80 +79,80 @@ public abstract class MixinMinecraft implements MixinMinecraftInterface {
         ingameGUI = new GUIUtil(Minecraft.getMinecraft());
     }
 
-//    @Inject(method = "displayGuiScreen", at = @At("HEAD"), cancellable = true)
-//    public void displayGuiScreen(GuiScreen guiScreenIn, CallbackInfo info)
-//    {
-//        /*try {
-//            HarakiriLoadingPlugin.terminate = true;
-//            HarakiriLoadingPlugin.thread.join();
-//            GL11.glFlush();        // process any remaining GL calls before releaseContext (prevents missing textures on mac)
-//            HarakiriLoadingPlugin.d.releaseContext();
-//            Display.getDrawable().makeCurrent();
-//        }catch (Throwable t){ ; }*/
-//
-//        if (guiScreenIn == null && this.world == null)
-//        {
-//            guiScreenIn = new HaraMainMenu();
-//        }
-//        else if (guiScreenIn == null && this.player.getHealth() <= 0.0F)
-//        {
-//            guiScreenIn = new GuiGameOver(null);
-//        }
-//
-//        GuiScreen old = this.currentScreen;
-//        net.minecraftforge.client.event.GuiOpenEvent event = new net.minecraftforge.client.event.GuiOpenEvent(guiScreenIn);
-//
-//        if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
-//            return;
-//
-//        guiScreenIn = event.getGui();
-//        if (old != null && guiScreenIn != old)
-//        {
-//            old.onGuiClosed();
-//        }
-//
-//        if (guiScreenIn instanceof HaraMainMenu || guiScreenIn instanceof GuiMultiplayer)
-//        {
-//            this.gameSettings.showDebugInfo = false;
-//            this.ingameGUI.getChatGUI().clearChatMessages(true);
-//        }
-//
-//        this.currentScreen = guiScreenIn;
-//
-//        if(Harakiri.get().getUsername().equalsIgnoreCase(""))
-//            Harakiri.get().getApiManager().killThisThing(); // Anti crack, some sort of
-//
-//        if (guiScreenIn != null)
-//        {
-//            Minecraft.getMinecraft().setIngameNotInFocus();
-//            KeyBinding.unPressAllKeys();
-//
-//            while (Mouse.next())
-//            {
-//            }
-//
-//            while (Keyboard.next())
-//            {
-//            }
-//
-//            ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft());
-//            int i = scaledresolution.getScaledWidth();
-//            int j = scaledresolution.getScaledHeight();
-//            guiScreenIn.setWorldAndResolution(Minecraft.getMinecraft(), i, j);
-//            this.skipRenderWorld = false;
-//        }
-//        else
-//        {
-//            this.soundHandler.resumeSounds();
-//            Minecraft.getMinecraft().setIngameFocus();
-//        }
-//
-//        final EventDisplayGui eventEE = new EventDisplayGui(guiScreenIn);
-//        Harakiri.get().getEventManager().dispatchEvent(eventEE);
-//        if (event.isCanceled()) info.cancel();
-//
-//        info.cancel();
-//    }
+    @Inject(method = "displayGuiScreen", at = @At("HEAD"), cancellable = true)
+    public void displayGuiScreen(GuiScreen guiScreenIn, CallbackInfo info)
+    {
+        /*try {
+            HarakiriLoadingPlugin.terminate = true;
+            HarakiriLoadingPlugin.thread.join();
+            GL11.glFlush();        // process any remaining GL calls before releaseContext (prevents missing textures on mac)
+            HarakiriLoadingPlugin.d.releaseContext();
+            Display.getDrawable().makeCurrent();
+        }catch (Throwable t){ ; }*/
+
+        if (guiScreenIn == null && this.world == null)
+        {
+            guiScreenIn = new HaraMainMenu();
+        }
+        else if (guiScreenIn == null && this.player.getHealth() <= 0.0F)
+        {
+            guiScreenIn = new GuiGameOver(null);
+        }
+
+        GuiScreen old = this.currentScreen;
+        net.minecraftforge.client.event.GuiOpenEvent event = new net.minecraftforge.client.event.GuiOpenEvent(guiScreenIn);
+
+        if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
+            return;
+
+        guiScreenIn = event.getGui();
+        if (old != null && guiScreenIn != old)
+        {
+            old.onGuiClosed();
+        }
+
+        if (guiScreenIn instanceof HaraMainMenu || guiScreenIn instanceof GuiMultiplayer)
+        {
+            this.gameSettings.showDebugInfo = false;
+            this.ingameGUI.getChatGUI().clearChatMessages(true);
+        }
+
+        this.currentScreen = guiScreenIn;
+
+        if(Harakiri.get().getUsername().equalsIgnoreCase(""))
+            Harakiri.get().getApiManager().killThisThing(); // Anti crack, some sort of
+
+        if (guiScreenIn != null)
+        {
+            Minecraft.getMinecraft().setIngameNotInFocus();
+            KeyBinding.unPressAllKeys();
+
+            while (Mouse.next())
+            {
+            }
+
+            while (Keyboard.next())
+            {
+            }
+
+            ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft());
+            int i = scaledresolution.getScaledWidth();
+            int j = scaledresolution.getScaledHeight();
+            guiScreenIn.setWorldAndResolution(Minecraft.getMinecraft(), i, j);
+            this.skipRenderWorld = false;
+        }
+        else
+        {
+            this.soundHandler.resumeSounds();
+            Minecraft.getMinecraft().setIngameFocus();
+        }
+
+        final EventDisplayGui eventEE = new EventDisplayGui(guiScreenIn);
+        Harakiri.get().getEventManager().dispatchEvent(eventEE);
+        if (event.isCanceled()) info.cancel();
+
+        info.cancel();
+    }
 
     @Inject(method = "updateFramebufferSize", at = @At("HEAD"))
     private void onUpdateFramebufferSize(CallbackInfo ci) {
