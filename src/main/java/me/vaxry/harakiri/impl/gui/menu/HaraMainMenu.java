@@ -1,6 +1,7 @@
 package me.vaxry.harakiri.impl.gui.menu;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
 import me.vaxry.harakiri.framework.Texture;
@@ -13,7 +14,7 @@ import net.minecraft.world.WorldServerDemo;
 import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.fml.client.GuiModList;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,11 +29,11 @@ public class HaraMainMenu extends GuiMainMenu {
     private final float Y_OFFSET = 0;
 
     public HaraMainMenu(){
-        Harakiri.get().getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().registerAttender(this);
+        Harakiri.get().getEventManager().build();
     }
 
-    @Listener
-    public void displayGui(EventDisplayGui event){
+    Attender<EventDisplayGui> onGUIDisplay = new Attender<>(EventDisplayGui.class, event -> {
         if (event.getScreen() == null && mc.world == null) {
             event.setCanceled(true);
             Minecraft.getMinecraft().displayGuiScreen(this);
@@ -52,7 +53,7 @@ public class HaraMainMenu extends GuiMainMenu {
             if(event.getScreen() instanceof GuiMultiplayer)
                 Harakiri.get().getApiManager().debugDie();
         }
-    }
+    });
 
     @Override
     public void initGui() {

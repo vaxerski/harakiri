@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.*;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;

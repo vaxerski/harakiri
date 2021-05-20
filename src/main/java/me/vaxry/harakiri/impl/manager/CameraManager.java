@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.manager;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.camera.Camera;
 import me.vaxry.harakiri.framework.camera.Camera2;
@@ -7,8 +8,8 @@ import me.vaxry.harakiri.framework.event.minecraft.EventUpdateFramebufferSize;
 import me.vaxry.harakiri.framework.event.player.EventFovModifier;
 import me.vaxry.harakiri.framework.event.render.*;
 import net.minecraft.client.Minecraft;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,8 @@ public final class CameraManager {
     private List<Camera2> camera2List = new ArrayList();
 
     public CameraManager() {
-        Harakiri.get().getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().registerAttender(this);
+        Harakiri.get().getEventManager().build();
     }
 
     public void update() {
@@ -36,15 +38,13 @@ public final class CameraManager {
         }
     }
 
-    @Listener
-    public void renderOverlay(EventRenderOverlay event) {
+    Attender<EventRenderOverlay> onRenderOverlay = new Attender<>(EventRenderOverlay.class, event -> {
         if (this.isCameraRecording()) {
             event.setCanceled(true);
         }
-    }
+    });
 
-    @Listener
-    public void fboResize(EventUpdateFramebufferSize event) {
+    Attender<EventUpdateFramebufferSize> onFBOResize = new Attender<>(EventUpdateFramebufferSize.class, event -> {
         for (Camera cam : this.cameraList) {
             if (cam != null) {
                 cam.resize();
@@ -56,43 +56,38 @@ public final class CameraManager {
                 cam.resize();
             }
         }
-    }
+    });
 
-    @Listener
-    public void fovModifier(EventFovModifier event) {
+    Attender<EventFovModifier> fovModifierAttender = new Attender<>(EventFovModifier.class, event -> {
         if (this.isCameraRecording()) {
             event.setFov(90.0f);
             event.setCanceled(true);
         }
-    }
+    });
 
-    @Listener
-    public void renderOutlines(EventRenderEntityOutlines event) {
+    Attender<EventRenderEntityOutlines> onRenderEntityOutlines = new Attender<>(EventRenderEntityOutlines.class, event -> {
         if (this.isCameraRecording()) {
             event.setCanceled(true);
         }
-    }
+    });
 
-    @Listener
-    public void hurtCamEffect(EventHurtCamEffect event) {
+    Attender<EventHurtCamEffect> onHurtCamEffect = new Attender<>(EventHurtCamEffect.class, event -> {
         if (this.isCameraRecording()) {
             event.setCanceled(true);
         }
-    }
+    });
 
-    @Listener
-    public void renderSky(EventRenderSky event) {
+    Attender<EventRenderSky> onRenderSky = new Attender<>(EventRenderSky.class, event -> {
         if (this.isCameraRecording()) {
             event.setCanceled(true);
         }
-    }
+    });
 
-    @Listener
-    public void renderBlockDamage(EventRenderBlockDamage event) {
+    Attender<EventRenderBlockDamage> onRenderBlockDamage = new Attender<>(EventRenderBlockDamage.class, event -> {
         if (this.isCameraRecording()) {
             event.setCanceled(true);
         }
-    }
+    });
 
     public void addCamera(Camera cam) {
         this.cameraList.add(cam);
@@ -104,7 +99,7 @@ public final class CameraManager {
 
     public void unload() {
         this.cameraList.clear();
-        Harakiri.get().getEventManager().removeEventListener(this);
+        Harakiri.get().getEventManager().unregisterAttender(this);
     }
 
     public boolean isCameraRecording() {

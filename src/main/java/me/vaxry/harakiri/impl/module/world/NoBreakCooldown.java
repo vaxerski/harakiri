@@ -4,7 +4,7 @@ import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class NoBreakCooldown extends Module {
 

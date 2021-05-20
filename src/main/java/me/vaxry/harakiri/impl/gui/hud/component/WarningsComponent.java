@@ -29,7 +29,8 @@ public class WarningsComponent extends DraggableHudComponent {
         this.setX(200);
         this.setY(200);
 
-        Harakiri.get().getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().registerAttender(this);
+        Harakiri.get().getEventManager().build();
     }
 
     @Override

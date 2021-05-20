@@ -1,8 +1,7 @@
 package me.vaxry.harakiri;
 
+import io.github.vialdevelopment.attendance.manager.impl.ParentEventManager;
 import me.vaxry.harakiri.framework.Module;
-import me.vaxry.harakiri.framework.event.client.EventLoad;
-import me.vaxry.harakiri.framework.event.client.EventUnload;
 import me.vaxry.harakiri.framework.extd.FontRendererExtd;
 import me.vaxry.harakiri.framework.extd.RenderItemAlpha;
 import me.vaxry.harakiri.framework.harakiriFormatter;
@@ -20,8 +19,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
-import team.stiff.pomelo.EventManager;
-import team.stiff.pomelo.impl.annotated.AnnotatedEventManager;
 
 import javax.swing.*;
 import java.io.PrintWriter;
@@ -36,7 +33,7 @@ import java.util.logging.Logger;
 public final class Harakiri {
 
     private boolean isTTF = true;
-    private static final Harakiri INSTANCE = new Harakiri();
+    public static final Harakiri INSTANCE = new Harakiri();
     private static String OS = System.getProperty("os.name").toLowerCase();
     private String username = "";
     private String loggedAccount = "";
@@ -45,7 +42,7 @@ public final class Harakiri {
 
     //private String prevTitle;
 
-    private EventManager eventManager;
+    private ParentEventManager eventManager = new ParentEventManager();
 
     private APIManager apiManager;
 
@@ -98,7 +95,7 @@ public final class Harakiri {
         try {
             this.fontUtil = new TTFFontUtil("gravity", 18);
 
-            this.eventManager = new AnnotatedEventManager();
+            this.eventManager = new ParentEventManager();
             this.apiManager = new APIManager();
             this.configManager = new ConfigManager();
             this.friendManager = new FriendManager();
@@ -118,12 +115,18 @@ public final class Harakiri {
             this.hudEditor = new GuiHudEditor();
             this.discordManager = new DiscordManager();
             this.haraMainMenu = new HaraMainMenu();
+            this.eventManager.build();
 
             //this.plexusEffect = new PlexusEffect(); -- inits in GuiHudEditor
 
             for(Module mod : this.moduleManager.getModuleList()){
                 mod.onFullLoad();
             }
+            this.eventManager.registerAttender(this.configManager);
+            Harakiri.get().getEventManager().build();
+            this.eventManager.setAttending(this.configManager, true);
+
+
 
             this.username = "Final";
 
@@ -137,7 +140,8 @@ public final class Harakiri {
                 JOptionPane.showMessageDialog(null, errors.toString(), "Init failed", JOptionPane.INFORMATION_MESSAGE);
             }
 
-            this.getEventManager().dispatchEvent(new EventLoad());
+//            EventLoad loadEvent = new EventLoad();
+//            this.getEventManager().dispatch(loadEvent);
 
             // Create the font renderer
             fontRendererExtd = new FontRendererExtd(Minecraft.getMinecraft().gameSettings, new ResourceLocation("harakirimod", "textures/ascii.png"), Minecraft.getMinecraft().renderEngine, true);
@@ -196,8 +200,6 @@ public final class Harakiri {
         this.hudEditor.unload();
         this.cameraManager.unload();
 
-        this.getEventManager().dispatchEvent(new EventUnload());
-
         ModContainer harakiriModContainer = null;
 
         for (ModContainer modContainer : Loader.instance().getActiveModList()) {
@@ -250,9 +252,9 @@ public final class Harakiri {
         return this.logger;
     }
 
-    public EventManager getEventManager() {
+    public ParentEventManager getEventManager() {
         if (this.eventManager == null) {
-            this.eventManager = new AnnotatedEventManager();
+            this.eventManager = new ParentEventManager();
         }
 
         return this.eventManager;

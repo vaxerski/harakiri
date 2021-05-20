@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.CPacketCustomPayload;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class NoHandShakeModule extends Module {
 

@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.RayTraceResult;
 import org.lwjgl.input.Mouse;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public class MiddleClickPearlModule extends Module {
     private boolean clicked;

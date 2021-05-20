@@ -7,7 +7,7 @@ import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityPig;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class EntityControlModule extends Module {
 

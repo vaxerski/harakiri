@@ -7,7 +7,7 @@ import me.vaxry.harakiri.framework.Friend;
 import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketUseEntity;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class NoFriendHurtModule extends Module {
 

@@ -11,7 +11,7 @@ import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import me.vaxry.harakiri.framework.gui.anchor.AnchorPoint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class HudModule extends Module {
 

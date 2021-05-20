@@ -12,7 +12,7 @@ import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.play.client.*;
 import net.minecraft.util.EnumHand;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class GodModeModule extends Module {
 
@@ -64,7 +64,7 @@ public final class GodModeModule extends Module {
         return this.mode.getValue().name();
     }
 
-    @Listener
+    
     public void onWalkingUpdate(EventUpdateWalkingPlayer event) {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             final Minecraft mc = Minecraft.getMinecraft();

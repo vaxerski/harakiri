@@ -17,7 +17,7 @@ public abstract class MixinBlockFluidRenderer {
     @Inject(at = @At("HEAD"), method = "renderFluid", cancellable = true)
     public void onRenderFluid(IBlockAccess blockAccess, IBlockState blockStateIn, BlockPos blockPosIn, BufferBuilder bufferBuilderIn, CallbackInfoReturnable<Boolean> cir) {
         EventRenderFluid event = new EventRenderFluid(blockAccess, blockStateIn, blockPosIn, bufferBuilderIn);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) {
             cir.cancel();
             cir.setReturnValue(event.isRenderable());

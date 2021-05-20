@@ -1,12 +1,13 @@
 package me.vaxry.harakiri.impl.manager;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.util.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,8 @@ public final class ChatManager {
     private World world;
 
     public ChatManager() {
-        Harakiri.get().getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().registerAttender(this);
+        Harakiri.get().getEventManager().build();
     }
 
     public void add(String s) {
@@ -29,11 +31,10 @@ public final class ChatManager {
 
     public void unload() {
         this.chatBuffer.clear();
-        Harakiri.get().getEventManager().removeEventListener(this);
+        Harakiri.get().getEventManager().unregisterAttender(this);
     }
 
-    @Listener
-    public void onUpdate(EventPlayerUpdate event) {
+    Attender<EventPlayerUpdate> onUpdatePlayer = new Attender<>(EventPlayerUpdate.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
 
             if (this.world != Minecraft.getMinecraft().world) {
@@ -53,6 +54,6 @@ public final class ChatManager {
                 }
             }
         }
-    }
+    });
 
 }

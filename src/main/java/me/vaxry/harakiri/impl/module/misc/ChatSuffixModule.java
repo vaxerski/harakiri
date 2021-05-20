@@ -6,7 +6,7 @@ import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.impl.module.hidden.CommandsModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketChatMessage;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class ChatSuffixModule extends Module {
 

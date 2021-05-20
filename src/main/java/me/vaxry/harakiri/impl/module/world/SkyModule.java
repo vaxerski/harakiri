@@ -4,7 +4,7 @@ import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.framework.Value;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public class SkyModule extends Module {
 

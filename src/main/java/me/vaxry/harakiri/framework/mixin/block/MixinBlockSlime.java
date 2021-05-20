@@ -26,14 +26,14 @@ public abstract class MixinBlockSlime extends Block {
     @Inject(at = @At("HEAD"), method = "onEntityWalk", cancellable = true)
     private void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn, CallbackInfo ci) {
         final EventWalkOnSlime event = new EventWalkOnSlime();
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 
     @Inject(at = @At("HEAD"), method = "onLanded", cancellable = true)
     private void onEntityWalk(World worldIn, Entity entityIn, CallbackInfo ci) {
         final EventLandOnSlime event = new EventLandOnSlime();
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 }

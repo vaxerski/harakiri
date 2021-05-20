@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class FullbrightModule extends Module {
 

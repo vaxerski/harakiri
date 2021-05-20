@@ -23,21 +23,21 @@ public abstract class MixinItemRenderer {
     @Inject(at = @At("HEAD"), method = "renderSuffocationOverlay", cancellable = true)
     private void onRenderSuffocationOverlay(TextureAtlasSprite sprite, CallbackInfo ci) {
         final EventRenderOverlay event = new EventRenderOverlay(EventRenderOverlay.OverlayType.BLOCK);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 
     @Inject(at = @At("HEAD"), method = "renderWaterOverlayTexture", cancellable = true)
     private void onRenderWaterOverlayTexture(float partialTicks, CallbackInfo ci) {
         final EventRenderOverlay event = new EventRenderOverlay(EventRenderOverlay.OverlayType.LIQUID);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 
     @Inject(at = @At("HEAD"), method = "renderFireInFirstPerson", cancellable = true)
     private void onRenderFireInFirstPerson(CallbackInfo ci) {
         final EventRenderOverlay event = new EventRenderOverlay(EventRenderOverlay.OverlayType.FIRE);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 

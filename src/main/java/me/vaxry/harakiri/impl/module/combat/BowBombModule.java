@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemBow;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class BowBombModule extends Module {
 

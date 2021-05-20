@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.manager;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
@@ -19,7 +20,7 @@ import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiSleepMP;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.common.MinecraftForge;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 import java.awt.*;
 import java.lang.reflect.Field;
@@ -126,7 +127,8 @@ public final class HudManager {
         // Organize alphabetically
         this.componentList = this.componentList.stream().sorted((obj1, obj2) -> obj1.getName().compareTo(obj2.getName())).collect(Collectors.toList());
 
-        Harakiri.get().getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().registerAttender(this);
+        Harakiri.get().getEventManager().build();
     }
 
     /**
@@ -157,8 +159,7 @@ public final class HudManager {
      *
      * @param event
      */
-    @Listener
-    public void onRender(EventRender2D event) {
+    Attender<EventRender2D> onRender2D = new Attender<>(EventRender2D.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         final int chatHeight = (mc.currentScreen instanceof GuiChat) ? 14 : 0;
@@ -203,16 +204,15 @@ public final class HudManager {
 
         Color rainbowColorC = Color.getHSBColor(hue, 1, 1);
         rainbowColor = 0xFF000000 + rainbowColorC.getRed() * 0x10000 + rainbowColorC.getGreen() * 0x100 + rainbowColorC.getBlue();
-    }
+    });
 
-    @Listener
-    public void onGuiScreenOpen(EventDisplayGui eventDisplayGui){
+    Attender<EventDisplayGui> onDisplayGUI = new Attender<>(EventDisplayGui.class, eventDisplayGui -> {
         if(eventDisplayGui.getScreen() instanceof GuiChat && !(eventDisplayGui.getScreen() instanceof HaraGuiChat) && !(eventDisplayGui.getScreen() instanceof GuiSleepMP)) {
             eventDisplayGui.setCanceled(true);
             eventDisplayGui.getScreen().onGuiClosed();
             Minecraft.getMinecraft().displayGuiScreen(new HaraGuiChat());
         }
-    }
+    });
 
     public void moveToTop(HudComponent component) {
         for (HudComponent comp : this.componentList) {
@@ -227,7 +227,7 @@ public final class HudManager {
     public void unload() {
         this.anchorPoints.clear();
         this.componentList.clear();
-        Harakiri.get().getEventManager().removeEventListener(this);
+        Harakiri.get().getEventManager().unregisterAttender(this);
     }
 
     public AnchorPoint findPoint(AnchorPoint.Point point) {

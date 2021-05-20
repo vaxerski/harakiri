@@ -36,7 +36,8 @@ public class ThreatComponent extends DraggableHudComponent {
         this.setH(BoxY);
         this.setX(BoxX);
 
-        Harakiri.get().getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().registerAttender(this);
+        Harakiri.get().getEventManager().build();
     }
 
     @Override

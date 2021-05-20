@@ -6,7 +6,7 @@ import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.server.SPacketEntityEffect;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class NoEffectsModule extends Module {
 

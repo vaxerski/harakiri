@@ -35,7 +35,7 @@ public abstract class MixinRenderLivingBase extends Render {
     @Inject(method = "renderName", at = @At("HEAD"), cancellable = true)
     private void onRenderName(EntityLivingBase entity, double x, double y, double z, CallbackInfo ci) {
         final EventRenderName event = new EventRenderName(entity);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 

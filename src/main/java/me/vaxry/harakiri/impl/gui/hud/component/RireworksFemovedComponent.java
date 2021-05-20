@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
 import me.vaxry.harakiri.framework.event.render.EventRender3D;
 import me.vaxry.harakiri.framework.event.world.EventSpawnEntity;
@@ -17,9 +18,10 @@ import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 import me.vaxry.harakiri.Harakiri;
 
@@ -39,7 +41,8 @@ public class RireworksFemovedComponent extends DraggableHudComponent {
         super("RemovedFireworks");
         this.setH(Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
 
-        Harakiri.get().getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().registerAttender(this);
+        Harakiri.get().getEventManager().build();
     }
 
     @SubscribeEvent
@@ -47,8 +50,8 @@ public class RireworksFemovedComponent extends DraggableHudComponent {
         fireworks = 0;
     }
 
-    @Listener
-    public void onSpawnEntity(EventSpawnEntity event) {
+
+    Attender<EventSpawnEntity> onEntitySpawn = new Attender<>(EventSpawnEntity.class, event -> {
         if (event.getEntity() instanceof EntityFireworkRocket) {
             fireworks += 1;
             lposx = (int)event.getEntity().posX;
@@ -58,7 +61,7 @@ public class RireworksFemovedComponent extends DraggableHudComponent {
 
             lastRocketTime.reset();
         }
-    }
+    });
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
@@ -141,8 +144,7 @@ public class RireworksFemovedComponent extends DraggableHudComponent {
     private int winX = 0;
     private int winY = 0;
 
-    @Listener
-    public void render2D(EventRender2D event) {
+    Attender<EventRender2D> onRender2D = new Attender<>(EventRender2D.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         if(mc.player == null || mc.world == null)
@@ -162,10 +164,9 @@ public class RireworksFemovedComponent extends DraggableHudComponent {
             if(seconds < 10)
                 Harakiri.get().getTTFFontUtil().drawStringWithShadow("Last Firework", bounds[0] + (bounds[2] - bounds[0]) / 2, bounds[1] + (bounds[3] - bounds[1]) - Harakiri.get().getTTFFontUtil().FONT_HEIGHT - 1, 0xFFFF0000);
         }
-    }
+    });
 
-    @Listener
-    public void render3D(EventRender3D event) {
+    Attender<EventRender3D> onRender3D = new Attender<>(EventRender3D.class, event -> {
         final Minecraft mc = Minecraft.getMinecraft();
 
         if(mc.player == null || mc.world == null)
@@ -204,5 +205,5 @@ public class RireworksFemovedComponent extends DraggableHudComponent {
         }
 
         RenderUtil.end3D();
-    }
+    });
 }

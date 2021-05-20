@@ -11,7 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiMainMenu;
 import org.lwjgl.input.Keyboard;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class CommandsModule extends Module {
 

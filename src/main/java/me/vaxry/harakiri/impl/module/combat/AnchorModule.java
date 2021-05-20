@@ -1,6 +1,7 @@
 package me.vaxry.harakiri.impl.module.combat;
 
 import akka.japi.Pair;
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.player.EventMove;
 import me.vaxry.harakiri.framework.Module;
@@ -10,7 +11,7 @@ import me.vaxry.harakiri.impl.module.render.HolesModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public class AnchorModule extends Module {
 
@@ -28,8 +29,7 @@ public class AnchorModule extends Module {
         holesModule = ((HolesModule)Harakiri.get().getModuleManager().find(HolesModule.class));
     }
 
-    @Listener
-    public void move(EventMove event) {
+    Attender<EventMove> onMove = new Attender<>(EventMove.class, event -> {
 
         // Check if over a hole.
 
@@ -59,7 +59,7 @@ public class AnchorModule extends Module {
 
         event.setX(0);
         event.setZ(0);
-    }
+    });
 
     private boolean canLocalFitIntoHole(HolesModule.Hole hole){
         EntityPlayer local = Minecraft.getMinecraft().player;

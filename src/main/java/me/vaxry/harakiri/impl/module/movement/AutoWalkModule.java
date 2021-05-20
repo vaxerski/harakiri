@@ -11,7 +11,7 @@ import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiDisconnected;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class AutoWalkModule extends Module {
 

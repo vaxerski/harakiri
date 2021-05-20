@@ -23,7 +23,7 @@ public class MixinRenderGlobal {
     @Inject(method = "isRenderEntityOutlines", at = @At("HEAD"), cancellable = true)
     private void onIsRenderEntityOutlines(CallbackInfoReturnable<Boolean> cir) {
         final EventRenderEntityOutlines event = new EventRenderEntityOutlines();
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) {
             cir.setReturnValue(false);
             cir.cancel();
@@ -33,35 +33,35 @@ public class MixinRenderGlobal {
     @Inject(method = "renderSky(FI)V", at = @At("HEAD"), cancellable = true)
     private void onRenderSky(float partialTicks, int pass, CallbackInfo ci) {
         final EventRenderSky event = new EventRenderSky();
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 
     @Inject(method = "drawBlockDamageTexture", at = @At("HEAD"), cancellable = true)
     private void onDrawBlockDamageTexture(Tessellator tessellatorIn, BufferBuilder bufferBuilderIn, Entity entityIn, float partialTicks, CallbackInfo ci) {
         final EventRenderBlockDamage event = new EventRenderBlockDamage();
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 
     @Inject(method = "renderEntities", at = @At("RETURN"), cancellable = true)
     private void renderEntities(Entity renderViewEntity, ICamera camera, float partialTicks, CallbackInfo ci){
         final EventRenderEntities eventRenderEntities = new EventRenderEntities(EventStageable.EventStage.POST, renderViewEntity, camera, partialTicks);
-        Harakiri.get().getEventManager().dispatchEvent(eventRenderEntities);
+        Harakiri.get().getEventManager().dispatch(eventRenderEntities);
         if(eventRenderEntities.isCanceled()) ci.cancel();
     }
 
     @Inject(method = "renderEntities", at = @At("HEAD"), cancellable = true)
     private void renderEntitiesPre(Entity renderViewEntity, ICamera camera, float partialTicks, CallbackInfo ci){
         final EventRenderEntities eventRenderEntities = new EventRenderEntities(EventStageable.EventStage.PRE, renderViewEntity, camera, partialTicks);
-        Harakiri.get().getEventManager().dispatchEvent(eventRenderEntities);
+        Harakiri.get().getEventManager().dispatch(eventRenderEntities);
         if(eventRenderEntities.isCanceled()) ci.cancel();
     }
 
     @Inject(method = "renderEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;disableFog()V", remap = false), cancellable = true)
     private void renderEntitiesMid(Entity renderViewEntity, ICamera camera, float partialTicks, CallbackInfo ci){
         final EventRenderEntities eventRenderEntities = new EventRenderEntities(EventStageable.EventStage.MID, renderViewEntity, camera, partialTicks);
-        Harakiri.get().getEventManager().dispatchEvent(eventRenderEntities);
+        Harakiri.get().getEventManager().dispatch(eventRenderEntities);
         if(eventRenderEntities.isCanceled()) ci.cancel();
     }
 
@@ -70,7 +70,7 @@ public class MixinRenderGlobal {
         RenderHelper.disableStandardItemLighting();
         Minecraft.getMinecraft().getRenderManager().setRenderOutlines(true);
         final EventRenderEntities event = new EventRenderEntities(EventStageable.EventStage.RENDER1, null, null, 0);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
     }
 
     @Redirect(method = "renderEntities", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Lists;newArrayList()V"))

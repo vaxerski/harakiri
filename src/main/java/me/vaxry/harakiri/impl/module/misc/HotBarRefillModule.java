@@ -11,7 +11,7 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemStack;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public class HotBarRefillModule extends Module {
     public final Value<Float> delay = new Value<>("Delay", new String[]{"Del"}, "The delay (in ms) per item transfer to hot-bar.", 500.0f, 0.0f, 2000.0f, 1.0f);

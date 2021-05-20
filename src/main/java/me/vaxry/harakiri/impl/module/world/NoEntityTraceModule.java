@@ -5,7 +5,7 @@ import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemTool;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class NoEntityTraceModule extends Module {
 

@@ -2,7 +2,7 @@ package me.vaxry.harakiri.impl.module.player;
 
 import me.vaxry.harakiri.framework.event.player.EventSwingArm;
 import me.vaxry.harakiri.framework.Module;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class NoSwingModule extends Module {
 

@@ -13,7 +13,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemShield;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.util.math.BlockPos;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class NoSlowDownModule extends Module {
 

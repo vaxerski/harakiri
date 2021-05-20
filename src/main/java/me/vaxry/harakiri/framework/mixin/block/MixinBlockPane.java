@@ -20,7 +20,7 @@ public class MixinBlockPane {
     @Inject(at = @At("HEAD"), method = "addCollisionBoxToList", cancellable = true)
     public void onAddCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState, CallbackInfo ci) {
         final EventAddCollisionBox event = new EventAddCollisionBox(pos, entityIn);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) {
             ci.cancel();
         }

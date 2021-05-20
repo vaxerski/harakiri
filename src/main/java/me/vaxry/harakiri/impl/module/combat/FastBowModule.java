@@ -8,7 +8,7 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
 import net.minecraft.util.math.BlockPos;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class FastBowModule extends Module {
 

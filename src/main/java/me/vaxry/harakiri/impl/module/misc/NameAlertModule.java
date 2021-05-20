@@ -8,7 +8,7 @@ import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.util.StringUtils;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

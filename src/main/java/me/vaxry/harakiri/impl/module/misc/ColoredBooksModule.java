@@ -3,7 +3,7 @@ package me.vaxry.harakiri.impl.module.misc;
 import me.vaxry.harakiri.framework.event.gui.EventBookPage;
 import me.vaxry.harakiri.framework.event.gui.EventBookTitle;
 import me.vaxry.harakiri.framework.Module;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class ColoredBooksModule extends Module {
 

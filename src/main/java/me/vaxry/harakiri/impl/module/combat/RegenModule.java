@@ -10,7 +10,7 @@ import net.minecraft.inventory.ClickType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class RegenModule extends Module {
 

@@ -4,7 +4,7 @@ import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class SmallShieldModule extends Module {
 

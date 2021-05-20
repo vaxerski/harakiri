@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.command;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.Command;
 import me.vaxry.harakiri.framework.event.render.EventRender2D;
@@ -16,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityShulkerBox;
 import net.minecraft.util.math.RayTraceResult;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 /**
  * Author Seth
@@ -48,14 +49,14 @@ public final class PeekCommand extends Command {
         }
 
         try {
-            Harakiri.get().getEventManager().addEventListener(this);
+            Harakiri.get().getEventManager().registerAttender(this);
+            Harakiri.get().getEventManager().build();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @Listener
-    public void render(EventRender2D event) {
+    Attender<EventRender2D> render2DAttender = new Attender<>(EventRender2D.class, event -> {
         try {
             final Minecraft mc = Minecraft.getMinecraft();
 
@@ -78,7 +79,7 @@ public final class PeekCommand extends Command {
                     if (stack == null) {
                         Harakiri.get().errorChat("\"" + target.getName() + "\" is not holding a shulker box");
                         this.entity = null;
-                        Harakiri.get().getEventManager().removeEventListener(this);
+                        Harakiri.get().getEventManager().unregisterAttender(this);
                         return;
                     }
                 } else {
@@ -133,8 +134,9 @@ public final class PeekCommand extends Command {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Harakiri.get().getEventManager().removeEventListener(this);
-    }
+        Harakiri.get().getEventManager().unregisterAttender(this);
+    });
+
 
     private ItemStack getHeldShulker(EntityPlayer entity) {
         if (!entity.getHeldItemMainhand().isEmpty() && entity.getHeldItemMainhand().getItem() instanceof ItemShulkerBox) {

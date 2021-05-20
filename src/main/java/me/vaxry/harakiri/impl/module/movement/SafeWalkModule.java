@@ -6,7 +6,7 @@ import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
 import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.client.Minecraft;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class SafeWalkModule extends Module {
 

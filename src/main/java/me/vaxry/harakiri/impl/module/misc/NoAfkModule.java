@@ -12,7 +12,7 @@ import me.vaxry.harakiri.framework.util.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.EnumHand;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class NoAfkModule extends Module {
 

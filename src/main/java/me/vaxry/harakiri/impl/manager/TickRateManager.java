@@ -1,11 +1,12 @@
 package me.vaxry.harakiri.impl.manager;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import net.minecraft.network.play.server.SPacketTimeUpdate;
 import net.minecraft.util.math.MathHelper;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class TickRateManager {
 
@@ -22,7 +23,8 @@ public final class TickRateManager {
             this.ticks[i] = 0.0f;
         }
 
-        Harakiri.get().getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().registerAttender(this);
+        Harakiri.get().getEventManager().build();
     }
 
     public float getLastTick() {
@@ -46,11 +48,10 @@ public final class TickRateManager {
     }
 
     public void unload() {
-        Harakiri.get().getEventManager().removeEventListener(this);
+        Harakiri.get().getEventManager().unregisterAttender(this);
     }
 
-    @Listener
-    public void receivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() instanceof SPacketTimeUpdate) {
                 if (this.prevTime != -1) {
@@ -62,6 +63,6 @@ public final class TickRateManager {
                 this.prevTime = System.currentTimeMillis();
             }
         }
-    }
+    });
 
 }

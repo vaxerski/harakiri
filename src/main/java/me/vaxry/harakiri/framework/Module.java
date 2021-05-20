@@ -82,7 +82,9 @@ public class Module {
     }
 
     public void onEnable() {
-        Harakiri.get().getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().registerAttender(this);
+        Harakiri.get().getEventManager().build();
+        Harakiri.get().getEventManager().setAttending(this, true);
 
         if(this.type == ModuleType.LUA && !(this instanceof ReloadLuasModule)){
             try {
@@ -123,7 +125,7 @@ public class Module {
             return;
         }
 
-        Harakiri.get().getEventManager().removeEventListener(this);
+        Harakiri.get().getEventManager().setAttending(this, false);
 
         if(this.type == ModuleType.LUA /*&& !(this instanceof ReloadLuasModule)  Redundant  */){
             try {

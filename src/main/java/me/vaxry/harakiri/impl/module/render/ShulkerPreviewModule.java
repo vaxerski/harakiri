@@ -18,7 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityShulkerBox;
 import net.minecraft.util.NonNullList;
 import org.lwjgl.input.Mouse;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class ShulkerPreviewModule extends Module {
 

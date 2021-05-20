@@ -90,7 +90,8 @@ public final class ConfigManager {
             }
         }
 
-        Harakiri.get().getEventManager().dispatchEvent(new EventSaveConfig());
+        EventSaveConfig event = new EventSaveConfig();
+        Harakiri.get().getEventManager().dispatch(event);
     }
 
     public void saveAll() {
@@ -101,7 +102,8 @@ public final class ConfigManager {
                 cfg.setNewConfigFileDir(this.current_config.getPath());
             cfg.onSave();
         }
-        Harakiri.get().getEventManager().dispatchEvent(new EventSaveConfig());
+        EventSaveConfig event = new EventSaveConfig();
+        Harakiri.get().getEventManager().dispatch(event);
     }
 
     public void load(Class configurableClassType) {
@@ -114,7 +116,9 @@ public final class ConfigManager {
                 cfg.onLoad();
             }
         }
-        Harakiri.get().getEventManager().dispatchEvent(new EventLoadConfig());
+
+//        EventLoadConfig event = new EventLoadConfig();
+//        Harakiri.get().getEventManager().dispatch(event);
     }
 
     public void loadAll() {
@@ -125,7 +129,8 @@ public final class ConfigManager {
                 cfg.setNewConfigFileDir(this.current_config.getPath());
             cfg.onLoad();
         }
-        Harakiri.get().getEventManager().dispatchEvent(new EventLoadConfig());
+//        EventLoadConfig event = new EventLoadConfig();
+//        Harakiri.get().getEventManager().dispatch(event);
     }
 
     private void addDirToZipArchive(ZipOutputStream zos, File fileToZip, String parrentDirectoryName) throws Exception {

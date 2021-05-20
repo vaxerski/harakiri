@@ -2,7 +2,7 @@ package me.vaxry.harakiri.impl.module.render;
 
 import me.vaxry.harakiri.framework.event.render.EventOrientCamera;
 import me.vaxry.harakiri.framework.Module;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class ViewClipModule extends Module {
 

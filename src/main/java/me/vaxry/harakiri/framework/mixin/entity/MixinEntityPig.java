@@ -24,7 +24,7 @@ public abstract class MixinEntityPig extends EntityAnimal {
     @Inject(at = @At("HEAD"), method = "canBeSteered", cancellable = true)
     public void onCanBeSteered(CallbackInfoReturnable<Boolean> cir) {
         final EventSteerEntity event = new EventSteerEntity();
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) {
             cir.setReturnValue(true);
             cir.cancel();
@@ -34,7 +34,7 @@ public abstract class MixinEntityPig extends EntityAnimal {
     @Inject(at = @At("HEAD"), method = "travel", cancellable = true)
     public void onTravel(float strafe, float vertical, float forward, CallbackInfo ci) {
         final EventPigTravel event = new EventPigTravel();
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) {
             ci.cancel();
         }

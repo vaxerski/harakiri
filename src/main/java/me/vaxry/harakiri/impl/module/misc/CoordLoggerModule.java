@@ -12,7 +12,7 @@ import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.network.play.server.SPacketSpawnMob;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class CoordLoggerModule extends Module {
 

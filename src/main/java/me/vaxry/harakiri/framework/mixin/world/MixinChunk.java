@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinChunk {
     @Inject(method = "onUnload", at = @At("RETURN"))
     private void onUnload(CallbackInfo ci) {
-        Harakiri.get().getEventManager().dispatchEvent(new EventChunk(EventChunk.ChunkType.UNLOAD, (Chunk) (Object) this));
+        EventChunk event = new EventChunk(EventChunk.ChunkType.UNLOAD, (Chunk) (Object) this);
+        Harakiri.get().getEventManager().dispatch(event);
     }
 }

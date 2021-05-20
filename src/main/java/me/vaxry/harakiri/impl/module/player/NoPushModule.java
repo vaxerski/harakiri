@@ -4,7 +4,7 @@ import me.vaxry.harakiri.framework.event.player.EventApplyCollision;
 import me.vaxry.harakiri.framework.event.player.EventPushOutOfBlocks;
 import me.vaxry.harakiri.framework.event.player.EventPushedByWater;
 import me.vaxry.harakiri.framework.Module;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class NoPushModule extends Module {
 

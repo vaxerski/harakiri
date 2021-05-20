@@ -10,7 +10,7 @@ import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.impl.config.LuaConfig;
 import me.vaxry.harakiri.impl.gui.hud.component.special.ModuleListComponent;
 import net.minecraft.client.Minecraft;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 import java.io.File;
 import java.util.ArrayList;

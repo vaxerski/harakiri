@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
@@ -7,7 +8,7 @@ import me.vaxry.harakiri.framework.gui.DraggableHudComponent;
 import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.impl.gui.hud.GuiHudEditor;
 import net.minecraft.client.Minecraft;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 import java.text.DecimalFormat;
 
@@ -19,17 +20,17 @@ public final class PacketTimeComponent extends DraggableHudComponent {
         super("PacketTime");
         this.setH(Harakiri.get().getTTFFontUtil().FONT_HEIGHT);
 
-        Harakiri.get().getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().registerAttender(this);
+        Harakiri.get().getEventManager().build();
     }
 
-    @Listener
-    public void onReceivePacket(EventReceivePacket event) {
+    Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {
         if (event.getStage() == EventStageable.EventStage.PRE) {
             if (event.getPacket() != null) {
                 this.timer.reset();
             }
         }
-    }
+    });
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {

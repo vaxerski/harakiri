@@ -10,7 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.RayTraceResult;
 import org.lwjgl.input.Mouse;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class MiddleClickFriendsModule extends Module {
 

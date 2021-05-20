@@ -5,7 +5,7 @@ import me.vaxry.harakiri.framework.event.gui.EventRenderPortal;
 import me.vaxry.harakiri.framework.event.render.EventRenderOverlay;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class NoOverlayModule extends Module {
 

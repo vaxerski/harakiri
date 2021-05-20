@@ -6,7 +6,7 @@ import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.impl.manager.ModuleManager;
 import net.minecraft.client.Minecraft;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 import java.io.File;
 import java.io.FileWriter;
@@ -32,7 +32,8 @@ public class ReloadConfigsModule extends Module {
         super("Reload Configs", new String[]{"ReloadCFG", "ReloadConfig"}, "Reload the config list", "NONE", -1, ModuleType.CONFIG);
         this.moduleManager = moduleManager;
         this.reloadConfigs();
-        Harakiri.get().getEventManager().addEventListener(this);
+        Harakiri.get().getEventManager().registerAttender(this);
+        Harakiri.get().getEventManager().build();
     }
 
     @Override

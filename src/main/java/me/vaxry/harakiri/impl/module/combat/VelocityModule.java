@@ -11,7 +11,7 @@ import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.network.play.server.SPacketEntityStatus;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.network.play.server.SPacketExplosion;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class VelocityModule extends Module {
 

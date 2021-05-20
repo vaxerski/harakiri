@@ -8,7 +8,7 @@ import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.math.BlockPos;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public class AvoidModule extends Module {
 

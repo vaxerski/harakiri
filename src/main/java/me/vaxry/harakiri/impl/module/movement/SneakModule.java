@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class SneakModule extends Module {
 

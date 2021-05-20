@@ -213,7 +213,8 @@ public final class HubComponent extends ResizableHudComponent {
                     final boolean insideComponent = mouseX >= (this.getX() + BORDER) && mouseX <= (this.getX() + this.getW() - BORDER - SCROLL_WIDTH) && mouseY >= (this.getY() + BORDER + Harakiri.get().getTTFFontUtil().FONT_HEIGHT + 1 + offsetY - this.scroll) && mouseY <= (this.getY() + BORDER + (Harakiri.get().getTTFFontUtil().FONT_HEIGHT * 2) + 1 + offsetY - this.scroll);
                     if (insideComponent) {
                         component.setVisible(!component.isVisible());
-                        Harakiri.get().getEventManager().dispatchEvent(new EventHubComponentClick(component.getName(), component.isVisible()));
+                        EventHubComponentClick event = new EventHubComponentClick(component.getName(), component.isVisible());
+                        Harakiri.get().getEventManager().dispatch(event);
                     }
                     offsetY += Harakiri.get().getTTFFontUtil().FONT_HEIGHT + TEXT_GAP;
                 }

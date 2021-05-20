@@ -5,7 +5,7 @@ import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public class AntiHungerModule extends Module {
 

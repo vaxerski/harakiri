@@ -10,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public class ChamsModule extends Module {
 

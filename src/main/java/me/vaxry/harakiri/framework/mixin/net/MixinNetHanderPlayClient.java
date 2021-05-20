@@ -16,7 +16,7 @@ public abstract class MixinNetHanderPlayClient {
     public void onHandleChunkData(SPacketChunkData packetIn, CallbackInfo ci) {
         if (packetIn != null) {
             final EventChunk event = new EventChunk(EventChunk.ChunkType.LOAD, Minecraft.getMinecraft().world.getChunk(packetIn.getChunkX(), packetIn.getChunkZ()));
-            Harakiri.get().getEventManager().dispatchEvent(event);
+            Harakiri.get().getEventManager().dispatch(event);
         }
     }
 }

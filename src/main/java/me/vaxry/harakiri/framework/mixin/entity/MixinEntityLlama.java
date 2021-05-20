@@ -22,7 +22,7 @@ public abstract class MixinEntityLlama extends EntityAnimal {
     @Inject(at = @At("HEAD"), method = "canBeSteered", cancellable = true)
     public void onCanBeSteered(CallbackInfoReturnable<Boolean> cir) {
         final EventSteerEntity event = new EventSteerEntity();
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) {
             cir.setReturnValue(true);
             cir.cancel();

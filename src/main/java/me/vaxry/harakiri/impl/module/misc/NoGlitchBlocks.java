@@ -8,7 +8,7 @@ import me.vaxry.harakiri.framework.event.world.EventSetBlockState;
 import me.vaxry.harakiri.impl.module.world.NukerModule;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class NoGlitchBlocks extends Module {
 

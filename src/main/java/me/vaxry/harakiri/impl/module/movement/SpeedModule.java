@@ -10,7 +10,7 @@ import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.MobEffects;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class SpeedModule extends Module {
 

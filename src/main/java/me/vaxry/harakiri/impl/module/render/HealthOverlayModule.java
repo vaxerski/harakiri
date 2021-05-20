@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public class HealthOverlayModule extends Module {
 

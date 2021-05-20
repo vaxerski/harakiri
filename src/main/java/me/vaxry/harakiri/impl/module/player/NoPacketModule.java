@@ -6,7 +6,7 @@ import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
 import net.minecraft.network.play.client.*;
 import net.minecraft.network.play.server.SPacketDestroyEntities;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class NoPacketModule extends Module {
 

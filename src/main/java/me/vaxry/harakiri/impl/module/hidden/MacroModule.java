@@ -6,7 +6,7 @@ import me.vaxry.harakiri.framework.Macro;
 import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class MacroModule extends Module {
 

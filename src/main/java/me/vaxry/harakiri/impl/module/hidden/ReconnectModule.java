@@ -15,7 +15,7 @@ import net.minecraft.network.EnumConnectionState;
 import net.minecraft.network.handshake.client.C00Handshake;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 
 public final class ReconnectModule extends Module {

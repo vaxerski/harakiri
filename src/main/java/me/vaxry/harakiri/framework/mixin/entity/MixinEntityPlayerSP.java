@@ -33,14 +33,14 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
     private void onUpdatePre(CallbackInfo ci) {
         EventPlayerUpdate event = new EventPlayerUpdate(EventStageable.EventStage.PRE);
         Harakiri.get().getCameraManager().update();
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 
     @Inject(method = "onUpdate", at = @At("RETURN"))
     private void onUpdatePost(CallbackInfo ci) {
         EventPlayerUpdate event = new EventPlayerUpdate(EventStageable.EventStage.POST);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
     }
 
 
@@ -49,14 +49,14 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
         Harakiri.get().getRotationManager().updateRotations();
         Harakiri.get().getPositionManager().updatePosition();
         EventUpdateWalkingPlayer event = new EventUpdateWalkingPlayer(EventStageable.EventStage.PRE);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 
     @Inject(method = "onUpdateWalkingPlayer", at = @At("RETURN"))
     private void onUpdateWalkingPlayerPost(CallbackInfo ci) {
         EventUpdateWalkingPlayer event = new EventUpdateWalkingPlayer(EventStageable.EventStage.POST);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
 
         Harakiri.get().getPositionManager().restorePosition();
         Harakiri.get().getRotationManager().restoreRotations();
@@ -65,28 +65,28 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
     @Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
     private void onSendChatMessage(String message, CallbackInfo ci) {
         EventSendChatMessage event = new EventSendChatMessage(message);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 
     @Inject(method = "swingArm", at = @At("HEAD"), cancellable = true)
     private void onSwingArm(EnumHand hand, CallbackInfo ci) {
         final EventSwingArm event = new EventSwingArm(hand);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 
     @Inject(method = "closeScreen", at = @At("HEAD"), cancellable = true)
     private void onCloseScreen(CallbackInfo ci) {
         final EventCloseScreen event = new EventCloseScreen();
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 
     @Inject(method = "pushOutOfBlocks", at = @At("HEAD"), cancellable = true)
     private void onPushOutOfBlocks(double x, double y, double z, CallbackInfoReturnable<Boolean> cir) {
         final EventPushOutOfBlocks event = new EventPushOutOfBlocks();
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) {
             cir.setReturnValue(false);
             cir.cancel();
@@ -95,7 +95,8 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
 
     @Inject(method = "onLivingUpdate", at = @At(remap = false, value = "INVOKE", target = "Lnet/minecraftforge/client/ForgeHooksClient;onInputUpdate(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/util/MovementInput;)V"))
     private void onUpdateInput(CallbackInfo ci) {
-        Harakiri.get().getEventManager().dispatchEvent(new EventUpdateInput());
+        EventUpdateInput event = new EventUpdateInput();
+        Harakiri.get().getEventManager().dispatch(event);
     }
 
     @Inject(method = "move", at = @At("HEAD"), cancellable = true)
@@ -104,7 +105,7 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
         double d0 = posX;
         double d1 = posZ;
         final EventMove event = new EventMove(type, x, y, z);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) return;
         super.move(type, event.getX(), event.getY(), event.getZ());
         updateAutoJump((float) (posX - d0), (float) (posZ - d1));

@@ -48,7 +48,7 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 import java.util.*;
 import java.util.List;
@@ -132,7 +132,6 @@ public final class ESPModule extends Module {
     @Override
     public void onDisable() {
         super.onDisable();
-        Harakiri.get().getEventManager().addEventListener(this);
         return;
     }
 

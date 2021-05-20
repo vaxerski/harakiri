@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketUseEntity;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class CriticalsModule extends Module {
 

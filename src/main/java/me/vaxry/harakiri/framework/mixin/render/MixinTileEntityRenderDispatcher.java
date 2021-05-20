@@ -16,7 +16,7 @@ public class MixinTileEntityRenderDispatcher {
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void render(TileEntity te, float pt, int deststage, CallbackInfo ci){
         final EventRenderTileEntity event = new EventRenderTileEntity(te, pt, deststage);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 }

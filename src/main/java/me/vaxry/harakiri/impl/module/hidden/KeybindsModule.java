@@ -4,7 +4,7 @@ import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.minecraft.EventKeyPress;
 import me.vaxry.harakiri.framework.Module;
 import org.lwjgl.input.Keyboard;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class KeybindsModule extends Module {
 

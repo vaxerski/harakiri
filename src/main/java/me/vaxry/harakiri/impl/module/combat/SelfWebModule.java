@@ -13,7 +13,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public class SelfWebModule extends Module {
     private int prevSlot = -1;

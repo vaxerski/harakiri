@@ -27,7 +27,7 @@ public abstract class MixinGuiScreenBook extends GuiScreen {
         ci.cancel();
 
         final EventBookPage event = new EventBookPage(p_146459_1_);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         String s1 = pageGetCurrent() + event.getPage();
         int i = fontRenderer.getWordWrappedHeight(s1 + "" + TextFormatting.BLACK + "_", 118);
         if (i <= 128 && s1.length() < 256) {
@@ -38,7 +38,7 @@ public abstract class MixinGuiScreenBook extends GuiScreen {
     @Inject(method = "keyTypedInTitle", at = @At("HEAD"))
     private void onKeyTypedInTitle(char typedChar, int keyCode, CallbackInfo ci) {
         final EventBookTitle event = new EventBookTitle(bookTitle);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         bookTitle = event.getTitle();
     }
 

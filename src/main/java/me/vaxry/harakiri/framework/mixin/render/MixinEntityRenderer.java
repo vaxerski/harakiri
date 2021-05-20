@@ -43,13 +43,14 @@ public class MixinEntityRenderer {
     @Inject(method = "renderWorldPass", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/EntityRenderer;renderHand:Z"))
     private void onRenderHand(int pass, float partialTicks, long finishTimeNano, CallbackInfo ci) {
         if (Harakiri.get().getCameraManager().isCameraRecording()) return;
-        Harakiri.get().getEventManager().dispatchEvent(new EventRender3D(partialTicks));
+        EventRender3D event = new EventRender3D(partialTicks);
+        Harakiri.get().getEventManager().dispatch(event);
     }
 
     @Inject(method = "hurtCameraEffect", at = @At("HEAD"), cancellable = true)
     private void onHurtCameraEffect(float partialTicks, CallbackInfo ci) {
         final EventHurtCamEffect event = new EventHurtCamEffect();
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 
@@ -62,7 +63,7 @@ public class MixinEntityRenderer {
     @Inject(method = "getFOVModifier", at = @At("HEAD"), cancellable = true)
     private void onGetFOVModifier(float partialTicks, boolean useFOVSetting, CallbackInfoReturnable<Float> cir) {
         final EventFovModifier event = new EventFovModifier();
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) {
             cir.setReturnValue(event.getFov());
             cir.cancel();
@@ -71,7 +72,8 @@ public class MixinEntityRenderer {
 
     @Redirect(method = "setupFog", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ActiveRenderInfo;getBlockStateAtEntityViewpoint(Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;F)Lnet/minecraft/block/state/IBlockState;"))
     private IBlockState setupFog(World world, Entity start, float partialticks) {
-        Harakiri.get().getEventManager().dispatchEvent(new EventSetupFog(world, start, partialticks));
+        EventSetupFog fogEvent = new EventSetupFog(world, start, partialticks);
+        Harakiri.get().getEventManager().dispatch(fogEvent);
         IBlockState iBlockState = ActiveRenderInfo.getBlockStateAtEntityViewpoint(world, start, partialticks);
 
         if(((NoOverlayModule)Harakiri.get().getModuleManager().find(NoOverlayModule.class)).lava.getValue()){

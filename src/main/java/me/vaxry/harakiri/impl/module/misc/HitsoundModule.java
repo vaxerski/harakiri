@@ -6,7 +6,7 @@ import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketUseEntity;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 import javax.sound.sampled.*;
 import java.io.File;

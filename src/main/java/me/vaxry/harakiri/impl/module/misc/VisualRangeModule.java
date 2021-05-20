@@ -11,7 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class VisualRangeModule extends Module {
 

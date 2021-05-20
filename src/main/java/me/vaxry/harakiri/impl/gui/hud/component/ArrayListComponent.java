@@ -1,6 +1,7 @@
 package me.vaxry.harakiri.impl.gui.hud.component;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import io.github.vialdevelopment.attendance.attender.Attender;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.client.EventSaveConfig;
 import me.vaxry.harakiri.framework.event.world.EventLoadWorld;
@@ -14,7 +15,7 @@ import me.vaxry.harakiri.impl.module.combat.VelocityModule;
 import me.vaxry.harakiri.impl.module.hidden.ArrayListModule;
 import me.vaxry.harakiri.impl.module.render.HudModule;
 import net.minecraft.client.gui.ScaledResolution;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -42,7 +43,8 @@ public final class ArrayListComponent extends DraggableHudComponent {
         this.setAnchorPoint(null);
         this.setVisible(true);
 
-        Harakiri.get().getEventManager().addEventListener(this); // subscribe to the event manager
+        Harakiri.get().getEventManager().registerAttender(this); // subscribe to the event manager
+        Harakiri.get().getEventManager().build();
     }
 
     private float getJitter() {
@@ -216,15 +218,14 @@ public final class ArrayListComponent extends DraggableHudComponent {
         }
     }
 
-    @Listener
-    public void onLoadWorld(EventLoadWorld eventLoadWorld) {
-        this.updateValues();
-    }
 
-    @Listener
-    public void onConfigSave(EventSaveConfig eventSaveConfig) {
+    Attender<EventLoadWorld> onWorldLoad = new Attender<>(EventLoadWorld.class, event -> {
         this.updateValues();
-    }
+    });
+
+    Attender<EventSaveConfig> onConfigSave = new Attender<>(EventSaveConfig.class, event -> {
+        this.updateValues();
+    });
 
     private void updateValues() {
         final HudModule hudModule = (HudModule) Harakiri.get().getModuleManager().find(HudModule.class);

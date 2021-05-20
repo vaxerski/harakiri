@@ -10,7 +10,7 @@ import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
 import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class AutoFishModule extends Module {
 

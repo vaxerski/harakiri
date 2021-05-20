@@ -22,7 +22,7 @@ public abstract class MixinEntity {
         //noinspection EqualsBetweenInconvertibleTypes
         if ((player != null) && (player.equals(this) || player.equals(entityIn))) {
             final EventApplyCollision event = new EventApplyCollision();
-            Harakiri.get().getEventManager().dispatchEvent(event);
+            Harakiri.get().getEventManager().dispatch(event);
             if (event.isCanceled()) {
                 ci.cancel();
             }

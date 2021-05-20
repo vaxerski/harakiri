@@ -4,7 +4,7 @@ import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import me.vaxry.harakiri.framework.Module;
 import net.minecraft.network.play.client.CPacketUpdateSign;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class ColoredSignsModule extends Module {
 

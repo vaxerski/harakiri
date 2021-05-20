@@ -4,7 +4,7 @@ import me.vaxry.harakiri.framework.event.minecraft.EventDisplayGui;
 import me.vaxry.harakiri.framework.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGameOver;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class RespawnModule extends Module {
 

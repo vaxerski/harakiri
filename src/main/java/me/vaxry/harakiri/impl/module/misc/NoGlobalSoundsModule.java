@@ -7,7 +7,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.server.SPacketEffect;
 import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.util.SoundCategory;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class NoGlobalSoundsModule extends Module {
 

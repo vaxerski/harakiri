@@ -206,7 +206,7 @@ public final class CommandManager {
 
     public void unload() {
         for (Command cmd : this.commandList) {
-            Harakiri.get().getEventManager().removeEventListener(cmd);
+            Harakiri.get().getEventManager().unregisterAttender(cmd);
         }
         this.commandList.clear();
     }

@@ -18,26 +18,26 @@ public abstract class MixinNetworkManager extends SimpleChannelInboundHandler<Pa
     @Inject(method = "sendPacket(Lnet/minecraft/network/Packet;)V", at = @At("HEAD"), cancellable = true)
     private void onSendPacketPre(Packet<?> packetIn, CallbackInfo ci) {
         final EventSendPacket event = new EventSendPacket(EventStageable.EventStage.PRE, packetIn);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 
     @Inject(method = "sendPacket(Lnet/minecraft/network/Packet;)V", at = @At("RETURN"))
     private void onSendPacket(Packet<?> packetIn, CallbackInfo ci) {
         final EventSendPacket event = new EventSendPacket(EventStageable.EventStage.POST, packetIn);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
     }
 
     @Inject(method = "channelRead0", at = @At("HEAD"), cancellable = true)
     private void onChannelRead0Pre(ChannelHandlerContext p_channelRead0_1_, Packet<?> p_channelRead0_2_, CallbackInfo ci) {
         final EventReceivePacket event = new EventReceivePacket(EventStageable.EventStage.PRE, p_channelRead0_2_);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 
     @Inject(method = "channelRead0", at = @At("RETURN"))
     private void onChannelRead0(ChannelHandlerContext p_channelRead0_1_, Packet<?> p_channelRead0_2_, CallbackInfo ci) {
         final EventReceivePacket event = new EventReceivePacket(EventStageable.EventStage.POST, p_channelRead0_2_);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
     }
 }

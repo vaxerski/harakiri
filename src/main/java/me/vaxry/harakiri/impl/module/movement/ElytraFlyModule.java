@@ -21,7 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.util.math.BlockPos;
-import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
+
 
 public final class ElytraFlyModule extends Module {
 

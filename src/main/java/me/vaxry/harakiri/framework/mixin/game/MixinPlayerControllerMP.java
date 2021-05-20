@@ -24,7 +24,7 @@ public class MixinPlayerControllerMP {
     @Inject(method = "onPlayerDestroyBlock", at = @At("HEAD"), cancellable = true)
     private void onPlayerDestroyBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         final EventDestroyBlock event = new EventDestroyBlock(pos);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) {
             cir.setReturnValue(false);
             cir.cancel();
@@ -34,7 +34,7 @@ public class MixinPlayerControllerMP {
     @Inject(method = "clickBlock", cancellable = true, at = @At("HEAD"))
     private void onClickBlock(BlockPos loc, EnumFacing face, CallbackInfoReturnable<Boolean> cir) {
         final EventClickBlock event = new EventClickBlock(loc, face);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) {
             cir.setReturnValue(false);
             cir.cancel();
@@ -44,14 +44,14 @@ public class MixinPlayerControllerMP {
     @Inject(method = "resetBlockRemoving", cancellable = true, at = @At("HEAD"))
     private void onResetBlockRemoving(CallbackInfo ci) {
         final EventResetBlockRemoving event = new EventResetBlockRemoving();
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) ci.cancel();
     }
 
     @Inject(method = "onPlayerDamageBlock", at = @At("HEAD"), cancellable = true)
     private void onPlayerDamageBlock(BlockPos posBlock, EnumFacing directionFacing, CallbackInfoReturnable<Boolean> cir) {
         final EventPlayerDamageBlock event = new EventPlayerDamageBlock(posBlock, directionFacing);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) {
             cir.setReturnValue(false);
             cir.cancel();
@@ -61,7 +61,7 @@ public class MixinPlayerControllerMP {
     @Inject(method = "processRightClickBlock", at = @At("HEAD"), cancellable = true)
     private void onProcessRightClickBlock(EntityPlayerSP player, WorldClient worldIn, BlockPos pos, EnumFacing direction, Vec3d vec, EnumHand hand, CallbackInfoReturnable<EnumActionResult> cir) {
         final EventRightClickBlock event = new EventRightClickBlock(pos, direction, vec, hand);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) {
             cir.setReturnValue(EnumActionResult.FAIL);
             cir.cancel();
@@ -71,7 +71,7 @@ public class MixinPlayerControllerMP {
     @Inject(method = "processRightClick", at = @At("HEAD"), cancellable = true)
     private void onProcessRightClick(EntityPlayer player, World worldIn, EnumHand hand, CallbackInfoReturnable<EnumActionResult> cir) {
         final EventRightClick event = new EventRightClick(hand);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) {
             cir.setReturnValue(EnumActionResult.FAIL);
             cir.cancel();
@@ -81,7 +81,7 @@ public class MixinPlayerControllerMP {
     @Inject(method = "isHittingPosition", at = @At("HEAD"), cancellable = true)
     private void onIsHittingPosition(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         final EventHittingPosition event = new EventHittingPosition(pos);
-        Harakiri.get().getEventManager().dispatchEvent(event);
+        Harakiri.get().getEventManager().dispatch(event);
         if (event.isCanceled()) {
             cir.setReturnValue(false);
             cir.cancel();
