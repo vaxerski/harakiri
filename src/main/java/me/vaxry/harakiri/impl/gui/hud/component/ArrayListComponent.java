@@ -45,6 +45,7 @@ public final class ArrayListComponent extends DraggableHudComponent {
 
         Harakiri.get().getEventManager().registerAttender(this); // subscribe to the event manager
         Harakiri.get().getEventManager().build();
+        Harakiri.get().getEventManager().setAttending(this, true);
     }
 
     private float getJitter() {

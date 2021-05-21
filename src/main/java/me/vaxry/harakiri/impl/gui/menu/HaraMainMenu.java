@@ -31,6 +31,7 @@ public class HaraMainMenu extends GuiMainMenu {
     public HaraMainMenu(){
         Harakiri.get().getEventManager().registerAttender(this);
         Harakiri.get().getEventManager().build();
+        Harakiri.get().getEventManager().setAttending(this, true);
     }
 
     Attender<EventDisplayGui> onGUIDisplay = new Attender<>(EventDisplayGui.class, event -> {

@@ -35,6 +35,7 @@ public class ReloadConfigsModule extends Module {
         this.reloadConfigs();
         Harakiri.get().getEventManager().registerAttender(this);
         Harakiri.get().getEventManager().build();
+        Harakiri.get().getEventManager().setAttending(this, true);
     }
 
     @Override

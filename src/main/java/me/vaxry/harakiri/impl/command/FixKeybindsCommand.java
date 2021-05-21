@@ -19,6 +19,7 @@ public final class FixKeybindsCommand extends Command {
         Harakiri.get().getEventManager().unregisterAttender(keybindsModule);
         Harakiri.get().getEventManager().registerAttender(keybindsModule);
         Harakiri.get().getEventManager().build();
+        Harakiri.get().getEventManager().setAttending(this, true);
         keybindsModule.setEnabled(true);
     }
 }

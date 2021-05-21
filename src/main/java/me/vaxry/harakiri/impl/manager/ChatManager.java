@@ -23,6 +23,7 @@ public final class ChatManager {
     public ChatManager() {
         Harakiri.get().getEventManager().registerAttender(this);
         Harakiri.get().getEventManager().build();
+        Harakiri.get().getEventManager().setAttending(this, true);
     }
 
     public void add(String s) {

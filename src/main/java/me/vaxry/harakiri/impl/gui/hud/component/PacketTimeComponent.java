@@ -22,6 +22,7 @@ public final class PacketTimeComponent extends DraggableHudComponent {
 
         Harakiri.get().getEventManager().registerAttender(this);
         Harakiri.get().getEventManager().build();
+        Harakiri.get().getEventManager().setAttending(this, true);
     }
 
     Attender<EventReceivePacket> onPacketReceive = new Attender<>(EventReceivePacket.class, event -> {

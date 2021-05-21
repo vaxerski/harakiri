@@ -129,6 +129,7 @@ public final class HudManager {
 
         Harakiri.get().getEventManager().registerAttender(this);
         Harakiri.get().getEventManager().build();
+        Harakiri.get().getEventManager().setAttending(this, true);
     }
 
     /**

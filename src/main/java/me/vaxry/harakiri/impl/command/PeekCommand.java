@@ -51,6 +51,7 @@ public final class PeekCommand extends Command {
         try {
             Harakiri.get().getEventManager().registerAttender(this);
             Harakiri.get().getEventManager().build();
+            Harakiri.get().getEventManager().setAttending(this, true);
         } catch (Exception e) {
             e.printStackTrace();
         }

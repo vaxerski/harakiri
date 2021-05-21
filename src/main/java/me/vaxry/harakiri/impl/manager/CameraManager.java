@@ -21,6 +21,7 @@ public final class CameraManager {
     public CameraManager() {
         Harakiri.get().getEventManager().registerAttender(this);
         Harakiri.get().getEventManager().build();
+        Harakiri.get().getEventManager().setAttending(this, true);
     }
 
     public void update() {

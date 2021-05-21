@@ -32,6 +32,7 @@ public class ThreatCamComponent extends DraggableHudComponent {
 
         Harakiri.get().getEventManager().registerAttender(this);
         Harakiri.get().getEventManager().build();
+        Harakiri.get().getEventManager().setAttending(this, true);
     }
 
     // todo: fix Future ESP
