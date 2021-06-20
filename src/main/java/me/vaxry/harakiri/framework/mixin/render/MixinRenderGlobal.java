@@ -58,7 +58,7 @@ public class MixinRenderGlobal {
         if(eventRenderEntities.isCanceled()) ci.cancel();
     }
 
-    @Inject(method = "renderEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;disableFog()V", remap = false))
+    @Inject(method = "renderEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;disableFog()V", remap = false), cancellable = true)
     private void renderEntitiesMid(Entity renderViewEntity, ICamera camera, float partialTicks, CallbackInfo ci){
         final EventRenderEntities eventRenderEntities = new EventRenderEntities(EventStageable.EventStage.MID, renderViewEntity, camera, partialTicks);
         Harakiri.get().getEventManager().dispatchEvent(eventRenderEntities);
@@ -73,7 +73,7 @@ public class MixinRenderGlobal {
         Harakiri.get().getEventManager().dispatchEvent(event);
     }
 
-    @Inject(method = "renderEntities", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Lists;newArrayList()V"))
+    @Redirect(method = "renderEntities", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Lists;newArrayList()V"))
     public void renderEntityPeri2(CallbackInfoReturnable<List<Entity>> ci) {
         // Add an entity to toggle rendering of the ESP always on.
         List<Entity> list1 = Lists.<Entity>newArrayList();

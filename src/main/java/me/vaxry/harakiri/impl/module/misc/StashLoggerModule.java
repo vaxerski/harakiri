@@ -1,9 +1,11 @@
 package me.vaxry.harakiri.impl.module.misc;
 
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.network.EventReceivePacket;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.Value;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketChunkData;
 import net.minecraft.util.math.Vec2f;
@@ -74,7 +76,7 @@ public class StashLoggerModule extends Module {
 
     protected void saveStringToFile(String str){
         try {
-            FileWriter writer = new FileWriter(new File(System.getenv("APPDATA") + "\\.minecraft\\harakiri\\stashlogger.txt"));
+            FileWriter writer = new FileWriter(new File(Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "harakiri/stashlogger.txt" : "harakiri\\stashlogger.txt")));
             writer.write(str);
             writer.close();
         }catch (Throwable t){
@@ -101,7 +103,7 @@ public class StashLoggerModule extends Module {
     protected String loadRawFile(){
         try {
             String res;
-            res = readAllBytesJava7(System.getenv("APPDATA") + "\\.minecraft\\harakiri\\stashlogger.txt");
+            res = readAllBytesJava7(Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "harakiri/stashlogger.txt" : "harakiri\\stashlogger.txt"));
             return res;
         }catch (Throwable t){
             ;

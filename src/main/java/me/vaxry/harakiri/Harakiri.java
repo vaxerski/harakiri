@@ -31,11 +31,13 @@ import java.util.logging.Logger;
 
 /**
  * @author vax
+ * @author Zim
  */
 public final class Harakiri {
 
     private boolean isTTF = true;
     private static final Harakiri INSTANCE = new Harakiri();
+    private static String OS = System.getProperty("os.name").toLowerCase();
     private String username = "";
     private String loggedAccount = "";
 
@@ -128,8 +130,11 @@ public final class Harakiri {
             try {
                 this.moduleManager.add(new ReloadConfigsModule(this.moduleManager)); // Load cfgs
                 this.configManager.init(); // Keep last, so we load configs after everything else inits
-            }catch(Throwable t){
-                JOptionPane.showMessageDialog(null, "Config Manager could not launch correctly. (Corrupt config?)\nTry recovering your config from %appdata%/harakiri/backup.\nIf that doesn't work, contact Vaxry.", "Init failed!", JOptionPane.INFORMATION_MESSAGE);
+            }catch(Exception t){
+                StringWriter errors = new StringWriter();
+                t.printStackTrace(new PrintWriter(errors));
+                //Harakiri.get().logChat("StorageESP Threw an Error: " + errors.toString());
+                JOptionPane.showMessageDialog(null, errors.toString(), "Init failed", JOptionPane.INFORMATION_MESSAGE);
             }
 
             this.getEventManager().dispatchEvent(new EventLoad());
@@ -422,4 +427,8 @@ public final class Harakiri {
 
     public static final ResourceLocation LIGHTNING_TEXTURE = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
     public static final ResourceLocation ENCHANTED_ITEM_GLINT_RES = new ResourceLocation("textures/misc/enchanted_item_glint.png");
+
+    public static boolean isNix(){
+        return OS.contains("nix") || OS.contains("nux") || OS.contains("aix") || OS.contains("darwin");
+    }
 }

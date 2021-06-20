@@ -183,92 +183,92 @@ public abstract class MixinMinecraft implements MixinMinecraftInterface {
         if (event.isCanceled()) ci.cancel();
     }
 
-    @Inject(method = "drawSplashScreen", cancellable = true, at = @At("HEAD"))
-    public void drawSplashScreen(TextureManager textureManager, CallbackInfo ci){
-        // Loading screen
-        /*try {
-
-            try
-            {
-                HarakiriLoadingPlugin.d = new SharedDrawable(Display.getDrawable());
-                Display.getDrawable().releaseContext();
-                HarakiriLoadingPlugin.d.makeCurrent();
-            }
-            catch (LWJGLException e)
-            {
-
-            }
-
-            HarakiriLoadingPlugin.thread = new HarakiriLoadingPlugin.HaraLoadingThread();
-            HarakiriLoadingPlugin.thread.start();
-        }catch (Throwable t){
-            JOptionPane.showMessageDialog(null, t.toString(), "err!", JOptionPane.INFORMATION_MESSAGE);
-        }*/
-    // Animated. Didnt work well.
-
-        ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft());
-        int i = scaledresolution.getScaleFactor();
-        Framebuffer framebuffer = new Framebuffer(scaledresolution.getScaledWidth() * i, scaledresolution.getScaledHeight() * i, true);
-        framebuffer.bindFramebuffer(false);
-        GlStateManager.matrixMode(5889);
-        GlStateManager.loadIdentity();
-        GlStateManager.ortho(0.0D, (double)scaledresolution.getScaledWidth(), (double)scaledresolution.getScaledHeight(), 0.0D, 1000.0D, 3000.0D);
-        GlStateManager.matrixMode(5888);
-        GlStateManager.loadIdentity();
-        GlStateManager.translate(0.0F, 0.0F, -2000.0F);
-        GlStateManager.disableLighting();
-        GlStateManager.disableFog();
-        GlStateManager.disableDepth();
-        GlStateManager.enableTexture2D();
-
-        try {
-            ResourceLocation rl = new ResourceLocation("harakirimod", "textures/loadingsplash.png");
-            Minecraft.getMinecraft().getTextureManager().bindTexture(rl);
-            Minecraft.getMinecraft().getTextureManager().bindTexture(rl);
-
-            final int x = 0;
-            final int y = 0;
-            final int width = scaledresolution.getScaledWidth();
-            final int height = scaledresolution.getScaledHeight();
-            final int u = 0;
-            final int v = 0;
-            final int t = 1;
-            final int s = 1;
-
-            final Tessellator tessellator = Tessellator.getInstance();
-            final BufferBuilder bufferbuilder = tessellator.getBuffer();
-            bufferbuilder.begin(GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX);
-            bufferbuilder.pos(x + width, y, 0F).tex(t, v).endVertex();
-            bufferbuilder.pos(x, y, 0F).tex(u, v).endVertex();
-            bufferbuilder.pos(x, y + height, 0F).tex(u, s).endVertex();
-            bufferbuilder.pos(x, y + height, 0F).tex(u, s).endVertex();
-            bufferbuilder.pos(x + width, y + height, 0F).tex(t, s).endVertex();
-            bufferbuilder.pos(x + width, y, 0F).tex(t, v).endVertex();
-            tessellator.draw();
-
-            final BufferBuilder bufferbuilder2 = Tessellator.getInstance().getBuffer();
-            bufferbuilder2.begin(GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX);
-            bufferbuilder2.pos(x + width, y, 0F).tex(t, v).endVertex();
-            bufferbuilder2.pos(x, y, 0F).tex(u, v).endVertex();
-            bufferbuilder2.pos(x, y + height, 0F).tex(u, s).endVertex();
-            bufferbuilder2.pos(x, y + height, 0F).tex(u, s).endVertex();
-            bufferbuilder2.pos(x + width, y + height, 0F).tex(t, s).endVertex();
-            bufferbuilder2.pos(x + width, y, 0F).tex(t, v).endVertex();
-            Tessellator.getInstance().draw();
-        }catch (Throwable t){
-            // If anything happens.
-            //JOptionPane.showMessageDialog(null, t.toString(), "Error in drawSplashScreen!", JOptionPane.INFORMATION_MESSAGE);
-        }
-        GlStateManager.disableLighting();
-        GlStateManager.disableFog();
-        framebuffer.unbindFramebuffer();
-        framebuffer.framebufferRender(scaledresolution.getScaledWidth() * i, scaledresolution.getScaledHeight() * i);
-        GlStateManager.enableAlpha();
-        GlStateManager.alphaFunc(516, 0.1F);
-        Minecraft.getMinecraft().updateDisplay();
-
-
-
-        ci.cancel();
-    }
+//    @Inject(method = "drawSplashScreen", cancellable = true, at = @At("HEAD"))
+//    public void drawSplashScreen(TextureManager textureManager, CallbackInfo ci){
+//        // Loading screen
+//        /*try {
+//
+//            try
+//            {
+//                HarakiriLoadingPlugin.d = new SharedDrawable(Display.getDrawable());
+//                Display.getDrawable().releaseContext();
+//                HarakiriLoadingPlugin.d.makeCurrent();
+//            }
+//            catch (LWJGLException e)
+//            {
+//
+//            }
+//
+//            HarakiriLoadingPlugin.thread = new HarakiriLoadingPlugin.HaraLoadingThread();
+//            HarakiriLoadingPlugin.thread.start();
+//        }catch (Throwable t){
+//            JOptionPane.showMessageDialog(null, t.toString(), "err!", JOptionPane.INFORMATION_MESSAGE);
+//        }*/
+//    // Animated. Didnt work well.
+//
+//        ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft());
+//        int i = scaledresolution.getScaleFactor();
+//        Framebuffer framebuffer = new Framebuffer(scaledresolution.getScaledWidth() * i, scaledresolution.getScaledHeight() * i, true);
+//        framebuffer.bindFramebuffer(false);
+//        GlStateManager.matrixMode(5889);
+//        GlStateManager.loadIdentity();
+//        GlStateManager.ortho(0.0D, (double)scaledresolution.getScaledWidth(), (double)scaledresolution.getScaledHeight(), 0.0D, 1000.0D, 3000.0D);
+//        GlStateManager.matrixMode(5888);
+//        GlStateManager.loadIdentity();
+//        GlStateManager.translate(0.0F, 0.0F, -2000.0F);
+//        GlStateManager.disableLighting();
+//        GlStateManager.disableFog();
+//        GlStateManager.disableDepth();
+//        GlStateManager.enableTexture2D();
+//
+//        try {
+//            ResourceLocation rl = new ResourceLocation("harakirimod", "textures/loadingsplash.png");
+//            Minecraft.getMinecraft().getTextureManager().bindTexture(rl);
+//            Minecraft.getMinecraft().getTextureManager().bindTexture(rl);
+//
+//            final int x = 0;
+//            final int y = 0;
+//            final int width = scaledresolution.getScaledWidth();
+//            final int height = scaledresolution.getScaledHeight();
+//            final int u = 0;
+//            final int v = 0;
+//            final int t = 1;
+//            final int s = 1;
+//
+//            final Tessellator tessellator = Tessellator.getInstance();
+//            final BufferBuilder bufferbuilder = tessellator.getBuffer();
+//            bufferbuilder.begin(GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX);
+//            bufferbuilder.pos(x + width, y, 0F).tex(t, v).endVertex();
+//            bufferbuilder.pos(x, y, 0F).tex(u, v).endVertex();
+//            bufferbuilder.pos(x, y + height, 0F).tex(u, s).endVertex();
+//            bufferbuilder.pos(x, y + height, 0F).tex(u, s).endVertex();
+//            bufferbuilder.pos(x + width, y + height, 0F).tex(t, s).endVertex();
+//            bufferbuilder.pos(x + width, y, 0F).tex(t, v).endVertex();
+//            tessellator.draw();
+//
+//            final BufferBuilder bufferbuilder2 = Tessellator.getInstance().getBuffer();
+//            bufferbuilder2.begin(GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX);
+//            bufferbuilder2.pos(x + width, y, 0F).tex(t, v).endVertex();
+//            bufferbuilder2.pos(x, y, 0F).tex(u, v).endVertex();
+//            bufferbuilder2.pos(x, y + height, 0F).tex(u, s).endVertex();
+//            bufferbuilder2.pos(x, y + height, 0F).tex(u, s).endVertex();
+//            bufferbuilder2.pos(x + width, y + height, 0F).tex(t, s).endVertex();
+//            bufferbuilder2.pos(x + width, y, 0F).tex(t, v).endVertex();
+//            Tessellator.getInstance().draw();
+//        }catch (Throwable t){
+//            // If anything happens.
+//            //JOptionPane.showMessageDialog(null, t.toString(), "Error in drawSplashScreen!", JOptionPane.INFORMATION_MESSAGE);
+//        }
+//        GlStateManager.disableLighting();
+//        GlStateManager.disableFog();
+//        framebuffer.unbindFramebuffer();
+//        framebuffer.framebufferRender(scaledresolution.getScaledWidth() * i, scaledresolution.getScaledHeight() * i);
+//        GlStateManager.enableAlpha();
+//        GlStateManager.alphaFunc(516, 0.1F);
+//        Minecraft.getMinecraft().updateDisplay();
+//
+//
+//
+//        ci.cancel();
+//    }
 }

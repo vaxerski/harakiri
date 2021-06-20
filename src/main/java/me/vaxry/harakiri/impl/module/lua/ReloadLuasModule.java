@@ -9,6 +9,7 @@ import me.vaxry.harakiri.framework.lua.LUAAPI;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.impl.config.LuaConfig;
 import me.vaxry.harakiri.impl.gui.hud.component.special.ModuleListComponent;
+import net.minecraft.client.Minecraft;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.io.File;
@@ -146,7 +147,7 @@ public class ReloadLuasModule extends Module {
         if(config != null)
             config.onSave();
 
-        File f = new File(System.getenv("APPDATA") + "\\.minecraft\\Harakiri\\Lua");
+        File f = new File(Minecraft.getMinecraft().gameDir + (Harakiri.isNix() ? "/harakiri/Lua" : "\\harakiri\\Lua"));
 
         pathnames = f.list();
 
