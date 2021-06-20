@@ -1,5 +1,6 @@
 package me.vaxry.harakiri.impl.module.world;
 
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.EventStageable;
 import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
@@ -7,6 +8,7 @@ import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.BlockInteractionUtil;
 import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.framework.Value;
+import me.vaxry.harakiri.impl.module.player.FreeCamModule;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemBlock;
@@ -46,7 +48,7 @@ public final class ScaffoldModule extends Module {
             return;
 
         final Minecraft mc = Minecraft.getMinecraft();
-        if (mc.world == null || mc.player == null)
+        if (mc.world == null || mc.player == null || Harakiri.get().getModuleManager().find(FreeCamModule.class).isEnabled())
             return;
 
         if (mc.player.getHeldItemMainhand().getItem() instanceof ItemBlock) {
