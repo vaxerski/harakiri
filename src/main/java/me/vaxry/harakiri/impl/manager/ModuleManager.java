@@ -80,6 +80,7 @@ public final class ModuleManager {
         add(new FastPlaceModule());
         add(new SpeedMineModule());
         add(new AutoToolModule());
+        add(new RandomizerModule());
         add(new NoBreakAnimModule());
         add(new FreeCamModule());
         add(new EntityControlModule());
