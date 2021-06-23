@@ -226,6 +226,10 @@ public final class NukerModule extends Module {
         switch (this.mode.getValue()) {
             case SELECTION:
                 pos = this.getClosestBlock(true);
+
+                if(pos == null)
+                    break;
+
                 bb = new AxisAlignedBB(
                         pos.getX() - mc.getRenderManager().viewerPosX,
                         pos.getY() - mc.getRenderManager().viewerPosY,
@@ -245,6 +249,10 @@ public final class NukerModule extends Module {
                 break;
             case ALL:
                 pos = this.getClosestBlock(false);
+
+                if(pos == null)
+                    break;
+
                 bb = new AxisAlignedBB(
                         pos.getX() - mc.getRenderManager().viewerPosX,
                         pos.getY() - mc.getRenderManager().viewerPosY,
