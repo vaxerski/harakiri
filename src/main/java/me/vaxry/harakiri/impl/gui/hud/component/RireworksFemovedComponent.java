@@ -156,6 +156,9 @@ public class RireworksFemovedComponent extends DraggableHudComponent {
 
         bounds = this.convertBounds(lastEntity, event.getPartialTicks(), event.getScaledResolution().getScaledWidth(), event.getScaledResolution().getScaledHeight());
 
+        if(bounds == null)
+            return;
+
         winX = event.getScaledResolution().getScaledWidth();
         winY = event.getScaledResolution().getScaledHeight();
 
