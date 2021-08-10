@@ -1,7 +1,9 @@
 package me.vaxry.harakiri.impl.module.player;
 
+import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.network.EventSendPacket;
 import me.vaxry.harakiri.framework.Module;
+import me.vaxry.harakiri.impl.module.movement.ElytraFlyModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
@@ -16,6 +18,10 @@ public class AntiHungerModule extends Module {
     @Listener
     public void onPacketSend(EventSendPacket event){
         final Minecraft mc = Minecraft.getMinecraft();
+
+        if(mc.player.isElytraFlying() && Harakiri.get().getModuleManager().find(ElytraFlyModule.class).isEnabled())
+            return;
+
         if(event.getPacket() instanceof CPacketPlayer && mc.player.onGround && !mc.player.isElytraFlying()){
             final CPacketPlayer packet = (CPacketPlayer)event.getPacket();
 
