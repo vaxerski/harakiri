@@ -1,14 +1,11 @@
 package me.vaxry.harakiri.framework.mixin.gui;
 
-import jdk.nashorn.internal.codegen.CompilerConstants;
 import me.vaxry.harakiri.Harakiri;
 import me.vaxry.harakiri.framework.event.gui.EventRenderTooltip;
 import me.vaxry.harakiri.impl.module.render.GuiPlusModule;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

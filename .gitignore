@@ -186,3 +186,6 @@ hs_err_pid*
 # End of https://www.gitignore.io/api/java,eclipse,forgegradle,intellij+all
 /build/
 /.gradle/
+
+# vs
+.vscode/

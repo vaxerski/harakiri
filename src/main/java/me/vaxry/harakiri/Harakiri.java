@@ -14,6 +14,7 @@ import me.vaxry.harakiri.impl.gui.menu.HaraMainMenu;
 import me.vaxry.harakiri.impl.manager.*;
 import me.vaxry.harakiri.impl.module.config.ReloadConfigsModule;
 import me.vaxry.harakiri.impl.module.render.CustomFontModule;
+import me.vaxry.harakiri.impl.module.render.XrayModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -42,6 +43,9 @@ public final class Harakiri {
     private String loggedAccount = "";
 
     private Logger logger;
+
+    // For fast access to XRay (block lag)
+    private XrayModule xrayModule = null;
 
     //private String prevTitle;
 
@@ -141,6 +145,9 @@ public final class Harakiri {
 
             // Create the font renderer
             fontRendererExtd = new FontRendererExtd(Minecraft.getMinecraft().gameSettings, new ResourceLocation("harakirimod", "textures/ascii.png"), Minecraft.getMinecraft().renderEngine, true);
+
+            // Get the XRay Module
+            this.xrayModule = (XrayModule)this.moduleManager.find(XrayModule.class);
 
             // Add runtime hook to listen for shutdown to save configs
             Runtime.getRuntime().addShutdownHook(new Thread("Harakiri SH") {
@@ -418,6 +425,10 @@ public final class Harakiri {
 
     public void initPlexusEffect(PlexusComponent plx) {
         this.plexusEffect = new PlexusEffect(plx);
+    }
+
+    public XrayModule getXRayModule() {
+        return this.xrayModule;
     }
 
     public static Harakiri get(){
