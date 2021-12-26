@@ -20,3 +20,7 @@ Zim tried but failed, here's his message i will not remove:
 
 Zim is here. Zim will save this project if it's the last thing I do. 
 Right after the first of this month because my boss constantly needs me to change things should've been done 2 weeks ago.
+
+Zim-2022:
+Goddamn man, congratulations on how far this project has come! I'm so sorry I was unable to properly do what I wanted to do and get this client updated to 1.16, with work and irl, Minecraft has taken a permanent back-seat for me as I continue to rebuild my life. 
+Thanks for not removing me from the repo, and if you do at any point, just remember I think you're a bad ass developer and you can do anything. <3
