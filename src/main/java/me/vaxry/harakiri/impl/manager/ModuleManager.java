@@ -68,6 +68,7 @@ public final class ModuleManager {
         ChamsModule chammod = new ChamsModule();
         add(chammod);
         add(new NametagsModule());
+        add(new MobOwnerModule());
         add(new SneakModule());
         add(new MiddleClickFriendsModule());
         add(new FullbrightModule());
