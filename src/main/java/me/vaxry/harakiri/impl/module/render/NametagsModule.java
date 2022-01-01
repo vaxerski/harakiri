@@ -43,6 +43,7 @@ public final class NametagsModule extends Module {
     public final Value<Float> additionalScale = new Value<Float>("Scale", new String[]{"Scale", "s"}, "Scale the nametag", 1.f, 0.5f, 2.5f, 0.5f);
     public final Value<Float> armorscale = new Value<Float>("ArmorScale", new String[]{"Armorscale", "as"}, "Scale the armor part", 1.f, 0.5f, 2.5f, 0.5f);
     public final Value<Integer> fadein = new Value<Integer>("FadeInSpeed", new String[]{"Fadein", "f"}, "Background fade in speed. Doesnt work for items cuz I'm lazy and minecraft.", 5, 1, 25, 1);
+    public final Value<Boolean> simplified = new Value<Boolean>("Simplified", new String[]{"Simplified", "sm"}, "Simplifies the nametag (shader-safe)", false);
 
 
     public NametagsModule() {
@@ -66,8 +67,11 @@ public final class NametagsModule extends Module {
 
             if(ent == mc.player)
                 continue;
-
-            drawNametag((EntityPlayer)ent, event);
+            
+            if (simplified.getValue())
+                drawNametag(((EntityPlayer) ent).getName(), 0xFFFFFFFF, ent, event, true);
+            else
+                drawNametag((EntityPlayer)ent, event);
         }
     }
 
