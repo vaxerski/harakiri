@@ -14,6 +14,11 @@ Current MC version: 1.12.2
 Type: mod
 Author: me
 
+## How to use Luas and Hitsounds
+put luas in .minecraft/harakiri/Lua (L uppercase)<br/>
+put the hitsound in .minecraft/harakiri in a file named hitsound.wav (has to be wav)
+
+<br/><br/><br/>
 
 Zim tried but failed, here's his message i will not remove:
 
