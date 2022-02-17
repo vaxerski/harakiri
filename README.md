@@ -1,31 +1,47 @@
-# harakiri
-A minecraft utility client designed for anarchy servers, with nice visuals and generally some novel ideas
+# highway build
 
-yes, it's a seppuku fork. Stop spamming I don't care.
+How to use?
 
-The reason it is a fork is because this client goes against seppuku's mission and already put in place practices.
+Turn on: Timer Nuker AutoEat
 
-Kind regards.
+Module settings:<br/>
+AutoDisconnect - As you please<br/>
+Timer - speed 8<br/>
+Scaffold - Extrapolate, range 4<br/>
+Nuker - HighwayMode, all compats<br/>
+AutoEat - as you please<br/>
 
-# Info
-Current MC version: 1.12.2
-*if you want to help code 1.16, feel free to dm me.*
+Recommended to turn on highwayInfo Component
 
-Type: mod
-Author: me
+# Important notices
 
-## How to use Luas and Hitsounds
-put luas in .minecraft/harakiri/Lua (L uppercase)<br/>
-put the hitsound in .minecraft/harakiri in a file named hitsound.wav (has to be wav)
+Nuker will pick a cardinal direction based on your facing dir when turning it on
 
-<br/><br/><br/>
+Nuker will ONLY use light-blue shulkers for pickaxes (you can change that and recompile lol)
 
-Zim tried but failed, here's his message i will not remove:
+Recommended to cap your fps at like 20
 
+Nuker will disconnect on:
+- no food
+- no totems
+- some other dangerous conditions i dont remember check the code
+  
 
-Zim is here. Zim will save this project if it's the last thing I do. 
-Right after the first of this month because my boss constantly needs me to change things should've been done 2 weeks ago.
+## Recommended setup
+Slot 1 - junk blocks (e.g. netherrack) - for filling/scaffolding
+Slot 2 - Pickaxe
+Slot 3 - food
+Slot 4 - food/pickaxe shulker
+Slot 5 - food/pickaxe shulker
+Slots 6-9 - pickaxe shulkers
+Offhand - totem
 
-Zim-2022:
-Goddamn man, congratulations on how far this project has come! I'm so sorry I was unable to properly do what I wanted to do and get this client updated to 1.16, with work and irl, Minecraft has taken a permanent back-seat for me as I continue to rebuild my life. 
-Thanks for not removing me from the repo, and if you do at any point, just remember I think you're a bad ass developer and you can do anything. <3
+in the inventory, put all non-pickaxe shulkers in the bottom right of the inner inventory (not on the hotbar) as those have the last IDs.
+
+# Building - very important
+I recommend you build this YOURSELF. I will not be providing support or development here so you're on your own if something is wrong.
+
+Most of the highwaytools' code is in NukerModule.java.
+
+### footnote
+If there's anything missing in this readme lmk i'll update it.

@@ -88,6 +88,7 @@ public final class HudManager {
         add(new WatermarkComponent());
         add(new TpsComponent());
         add(new FpsComponent());
+        add(new HighwayInfoComponent());
         add(new CoordsComponent());
         add(new NetherCoordsComponent());
         add(new SpeedComponent());

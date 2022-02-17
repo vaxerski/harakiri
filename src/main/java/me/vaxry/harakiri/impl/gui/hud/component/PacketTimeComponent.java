@@ -13,7 +13,7 @@ import java.text.DecimalFormat;
 
 public final class PacketTimeComponent extends DraggableHudComponent {
 
-    private final Timer timer = new Timer();
+    public final Timer timer = new Timer();
 
     public PacketTimeComponent() {
         super("PacketTime");

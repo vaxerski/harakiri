@@ -6,11 +6,22 @@ import me.vaxry.harakiri.framework.event.player.EventPlayerUpdate;
 import me.vaxry.harakiri.framework.event.player.EventUpdateWalkingPlayer;
 import me.vaxry.harakiri.framework.Module;
 import me.vaxry.harakiri.framework.util.BlockInteractionUtil;
+import me.vaxry.harakiri.framework.util.BlockUtil;
 import me.vaxry.harakiri.framework.util.Timer;
 import me.vaxry.harakiri.framework.Value;
+import me.vaxry.harakiri.impl.module.player.AutoEatModule;
 import me.vaxry.harakiri.impl.module.player.FreeCamModule;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
+import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockFlowerPot;
+import net.minecraft.block.BlockSign;
+import net.minecraft.block.BlockSnow;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
@@ -24,6 +35,9 @@ public final class ScaffoldModule extends Module {
     enum MODE {
         CLASSIC, EXTRAPOLATE
     }
+
+    // for hwinfo
+    public String scaffoldStatus = "wrong mode";
 
     public final Value<MODE> mode = new Value<MODE>("Mode", new String[]{"Mode", "m"}, "Mode to use.", MODE.CLASSIC);
     public final Value<Integer> reach = new Value<Integer>("Reach", new String[]{"Reach", "range", "r"}, "The reach in blocks from the player to end bridging.", 4, 1, 10, 1);
@@ -42,21 +56,61 @@ public final class ScaffoldModule extends Module {
     private boolean lastFeet = false;
     private double towerStart = 0.0;
 
+    @Override
+    public void onEnable() {
+        // TODO Auto-generated method stub
+        super.onEnable();
+
+        scaffoldStatus = "idle";
+    }
+
     @Listener
     public void onUpdate(EventPlayerUpdate event) {
         if (event.getStage().equals(EventStageable.EventStage.POST) || mode.getValue() == MODE.CLASSIC)
             return;
 
         final Minecraft mc = Minecraft.getMinecraft();
+
+        // eat compat
+        final AutoEatModule aem = ((AutoEatModule) Harakiri.get().getModuleManager().find(AutoEatModule.class));
+        if (mc.player.getFoodStats().getFoodLevel() < aem.hunger.getValue() || mc.player.getHealth() < aem.health.getValue()) {
+            return;
+        }
+
+        // Stack
         if (mc.world == null || mc.player == null || Harakiri.get().getModuleManager().find(FreeCamModule.class).isEnabled())
             return;
 
+        ItemStack stack = mc.player.getHeldItemMainhand();
+
+        if (!BlockInteractionUtil.verifyStack(stack)) {
+            for (int i = 0; i < 9; ++i) {
+                stack = mc.player.inventory.getStackInSlot(i);
+
+                if (BlockInteractionUtil.verifyStack(stack)) {
+                    mc.player.inventory.currentItem = i;
+                    mc.playerController.updateController();
+                    break;
+                }
+            }
+        }
+
+        if (!BlockInteractionUtil.verifyStack(stack)){
+            scaffoldStatus = "no blocks";
+            return;
+        }
+
         if (mc.player.getHeldItemMainhand().getItem() instanceof ItemBlock) {
+            EnumFacing facing = mc.player.getHorizontalFacing();
+            breakAllOnTheWay(facing.getDirectionVec(), mc);
             ItemBlock itemBlock = (ItemBlock) mc.player.getHeldItemMainhand().getItem();
             if (BlockInteractionUtil.shouldPlace(itemBlock.getBlock())) {
-                EnumFacing facing = mc.player.getHorizontalFacing();
                 Vec3i position = getNextBlock(facing.getDirectionVec(), mc);
+
                 if (position != null) {
+                    BlockPos blockPos = new BlockPos(position.getX(), position.getY(), position.getZ());
+                    final Block block = BlockUtil.getBlock(blockPos);
+
                     mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(new BlockPos(position.getX(), position.getY(), position.getZ()), facing, EnumHand.MAIN_HAND, (float) facing.getDirectionVec().getX() / 2.0F, (float) facing.getDirectionVec().getY() / 2.0F, (float) facing.getDirectionVec().getZ() / 2.0F));
                 }
             }
@@ -78,6 +132,9 @@ public final class ScaffoldModule extends Module {
             return;
 
         Minecraft mc = Minecraft.getMinecraft();
+
+        if (mc.world == null || mc.player == null || Harakiri.get().getModuleManager().find(FreeCamModule.class).isEnabled())
+            return;
 
         // verify we have a block in our hand
         ItemStack stack = mc.player.getHeldItemMainhand();
@@ -215,11 +272,27 @@ public final class ScaffoldModule extends Module {
         for (int i = 0; i <= (int) reach.getValue(); i++) {
             Vec3i position = new Vec3i(mc.player.posX + direction.getX() * i, mc.player.posY - 1, mc.player.posZ + direction.getZ() * i);
             Vec3i before = new Vec3i(mc.player.posX + direction.getX() * (i - 1), mc.player.posY - 1, mc.player.posZ + direction.getZ() * (i - 1));
-            if ((mc.world.getBlockState(new BlockPos(position.getX(), position.getY(), position.getZ())).getMaterial() == Material.AIR) && (mc.world.getBlockState(new BlockPos(before.getX(), before.getY(), before.getZ())).getMaterial() != Material.AIR)) {
+            if ((!(BlockUtil.getBlock(new BlockPos(before.getX(), before.getY(), before.getZ())) instanceof BlockAir)) && (isBlockBreakableAndObstructing(BlockUtil.getBlock(new BlockPos(position.getX(), position.getY(), position.getZ()))) || (mc.world.getBlockState(new BlockPos(position.getX(), position.getY(), position.getZ())).getMaterial() == Material.AIR))) {
                 return before;
             }
         }
         return null;
+    }
+
+    private void breakAllOnTheWay(Vec3i direction, final Minecraft mc) {
+        for (int i = 0; i <= (int) reach.getValue(); i++) {
+            BlockPos position = new BlockPos(mc.player.posX + direction.getX() * i, mc.player.posY - 1, mc.player.posZ + direction.getZ() * i);
+            
+            if (mc.world.getBlockState(position).getBlock().isPassable(mc.world, position)) {
+                ((NukerModule) Harakiri.get().getModuleManager().find(NukerModule.class)).breakCreativeBlock(position, true);
+                mc.playerController.onPlayerDamageBlock(position, mc.player.getHorizontalFacing());
+                mc.player.swingArm(EnumHand.MAIN_HAND);
+                Harakiri.get().logChat("Passable block in scaffold: nuking.");
+            }
+        }
+    }
+    private boolean isBlockBreakableAndObstructing(Block block){
+        return block instanceof BlockSnow || block instanceof net.minecraft.block.BlockTallGrass || block instanceof BlockBush || block instanceof BlockFlower || block instanceof BlockFlowerPot || block instanceof net.minecraft.block.BlockFlower || block instanceof BlockTorch || block instanceof BlockSign;
     }
 }
 

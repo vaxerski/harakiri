@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemShulkerBox;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketEntityAction;
@@ -482,7 +483,7 @@ public class BlockInteractionUtil {
 
     public static boolean verifyStack(ItemStack stack)
     {
-        return !stack.isEmpty() && stack.getItem() instanceof ItemBlock;
+        return !stack.isEmpty() && stack.getItem() instanceof ItemBlock && !(stack.getItem() instanceof ItemShulkerBox);
     }
 
     public static boolean shouldPlace(Block block) {

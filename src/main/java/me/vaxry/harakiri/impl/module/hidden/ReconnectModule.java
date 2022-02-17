@@ -11,6 +11,7 @@ import me.vaxry.harakiri.impl.gui.menu.ReconnectButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.multiplayer.GuiConnecting;
+import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.network.EnumConnectionState;
 import net.minecraft.network.handshake.client.C00Handshake;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -22,7 +23,7 @@ public final class ReconnectModule extends Module {
 
     private String lastIp;
     private int lastPort;
-    private boolean reconnect;
+    public boolean reconnect;
     private Timer timer = new Timer();
 
     public final Value<Boolean> auto = new Value<Boolean>("AutoReconnect", new String[]{"Auto"}, "Auto Reconnect.", true);
@@ -63,7 +64,8 @@ public final class ReconnectModule extends Module {
 
     public boolean reconnect(){
         if (this.lastIp != null && this.lastPort > 0) {
-            Minecraft.getMinecraft().displayGuiScreen(new GuiConnecting(Minecraft.getMinecraft().currentScreen, Minecraft.getMinecraft(), this.lastIp, this.lastPort));
+            net.minecraftforge.fml.client.FMLClientHandler.instance().connectToServer(null, new ServerData("Reconnecting", this.lastIp + ":" + Integer.toString(this.lastPort), true));
+            //Minecraft.getMinecraft().displayGuiScreen(new GuiConnecting(Minecraft.getMinecraft().currentScreen, Minecraft.getMinecraft(), this.lastIp, this.lastPort));
             this.timer.reset();
             this.reconnect = false;
         }else

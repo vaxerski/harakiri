@@ -13,7 +13,6 @@ import me.vaxry.harakiri.impl.module.render.*;
 import me.vaxry.harakiri.impl.module.ui.HudEditorModule;
 import me.vaxry.harakiri.impl.module.ui.WatermarkModule;
 import me.vaxry.harakiri.impl.module.world.*;
-import me.vaxry.harakiri.impl.module.world.ScaffoldModule;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.lang.reflect.Field;
@@ -77,6 +76,7 @@ public final class ModuleManager {
         add(recmod);
         add(new AutoFishModule());
         add(new InteractModule());
+        add(new HighwayAutoUnpackModule());
         add(new TracersModule());
         add(new FastPlaceModule());
         add(new SpeedMineModule());
@@ -119,6 +119,7 @@ public final class ModuleManager {
         add(new NoAfkModule());
         add(new NoGlitchBlocks());
         add(new NukerModule());
+        add(new FillLavaModule());
         add(new SlimeChunksModule());
         add(new StepModule());
         add(new ViewClipModule());

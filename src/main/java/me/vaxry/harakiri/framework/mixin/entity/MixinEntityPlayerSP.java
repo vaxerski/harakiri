@@ -58,8 +58,12 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
         EventUpdateWalkingPlayer event = new EventUpdateWalkingPlayer(EventStageable.EventStage.POST);
         Harakiri.get().getEventManager().dispatchEvent(event);
 
-        Harakiri.get().getPositionManager().restorePosition();
-        Harakiri.get().getRotationManager().restoreRotations();
+        try {
+            Harakiri.get().getPositionManager().restorePosition();
+            Harakiri.get().getRotationManager().restoreRotations();
+        } catch(NullPointerException e) {
+            Harakiri.get().logChat("Local nullptr at updateWalkingPlayer!");
+        }
     }
 
     @Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)

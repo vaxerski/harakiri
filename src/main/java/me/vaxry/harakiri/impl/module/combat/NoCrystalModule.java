@@ -203,7 +203,7 @@ public final class NoCrystalModule extends Module {
         return block.isReplaceable(mc.world, pos) && !(block == Blocks.OBSIDIAN) && !(block == Blocks.BEDROCK);
     }
 
-    private void place(BlockPos pos) {
+    public void place(BlockPos pos) {
         final Block block = mc.world.getBlockState(pos).getBlock();
 
         final EnumFacing direction = this.calcSide(pos);

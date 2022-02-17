@@ -14,7 +14,10 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public final class AutoEatModule extends Module {
 
+    public boolean eating = false;
+
     public final Value<Float> hunger = new Value<Float>("Hunger", new String[]{"food", "h"}, "The amount of hunger needed to acquire some food.", 9.0f, 0.0f, 20.0f, 0.5f);
+    public final Value<Float> health = new Value<Float>("Health", new String[]{"health", "he"}, "The amount of health needed to acquire some food.", 9.0f, 0.0f, 20.0f, 0.5f);
     public final Value<Integer> forcedSlot = new Value<Integer>("Slot", new String[]{"s"}, "The hot-bar slot to put the food into. (45 for offhand)", 43, 0, 43, 1);
 
     private int previousHeldItem = -1;
@@ -34,15 +37,18 @@ public final class AutoEatModule extends Module {
         if (event.getStage() != EventStageable.EventStage.PRE)
             return;
 
+        eating = false;
+
         final Minecraft mc = Minecraft.getMinecraft();
         if (mc.player == null)
             return;
 
-        if (mc.player.getFoodStats().getFoodLevel() < this.hunger.getValue()) {
+        if (mc.player.getFoodStats().getFoodLevel() < this.hunger.getValue() || mc.player.getHealth() < this.health.getValue()) {
             this.foodSlot = this.findFood();
         }
 
         if (this.foodSlot != -1) {
+            eating = true;
             if (this.forcedSlot.getValue() != 45) { // we aren't trying to put it in the offhand
                 if (this.previousHeldItem == -1) {
                     this.previousHeldItem = mc.player.inventory.currentItem;
@@ -64,13 +70,15 @@ public final class AutoEatModule extends Module {
                 }
             }
 
-            if (mc.player.getFoodStats().getFoodLevel() >= this.hunger.getValue()) {
+            // TODO: make this better
+            if (mc.player.getFoodStats().getFoodLevel() >= this.hunger.getValue() && mc.player.getHealth() + mc.player.getAbsorptionAmount() >= this.health.getValue()) {
                 mc.gameSettings.keyBindUseItem.pressed = false;
                 if (this.previousHeldItem != -1) {
                     mc.player.inventory.currentItem = this.previousHeldItem;
                 }
                 this.foodSlot = -1;
                 this.previousHeldItem = -1;
+                eating = false;
             } else {
                 mc.displayGuiScreen(null);
                 mc.gameSettings.keyBindUseItem.pressed = true;
@@ -97,7 +105,7 @@ public final class AutoEatModule extends Module {
         return bestFoodSlot;
     }
 
-    private int getFoodCount() {
+    public int getFoodCount() {
         int food = 0;
 
         if (Minecraft.getMinecraft().player == null)
@@ -117,7 +125,7 @@ public final class AutoEatModule extends Module {
         if (!(item instanceof ItemFood))
             return false; // is not of ItemFood class
 
-        if (item == Items.GOLDEN_APPLE || item == Items.CHORUS_FRUIT || item == Items.ROTTEN_FLESH || item == Items.POISONOUS_POTATO || item == Items.SPIDER_EYE)
+        if (item == Items.CHORUS_FRUIT || item == Items.ROTTEN_FLESH || item == Items.POISONOUS_POTATO || item == Items.SPIDER_EYE)
             return false;
 
         return true;

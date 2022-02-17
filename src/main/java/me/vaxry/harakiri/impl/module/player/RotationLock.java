@@ -12,8 +12,8 @@ public final class RotationLock extends Module {
     public final Value<Boolean> yawLock = new Value<Boolean>("Yaw", new String[]{"Y"}, "Lock the player's rotation yaw if enabled.", true);
     public final Value<Boolean> pitchLock = new Value<Boolean>("Pitch", new String[]{"P"}, "Lock the player's rotation pitch if enabled.", false);
 
-    private float yaw;
-    private float pitch;
+    public float yaw;
+    public float pitch;
 
     public RotationLock() {
         super("RotationLock", new String[]{"RotLock", "Rotation"}, "Locks you rotation.", "NONE", -1, ModuleType.PLAYER);

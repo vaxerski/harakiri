@@ -9,18 +9,24 @@ public final class PositionManager {
     private double z;
 
     public void updatePosition() {
+        if (Minecraft.getMinecraft().player == null)
+            return;
         this.x = Minecraft.getMinecraft().player.posX;
         this.y = Minecraft.getMinecraft().player.posY;
         this.z = Minecraft.getMinecraft().player.posZ;
     }
 
     public void restorePosition() {
+        if (Minecraft.getMinecraft().player == null)
+            return;
         Minecraft.getMinecraft().player.posX = this.x;
         Minecraft.getMinecraft().player.posY = this.y;
         Minecraft.getMinecraft().player.posZ = this.z;
     }
 
     public void setPlayerPosition(double x, double y, double z) {
+        if (Minecraft.getMinecraft().player == null)
+            return;
         Minecraft.getMinecraft().player.posX = x;
         Minecraft.getMinecraft().player.posY = y;
         Minecraft.getMinecraft().player.posZ = z;
